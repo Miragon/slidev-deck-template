@@ -23,7 +23,7 @@
     "@paper-design/shaders": "0.0.77"
   },
   "peerDependencies": {
-    "vue": "^3.5"
+    "vue": "3.5.40"
   },
   "files": [
     "layouts",
