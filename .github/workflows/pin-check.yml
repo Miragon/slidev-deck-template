@@ -1,0 +1,20 @@
+name: Pin Check
+
+# Fail the build if any package.json reintroduces a version range, wildcard,
+# dist-tag, or mutable git ref. Exact pins + committed lockfile keep installs
+# reproducible and shrink the window for a malicious npm republish.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pin-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: Miragon/pin-npm-dependencies@58fe24377aef66748a1444ff69ab05e3f938a798 # v1.2.1

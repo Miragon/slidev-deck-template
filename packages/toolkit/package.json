@@ -1,0 +1,38 @@
+{
+  "name": "@miragon/slidev-toolkit",
+  "version": "1.0.0",
+  "description": "Miragon Slidev toolkit: the brand theme, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, SplitView) and the BrandMeshBackground animation. Single source of design truth, consumed by the reference deck in this repo.",
+  "keywords": [
+    "slidev-theme",
+    "slidev",
+    "miragon",
+    "toolkit"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miragon/slidev-deck-template.git",
+    "directory": "packages/toolkit"
+  },
+  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/packages/toolkit#readme",
+  "bugs": "https://github.com/Miragon/slidev-deck-template/issues",
+  "engines": {
+    "slidev": ">=0.48.0"
+  },
+  "dependencies": {
+    "@paper-design/shaders": "0.0.77"
+  },
+  "peerDependencies": {
+    "vue": "^3.5"
+  },
+  "files": [
+    "layouts",
+    "components",
+    "styles",
+    "assets"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

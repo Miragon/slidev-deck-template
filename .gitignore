@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.slidev/
+*.log
+verify/screenshots/
+verify/test-results/
+verify/playwright-report/
+playwright-report/
+/.idea/
+.claude/logs/
+
+# Secrets / credentials — never commit. The release-please GitHub App private
+# key (.pem) is downloaded during setup; keep it out of the repo.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx

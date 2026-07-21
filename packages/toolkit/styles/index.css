@@ -1,0 +1,25 @@
+/* Global deck styles — auto-loaded by Slidev (unscoped). */
+
+/* Brand-Tokens (CI-Farben + Gradients) global laden. MUSS hier liegen, nicht
+   im scoped <style>-Block in slides.md — Vue scoped sonst `:root` mit der
+   Komponenten-ID, dann matchen die Variablen nirgends (in Slidev 52 strikter
+   als in 0.49). */
+@import './theme.css';
+@import './fonts.css';
+
+/* Brand typography: Geist for everything, Geist Mono for code. Set on the app
+   root so it cascades into every layout; redirect Slidev's code-font variable
+   (used by code.css) to Geist Mono. Tokens live in theme.css, @font-face in
+   fonts.css. */
+#slidev-app {
+  font-family: var(--miragon-font);
+  --slidev-code-font-family: var(--miragon-font-mono);
+}
+
+/* Hide Slidev's built-in Goto dialog (triggered by the "g" key,
+   easy to press by accident, obstructs slide content when open).
+   DOM id is stable across Slidev versions. The Overview (key "o",
+   #slidev-overview) stays available. */
+#slidev-goto-dialog {
+  display: none !important;
+}

@@ -1,0 +1,80 @@
+/**
+ * Miragon Design Tokens — CI. DO NOT CHANGE brand colors.
+ * Rule: NEVER hardcode hex in slides — use these variables or accent props
+ * ("blue" | "green" | "mixed") on layouts. See the slides skill.
+ */
+
+:root {
+  /* --- Typografie (CI) ----------------------------------------------- */
+  /* Geist (OFL) — bundled variable fonts, see fonts.css. Geist for headings
+     and body, Geist Mono for code and tables. Fallbacks keep the deck readable
+     before the font loads or if it is unavailable. */
+  --miragon-font: 'Geist', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --miragon-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- Markenfarben (CI) --------------------------------------------- */
+  --miragon-blue: #335DE5;          /* Primär */
+  --miragon-green: #00E676;         /* Sekundär — sparsam einsetzen */
+  --miragon-gray-bg: #F9F7F7;
+  --miragon-black: #000000;
+  --miragon-white: #FFFFFF;
+
+  /* --- Blau-Varianten ------------------------------------------------ */
+  --miragon-blue-dark: #335DE5;     /* kanonisch: Headings, Akzente */
+  --miragon-blue-darker: #1E3EBF;   /* Hover, Borders */
+  --miragon-blue-mid: #2B4ACB;
+  --miragon-blue-light: #F0F4FF;    /* dezente Hintergründe */
+  --miragon-blue-soft: #F5F7FF;
+  --miragon-blue-warm: #D6E0F8;
+  --miragon-blue-deep: #1A3278;
+
+  /* --- Grün-Varianten ------------------------------------------------ */
+  --miragon-green-dark: #00E676;
+  --miragon-green-light: #E8F5E9;
+  --miragon-green-soft: #D4F5DC;
+  --miragon-green-deep: #006838;
+
+  /* --- Neutrals ------------------------------------------------------- */
+  --miragon-gray: #64748B;
+  --miragon-gray-light: #F8FAFC;
+  --miragon-gray-dark: #1E293B;
+  --miragon-grad-mid: #E0ECF5;
+  --miragon-grad-mid-accent: #1E6E8A;
+
+  /* --- Text ---------------------------------------------------------- */
+  --miragon-text-primary: #000000;
+  --miragon-text-secondary: #334155;
+  --miragon-text-muted: #64748B;
+
+  /* --- Static content gradients (chrome only, never cards) ----------- */
+  --miragon-gradient-blue: linear-gradient(135deg, #335DE5 0%, #1E3EBF 100%);
+  --miragon-gradient-green: linear-gradient(135deg, #00E676 0%, #00C263 100%);
+  --miragon-gradient-mixed: linear-gradient(135deg, #335DE5 0%, #1B4FE0 60%, #00C263 100%);
+}
+
+/*
+ * Card rule (see the slides skill; use the <Card> component):
+ * Cards are ALWAYS white (rounded-xl border border-gray-200 bg-white +
+ * box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08)). When a set of cards needs
+ * an accent, colour the card's TITLE text only, running the blue → teal →
+ * green progression. Never gradient or coloured card backgrounds.
+ *
+ * The earlier `.mira-card-1/2/3` gradient utilities are intentionally NOT
+ * defined here — they violated the white-card rule and have been removed.
+ */
+
+/*
+ * PDF / print export only. Slidev forces `media: "screen"` for the export
+ * (so @media print never applies) but adds the class `print` on <html> and
+ * wraps each captured slide in `.print-slide-container`. Soft blue-tinted
+ * box-shadows on cards and layout panels (compare, goodbad, person, showcase,
+ * …) and the large-blur text-shadow on the cover title all rasterise into hard
+ * dark/lavender blocks behind the content. They are purely decorative (real
+ * edges use `border`), so drop every shadow in the export. The on-screen deck
+ * keeps its shadows.
+ */
+.print *,
+.print-slide-container * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}

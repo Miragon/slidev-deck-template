@@ -1,0 +1,83 @@
+# Dependabot configuration for the Miragon Slidev deck template.
+#
+# Goal: minimal PR noise. Every ecosystem gets ONE bundled PR that carries
+# all of its updates — major, minor and patch alike — so the lockfile stays
+# consistent and reviewers touch a single PR per ecosystem per interval.
+#   - npm            : one bundled PR every Monday.
+#   - github-actions : one bundled PR every month.
+#
+# Security updates are grouped the same way and arrive on CVE publication,
+# independent of the schedule below.
+#
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+
+updates:
+  # ─── npm: Slidev, Vue, theme, playwright-chromium, addons ──────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps(dev)"
+      include: scope
+    labels:
+      - dependencies
+      - npm
+    groups:
+      # One PR for the whole npm ecosystem: majors, minors and patches
+      # together. Keeps the lockfile coherent and review to a single PR.
+      npm:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+      # Same bundling for security fixes.
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+
+  # ─── GitHub Actions used in .github/workflows/ ─────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"
+      include: scope
+    labels:
+      - dependencies
+      - github-actions
+    groups:
+      # One PR for every action update, all version bumps together.
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"

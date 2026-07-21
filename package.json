@@ -1,0 +1,20 @@
+{
+  "name": "miragon-slidev-deck",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "deck"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w deck",
+    "build": "npm run build -w deck",
+    "export": "npm run export -w deck",
+    "verify": "playwright test -c verify/playwright.config.ts; playwright show-report verify/playwright-report",
+    "verify:source": "VERIFY_SOURCE_ONLY=1 playwright test -c verify/playwright.config.ts -g @source"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "playwright-chromium": "1.61.1"
+  }
+}

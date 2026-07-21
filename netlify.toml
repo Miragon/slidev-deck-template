@@ -1,0 +1,21 @@
+# Netlify build for the Slidev deck.
+#
+# `npm run build` (slidev build) exports a PDF because the deck sets
+# `download: true` in deck/slides.md. That export launches Chromium via
+# Playwright, but Netlify's build image does not ship the browser — so the
+# build only worked while Chromium happened to be warm in Netlify's cache,
+# and broke the moment the pinned Playwright version needed a new browser
+# build. We install Chromium before building so preview and production are
+# deterministic. No --with-deps: the original failure was a missing browser
+# binary ("Executable doesn't exist"), not missing system libraries, so
+# Netlify's image already has the runtime deps and the apt step is skipped.
+[build]
+  command = "npx playwright install chromium && npm run build"
+  publish = "dist"
+
+# SPA fallback so deep links (e.g. /23) resolve on a hard refresh. Netlify
+# serves existing static assets first and only falls back to index.html.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

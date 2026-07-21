@@ -1,0 +1,27 @@
+# Conductor workspace lifecycle for the Miragon Slidev deck template.
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+setup = "npm install"
+run_mode = "concurrent"
+
+# Preview the deck with hot reload. Opens the browser on the workspace port.
+[scripts.run.dev]
+command = "npm run dev -- --port $CONDUCTOR_PORT"
+default = true
+icon = "play"
+
+# Production build check: renders the deck (incl. the PDF) into ../dist.
+[scripts.run.build]
+command = "npm run build"
+icon = "package"
+
+# Run the Playwright verify suite and open its HTML report.
+[scripts.run.verify]
+command = "npm run verify"
+icon = "test-tube"
+
+# Fast source-level guardrails (layout archetype + source checks); no dev server.
+[scripts.run.verify-source]
+command = "npm run verify:source"
+icon = "shield-check"

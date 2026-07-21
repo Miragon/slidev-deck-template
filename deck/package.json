@@ -1,0 +1,16 @@
+{
+  "name": "@miragon/slidev-deck",
+  "type": "module",
+  "private": true,
+  "description": "Reference deck that consumes @miragon/slidev-toolkit. This is the template body: cover, chapters and closing.",
+  "scripts": {
+    "dev": "slidev slides.md --open",
+    "build": "slidev build slides.md --out ../dist",
+    "export": "slidev export slides.md"
+  },
+  "dependencies": {
+    "@slidev/cli": "52.17.0",
+    "slidev-addon-bpmn": "1.8.1",
+    "vue": "3.5.39"
+  }
+}

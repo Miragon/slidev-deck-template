@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_recruitment" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Recruitment" isExecutable="false">
+    <bpmn:startEvent id="Start_App" name="Application&#10;received">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MED_App" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Screen" name="Screen application">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gw_Qualifies" name="Qualifies?">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_Schedule" name="Schedule interview">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Conduct" name="Conduct interview">
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gw_Hire" name="Hire?">
+      <bpmn:incoming>F5</bpmn:incoming>
+      <bpmn:outgoing>F6</bpmn:outgoing>
+      <bpmn:outgoing>F9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Offer" name="Send offer">
+      <bpmn:incoming>F6</bpmn:incoming>
+      <bpmn:outgoing>F7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Offer" name="Offer sent">
+      <bpmn:incoming>F7</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MED_Offer" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_RejectEarly" name="Rejected&#10;before interview">
+      <bpmn:incoming>F8</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MED_RejectEarly" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_RejectLate" name="Rejected&#10;after interview">
+      <bpmn:incoming>F9</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MED_RejectLate" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="F1" sourceRef="Start_App" targetRef="Task_Screen" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Task_Screen" targetRef="Gw_Qualifies" />
+    <bpmn:sequenceFlow id="F3" name="yes" sourceRef="Gw_Qualifies" targetRef="Task_Schedule" />
+    <bpmn:sequenceFlow id="F4" sourceRef="Task_Schedule" targetRef="Task_Conduct" />
+    <bpmn:sequenceFlow id="F5" sourceRef="Task_Conduct" targetRef="Gw_Hire" />
+    <bpmn:sequenceFlow id="F6" name="yes" sourceRef="Gw_Hire" targetRef="Task_Offer" />
+    <bpmn:sequenceFlow id="F7" sourceRef="Task_Offer" targetRef="End_Offer" />
+    <bpmn:sequenceFlow id="F8" name="no" sourceRef="Gw_Qualifies" targetRef="End_RejectEarly" />
+    <bpmn:sequenceFlow id="F9" name="no" sourceRef="Gw_Hire" targetRef="End_RejectLate" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Recruitment">
+      <bpmndi:BPMNShape id="Start_App_di" bpmnElement="Start_App">
+        <dc:Bounds x="50" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="36" y="125" width="64" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Screen_di" bpmnElement="Task_Screen">
+        <dc:Bounds x="140" y="60" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Qualifies_di" bpmnElement="Gw_Qualifies" isMarkerVisible="true">
+        <dc:Bounds x="300" y="75" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="294" y="48" width="62" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Schedule_di" bpmnElement="Task_Schedule">
+        <dc:Bounds x="400" y="60" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Conduct_di" bpmnElement="Task_Conduct">
+        <dc:Bounds x="570" y="60" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Hire_di" bpmnElement="Gw_Hire" isMarkerVisible="true">
+        <dc:Bounds x="740" y="75" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="745" y="48" width="40" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Offer_di" bpmnElement="Task_Offer">
+        <dc:Bounds x="840" y="60" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Offer_di" bpmnElement="End_Offer">
+        <dc:Bounds x="1000" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="992" y="125" width="52" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_RejectEarly_di" bpmnElement="End_RejectEarly">
+        <dc:Bounds x="307" y="220" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="270" y="263" width="110" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_RejectLate_di" bpmnElement="End_RejectLate">
+        <dc:Bounds x="747" y="220" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="708" y="263" width="114" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="86" y="100" /><di:waypoint x="140" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="260" y="100" /><di:waypoint x="300" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="350" y="100" /><di:waypoint x="400" y="100" />
+        <bpmndi:BPMNLabel><dc:Bounds x="365" y="82" width="18" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="530" y="100" /><di:waypoint x="570" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="700" y="100" /><di:waypoint x="740" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="790" y="100" /><di:waypoint x="840" y="100" />
+        <bpmndi:BPMNLabel><dc:Bounds x="805" y="82" width="18" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F7_di" bpmnElement="F7">
+        <di:waypoint x="960" y="100" /><di:waypoint x="1000" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="325" y="125" /><di:waypoint x="325" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="332" y="160" width="15" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F9_di" bpmnElement="F9">
+        <di:waypoint x="765" y="125" /><di:waypoint x="765" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="772" y="160" width="15" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
