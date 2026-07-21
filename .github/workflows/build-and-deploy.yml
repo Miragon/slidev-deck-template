@@ -1,25 +1,17 @@
-name: Build & Deploy Deck
+name: Build Deck
 
 # Build on every push to main AND on every pull request — so Dependabot
-# (and human) PRs get a green/red CI status before merge. Deploy is gated
-# to pushes on main only.
+# (and human) PRs get a green/red CI status before merge.
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 
-# Least privilege at workflow level. The deploy job opts into the extra
-# permissions it actually needs.
+# Least privilege at workflow level.
 permissions:
   contents: read
 
-# Concurrency is per-job, not workflow-level:
-#   build  → cancel-in-progress: true   (newer commit makes the older build
-#                                        irrelevant; cancel to save minutes)
-#   deploy → cancel-in-progress: false  (deploys are atomic; cancelling
-#                                        mid-flight can leave Pages in a
-#                                        half-updated state)
 jobs:
   build:
     concurrency:
@@ -51,30 +43,3 @@ jobs:
       # after the build so dist/ exists for the transparent-diagram check.
       - name: Verify guardrails (layout + source checks)
         run: npm run verify:source
-
-      # Pages-Artefakt nur auf main-Pushes hochladen — PRs brauchen den
-      # Build-Check, aber keinen Deploy-Artifact-Upload.
-      - name: Upload Pages artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    # Deploys run to completion. Multiple deploys to main queue up rather
-    # than cancelling, so Pages can never be left in a half-deployed state.
-    concurrency:
-      group: pages-${{ github.ref }}
-      cancel-in-progress: false
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
