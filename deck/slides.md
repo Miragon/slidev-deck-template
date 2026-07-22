@@ -75,10 +75,6 @@ src: ./chapter/05-authoring/05-authoring.md
 ---
 
 ---
-src: ./chapter/06-components/06-components.md
----
-
----
 layout: closing
 eyebrow: Your turn
 contact: hello@miragon.io
