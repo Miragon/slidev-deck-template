@@ -7,13 +7,17 @@ name: Release
 # The GitHub App token (not the default GITHUB_TOKEN) is required so the bot's
 # commits/tags trigger downstream workflows — a plain GITHUB_TOKEN would not.
 #
-# npm publish uses Trusted Publishing (OIDC). npm validates the OIDC token
-# against the trusted-publisher config on npmjs.com by WORKFLOW FILENAME. When a
-# reusable workflow (workflow_call) runs the publish, npm's validation gets
-# ambiguous (caller vs. callee workflow ref) and surfaces as a misleading `E404`
-# on publish. We therefore run `npm publish` INLINE in this file, so both OIDC
-# claims resolve to `release-please.yml` — exactly the configured trusted
-# publisher. Do NOT move the publish back into a reusable workflow.
+# npm publish uses Trusted Publishing (OIDC). npm's registry validates the OIDC
+# token against the trusted-publisher config on npmjs.com, and EVERY claim must
+# match or the token exchange fails with a misleading `E404` ("package not
+# found") — see npm/cli#8678, #9088. Two things the config must agree with:
+#   1. Workflow filename = release-please.yml. The publish therefore runs INLINE
+#      here (NOT a reusable workflow), so the OIDC workflow ref resolves to this
+#      file and not to a callee.
+#   2. NO GitHub environment. The trusted-publisher "Environment name" field is
+#      empty, so this job must NOT declare `environment:` — an environment claim
+#      the config doesn't expect makes the exchange 404. Keep them in sync: to
+#      re-add an environment, set the same name in the npm config first.
 on:
   push:
     branches: [main]
@@ -67,7 +71,6 @@ jobs:
       (needs.release-please.outputs.releases_created == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
     runs-on: ubuntu-latest
-    environment: npm
     permissions:
       contents: read
       id-token: write
