@@ -13,7 +13,7 @@ The entry **`deck/slides.md`** holds only the cover and the closing; the body is
 
 **Always invoke the `slides` skill before creating or editing any slide.** Editing the deck is never freehand: load the skill first and follow it for every layout, component, and editorial decision.
 
-1. **The `slides` skill** (`.claude/skills/slides/SKILL.md`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 11 layout archetypes (`cover`, `hero`, `person`, `section`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `SplitView`), the white-card rule, content rules (English, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
+1. **The `slides` skill** (`.claude/skills/slides/SKILL.md`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 12 layout archetypes (`cover`, `hero`, `person`, `section`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `SplitView`), the white-card rule, content rules (English, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
 2. **`deck/`** — the reference implementation. Every archetype has a demo slide with a comment block listing `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE`. Open the relevant `deck/chapter/<chapter>/<chapter>.md` alongside the skill when in doubt.
 
 Do not duplicate rules across files (this one, the skill, project memory). The rendering truth lives in `packages/toolkit/`; point at the `slides` skill for everything else.
@@ -44,6 +44,7 @@ If you do nothing else, respect these:
 - **`deck/slides.md`** is the entry; each chapter is a folder `deck/chapter/NN-name/` with `NN-name.md` + a `resources/` subfolder, imported via `src:`. Every chapter begins with a `section` archetype slide.
 - **Vary `leftIsGood` across `goodbad` slides** so "Recommended" doesn't always land on the same side.
 - **The `bpmn` archetype requires `slidev-addon-bpmn`** — already in `package.json` and registered in `deck/slides.md` frontmatter. Put `.bpmn` files in the chapter's `resources/` folder and set `diagram: /resources/<chapter>/<file>`.
+- **The `dmn` archetype requires `slidev-addon-dmn`** (the sibling of `bpmn`: a decision table instead of a process) — already in `package.json` and registered in `deck/slides.md` frontmatter. Put `.dmn` files in the chapter's `resources/` folder and set `diagram: /resources/<chapter>/<file>`.
 
 Everything above is expanded in the `slides` skill.
 
