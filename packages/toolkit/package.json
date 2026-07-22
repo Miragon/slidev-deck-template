@@ -29,7 +29,10 @@
     "layouts",
     "components",
     "styles",
-    "assets"
+    "assets",
+    "global",
+    "global-top.vue",
+    "global-bottom.vue"
   ],
   "publishConfig": {
     "access": "public",
