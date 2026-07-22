@@ -7,7 +7,7 @@ accent: blue
 
 # **The Miragon theme**
 
-The brand layer: fixed tokens, twelve layouts, seven components.
+The brand layer: fixed tokens and twelve layouts. The components have their own chapter.
 
 ---
 layout: content
@@ -38,7 +38,7 @@ accent: blue
 ---
 
 <!--
-  The archetypes, grouped. Each is a `layout:` value. Transition: "Components fill them."
+  The archetypes, grouped. Each is a `layout:` value. Transition: "Why a system at all?"
 -->
 
 <v-clicks>
@@ -50,56 +50,6 @@ accent: blue
 - **Close:** `closing`
 
 </v-clicks>
-
----
-layout: content
-title: Seven components keep markdown clean
-eyebrow: 03 - The Miragon theme
-accent: blue
----
-
-<!--
-  Explain the components precisely; no raw HTML/CSS/hex in slides.
-  Transition: "Here they are in action."
--->
-
-<v-clicks>
-
-- **Card / CardGrid**: white cards in a row, accent on the title only
-- **StepList / Step**: a labelled, ordered sequence
-- **Figure**: a titled, captioned visual (image or diagram)
-- **SplitView**: a visual on one side, the explanation on the other
-- **BrandMeshBackground**: the animated cover/closing shader (brand-locked)
-
-</v-clicks>
-
----
-layout: content
-title: Components in action
-eyebrow: 03 - The Miragon theme
-accent: blue
----
-
-<!--
-  CardGrid + Card: no raw <div>, no hex. Accent walks blue → teal → green.
-  Transition: "Why bother with a system at all?"
--->
-
-<CardGrid cols="3">
-
-<Card title="Card / CardGrid" accent="blue">
-A row of white cards, written as components, not raw HTML or hex.
-</Card>
-
-<Card title="StepList / Figure" accent="teal">
-Ordered steps and captioned visuals, styled by the theme, not the slide.
-</Card>
-
-<Card title="SplitView" accent="green">
-A diagram on one side, the explanation on the other, in one tag.
-</Card>
-
-</CardGrid>
 
 ---
 layout: compare

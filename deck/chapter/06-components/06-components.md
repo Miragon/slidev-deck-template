@@ -7,17 +7,17 @@ accent: blue
 
 # **Components**
 
-One slide per building block, with what each is for.
+Three kinds, grouped by how you use them.
 
 ---
 layout: content
 title: Card and CardGrid
-eyebrow: 06 - Components
+eyebrow: Drop into a slide
 accent: blue
 ---
 
 <!--
-  Purpose: group a few parallel points as equal white cards.
+  Group 1, drop-in furniture. Purpose: group a few parallel points as white cards.
   The row below is a live CardGrid. Transition: "Next, a labelled sequence."
 -->
 
@@ -36,12 +36,12 @@ Group a few parallel points as equal white cards, the accent stepping across the
 ---
 layout: content
 title: StepList and Step
-eyebrow: 06 - Components
+eyebrow: Drop into a slide
 accent: blue
 ---
 
 <!--
-  Purpose: a compact labelled sequence, usually beside a diagram.
+  Group 1, drop-in furniture. Purpose: a compact labelled sequence beside a diagram.
   The list below is a live StepList. Transition: "A titled, captioned visual next."
 -->
 
@@ -56,12 +56,12 @@ A compact labelled sequence for the narrow column next to a diagram: a bold labe
 ---
 layout: content
 title: Figure
-eyebrow: 06 - Components
+eyebrow: Drop into a slide
 accent: blue
 ---
 
 <!--
-  Purpose: wrap one visual with a title and caption.
+  Group 1, drop-in furniture. Purpose: wrap one visual with a title and caption.
   The block below is a live Figure. Transition: "Pair a visual with text: SplitView."
 -->
 
@@ -72,13 +72,13 @@ Wrap one visual, an image or an `.excalidraw.svg`, with a title above and a capt
 ---
 layout: content
 title: SplitView
-eyebrow: 06 - Components
+eyebrow: Drop into a slide
 accent: blue
 ---
 
 <!--
-  Purpose: a visual and its explanation, side by side.
-  The block below is a live SplitView. Transition: "A full-deck component: Agenda."
+  Group 1, drop-in furniture. Purpose: a visual and its explanation, side by side.
+  The block below is a live SplitView. Transition: "One you place once: the Agenda."
 -->
 
 Put a visual and its explanation side by side, when a diagram needs bullets next to it.
@@ -97,64 +97,42 @@ Put a visual and its explanation side by side, when a diagram needs bullets next
 ---
 layout: content
 title: Agenda
-eyebrow: 06 - Components
+eyebrow: Place once
 accent: blue
 ---
 
 <!--
-  Purpose: the deck's live chapter map. Shown live right after the cover.
-  Transition: "The animated brand shader: BrandMeshBackground."
+  Group 2, place once. Purpose: the deck's live chapter map. Shown live after the cover.
+  Transition: "Now the chrome the theme adds for you."
 -->
 
-The deck's chapter map, and the red thread through a talk.
+The deck's chapter map, and the red thread through a talk. You place it once.
 
 <v-clicks>
 
 - A clickable stepper across the chapters, with a live preview of each one
 - It reads the deck live, so adding a chapter updates it automatically
-- Use it once, near the start: you saw it right after the cover
-
-</v-clicks>
-
----
-layout: content
-title: BrandMeshBackground
-eyebrow: 06 - Components
-accent: blue
----
-
-<!--
-  Purpose: the animated brand shader, brand-locked, cover/closing only.
-  Transition: "Always-on chrome: the stepper bar."
--->
-
-The animated brand shader, the one moving brand moment in the deck.
-
-<v-clicks>
-
-- A full-bleed animated gradient in the Miragon colours
-- Brand-locked: the colours and motion never change
-- Used only by the `cover` and `closing` layouts, as the opening and closing
+- Used near the start: you saw it right after the cover
 
 </v-clicks>
 
 ---
 layout: content
 title: Stepper bar
-eyebrow: 06 - Components
+eyebrow: Automatic chrome
 accent: blue
 ---
 
 <!--
-  Purpose: deck-wide progress, a global layer. Visible at the very top of this slide.
+  Group 3, automatic chrome. Purpose: deck-wide progress. Visible at the top of this slide.
   Transition: "Its partner at the bottom: the footer."
 -->
 
-A thin progress bar that tracks your position across the whole deck.
+A thin progress bar that tracks your position across the whole deck. You never place it.
 
 <v-clicks>
 
-- A global layer: automatic on every content slide, nothing to place
+- A global layer: the theme adds it to every content slide
 - Its width grows as you move through the deck
 - Look at the very top edge of this slide
 
@@ -163,13 +141,13 @@ A thin progress bar that tracks your position across the whole deck.
 ---
 layout: content
 title: Footer
-eyebrow: 06 - Components
+eyebrow: Automatic chrome
 accent: blue
 ---
 
 <!--
-  Purpose: quiet chapter and position line, a global layer. Visible at the bottom now.
-  Transition: "And the twelve layouts that host them."
+  Group 3, automatic chrome. Purpose: quiet chapter and position line. Visible at the bottom.
+  Transition: "And the animated brand moment: BrandMeshBackground."
 -->
 
 A quiet line that keeps the audience oriented, with an optional date.
@@ -184,23 +162,22 @@ A quiet line that keeps the audience oriented, with an optional date.
 
 ---
 layout: content
-title: Twelve layouts host them
-eyebrow: 06 - Components
+title: BrandMeshBackground
+eyebrow: Automatic chrome
 accent: blue
 ---
 
 <!--
-  The whole-slide archetypes the components live inside, each a `layout:` value.
-  All are demoed across this deck: bpmn and dmn in chapter 04, the openers and
-  content layouts everywhere. Transition: "That is the whole toolkit."
+  Group 3, automatic chrome. Purpose: the animated brand shader, cover/closing only.
+  Transition: "That is the whole toolkit."
 -->
+
+The animated brand shader, the one moving brand moment, run by the layouts for you.
 
 <v-clicks>
 
-- **Openers:** `cover`, `hero`, `person`, `section`
-- **Content:** `content`, `content-image`
-- **Decisions:** `compare`, `goodbad`
-- **Process and rules:** `bpmn`, `dmn`
-- **Explore and close:** `showcase`, `closing`
+- A full-bleed animated gradient in the Miragon colours
+- Brand-locked: the colours and motion never change
+- Built into the `cover` and `closing` layouts, as the opening and closing
 
 </v-clicks>
