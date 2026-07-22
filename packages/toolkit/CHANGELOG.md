@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/Miragon/slidev-deck-template/compare/v1.2.0...v1.2.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* **toolkit:** add package README and broaden the vue peer range ([#15](https://github.com/Miragon/slidev-deck-template/issues/15)) ([fb05845](https://github.com/Miragon/slidev-deck-template/commit/fb05845e4f12acadbd848bff9063c84d5fe8dbf8))
+
 ## [1.2.0](https://github.com/Miragon/slidev-deck-template/compare/v1.1.0...v1.2.0) (2026-07-22)
 
 
