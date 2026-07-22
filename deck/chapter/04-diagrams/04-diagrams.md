@@ -78,7 +78,24 @@ height: 330px
 
 <!--
   bpmn archetype: renders a .bpmn file with token simulation (slidev-addon-bpmn).
-  File lives in this chapter's resources/. Transition: "Now: how do you write all this?"
+  File lives in this chapter's resources/. Transition: "And the decisions inside it: DMN."
 -->
 
 A real BPMN file with token simulation, straight from Camunda Modeler or bpmn.io.
+
+---
+layout: dmn
+title: And the decisions inside it
+eyebrow: 04 - Diagrams
+accent: blue
+diagram: /resources/04-diagrams/hiring.dmn
+height: 300px
+---
+
+<!--
+  dmn archetype: renders a .dmn decision table (slidev-addon-dmn), the sibling of
+  the bpmn archetype. BPMN models the process, DMN models the decisions inside it.
+  File lives in this chapter's resources/. Transition: "Now: how do you write all this?"
+-->
+
+A DMN decision table, the business rules behind a process step, from any DMN modeler.

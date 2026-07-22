@@ -13,6 +13,7 @@ transition: slide-up
 # `npm run export` instead. See README → "Presenting and exporting".
 addons:
   - slidev-addon-bpmn
+  - slidev-addon-dmn
 layout: cover
 eyebrow: Miragon · Onboarding
 # Social/link preview (og:image). Needs an absolute URL, so it points at the

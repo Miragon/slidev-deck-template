@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             id="hiring"
+             name="Hiring decision"
+             namespace="http://miragon.io/dmn/hiring">
+  <decision id="hiringDecision" name="Hiring decision">
+    <decisionTable id="hiringTable" hitPolicy="UNIQUE">
+      <input id="input_score" label="Interview score">
+        <inputExpression id="input_score_expr" typeRef="number">
+          <text>score</text>
+        </inputExpression>
+      </input>
+      <output id="output_outcome" label="Outcome" name="outcome" typeRef="string" />
+      <rule id="rule_reject">
+        <inputEntry id="ie_reject"><text>&lt; 50</text></inputEntry>
+        <outputEntry id="oe_reject"><text>"Reject"</text></outputEntry>
+      </rule>
+      <rule id="rule_second">
+        <inputEntry id="ie_second"><text>[50..80)</text></inputEntry>
+        <outputEntry id="oe_second"><text>"Second interview"</text></outputEntry>
+      </rule>
+      <rule id="rule_offer">
+        <inputEntry id="ie_offer"><text>&gt;= 80</text></inputEntry>
+        <outputEntry id="oe_offer"><text>"Make an offer"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

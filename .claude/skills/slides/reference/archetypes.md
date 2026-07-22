@@ -1,6 +1,6 @@
 # Layout archetypes — full reference
 
-The theme ships **11 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
+The theme ships **12 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
 
 `accent` is `blue` (default) · `green` · `mixed` unless noted; it tints the gradient accent bar and the bold word.
 
@@ -127,6 +127,23 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 | **slot** | optional caption below the diagram |
 
 **Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
+
+## dmn — DMN decision table (static)
+
+A `.dmn` file rendered as a decision table via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN models the process, DMN the decisions inside it. The table is the focal point.
+
+| Frontmatter | Values |
+|---|---|
+| `title`, `eyebrow` (str) | — |
+| `accent` | blue / green / mixed |
+| `diagram` (str) | the `.dmn` in the chapter's `resources/`, e.g. `/resources/04-diagrams/x.dmn` |
+| `height` (str) | canvas height (default `"360px"`) |
+| `decisionId` (str) | which decision to show when the file holds several (optional) |
+| `fontSize` (str) | table font size (default `"15px"`) |
+| `showAnnotations` (bool) | show the trailing annotations column (default `false`) |
+| **slot** | optional caption below the table |
+
+**Dependency:** `slidev-addon-dmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
 ## showcase — interactive feature explorer (static, interactive)
 
