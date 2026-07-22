@@ -99,7 +99,7 @@ accent: blue
 
 <!--
   The full-slide and always-on pieces. The stepper bar and footer are visible on
-  this very slide. Transition: "That is the whole toolkit."
+  this very slide. Transition: "And the twelve layouts that host them."
 -->
 
 <CardGrid cols="3">
@@ -111,3 +111,26 @@ accent: blue
 <Card title="BrandMeshBackground" accent="green">The animated shader on the cover and closing. Brand-locked, so its colours never change.</Card>
 
 </CardGrid>
+
+---
+layout: content
+title: Twelve layouts host them
+eyebrow: 06 - Components
+accent: blue
+---
+
+<!--
+  The whole-slide archetypes the components live inside, each a `layout:` value.
+  All are demoed across this deck: bpmn and dmn in chapter 04, the openers and
+  content layouts everywhere. Transition: "That is the whole toolkit."
+-->
+
+<v-clicks>
+
+- **Openers:** `cover`, `hero`, `person`, `section`
+- **Content:** `content`, `content-image`
+- **Decisions:** `compare`, `goodbad`
+- **Process and rules:** `bpmn`, `dmn`
+- **Explore and close:** `showcase`, `closing`
+
+</v-clicks>
