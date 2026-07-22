@@ -4,6 +4,9 @@ theme: '@miragon/slidev-toolkit'
 colorSchema: light
 highlighter: shiki
 transition: slide-up
+# Optional: show a date in the footer's left segment (global-bottom.vue).
+# Uncomment and set an ISO date; leave commented to hide the date segment.
+# eventDate: 2026-07-21
 # NOTE: PDF export (download: true) is intentionally disabled. It requires a
 # Playwright/Chromium browser, which is not available on hosted CI builders
 # (e.g. Netlify) and fails `npm run build` there. Export the PDF locally with
