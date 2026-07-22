@@ -30,6 +30,7 @@
     "components",
     "styles",
     "assets",
+    "global",
     "global-top.vue",
     "global-bottom.vue"
   ],
