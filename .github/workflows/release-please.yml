@@ -6,6 +6,14 @@ name: Release
 #
 # The GitHub App token (not the default GITHUB_TOKEN) is required so the bot's
 # commits/tags trigger downstream workflows — a plain GITHUB_TOKEN would not.
+#
+# npm publish uses Trusted Publishing (OIDC). npm validates the OIDC token
+# against the trusted-publisher config on npmjs.com by WORKFLOW FILENAME. When a
+# reusable workflow (workflow_call) runs the publish, npm's validation gets
+# ambiguous (caller vs. callee workflow ref) and surfaces as a misleading `E404`
+# on publish. We therefore run `npm publish` INLINE in this file, so both OIDC
+# claims resolve to `release-please.yml` — exactly the configured trusted
+# publisher. Do NOT move the publish back into a reusable workflow.
 on:
   push:
     branches: [main]
@@ -13,6 +21,10 @@ on:
     inputs:
       dry_run:
         description: 'Validate packaging/publish without releasing'
+        type: boolean
+        default: false
+      publish_current:
+        description: 'Publish the current packages/toolkit version now (idempotent recovery lever)'
         type: boolean
         default: false
 
@@ -43,13 +55,41 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
+  # Inline publish (see the note at the top of this file — must NOT be a reusable
+  # workflow, so the OIDC token resolves to release-please.yml for npm Trusted
+  # Publishing). Runs when release-please cut a release, OR on a manual
+  # `publish_current` dispatch (recovery / republish). Idempotent: skips if the
+  # current version is already on the registry.
   publish-npm:
     needs: release-please
-    if: needs.release-please.outputs.releases_created == 'true'
+    if: >-
+      !cancelled() && needs.release-please.result != 'failure' &&
+      (needs.release-please.outputs.releases_created == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
+    runs-on: ubuntu-latest
+    environment: npm
     permissions:
       contents: read
       id-token: write
-    uses: ./.github/workflows/publish-npm-package.yml
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # Trusted Publishing (OIDC) needs npm >= 11.5.1, newer than what Node 24
+      # ships. Upgrade the CLI before publishing.
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - name: Publish @miragon/slidev-toolkit
+        run: |
+          name="$(node -p "require('./packages/toolkit/package.json').name")"
+          version="$(node -p "require('./packages/toolkit/package.json').version")"
+          if npm view "$name@$version" version > /dev/null 2>&1; then
+            echo "$name@$version already published — skipping"
+          else
+            npm publish -w packages/toolkit --provenance --access public
+          fi
 
   # Manual sanity check: `Run workflow` with dry_run = true builds and runs
   # `npm publish --dry-run` without releasing or publishing anything.
