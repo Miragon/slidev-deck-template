@@ -7,7 +7,7 @@ accent: blue
 
 # **The Miragon theme**
 
-The brand layer: fixed tokens, eleven layouts, seven components.
+The brand layer: fixed tokens, twelve layouts, seven components.
 
 ---
 layout: content
@@ -32,7 +32,7 @@ accent: blue
 
 ---
 layout: content
-title: Eleven layouts for eleven jobs
+title: Twelve layouts for twelve jobs
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
@@ -46,7 +46,7 @@ accent: blue
 - **Openers:** `cover`, `hero`, `person`, `section`
 - **Content:** `content`, `content-image`
 - **Decisions:** `compare`, `goodbad`
-- **Visuals:** `bpmn`, `showcase`
+- **Visuals:** `bpmn`, `dmn`, `showcase`
 - **Close:** `closing`
 
 </v-clicks>

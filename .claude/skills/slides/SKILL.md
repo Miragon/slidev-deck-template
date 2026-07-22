@@ -17,7 +17,7 @@ How to build the Miragon-branded Slidev deck in this repo: where things live, wh
 
 If a value disagrees, **`packages/toolkit/styles/theme.css` wins for colours**, the layout/component `.vue` wins for its prop signature, and this skill wins for editorial/composition rules.
 
-Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 11 layouts) and [`reference/components.md`](reference/components.md) (the components).
+Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 12 layouts) and [`reference/components.md`](reference/components.md) (the components).
 
 ---
 
@@ -28,7 +28,7 @@ A **single deck**. The design system is the **`@miragon/slidev-toolkit`** packag
 ```
 packages/toolkit/          the design system (fixed, brand-controlled)
   styles/theme.css         colour tokens
-  layouts/*.vue            the 11 archetypes
+  layouts/*.vue            the 12 archetypes
   components/*.vue         Card, CardGrid, StepList, Step, Figure, SplitView, BrandMeshBackground
   assets/                  brand assets (logo.svg, komet.svg) — bundled with the theme
 deck/
@@ -71,7 +71,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 
 ## The non-negotiables (one screen)
 
-- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 11 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
+- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 12 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
 - **English only on slide content** (titles, bullets, labels, diagram text). Speaker notes (`<!-- … -->`) may be in another language if requested. Code, brand names, and standard technical terms stay as-is.
 - **Cards are always white** — use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**.
 - **Headings are BLACK, never blue.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour — don't override.
@@ -98,6 +98,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 | Before vs. After (two coloured panels) | `compare` |
 | "Which one is right, and why?" with reveal | `goodbad` |
 | A BPMN process diagram with token playback | `bpmn` (needs `slidev-addon-bpmn`) |
+| A DMN decision table (the rules behind a step) | `dmn` (needs `slidev-addon-dmn`) |
 | Click-through feature explorer / mini-quiz | `showcase` |
 | Close the deck | `closing` (animated) |
 | One memorable number / stat | `hero` with the number as the bold word |

@@ -34,6 +34,7 @@ const MIME = {
   '.gif': 'image/gif',
   '.webp': 'image/webp',
   '.bpmn': 'application/xml',
+  '.dmn': 'application/xml',
   '.xml': 'application/xml',
   '.json': 'application/json',
 }
