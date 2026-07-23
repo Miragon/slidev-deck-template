@@ -122,17 +122,27 @@ async function fetchSkeleton(ref) {
   return scratch
 }
 
+/** Turn a target directory into a valid, lowercase npm package name. */
+function deckNameFrom(dir) {
+  return basename(dir).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || 'my-deck'
+}
+
+/** The verify tooling versions, read (by name) from the root package.json's devDependencies. */
+function verifyDevDeps(rootPkg) {
+  const deps = {}
+  for (const name of VERIFY_DEV_DEPS) {
+    const version = rootPkg.devDependencies?.[name]
+    if (!version) throw new Error(`Root package.json is missing devDependency ${name}`)
+    deps[name] = version
+  }
+  return deps
+}
+
 /** Build the standalone deck package.json from the fetched skeleton's manifests. */
 function buildPackageJson(scratch, deckName, toolkitVersion) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
   const rootPkg = readManifest('package.json')
-  const devDependencies = {}
-  for (const name of VERIFY_DEV_DEPS) {
-    const version = rootPkg.devDependencies?.[name]
-    if (!version) throw new Error(`Root package.json is missing devDependency ${name}`)
-    devDependencies[name] = version
-  }
   const pkg = {
     name: deckName,
     type: 'module',
@@ -145,9 +155,69 @@ function buildPackageJson(scratch, deckName, toolkitVersion) {
       'verify:source': rootPkg.scripts['verify:source'],
     },
     dependencies: { '@miragon/slidev-toolkit': toolkitVersion, ...deckPkg.dependencies },
-    devDependencies,
+    devDependencies: verifyDevDeps(rootPkg),
   }
   return JSON.stringify(pkg, null, 2) + '\n'
+}
+
+/** Exit unless `target` is absent or an empty directory. Returns whether it already exists. */
+async function ensureEmptyTarget(target) {
+  if (!existsSync(target)) return false
+  const refuse = (why) => {
+    console.error(`Refusing to scaffold: ${target} ${why}.`)
+    process.exit(1)
+  }
+  if (!statSync(target).isDirectory()) refuse('exists and is not a directory')
+  if ((await readdir(target)).length > 0) refuse('exists and is not empty')
+  return true
+}
+
+/** Copy each whitelisted skeleton path into the target. */
+async function copySkeleton(scratch, target, ref) {
+  for (const rel of SKELETON) {
+    const from = join(scratch, rel)
+    if (!existsSync(from)) throw new Error(`Skeleton is missing ${rel} (ref ${ref}).`)
+    const to = join(target, rel)
+    await mkdir(dirname(to), { recursive: true })
+    await cp(from, to, { recursive: true })
+  }
+}
+
+/** Undo a half-written target so a retry is not blocked by the empty-dir guard. */
+async function rollback(target, preexisting) {
+  if (!preexisting) return rm(target, { recursive: true, force: true })
+  for (const entry of await readdir(target).catch(() => [])) {
+    await rm(join(target, entry), { recursive: true, force: true })
+  }
+}
+
+/** Assemble the deck in `target`: skeleton, prune, then the generated overlay. */
+async function layDownDeck({ scratch, target, deckName, toolkitVersion, ref, preexisting }) {
+  try {
+    await mkdir(target, { recursive: true })
+    await copySkeleton(scratch, target, ref)
+    for (const rel of PRUNE) await rm(join(target, rel), { force: true })
+
+    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion)
+    await writeFile(join(target, 'package.json'), packageJson)
+    await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
+  } catch (err) {
+    await rollback(target, preexisting)
+    throw err
+  }
+}
+
+function printNextSteps(dir) {
+  const pm = packageManager()
+  console.log(`
+Done. Your deck is ready in ${dir}
+
+Next steps:
+  cd ${dir}
+  ${pm} install
+  ${pm} run dev
+
+Build with '${pm} run build', check brand guardrails with '${pm} run verify'.`)
 }
 
 async function main() {
@@ -162,67 +232,22 @@ async function main() {
   }
 
   const target = resolve(opts.target)
-  if (existsSync(target)) {
-    if (!statSync(target).isDirectory()) {
-      console.error(`Refusing to scaffold: ${target} exists and is not a directory.`)
-      process.exit(1)
-    }
-    if ((await readdir(target)).length > 0) {
-      console.error(`Refusing to scaffold: ${target} exists and is not empty.`)
-      process.exit(1)
-    }
-  }
-  const preexisting = existsSync(target)
-
+  const preexisting = await ensureEmptyTarget(target)
   const ref = opts.ref ?? `create-slidev-deck-v${SELF.version}`
   const toolkitVersion = opts.toolkitVersion ?? TOOLKIT_VERSION
-  const deckName =
-    basename(target).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || 'my-deck'
+  const deckName = deckNameFrom(target)
 
   const source = process.env.CREATE_DECK_SKELETON ? 'local checkout' : `${REPO}#${ref}`
   console.log(`Scaffolding ${deckName} from ${source} ...`)
 
   const scratch = await fetchSkeleton(ref)
   try {
-    await mkdir(target, { recursive: true })
-
-    // 1. Skeleton: copy the whitelist verbatim, then drop the pruned paths.
-    for (const rel of SKELETON) {
-      const from = join(scratch, rel)
-      if (!existsSync(from)) throw new Error(`Skeleton is missing ${rel} (ref ${ref}).`)
-      const to = join(target, rel)
-      await mkdir(dirname(to), { recursive: true })
-      await cp(from, to, { recursive: true })
-    }
-    for (const rel of PRUNE) await rm(join(target, rel), { force: true })
-
-    // 2. Overlay: the derived standalone package.json + the deck-focused README.
-    await writeFile(join(target, 'package.json'), buildPackageJson(scratch, deckName, toolkitVersion))
-    await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
-  } catch (err) {
-    // Roll back so a half-written target does not block a retry (empty-dir guard).
-    if (preexisting) {
-      for (const f of await readdir(target).catch(() => [])) {
-        await rm(join(target, f), { recursive: true, force: true })
-      }
-    } else {
-      await rm(target, { recursive: true, force: true })
-    }
-    throw err
+    await layDownDeck({ scratch, target, deckName, toolkitVersion, ref, preexisting })
   } finally {
     await rm(scratch, { recursive: true, force: true })
   }
 
-  const pm = packageManager()
-  console.log(`
-Done. Your deck is ready in ${opts.target}
-
-Next steps:
-  cd ${opts.target}
-  ${pm} install
-  ${pm} run dev
-
-Build with '${pm} run build', check brand guardrails with '${pm} run verify'.`)
+  printNextSteps(opts.target)
 }
 
 main().catch((err) => {
