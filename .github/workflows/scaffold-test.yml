@@ -1,0 +1,40 @@
+name: Scaffold Test
+
+# TEMPLATE-ONLY. Proves `npm create @miragon/slidev-deck` still emits a working
+# deck: a fast structural check of the generated layout, then a full
+# scaffold -> install -> build -> verify against the toolkit pulled from npm.
+# This workflow is not part of the scaffold, so it never lands in a generated
+# deck; the repo guard keeps it a no-op in "Use this template" clones.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scaffold-test:
+    if: github.repository == 'Miragon/slidev-deck-template'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Fast structural smoke test: generated layout, exclusions, clean package.json.
+      - run: npm test -w packages/create-deck
+
+      # End-to-end: scaffold a deck from this checkout and prove it installs,
+      # builds and passes the source guardrails with the toolkit resolved from npm.
+      - name: Scaffold a deck and verify it builds
+        run: |
+          CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
+          cd "$RUNNER_TEMP/smoke-deck"
+          npm install
+          npm run build
+          npm run verify:source

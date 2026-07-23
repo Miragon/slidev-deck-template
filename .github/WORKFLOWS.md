@@ -10,14 +10,15 @@ The workflows that keep the template building, releasing and secure. All actions
 | `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR per package from conventional commits; on merge, cuts the tag/GitHub release and publishes `@miragon/slidev-toolkit` and `@miragon/create-slidev-deck` to npm. |
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
+| `scaffold-test.yml` | Scaffold Test | push to `main`, every PR, manual | **Template-only.** Runs the `create-slidev-deck` structural smoke test, then scaffolds a deck and checks it installs, builds and verifies with the toolkit pulled from npm. |
 
 ## Template-only workflows
 
-"Use this template" copies every file here into the new repo, but only this repo owns the npm package. **Release** and **PR Title** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`:
+"Use this template" copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`:
 
-- Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason.
-- In a derived repo both workflows now run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
-- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all five occurrences** (four jobs in `release-please.yml` plus `pr-title.yml`), otherwise releases stop silently.
+- Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason, and it would pointlessly test a scaffolder it does not own.
+- In a derived repo these workflows run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
+- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all six occurrences** (four jobs in `release-please.yml`, plus `pr-title.yml` and `scaffold-test.yml`), otherwise releases stop silently.
 
 Build Deck and Pin Check are deliberately *not* guarded — every deck repo wants them.
 
