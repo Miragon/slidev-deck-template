@@ -29,12 +29,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Chromium nur hier in der CI installiert; der Build erzeugt damit
-      # das PDF (slidev-exported.pdf) für den Download-Button (download: true).
-      - name: Install Chromium for PDF export
-        run: npx playwright install chromium --with-deps
-
-      - name: Build HTML (incl. PDF for download button)
+      # No browser step: the deck keeps the PDF export (`download: true`) switched
+      # off on purpose, so `slidev build` is pure static output. Export the PDF
+      # locally with `npm run export`. The verify step below is source-only and
+      # needs no browser either.
+      - name: Build HTML
         run: npx slidev build deck/slides.md --base /${{ github.event.repository.name }}/ --out ../dist
 
       # Fitness functions: fast source-level guardrails (every slide declares a
