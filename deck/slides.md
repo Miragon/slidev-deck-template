@@ -17,7 +17,11 @@ addons:
 layout: cover
 eyebrow: Miragon · Onboarding
 # Social/link preview (og:image). Needs an absolute URL, so it points at the
-# Netlify production site. The image is served from deck/public/og-image.png.
+# Netlify production site of THIS template. The image is served from
+# deck/public/og-image.png.
+# In a deck created from this template: point these at your own domain, or
+# delete the whole seoMeta block. Otherwise your shared link previews as the
+# Miragon template instead of your talk.
 seoMeta:
   ogTitle: Miragon Slidev Deck Template
   ogDescription: A branded Slidev template. Build decks like code.

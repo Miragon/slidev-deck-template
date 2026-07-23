@@ -74,7 +74,7 @@ A slide is frontmatter + headings + bullets + component tags, never raw `<div>`/
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium; kept out of `build` so CI stays green) |
 | `npm run verify` | Screenshot + checklist per slide against the design rules — see [`verify/`](verify/) |
 
-Every push and PR is built and verified in CI ([`.github/`](.github/)); the built `dist/` is published via Netlify (`netlify.toml`).
+Every push and PR is built and verified in CI ([`.github/`](.github/)); CI itself publishes nowhere. Hosting is opt-in: this template's own deck is served by Netlify via [`netlify.toml`](netlify.toml), but a repo created from the template gets **no** site until you connect it in the Netlify UI.
 
 ## Working with Claude
 
@@ -100,7 +100,10 @@ More (PDF button, brand colours, per-file map) in [`deck/README.md`](deck/README
 1. Click **Use this template** on GitHub → fresh repo.
 2. `npm install`, then `npm run dev` to preview.
 3. Replace the demo content under `deck/`; keep the comment-block guardrails.
-4. Or open the repo with Claude Code and let it draft the first pass from your outline.
+4. Point the `seoMeta` block in [`deck/slides.md`](deck/slides.md) at your own domain, or delete it — it still carries this template's link preview.
+5. Or open the repo with Claude Code and let it draft the first pass from your outline.
+
+Your repo builds and verifies the deck (**Build Deck**, **Pin Check**) and does nothing else. **Release** and **PR Title** belong to the template — they maintain the `@miragon/slidev-toolkit` npm package and only ever run in `Miragon/slidev-deck-template`; in your repo they show up as *skipped* and change nothing. Delete `.github/workflows/release-please.yml`, `.github/workflows/pr-title.yml`, `release-please-config.json` and `.release-please-manifest.json` if you want a quiet Actions tab.
 
 ## License
 

@@ -3,6 +3,12 @@ name: PR Title
 # release-please parses conventional commits to decide version bumps. Because PRs
 # are squash-merged, the PR title becomes the commit message on main, so it must
 # be a valid conventional-commit subject (feat:, fix:, chore:, ...).
+#
+# TEMPLATE-ONLY: this check exists solely to feed release-please, which only runs
+# here (see release-please.yml). "Use this template" copies this workflow into
+# every new deck repo, where it would redden ordinary PR titles like "Slides for
+# the kickoff" for no reason. The repo guard below skips it there; a skipped job
+# counts as passing, so it never blocks a merge either.
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
@@ -16,6 +22,7 @@ concurrency:
 
 jobs:
   validate-pr-title:
+    if: github.repository == 'Miragon/slidev-deck-template'
     runs-on: ubuntu-latest
     steps:
       - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1

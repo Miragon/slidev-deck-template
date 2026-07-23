@@ -1,16 +1,17 @@
 # Netlify build for the Slidev deck.
 #
-# `npm run build` (slidev build) exports a PDF because the deck sets
-# `download: true` in deck/slides.md. That export launches Chromium via
-# Playwright, but Netlify's build image does not ship the browser — so the
-# build only worked while Chromium happened to be warm in Netlify's cache,
-# and broke the moment the pinned Playwright version needed a new browser
-# build. We install Chromium before building so preview and production are
-# deterministic. No --with-deps: the original failure was a missing browser
-# binary ("Executable doesn't exist"), not missing system libraries, so
-# Netlify's image already has the runtime deps and the apt step is skipped.
+# This file does NOTHING on its own. Netlify never creates a site for a repo by
+# itself — it builds only what someone deliberately links to a site in the
+# Netlify UI. A repo created via "Use this template" therefore inherits this
+# config but no site, no deploys and no URL. It is here so that connecting the
+# repo later is a one-click affair: the build is already configured correctly.
+#
+# `npm run build` is a plain `slidev build` — no browser involved. The deck
+# keeps the PDF export (`download: true`) switched off on purpose (see the note
+# in deck/slides.md), so the Chromium install this command used to carry was
+# pure build time. Export the PDF locally with `npm run export` instead.
 [build]
-  command = "npx playwright install chromium && npm run build"
+  command = "npm run build"
   publish = "dist"
 
 # SPA fallback so deep links (e.g. /23) resolve on a hard refresh. Netlify

@@ -7,6 +7,15 @@ name: Release
 # The GitHub App token (not the default GITHUB_TOKEN) is required so the bot's
 # commits/tags trigger downstream workflows — a plain GITHUB_TOKEN would not.
 #
+# TEMPLATE-ONLY: this repo is a GitHub template, so "Use this template" copies
+# this workflow into every new deck repo. The App credentials live at ORG level
+# in Miragon, so a copy would happily open Release PRs there and then fail the
+# npm publish (the OIDC repo claim no longer matches the trusted publisher).
+# Every job is therefore guarded by `github.repository == '<this repo>'`; in a
+# derived repo the run shows up as skipped and does nothing. The guard is a
+# literal string per job on purpose — the `env` context is not available in
+# `jobs.<id>.if`. If this repo is ever renamed or moved, update all three.
+#
 # npm publish uses Trusted Publishing (OIDC). npm's registry validates the OIDC
 # token against the trusted-publisher config on npmjs.com, and EVERY claim must
 # match or the token exchange fails with a misleading `E404` ("package not
@@ -41,6 +50,7 @@ jobs:
     # Skip cleanly until the GitHub App is configured (Teil 3 of the setup), so a
     # push to main does not fail the workflow before the credentials exist.
     if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
       (github.event_name != 'workflow_dispatch' || !inputs.dry_run) &&
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
@@ -67,6 +77,7 @@ jobs:
   publish-npm:
     needs: release-please
     if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.releases_created == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -97,7 +108,9 @@ jobs:
   # Manual sanity check: `Run workflow` with dry_run = true builds and runs
   # `npm publish --dry-run` without releasing or publishing anything.
   dry-run:
-    if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+    if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
+      github.event_name == 'workflow_dispatch' && inputs.dry_run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
