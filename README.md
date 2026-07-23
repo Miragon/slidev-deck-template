@@ -30,7 +30,7 @@ This is an npm workspace with three sub-projects, each with its own README:
 | [`deck/`](deck/) | **Your content** — cover, chapters, closing. This is what you edit. | [deck/README.md](deck/README.md) |
 | [`packages/toolkit/`](packages/toolkit/) | The `@miragon/slidev-toolkit` design system: theme, layouts, components. Fixed by brand. | [packages/toolkit/README.md](packages/toolkit/README.md) |
 | [`verify/`](verify/) | The design-system verification suite (`npm run verify`). | [verify/README.md](verify/README.md) |
-| [`.github/`](.github/) | CI, deploy, release and supply-chain automation. | [.github/README.md](.github/README.md) |
+| [`.github/`](.github/) | CI, deploy, release and supply-chain automation. | [.github/WORKFLOWS.md](.github/WORKFLOWS.md) |
 
 The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you never touch it. Content lives under `deck/` — `slides.md` is the entry (cover + one `src:` import per chapter + closing), and each chapter is a folder `deck/chapter/NN-name/` with its own `resources/`. See [`deck/README.md`](deck/README.md) for the full workflow.
 
