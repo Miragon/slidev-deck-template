@@ -7,7 +7,7 @@ The workflows that keep the template building, releasing and secure. All actions
 | File | Name | Trigger | Does |
 |---|---|---|---|
 | `build-and-deploy.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, `slidev build`, then `npm run verify:source`. No browser involved: the PDF export is kept out of `build` and the guardrails are source-only. This is the required CI status; forks inherit it. |
-| `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR from conventional commits; on merge, cuts the tag/GitHub release and publishes `@miragon/slidev-toolkit` to npm. |
+| `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR per package from conventional commits; on merge, cuts the tag/GitHub release and publishes `@miragon/slidev-toolkit` and `@miragon/create-slidev-deck` to npm. |
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
 
@@ -17,7 +17,7 @@ The workflows that keep the template building, releasing and secure. All actions
 
 - Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason.
 - In a derived repo both workflows now run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
-- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all four occurrences**, otherwise releases stop silently.
+- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all five occurrences** (four jobs in `release-please.yml` plus `pr-title.yml`), otherwise releases stop silently.
 
 Build Deck and Pin Check are deliberately *not* guarded — every deck repo wants them.
 
@@ -25,10 +25,11 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 `release-please.yml` publishes without an `NPM_TOKEN` secret. npm validates an OIDC token against the trusted-publisher config on npmjs.com, so the setup is deliberately constrained — read the header comment in the file before touching it:
 
-- The publish job runs **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename).
-- **No GitHub environment** on the publish job (the environment-name claim must stay empty).
-- Publishing is **idempotent** — it skips if the current `packages/toolkit` version is already on npm.
-- `workflow_dispatch` inputs allow a dry-run or a manual `publish_current` recovery republish.
+- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename). Each package needs its own trusted-publisher entry on npmjs.com pointing at this workflow.
+- **No GitHub environment** on the publish jobs (the environment-name claim must stay empty).
+- Publishing is **idempotent** — a job skips if that package's current version is already on npm.
+- `workflow_dispatch` inputs allow a dry-run (both packages) or a manual `publish_current` recovery republish.
+- **First-publish bootstrap:** OIDC cannot configure a trusted publisher for a package that does not exist yet, so a brand-new package's first release needs a one-time manual publish (or a short-lived granular token); every later release is tokenless.
 
 ## Dependency updates
 

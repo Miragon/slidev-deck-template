@@ -1,3 +1,4 @@
 {
-  "packages/toolkit": "1.2.1"
+  "packages/toolkit": "1.2.1",
+  "packages/create-deck": "0.0.0"
 }

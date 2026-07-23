@@ -1,12 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "release-type": "node",
-  "include-component-in-tag": false,
   "bump-minor-pre-major": true,
+  "separate-pull-requests": true,
   "packages": {
     "packages/toolkit": {
       "package-name": "@miragon/slidev-toolkit",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "include-component-in-tag": false
+    },
+    "packages/create-deck": {
+      "package-name": "@miragon/create-slidev-deck",
+      "component": "create-slidev-deck",
+      "include-component-in-tag": true
     }
   }
 }
