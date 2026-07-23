@@ -25,11 +25,10 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 `release-please.yml` publishes without an `NPM_TOKEN` secret. npm validates an OIDC token against the trusted-publisher config on npmjs.com, so the setup is deliberately constrained — read the header comment in the file before touching it:
 
-- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename). Each package needs its own trusted-publisher entry on npmjs.com pointing at this workflow.
+- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename).
 - **No GitHub environment** on the publish jobs (the environment-name claim must stay empty).
 - Publishing is **idempotent** — a job skips if that package's current version is already on npm.
 - `workflow_dispatch` inputs allow a dry-run (both packages) or a manual `publish_current` recovery republish.
-- **First-publish bootstrap:** OIDC cannot configure a trusted publisher for a package that does not exist yet, so a brand-new package's first release needs a one-time manual publish (or a short-lived granular token); every later release is tokenless.
 
 ## Dependency updates
 

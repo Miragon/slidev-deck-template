@@ -49,3 +49,28 @@ Authoring conventions live in the `slides` skill (`.claude/skills/slides/`). Sta
 > Outline a 30-minute talk on [topic] using `cover`, three `section` chapters with two `content` slides each, then `closing`.
 
 > Build a `goodbad` slide asking "Which error message helps the user more?" Make Model A the avoid side.
+
+## Staying up to date
+
+Your dependencies (`@miragon/slidev-toolkit`, `@slidev/cli`, the addons) are exact-pinned so installs stay
+reproducible. For a deck you keep around, enable [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates)
+so it opens PRs when new versions ship — you get the latest toolkit and Slidev without hunting for updates,
+and **Build Deck** + **Pin Check** gate each PR. Add `.github/dependabot.yml`:
+
+```yaml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+```
+
+For a one-off talk you can skip this — the pinned versions keep working as-is.

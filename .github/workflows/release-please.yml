@@ -54,9 +54,6 @@ jobs:
       (github.event_name != 'workflow_dispatch' || !inputs.dry_run) &&
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
-    # Per-package outputs: with two packages + separate-pull-requests, each package
-    # releases independently, so gate each publish job on its OWN path key rather
-    # than the repo-wide `releases_created` (which fires when EITHER releases).
     outputs:
       toolkit_released: ${{ steps.release_please.outputs['packages/toolkit--release_created'] }}
       create_deck_released: ${{ steps.release_please.outputs['packages/create-deck--release_created'] }}
@@ -75,17 +72,9 @@ jobs:
 
   # Inline publish (see the note at the top of this file — must NOT be a reusable
   # workflow, so the OIDC token resolves to release-please.yml for npm Trusted
-  # Publishing). Each package has its OWN trusted-publisher config on npmjs.com
-  # (workflow release-please.yml, empty environment) and its own publish job below,
-  # gated on that package's release. Both jobs are idempotent: they skip if the
-  # current version is already on the registry, so a manual `publish_current`
-  # dispatch is a safe recovery / republish lever.
-  #
-  # First-publish bootstrap: OIDC cannot configure a trusted publisher for a
-  # package that does not exist yet. The very first release of a brand-new package
-  # (e.g. @miragon/create-slidev-deck) needs a one-time manual publish (or a
-  # short-lived granular token) to create it on npm; then add its trusted publisher
-  # and every later release publishes tokenless.
+  # Publishing). Runs when release-please cut a release, OR on a manual
+  # `publish_current` dispatch (recovery / republish). Idempotent: skips if the
+  # current version is already on the registry.
   publish-toolkit:
     needs: release-please
     if: >-

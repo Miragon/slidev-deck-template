@@ -46,5 +46,10 @@ version, so a given `create-slidev-deck` version always produces an identical de
 changes reach new decks when a new `create-slidev-deck` version is released (a deliberate snapshot),
 keeping the two release lines independent.
 
+The toolkit version written into the generated `package.json` is this package's own pinned
+`@miragon/slidev-toolkit` devDependency, so **Dependabot keeps the default current** — its bump PR
+flows into the next `create-slidev-deck` release. Generated decks get the same advice for their own
+dependencies (see the deck's README).
+
 For local development, set `CREATE_DECK_SKELETON=/path/to/template-checkout` to copy the skeleton
 from a local checkout instead of fetching a tag.

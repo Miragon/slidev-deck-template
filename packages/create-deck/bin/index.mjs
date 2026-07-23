@@ -10,7 +10,7 @@
 // tag that matches THIS package's version, so a given create-slidev-deck version
 // always emits an identical deck. `--ref` and `--toolkit-version` override.
 
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
@@ -19,11 +19,12 @@ import { downloadTemplate } from 'giget'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = 'Miragon/slidev-deck-template'
+const SELF = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 
-// The toolkit version baked into the generated package.json. Bumped by the
-// deliberate `chore(create-slidev-deck): sync skeleton + toolkit to <v>` release
-// commit, so a pinned create-slidev-deck version emits a byte-identical deck.
-const TOOLKIT_VERSION = '1.2.1'
+// The toolkit version baked into the generated package.json: this package's own
+// pinned @miragon/slidev-toolkit devDependency, so Dependabot keeps the default
+// current and a given create-slidev-deck version emits a byte-identical deck.
+const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
 
 // Paths copied verbatim from the fetched skeleton into the new deck. Anything not
 // listed (packages/, release-please*, pr-title.yml, LICENSE, netlify.toml, docs/)
@@ -101,10 +102,7 @@ async function main() {
     process.exit(1)
   }
 
-  const selfVersion = JSON.parse(
-    await readFile(new URL('../package.json', import.meta.url), 'utf8'),
-  ).version
-  const ref = opts.ref ?? `create-slidev-deck-v${selfVersion}`
+  const ref = opts.ref ?? `create-slidev-deck-v${SELF.version}`
   const toolkitVersion = opts.toolkitVersion ?? TOOLKIT_VERSION
   const deckName = basename(target).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || 'my-deck'
 

@@ -27,6 +27,9 @@
   "dependencies": {
     "giget": "3.3.0"
   },
+  "devDependencies": {
+    "@miragon/slidev-toolkit": "1.2.1"
+  },
   "files": [
     "bin",
     "templates"
