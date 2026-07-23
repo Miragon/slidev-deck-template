@@ -101,10 +101,13 @@ More (PDF button, brand colours, per-file map) in [`deck/README.md`](deck/README
 2. `npm install`, then `npm run dev` to preview.
 3. Replace the demo content under `deck/`; keep the comment-block guardrails.
 4. Point the `seoMeta` block in [`deck/slides.md`](deck/slides.md) at your own domain, or delete it — it still carries this template's link preview.
-5. Or open the repo with Claude Code and let it draft the first pass from your outline.
+5. Delete the copied `LICENSE` (see below).
+6. Or open the repo with Claude Code and let it draft the first pass from your outline.
 
 Your repo builds and verifies the deck (**Build Deck**, **Pin Check**) and does nothing else. **Release** and **PR Title** belong to the template — they maintain the `@miragon/slidev-toolkit` npm package and only ever run in `Miragon/slidev-deck-template`; in your repo they show up as *skipped* and change nothing. Delete `.github/workflows/release-please.yml`, `.github/workflows/pr-title.yml`, `release-please-config.json` and `.release-please-manifest.json` if you want a quiet Actions tab.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The bundled Geist fonts are OFL.
+MIT — see [LICENSE](LICENSE). It covers this repository: the template scaffolding and the reference deck. `@miragon/slidev-toolkit` ships its own copy ([`packages/toolkit/LICENSE`](packages/toolkit/LICENSE)) inside the npm package, and the bundled Geist fonts are OFL ([`packages/toolkit/assets/fonts/LICENSE.txt`](packages/toolkit/assets/fonts/LICENSE.txt)).
+
+**In a deck created from this template, delete `LICENSE`.** "Use this template" copies every file, so your repo would otherwise ship *MIT, Copyright (c) Miragon GmbH* — declaring that your slides may be copied, sold and sublicensed by anyone. No license file means all rights reserved, which is what a talk usually wants. Replace it only if you deliberately publish your deck under specific terms.
