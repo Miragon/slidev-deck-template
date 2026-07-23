@@ -22,6 +22,7 @@ import { cp, mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { parseArgs } from 'node:util'
 import { downloadTemplate } from 'giget'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -58,24 +59,26 @@ const PRUNE = ['deck/package.json']
 // package.json's devDependencies so the versions track the reference repo.
 const VERIFY_DEV_DEPS = ['@playwright/test', 'playwright-chromium']
 
-const VALUE_FLAGS = new Set(['--ref', '--toolkit-version'])
-
-function parseArgs(argv) {
-  const opts = {}
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (a === '-h' || a === '--help') opts.help = true
-    else if (a === '-v' || a === '--version') opts.version = true
-    else if (VALUE_FLAGS.has(a)) {
-      const val = argv[++i]
-      if (val === undefined || val.startsWith('-')) throw new Error(`Missing value for ${a}`)
-      if (a === '--ref') opts.ref = val
-      else opts.toolkitVersion = val
-    } else if (a.startsWith('-')) throw new Error(`Unknown option: ${a}`)
-    else if (!opts.target) opts.target = a
-    else throw new Error(`Unexpected argument: ${a}`)
+/** Parse argv with node:util — it validates unknown options and missing values for us. */
+function parseCliArgs(argv) {
+  const { values, positionals } = parseArgs({
+    args: argv,
+    allowPositionals: true,
+    options: {
+      ref: { type: 'string' },
+      'toolkit-version': { type: 'string' },
+      version: { type: 'boolean', short: 'v' },
+      help: { type: 'boolean', short: 'h' },
+    },
+  })
+  if (positionals.length > 1) throw new Error(`Unexpected argument: ${positionals[1]}`)
+  return {
+    target: positionals[0],
+    ref: values.ref,
+    toolkitVersion: values['toolkit-version'],
+    version: values.version,
+    help: values.help,
   }
-  return opts
 }
 
 const USAGE = `Usage: npm create @miragon/slidev-deck@latest <dir> [options]
@@ -148,7 +151,7 @@ function buildPackageJson(scratch, deckName, toolkitVersion) {
 }
 
 async function main() {
-  const opts = parseArgs(process.argv.slice(2))
+  const opts = parseCliArgs(process.argv.slice(2))
   if (opts.version) {
     console.log(SELF.version)
     return
