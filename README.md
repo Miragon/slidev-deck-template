@@ -8,32 +8,30 @@ A reusable [Slidev](https://sli.dev) template in the Miragon corporate design. F
 
 ![Cover slide preview](docs/assets/cover.png)
 
-> **Authoring guide:** the `slides` skill (`.claude/skills/slides/`). This README onboards you; the skill answers everything else, and the code in [`packages/toolkit/`](packages/toolkit/) is the rendering truth.
-
 ## Quick start
 
-Needs **Node 20+** (`node --version`) and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
+Scaffold a fresh deck with one command. Needs **Node 20+** and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
 
 ```bash
-npm install      # once, ~30s — pulls Slidev and a Chromium for PDF export
+npm create @miragon/slidev-deck@latest my-talk
+# equivalently:
+npx @miragon/create-slidev-deck@latest my-talk
+```
+
+```bash
+cd my-talk
+npm install
 npm run dev      # opens the deck on http://localhost:3030 with live reload
 ```
 
-Edit files under `deck/` and save — the preview updates instantly. Every demo slide carries a `REQUIRED / OPTIONAL / LIMIT / HOW TO USE` comment block: your in-place authoring guide.
+You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and `@miragon/slidev-toolkit` pulled from npm — no toolkit source, no release tooling to prune. Then:
 
-## Repository layout
+1. Replace the demo content under `deck/`; keep the `REQUIRED / OPTIONAL / LIMIT / HOW TO USE` comment-block guardrails on each demo slide.
+2. Point the `seoMeta` block in `deck/slides.md` at your own domain, or delete it — it still carries this template's link preview.
+3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
+4. Or open the repo with Claude Code and let it draft the first pass from your outline.
 
-This is an npm workspace with four sub-projects, each with its own README:
-
-| Path | What it is | README |
-|---|---|---|
-| [`deck/`](deck/) | **Your content** — cover, chapters, closing. This is what you edit. | [deck/README.md](deck/README.md) |
-| [`packages/toolkit/`](packages/toolkit/) | The `@miragon/slidev-toolkit` design system: theme, layouts, components. Fixed by brand. | [packages/toolkit/README.md](packages/toolkit/README.md) |
-| [`packages/create-deck/`](packages/create-deck/) | The `@miragon/create-slidev-deck` scaffolder behind `npm create @miragon/slidev-deck`. | [packages/create-deck/README.md](packages/create-deck/README.md) |
-| [`verify/`](verify/) | The design-system verification suite (`npm run verify`). | [verify/README.md](verify/README.md) |
-| [`.github/`](.github/) | CI, deploy, release and supply-chain automation. | [.github/WORKFLOWS.md](.github/WORKFLOWS.md) |
-
-The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you never touch it. Content lives under `deck/` — `slides.md` is the entry (cover + one `src:` import per chapter + closing), and each chapter is a folder `deck/chapter/NN-name/` with its own `resources/`. See [`deck/README.md`](deck/README.md) for the full workflow.
+> **Fallback — "Use this template":** the GitHub button still works, but it copies *every* file, including the toolkit source, the release tooling and the `LICENSE`, which you then prune by hand. Prefer `npm create` unless you specifically want to fork the toolkit itself.
 
 ## The 12 archetypes
 
@@ -56,7 +54,7 @@ Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapte
 
 ## Components — keep the markdown clean
 
-A slide is frontmatter + headings + bullets + component tags, never raw `<div>`/CSS/hex. Full props in the `slides` skill (`reference/components.md`).
+A slide is frontmatter + headings + bullets + component tags, never raw `<div>`/CSS/hex. Full props in the `slides` skill (`.claude/skills/slides/reference/components.md`).
 
 | Component | What it's for |
 |---|---|
@@ -68,18 +66,20 @@ A slide is frontmatter + headings + bullets + component tags, never raw `<div>`/
 
 ## Present, build, export
 
+Run these in your deck:
+
 | Command | Result |
 |---|---|
 | `npm run dev` | Live preview on `:3030`; press `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere (Mesh animation included, no Node at runtime) |
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium; kept out of `build` so CI stays green) |
-| `npm run verify` | Screenshot + checklist per slide against the design rules — see [`verify/`](verify/) |
+| `npm run verify` | Screenshot + checklist per slide against the design rules |
 
-Every push and PR is built and verified in CI ([`.github/`](.github/)); CI itself publishes nowhere. Hosting is opt-in: this template's own deck is served by Netlify via [`netlify.toml`](netlify.toml), but a repo created from the template gets **no** site until you connect it in the Netlify UI.
+Every push and PR to your deck is built and verified in CI (**Build Deck**, **Pin Check**); hosting is up to you (any static host, or wire up Netlify / GitHub Pages).
 
 ## Working with Claude
 
-The template ships `CLAUDE.md` and the `slides` skill, so a Claude Code session knows the design system on the first prompt. It respects the white-card, no-em-dash, heading-colour and `leftIsGood` rules automatically. Starter prompts:
+The scaffold ships `CLAUDE.md` and the `slides` skill, so a Claude Code session knows the design system on the first prompt. It respects the white-card, no-em-dash, heading-colour and `leftIsGood` rules automatically. Starter prompts:
 
 > Outline a 30-minute talk on [topic] using `cover`, three `section` chapters with two `content` slides each, then `closing`. Split into chapter files under `deck/chapter/`.
 
@@ -94,34 +94,9 @@ The template ships `CLAUDE.md` and the `slides` skill, so a Claude Code session 
 - **Export produces an empty PDF.** Run `npm run build` once to warm the pre-bundle, then `npm run export`.
 - **Cover renders white.** WebGL2 is blocked and the gradient fallback too — update or switch browsers.
 
-More (PDF button, brand colours, per-file map) in [`deck/README.md`](deck/README.md).
+## Contributing
 
-## Creating a new deck from this template
-
-Scaffold a fresh deck with one command — it lays down **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and pulls `@miragon/slidev-toolkit` from npm. No toolkit source, no release-please or `LICENSE` to delete afterwards.
-
-```bash
-npm create @miragon/slidev-deck@latest my-talk
-# equivalently:
-npx @miragon/create-slidev-deck@latest my-talk
-```
-
-Then:
-
-```bash
-cd my-talk
-npm install
-npm run dev
-```
-
-1. Replace the demo content under `deck/`; keep the comment-block guardrails.
-2. Point the `seoMeta` block in [`deck/slides.md`](deck/slides.md) at your own domain, or delete it — it still carries this template's link preview.
-3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
-4. Or open the repo with Claude Code and let it draft the first pass from your outline.
-
-The generated repo builds and verifies the deck (**Build Deck**, **Pin Check**) and does nothing else — the template's own **Release** and **PR Title** workflows (which maintain the npm packages) are never scaffolded into it.
-
-> **Fallback — "Use this template":** the GitHub button still works, but it copies *every* file, including the toolkit source, the release-please/pr-title workflows, and the `LICENSE`. You then have to prune those by hand (see the note below). Prefer `npm create` unless you specifically want to fork the toolkit itself.
+Working on the template itself — the `@miragon/slidev-toolkit` design system, the `@miragon/create-slidev-deck` scaffolder, or the verification suite? See [CONTRIBUTING.md](CONTRIBUTING.md) for the monorepo layout, local development and how releases are published.
 
 ## License
 
