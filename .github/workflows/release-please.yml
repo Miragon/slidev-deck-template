@@ -37,7 +37,7 @@ on:
         type: boolean
         default: false
       publish_current:
-        description: 'Publish the current packages/toolkit version now (idempotent recovery lever)'
+        description: 'Publish the current package versions now (idempotent recovery lever; both packages)'
         type: boolean
         default: false
 
@@ -55,7 +55,8 @@ jobs:
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
     outputs:
-      releases_created: ${{ steps.release_please.outputs.releases_created }}
+      toolkit_released: ${{ steps.release_please.outputs['packages/toolkit--release_created'] }}
+      create_deck_released: ${{ steps.release_please.outputs['packages/create-deck--release_created'] }}
     steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
@@ -74,12 +75,12 @@ jobs:
   # Publishing). Runs when release-please cut a release, OR on a manual
   # `publish_current` dispatch (recovery / republish). Idempotent: skips if the
   # current version is already on the registry.
-  publish-npm:
+  publish-toolkit:
     needs: release-please
     if: >-
       github.repository == 'Miragon/slidev-deck-template' &&
       !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.releases_created == 'true' ||
+      (needs.release-please.outputs.toolkit_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
     runs-on: ubuntu-latest
     permissions:
@@ -105,6 +106,35 @@ jobs:
             npm publish -w packages/toolkit --provenance --access public
           fi
 
+  publish-create-deck:
+    needs: release-please
+    if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
+      !cancelled() && needs.release-please.result != 'failure' &&
+      (needs.release-please.outputs.create_deck_released == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - name: Publish @miragon/create-slidev-deck
+        run: |
+          name="$(node -p "require('./packages/create-deck/package.json').name")"
+          version="$(node -p "require('./packages/create-deck/package.json').version")"
+          if npm view "$name@$version" version > /dev/null 2>&1; then
+            echo "$name@$version already published — skipping"
+          else
+            npm publish -w packages/create-deck --provenance --access public
+          fi
+
   # Manual sanity check: `Run workflow` with dry_run = true builds and runs
   # `npm publish --dry-run` without releasing or publishing anything.
   dry-run:
@@ -120,3 +150,4 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm publish -w packages/toolkit --access public --dry-run
+      - run: npm publish -w packages/create-deck --access public --dry-run

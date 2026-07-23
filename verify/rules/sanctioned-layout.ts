@@ -1,11 +1,26 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { createRequire } from 'node:module'
+import { dirname, join, relative } from 'node:path'
 import { parseSync } from '@slidev/parser'
 import { repoRoot, slideSourceFiles } from '../helpers'
 import type { Rule } from './types'
 
-/** The theme's layout archetypes live one-.vue-file-per-layout under packages/toolkit/layouts/. */
-const LAYOUTS_DIR = join(repoRoot, 'packages', 'toolkit', 'layouts')
+/**
+ * The theme's layout archetypes live one-.vue-file-per-layout under the toolkit's
+ * `layouts/`. Resolve the INSTALLED `@miragon/slidev-toolkit` first — a deck
+ * scaffolded from this template consumes the toolkit purely from npm and has no
+ * `packages/toolkit/` source tree. Fall back to the in-repo source so the
+ * template monorepo itself still verifies. (In the monorepo the package resolves
+ * via the workspace symlink, so both paths land on the same files.)
+ */
+function layoutsDir(): string {
+  try {
+    const pkg = createRequire(import.meta.url).resolve('@miragon/slidev-toolkit/package.json')
+    return join(dirname(pkg), 'layouts')
+  } catch {
+    return join(repoRoot, 'packages', 'toolkit', 'layouts')
+  }
+}
 
 /**
  * Slidev built-in layouts allowed even though they are not theme archetypes.
@@ -21,8 +36,9 @@ const BUILTIN_LAYOUTS = ['default']
  */
 function sanctionedLayouts(): Set<string> {
   const names = new Set(BUILTIN_LAYOUTS)
-  if (existsSync(LAYOUTS_DIR)) {
-    for (const f of readdirSync(LAYOUTS_DIR)) {
+  const dir = layoutsDir()
+  if (existsSync(dir)) {
+    for (const f of readdirSync(dir)) {
       if (f.endsWith('.vue')) names.add(f.slice(0, -'.vue'.length))
     }
   }
