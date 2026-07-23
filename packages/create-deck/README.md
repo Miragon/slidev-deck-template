@@ -29,15 +29,41 @@ npm run dev
 
 ## What it emits
 
-The scaffold pulls the shared **skeleton** from the template repo and lays a small **overlay** on top:
+Running `npm create @miragon/slidev-deck@latest my-talk` produces:
 
-- **Skeleton** (fetched, single source of truth): `deck/`, `.claude/`, `CLAUDE.md`, `verify/`,
-  `.npmrc`, `.gitignore`, and the `build-and-deploy.yml` + `pin-check.yml` workflows.
-- **Overlay** (this package's `templates/`): a standalone `package.json` (no npm workspace, toolkit
-  added as an exact-pinned dependency) and a deck-focused `README.md`.
+```
+my-talk/
+├── deck/                          # your content — this is what you edit
+│   ├── slides.md                  # entry: cover + one src: import per chapter + closing
+│   ├── vite.config.ts             # chapter-resources plugin + shaders pre-bundle
+│   ├── public/og-image.png
+│   ├── chapter/
+│   │   ├── 01-intro/01-intro.md
+│   │   ├── 02-slidev/…            # each chapter: NN-name.md + its own resources/
+│   │   ├── 03-theme/…
+│   │   ├── 04-diagrams/…          # .bpmn, .dmn, .excalidraw.svg demos
+│   │   └── 05-authoring/…
+│   └── README.md
+├── verify/                        # brand guardrails — `npm run verify`
+│   ├── rules/                     # sanctioned-layout, no-raw-html, excalidraw checks…
+│   ├── slides.spec.ts
+│   └── …
+├── .claude/skills/                # authoring guidance for Claude Code
+│   ├── slides/
+│   └── excalidraw/
+├── .github/workflows/             # only Build Deck + Pin Check
+│   ├── build-and-deploy.yml
+│   └── pin-check.yml
+├── CLAUDE.md                      # design-system rules, auto-loaded by Claude Code
+├── .npmrc                         # save-exact=true
+├── .gitignore
+├── README.md                      # ← generated overlay (deck-focused)
+└── package.json                   # ← generated overlay (standalone, toolkit pinned, no workspace)
+```
 
-It never emits the template-only infrastructure: `packages/`, the release-please / pr-title
-workflows and config, `LICENSE`, or `netlify.toml`.
+Everything except the two `← generated overlay` files is the shared **skeleton**, fetched from the
+template repo (a single source of design truth). It never emits the template-only infrastructure:
+`packages/`, the release-please / pr-title workflows and config, `LICENSE`, or `netlify.toml`.
 
 ## How it stays a single source of truth
 

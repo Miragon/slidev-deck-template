@@ -54,6 +54,7 @@ test('omits the template-only files', () => {
     'netlify.toml',
     '.github/workflows/release-please.yml',
     '.github/workflows/pr-title.yml',
+    'deck/package.json', // workspace sub-manifest — replaced by the root package.json
   ]
   for (const f of forbidden) assert.ok(!existsSync(join(out, f)), `should not emit ${f}`)
 })

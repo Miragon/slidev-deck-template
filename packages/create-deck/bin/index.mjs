@@ -40,6 +40,10 @@ const SKELETON = [
   '.github/workflows/pin-check.yml',
 ]
 
+// Skeleton files that must not survive into a standalone deck. The deck's own
+// workspace sub-manifest is replaced by the generated root package.json below.
+const PRUNE = ['deck/package.json']
+
 function parseArgs(argv) {
   const opts = { target: undefined, ref: undefined, toolkitVersion: undefined }
   for (let i = 0; i < argv.length; i++) {
@@ -124,6 +128,7 @@ async function main() {
       await mkdir(dirname(to), { recursive: true })
       await cp(from, to, { recursive: true })
     }
+    for (const rel of PRUNE) await rm(join(target, rel), { force: true })
 
     // 2. Overlay: the standalone package.json + deck README, with placeholders
     //    filled. The template is named `deck-package.json` (not `package.json`) so
