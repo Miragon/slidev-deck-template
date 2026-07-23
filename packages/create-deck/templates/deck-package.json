@@ -1,0 +1,23 @@
+{
+  "name": "__DECK_NAME__",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "slidev deck/slides.md --open",
+    "build": "slidev build deck/slides.md --out ../dist",
+    "export": "slidev export deck/slides.md",
+    "verify": "playwright test -c verify/playwright.config.ts; playwright show-report verify/playwright-report",
+    "verify:source": "VERIFY_SOURCE_ONLY=1 playwright test -c verify/playwright.config.ts -g @source"
+  },
+  "dependencies": {
+    "@miragon/slidev-toolkit": "__TOOLKIT_VERSION__",
+    "@slidev/cli": "52.18.0",
+    "slidev-addon-bpmn": "1.8.1",
+    "slidev-addon-dmn": "1.3.0",
+    "vue": "3.5.40"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "playwright-chromium": "1.61.1"
+  }
+}

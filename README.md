@@ -23,12 +23,13 @@ Edit files under `deck/` and save — the preview updates instantly. Every demo 
 
 ## Repository layout
 
-This is an npm workspace with three sub-projects, each with its own README:
+This is an npm workspace with four sub-projects, each with its own README:
 
 | Path | What it is | README |
 |---|---|---|
 | [`deck/`](deck/) | **Your content** — cover, chapters, closing. This is what you edit. | [deck/README.md](deck/README.md) |
 | [`packages/toolkit/`](packages/toolkit/) | The `@miragon/slidev-toolkit` design system: theme, layouts, components. Fixed by brand. | [packages/toolkit/README.md](packages/toolkit/README.md) |
+| [`packages/create-deck/`](packages/create-deck/) | The `@miragon/create-slidev-deck` scaffolder behind `npm create @miragon/slidev-deck`. | [packages/create-deck/README.md](packages/create-deck/README.md) |
 | [`verify/`](verify/) | The design-system verification suite (`npm run verify`). | [verify/README.md](verify/README.md) |
 | [`.github/`](.github/) | CI, deploy, release and supply-chain automation. | [.github/WORKFLOWS.md](.github/WORKFLOWS.md) |
 
@@ -97,17 +98,33 @@ More (PDF button, brand colours, per-file map) in [`deck/README.md`](deck/README
 
 ## Creating a new deck from this template
 
-1. Click **Use this template** on GitHub → fresh repo.
-2. `npm install`, then `npm run dev` to preview.
-3. Replace the demo content under `deck/`; keep the comment-block guardrails.
-4. Point the `seoMeta` block in [`deck/slides.md`](deck/slides.md) at your own domain, or delete it — it still carries this template's link preview.
-5. Delete the copied `LICENSE` (see below).
-6. Or open the repo with Claude Code and let it draft the first pass from your outline.
+Scaffold a fresh deck with one command — it lays down **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and pulls `@miragon/slidev-toolkit` from npm. No toolkit source, no release-please or `LICENSE` to delete afterwards.
 
-Your repo builds and verifies the deck (**Build Deck**, **Pin Check**) and does nothing else. **Release** and **PR Title** belong to the template — they maintain the `@miragon/slidev-toolkit` npm package and only ever run in `Miragon/slidev-deck-template`; in your repo they show up as *skipped* and change nothing. Delete `.github/workflows/release-please.yml`, `.github/workflows/pr-title.yml`, `release-please-config.json` and `.release-please-manifest.json` if you want a quiet Actions tab.
+```bash
+npm create @miragon/slidev-deck@latest my-talk
+# equivalently:
+npx @miragon/create-slidev-deck@latest my-talk
+```
+
+Then:
+
+```bash
+cd my-talk
+npm install
+npm run dev
+```
+
+1. Replace the demo content under `deck/`; keep the comment-block guardrails.
+2. Point the `seoMeta` block in [`deck/slides.md`](deck/slides.md) at your own domain, or delete it — it still carries this template's link preview.
+3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
+4. Or open the repo with Claude Code and let it draft the first pass from your outline.
+
+The generated repo builds and verifies the deck (**Build Deck**, **Pin Check**) and does nothing else — the template's own **Release** and **PR Title** workflows (which maintain the npm packages) are never scaffolded into it.
+
+> **Fallback — "Use this template":** the GitHub button still works, but it copies *every* file, including the toolkit source, the release-please/pr-title workflows, and the `LICENSE`. You then have to prune those by hand (see the note below). Prefer `npm create` unless you specifically want to fork the toolkit itself.
 
 ## License
 
 MIT — see [LICENSE](LICENSE). It covers this repository: the template scaffolding and the reference deck. `@miragon/slidev-toolkit` ships its own copy ([`packages/toolkit/LICENSE`](packages/toolkit/LICENSE)) inside the npm package, and the bundled Geist fonts are OFL ([`packages/toolkit/assets/fonts/LICENSE.txt`](packages/toolkit/assets/fonts/LICENSE.txt)).
 
-**In a deck created from this template, delete `LICENSE`.** "Use this template" copies every file, so your repo would otherwise ship *MIT, Copyright (c) Miragon GmbH* — declaring that your slides may be copied, sold and sublicensed by anyone. No license file means all rights reserved, which is what a talk usually wants. Replace it only if you deliberately publish your deck under specific terms.
+**Decks scaffolded with `npm create` carry no `LICENSE`** — a talk usually wants all rights reserved, and no license file means exactly that. Only the **"Use this template"** fallback copies this `LICENSE` (*MIT, Copyright (c) Miragon GmbH*, which would declare your slides free to copy, sell and sublicense); if you went that route, delete it. Add one back only if you deliberately publish your deck under specific terms.

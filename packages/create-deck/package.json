@@ -1,0 +1,38 @@
+{
+  "name": "@miragon/create-slidev-deck",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Scaffold a lean Miragon Slidev deck: only the files a deck needs, with @miragon/slidev-toolkit pulled from npm. Run via `npm create @miragon/slidev-deck`.",
+  "keywords": [
+    "slidev",
+    "miragon",
+    "create",
+    "scaffold",
+    "template"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miragon/slidev-deck-template.git",
+    "directory": "packages/create-deck"
+  },
+  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/packages/create-deck#readme",
+  "bugs": "https://github.com/Miragon/slidev-deck-template/issues",
+  "bin": {
+    "create-slidev-deck": "bin/index.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "giget": "3.3.0"
+  },
+  "files": [
+    "bin",
+    "templates"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
