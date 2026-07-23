@@ -6,7 +6,7 @@ The workflows that keep the template building, releasing and secure. All actions
 
 | File | Name | Trigger | Does |
 |---|---|---|---|
-| `build-and-deploy.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, install Chromium, `slidev build` (with the PDF for the download button), then `npm run verify:source`. This is the required CI status; forks inherit it. |
+| `build-and-deploy.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, `slidev build`, then `npm run verify:source`. No browser involved: the PDF export is kept out of `build` and the guardrails are source-only. This is the required CI status; forks inherit it. |
 | `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR from conventional commits; on merge, cuts the tag/GitHub release and publishes `@miragon/slidev-toolkit` to npm. |
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
