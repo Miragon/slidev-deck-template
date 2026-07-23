@@ -1,9 +1,5 @@
 # @miragon/create-slidev-deck
 
-[![npm](https://img.shields.io/npm/v/@miragon/create-slidev-deck)](https://www.npmjs.com/package/@miragon/create-slidev-deck)
-[![node](https://img.shields.io/node/v/@miragon/create-slidev-deck)](https://nodejs.org)
-[![License: MIT](https://img.shields.io/npm/l/@miragon/create-slidev-deck)](https://github.com/Miragon/slidev-deck-template/blob/main/LICENSE)
-
 Scaffold a lean [Miragon Slidev deck](https://github.com/Miragon/slidev-deck-template): a fresh
 repo with **only** the files a deck needs, and `@miragon/slidev-toolkit` pulled from npm instead of
 vendored.

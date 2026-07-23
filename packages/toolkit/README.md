@@ -1,8 +1,5 @@
 # @miragon/slidev-toolkit
 
-[![npm](https://img.shields.io/npm/v/@miragon/slidev-toolkit)](https://www.npmjs.com/package/@miragon/slidev-toolkit)
-[![License: MIT](https://img.shields.io/npm/l/@miragon/slidev-toolkit)](https://github.com/Miragon/slidev-deck-template/blob/main/LICENSE)
-
 The Miragon-branded [Slidev](https://sli.dev) design system: a fixed brand theme, twelve layout archetypes, reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `SplitView`, `Agenda`), the animated `BrandMeshBackground`, and always-on progress chrome (a stepper bar and a chapter footer). One source of design truth, so a Miragon deck stays on-brand without hand-written HTML or CSS.
 
 > Building a **new** deck? The easiest path is the [template repository](https://github.com/Miragon/slidev-deck-template) ("Use this template") — it ships this toolkit together with a demo deck, authoring guidance, and CI. Use the npm package below when you want the brand in an **existing** or standalone Slidev project.
