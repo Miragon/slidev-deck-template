@@ -25,7 +25,11 @@ npm run dev
 | Flag | Default | Effect |
 |---|---|---|
 | `--ref <tag\|sha\|branch>` | this version's release tag | which template snapshot to fetch the skeleton from |
-| `--toolkit-version <x>` | baked pin | pin `@miragon/slidev-toolkit` in the generated `package.json` |
+| `--toolkit-version <x>` | pinned default | pin `@miragon/slidev-toolkit` in the generated `package.json` |
+| `-v`, `--version` | — | print the `create-slidev-deck` version |
+| `-h`, `--help` | — | show usage |
+
+Launched via `pnpm create` / `yarn create` / `bun create`, the printed next steps use that package manager.
 
 ## What it emits
 
@@ -72,10 +76,19 @@ version, so a given `create-slidev-deck` version always produces an identical de
 changes reach new decks when a new `create-slidev-deck` version is released (a deliberate snapshot),
 keeping the two release lines independent.
 
-The toolkit version written into the generated `package.json` is this package's own pinned
-`@miragon/slidev-toolkit` devDependency, so **Dependabot keeps the default current** — its bump PR
-flows into the next `create-slidev-deck` release. Generated decks get the same advice for their own
-dependencies (see the deck's README).
+**Nothing pins a dependency version by hand in this package.** The generated `package.json` is
+*derived* from the fetched skeleton's own manifests at scaffold time:
+
+- Slidev runtime deps (`@slidev/cli`, the addons, `vue`) come from the reference `deck/package.json`.
+- The verify tooling (`@playwright/test`, `playwright-chromium`) and the verify scripts come from the
+  root `package.json`.
+- Only `@miragon/slidev-toolkit` comes from this package's own pinned devDependency (the reference
+  deck resolves the toolkit via a workspace symlink, so it has no version to read). `--toolkit-version`
+  overrides it.
+
+All of those manifests are kept current by the monorepo's Dependabot, so a freshly-scaffolded deck
+always gets the versions the reference deck currently uses — with no version list to maintain in this
+package.
 
 For local development, set `CREATE_DECK_SKELETON=/path/to/template-checkout` to copy the skeleton
 from a local checkout instead of fetching a tag.
