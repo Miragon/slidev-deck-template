@@ -73,9 +73,10 @@ Run these in your deck:
 | `npm run dev` | Live preview on `:3030`; press `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere (Mesh animation included, no Node at runtime) |
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium; kept out of `build` so CI stays green) |
-| `npm run verify` | Screenshot + checklist per slide against the design rules |
+| `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
+| `npm run verify:source` | Fast source-only guardrail checks, no browser — the subset CI runs |
 
-Every push and PR to your deck is built and verified in CI (**Build Deck**, **Pin Check**); hosting is up to you (any static host, or wire up Netlify / GitHub Pages).
+Every push and PR to your deck runs **Build Deck** (the static build plus `npm run verify:source`) and **Pin Check** in CI; the full `npm run verify` screenshot suite stays a local step. Hosting is up to you (any static host, or wire up Netlify / GitHub Pages).
 
 ## Working with Claude
 

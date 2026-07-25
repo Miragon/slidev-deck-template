@@ -24,7 +24,7 @@ Edit files under `deck/` and save — the preview updates instantly. Every demo 
 | `deck/` | **Your content** — `slides.md` is the entry (cover + one `src:` import per chapter + closing); each chapter is a folder `deck/chapter/NN-name/` with its own `resources/`. |
 | `verify/` | Brand guardrails (`npm run verify`) — every slide declares a sanctioned layout, cards stay white, no em-dashes, headings black, diagrams light/transparent. |
 | `CLAUDE.md` + `.claude/skills/` | Authoring guidance for Claude Code, so a session knows the design system on the first prompt. |
-| `.github/workflows/` | **Build Deck** and **Pin Check** run on every push and PR. |
+| `.github/workflows/` | **Build Deck** (static build plus `npm run verify:source`) and **Pin Check** run on every push and PR. |
 
 The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you never touch the theme.
 
@@ -35,7 +35,8 @@ The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you 
 | `npm run dev` | Live preview on `:3030`; `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere |
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium) |
-| `npm run verify` | Screenshot + checklist per slide against the design rules |
+| `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
+| `npm run verify:source` | Fast source-only guardrail checks, no browser — the subset CI runs |
 
 ## Next steps
 
