@@ -10,12 +10,20 @@
  *   3 Karten: blue, teal, green
  *   4 Karten: blue, blue-mid, green-deep, green
  *   <Card title="Deployment" accent="blue">Body …</Card>
+ *
+ * `icon` (optional): eine Iconify-UnoCSS-Klasse (`i-carbon-idea`, `i-ph-cube`, …).
+ * Wird sie gesetzt, erscheint das Icon über dem Titel und trägt dieselbe
+ * Akzentfarbe; ohne `icon` bleibt die Karte wie bisher rein textuell.
+ * Der volle Klassenname muss so im Slide stehen, damit UnoCSS ihn beim
+ * statischen Scan findet und generiert (Brand-Regel: Iconify `i-*`, kein Emoji).
+ *   <Card title="Deployment" accent="blue" icon="i-carbon-rocket">Body …</Card>
  */
 const props = withDefaults(
   defineProps<{
     title?: string
     accent?: 'blue' | 'blue-mid' | 'teal' | 'green-deep' | 'green-mid' | 'green'
     padding?: 'compact' | 'standard' | 'generous'
+    icon?: string
   }>(),
   { accent: 'blue', padding: 'standard' },
 )
@@ -33,6 +41,7 @@ const ACCENTS: Record<string, string> = {
 
 <template>
   <div class="mg-card" :class="`mg-card--${props.padding}`">
+    <span v-if="icon" class="mg-card__icon" :class="icon" :style="{ color: ACCENTS[props.accent] }" aria-hidden="true"></span>
     <h3 v-if="title" class="mg-card__title" :style="{ color: ACCENTS[props.accent] }">{{ title }}</h3>
     <div class="mg-card__body"><slot /></div>
   </div>
@@ -53,6 +62,13 @@ const ACCENTS: Record<string, string> = {
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
 .mg-card--standard { padding: 1.25rem; }
 .mg-card--generous { padding: 1.5rem; }
+/* Optionales Icon über dem Titel: skaliert über font-size (die i-*-Klasse ist
+   1em breit/hoch), Farbe via currentColor aus dem inline color = Akzent. */
+.mg-card__icon {
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+}
 .mg-card__title {
   margin: 0;
   font-weight: 700;
