@@ -5,9 +5,12 @@
 setup = "npm install"
 run_mode = "concurrent"
 
-# Preview the deck with hot reload. Opens the browser on the workspace port.
+# Preview the deck with hot reload. Runs on the per-workspace $CONDUCTOR_PORT so
+# parallel workspaces never share a port — this also keeps the verify suite's
+# default port (3030) free, so it always spins up and tests THIS deck rather than
+# reusing a dev server from another workspace.
 [scripts.run.dev]
-command = "npm run dev"
+command = "npm run dev -- --port $CONDUCTOR_PORT"
 default = true
 icon = "play"
 

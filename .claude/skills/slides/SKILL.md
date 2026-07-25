@@ -248,31 +248,41 @@ Transition: "Next, how the request reaches the pod."
 Two layers, neither optional:
 
 ```bash
-npm install        # once
-npm run build      # compiles the deck (slidev build deck/slides.md)
-npm run verify     # the Playwright design-system suite
+npm install         # once
+npm run build       # compiles the deck (slidev build deck/slides.md)
+npm run verify      # the Playwright design-system suite (opens an HTML report)
+npm run verify:ci   # same suite, list reporter, NO blocking report viewer — use this headless
+node scripts/shot.mjs <page> [port]   # screenshot one rendered slide (fast visual check)
 ```
 
 `npm run build` only proves the Markdown/Vue **compiles** — it says nothing about whether a slide overflows or breaks a design rule. For that, `npm run verify` runs the **Playwright design-system suite** (`verify/`, always **headless**). It walks the live, fully-revealed slides and measures the DOM-checkable rules: fits the canvas with a bottom margin (content must clear the 552px floor by >= 16px, not merely fit), no em-dashes, no emoji, headings black, cards white, no inline fonts, no restyled or nested bullets. It also runs source-level checks: **every slide declares a sanctioned layout** (each slide's `layout:` must be a theme archetype or the built-in `default`; `src:` stubs are exempt), **no raw HTML** (slide bodies are markdown + components only; tags like `<div>`/`<span>` are flagged, while code fences and comments are exempt so HTML can be shown as an example), **no HTML entities in the slide source** (write the literal character, never `&#39;`/`&amp;`/…) and **every `.excalidraw.svg` is light and transparent** (no dark-mode filter, no baked white background). These source-level checks run fast on their own via `npm run verify:source` (no dev server) and gate CI so forks inherit them. It captures a slide + checklist screenshot per slide under `verify/screenshots/<slug>/` and opens an HTML report.
 
-The suite starts a fresh Slidev dev server for `deck/slides.md` (or reuses one already running on the same port — set `VERIFY_PORT=<port>` to point elsewhere). Full reference: [`verify/README.md`](../../../verify/README.md).
+The suite defaults to port **3030** (override with `VERIFY_PORT=<port>`). If nothing is on 3030 it starts its own fresh server for `deck/slides.md`; if a server is already there it **reuses** it. Full reference: [`verify/README.md`](../../../verify/README.md).
+
+### Confirm you are testing THIS deck (the port trap)
+
+Reuse-on-3030 has one sharp edge: in a multi-workspace setup a **different** deck can be sitting on 3030, and the suite will happily verify *that* one instead. The workspace's own `npm run dev` runs on the per-workspace `$CONDUCTOR_PORT` (see `.conductor/settings.toml`), which keeps 3030 free for verify — but a stray server from another workspace can still grab it.
+
+- **Read the deck name in the output.** The suite prints `All N slide(s) of "<deck title>" pass …`. If that title is not this deck, you tested the wrong one — nothing you changed was checked. Re-run against the right port with `VERIFY_PORT=<port>`.
+- **`node scripts/shot.mjs` prints the deck title too**, and scans 3030-3034 when the port is wrong, so it tells you which deck is on which port.
 
 ### Never touch the running dev server
 
-The author almost always has `npm run dev` running on port 3030. **Reuse that instance; never start, restart, or kill it.**
+The author has `npm run dev` running (on `$CONDUCTOR_PORT`, e.g. 3031). **Never start, restart, or kill it.**
 
-- **Do not run `npm run dev` / `slidev … --open`** yourself, in the foreground or background. Slidev has HMR: your edits to `deck/**` are picked up automatically by the running server, so there is nothing to restart. (Background dev servers you start get reaped at the end of the turn anyway, which is what kills the author's session.)
-- **Never free a port or kill a process** — no `pkill -f slidev`, no `kill $(lsof -t -i:3030)`, no `fuser -k`. If port 3030 is busy, that is the author's server doing its job; leave it.
-- **To verify, just run `npm run verify`.** Playwright reuses the already-running server (`reuseExistingServer` locally) and tears down only a server it started itself, so the author's instance is never affected. If you truly need an isolated server, run it on a different port via `VERIFY_PORT=<port>` instead of touching 3030.
+- **Do not run `npm run dev` / `slidev … --open`** yourself, foreground or background. Slidev has HMR: your edits to `deck/**` are picked up automatically, so there is nothing to restart. (Background dev servers you start get reaped at the end of the turn, which kills the author's session.)
+- **Never free a port or kill a process** — no `pkill -f slidev`, no `kill $(lsof -t -i:PORT)`, no `fuser -k`. A busy dev port is the author's server doing its job; leave it. (The verify HTML-report viewer from `npm run verify` is the one exception — it blocks; prefer `npm run verify:ci`, which never opens it.)
+- **To verify headless, run `npm run verify:ci`.** It reuses an existing server or starts its own, and never opens the blocking report viewer.
 
 ### Authoring flow — edit, then verify headless, finish only on green
 
 This is the loop for every slide change:
 
 1. **Edit** the slide (`deck/chapter/<chapter>/<chapter>.md`).
-2. **Verify headless**: `npm run verify`. It builds nothing extra — it drives the deck headless and reports each slide's checklist plus the source-level checks. (Run `npm run build` too when you want to confirm a clean production build / PDF.) To re-check only the slides you just touched instead of walking the whole deck, scope it with `VERIFY_PAGES` (a range or list, e.g. `VERIFY_PAGES="4-6" npm run verify` or `VERIFY_PAGES="2,5,9"`); the source-level checks still run across the whole deck.
-3. If any check is **red**, fix the slide (the checklist spells out what and how) and re-run. The overflow check is measured against the canvas, so trust it over eyeballing: a slide that touches the bottom edge is overflowing, not "just fitting."
-4. **Do not stop until every check is green.** A slide left red is unfinished work.
+2. **Changing CSS, a layout, or a component? Look at it first.** `node scripts/shot.mjs <page>` screenshots the rendered slide. `build` and `verify:source` compile and lint but **cannot see colours, backgrounds, or a broken frame** — a screenshot is the only fast signal for a visual change, and catches things the design-system suite does not assert (e.g. an unwanted background behind code). Do this before the full suite, not after.
+3. **Verify headless**: `npm run verify:ci`. It drives the deck headless and reports each slide's checklist plus the source-level checks. (Run `npm run build` too when you want to confirm a clean production build / PDF.) To re-check only the slides you just touched, scope it with `VERIFY_PAGES` (a range or list, e.g. `VERIFY_PAGES="4-6" npm run verify:ci` or `VERIFY_PAGES="2,5,9"`); the source-level checks still run across the whole deck. **Check the deck title in the output is this deck** (see the port trap above).
+4. If any check is **red**, fix the slide (the checklist spells out what and how) and re-run. The overflow check is measured against the canvas, so trust it over eyeballing: a slide that touches the bottom edge is overflowing, not "just fitting."
+5. **Do not stop until every check is green.** A slide left red is unfinished work.
 
 ---
 

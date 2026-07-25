@@ -62,8 +62,9 @@ Everything above is expanded in the `slides` skill.
 - [ ] No em-dashes; no emoji icons
 - [ ] Frontmatter respects the archetype's prop signature (see the `slides` skill, `reference/archetypes.md`)
 - [ ] Speaker notes ending with a `Transition: "…"` line where appropriate
+- [ ] Visual/CSS change? Eyeball the rendered slide first: `node scripts/shot.mjs <page>` (build and source checks cannot see colours/backgrounds)
 - [ ] Build clean: `npm run build`
-- [ ] Verify suite green: `npm run verify`. Do not finish on red.
+- [ ] Verify green: `npm run verify:ci` — and confirm the printed deck title is this deck. Do not finish on red.
 
 For anything not covered here, consult the `slides` skill.
 
