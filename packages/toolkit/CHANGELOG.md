@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/Miragon/slidev-deck-template/compare/v1.2.1...v1.3.0) (2026-07-25)
+
+
+### Features
+
+* add branded CodeBlock component and code styling ([#26](https://github.com/Miragon/slidev-deck-template/issues/26)) ([72a0cb3](https://github.com/Miragon/slidev-deck-template/commit/72a0cb303f4fb5b2c687ff2db45db6bd9c56dd6b))
+
 ## [1.2.1](https://github.com/Miragon/slidev-deck-template/compare/v1.2.0...v1.2.1) (2026-07-22)
 
 
