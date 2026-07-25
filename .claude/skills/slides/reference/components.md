@@ -102,6 +102,32 @@ Unlike inline components, `SplitView` is a multi-line container (like `StepList`
 </SplitView>
 ```
 
+## CodeBlock
+
+A titled code "window" in Miragon CI: a white brand card (like `Card`) with a header showing an optional filename (left, muted mono) and an optional language badge (right, blue). It wraps a Markdown code fence in the default slot; Shiki still highlights the code. Use it when a snippet needs a filename or language label. For a bare snippet, just write a plain ` ```lang ` fence: it already picks up the same white-card frame globally (`styles/code.css`), so `CodeBlock` is only for the labelled case.
+
+| Prop | Values | Default | Notes |
+|---|---|---|---|
+| `file` (str) | — | — | filename / path shown left in the header (muted mono) |
+| `lang` (str) | — | — | language badge shown right (blue pill, e.g. `md`, `ts`) |
+| `size` (str) | CSS length | — | font size of the code, e.g. `"0.9rem"` / `"14px"`; omit for the default |
+| `hideHeader` (bool) | — | `false` | hide the filename/language header even when `file`/`lang` are set |
+| **slot** | — | — | a single Markdown code fence, on its own lines with blank lines around it |
+
+Fenced code renders in pure form: Shiki syntax colours on the white card, no background behind the tokens (the layouts' blue inline-code pill is scoped to real inline code, `:not(pre) > code`, so it never leaks onto a fence).
+
+The fence must sit on its own lines with a blank line before and after (like the bullet rule in `SplitView`) so it parses as Markdown. Keep to the 18-line code limit.
+
+````md
+<CodeBlock file="deck/slides.md" lang="md">
+
+```md
+# Build decks like **code**
+```
+
+</CodeBlock>
+````
+
 ---
 
 ## Diagrams

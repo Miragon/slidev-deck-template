@@ -31,6 +31,34 @@ accent: blue
 </v-clicks>
 
 ---
+layout: content
+title: A slide is just Markdown
+eyebrow: 02 - Slidev
+accent: blue
+---
+
+<!--
+  Shows the CodeBlock component: a titled code window in Miragon CI (filename
+  left, language badge right, white brand card frame). The bare fence below it
+  picks up the same frame globally via code.css. Transition: "And one source
+  gives you every output."
+-->
+
+The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>` or `<Figure>` when text alone is not enough.
+
+<CodeBlock file="deck/chapter/02-slidev/02-slidev.md" lang="md">
+
+```md
+# Three habits of great **retros**
+
+- Look back before looking forward
+- One action item, not ten
+- Rotate the facilitator
+```
+
+</CodeBlock>
+
+---
 layout: content-image
 title: One source, every output
 eyebrow: 02 - Slidev
