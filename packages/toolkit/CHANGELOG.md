@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/Miragon/slidev-deck-template/compare/v1.5.0...v1.5.1) (2026-07-25)
+
+
+### Bug Fixes
+
+* **toolkit:** render StepList as a numbered, full-size step sequence ([#43](https://github.com/Miragon/slidev-deck-template/issues/43)) ([f6d5aa9](https://github.com/Miragon/slidev-deck-template/commit/f6d5aa93f0f193a5d6c2b687f139314f46d3ddab))
+* **toolkit:** size bullet lists in Card body to match paragraph text ([#44](https://github.com/Miragon/slidev-deck-template/issues/44)) ([42ead8f](https://github.com/Miragon/slidev-deck-template/commit/42ead8f161699798f0a51fe544494361eafba55d))
+
 ## [1.5.0](https://github.com/Miragon/slidev-deck-template/compare/v1.4.0...v1.5.0) (2026-07-25)
 
 
