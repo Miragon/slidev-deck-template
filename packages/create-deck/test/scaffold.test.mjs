@@ -89,6 +89,16 @@ test('derives runtime + verify deps from the reference manifests', () => {
   for (const dep of ['@playwright/test', 'playwright-chromium']) {
     assert.match(pkg.devDependencies[dep], /^\d/, `missing verify dep ${dep}`)
   }
+  assert.match(pkg.devDependencies.portless, /^\d/, 'missing portless devDependency')
+})
+
+test('wires the deck for a portless dev URL', () => {
+  const pkg = pkgOf(out)
+  assert.equal(pkg.scripts.dev, 'portless', 'dev must be the portless entrypoint')
+  assert.match(pkg.scripts['dev:app'], /slidev deck\/slides\.md --port/, 'dev:app must be the raw server')
+  const portless = JSON.parse(readFileSync(join(out, 'portless.json'), 'utf8'))
+  assert.equal(portless.name, 'my-deck', 'portless name derives from the deck name')
+  assert.equal(portless.script, 'dev:app', 'portless runs the dev:app script')
 })
 
 test('--toolkit-version overrides the pinned default', () => {

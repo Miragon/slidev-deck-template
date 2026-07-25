@@ -123,4 +123,7 @@ export default {
   optimizeDeps: {
     include: ['@paper-design/shaders'],
   },
+  server: {
+    allowedHosts: ['.localhost'],
+  },
 }

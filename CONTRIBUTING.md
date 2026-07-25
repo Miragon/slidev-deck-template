@@ -18,14 +18,16 @@ The reference deck consumes the toolkit by name (`theme: '@miragon/slidev-toolki
 
 ## Local development
 
-Needs **Node 20+** and a modern browser (WebGL2 for the animated background).
+Needs **Node 20+** (**Node 24+** for `npm run dev`, which uses portless) and a modern browser (WebGL2 for the animated background).
 
 ```bash
 npm install      # once — installs every workspace
-npm run dev      # previews the reference deck on http://localhost:3030
+npm run dev      # previews the reference deck at https://<branch>.slidev-deck.localhost (portless)
 npm run build    # static build of the reference deck
 npm run verify   # full render + checklist per slide against the design rules
 ```
+
+`npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `.localhost` URL instead of a `:3030` port, so parallel worktrees (e.g. Conductor workspaces) never collide. The proxy auto-starts on first run (one-time `sudo`); run `npx portless service install` once to make it permanent. `npm run dev:plain` runs the raw Slidev server without portless.
 
 `npm run verify:source` runs only the fast source-level guardrails (sanctioned layout, no raw HTML, diagrams light/transparent) with no browser — the same check CI runs on every PR.
 

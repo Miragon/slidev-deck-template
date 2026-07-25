@@ -5,8 +5,8 @@
 setup = "npm install"
 run_mode = "concurrent"
 
-[scripts.run.dev]
-command = "npm run dev -- --port $CONDUCTOR_PORT"
+[scripts.run.example-deck]
+command = "npm run dev"
 default = true
 icon = "play"
 
@@ -17,7 +17,7 @@ icon = "package"
 
 # Run the Playwright verify suite and open its HTML report.
 [scripts.run.verify]
-command = "npm run verify"
+command = "VERIFY_PORT=$CONDUCTOR_PORT npm run verify"
 icon = "test-tube"
 
 # Fast source-level guardrails (layout archetype + source checks); no dev server.

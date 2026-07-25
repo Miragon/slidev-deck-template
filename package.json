@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev": "npm run dev -w deck",
+    "dev:plain": "npm run dev:app -w deck",
     "build": "npm run build -w deck",
     "export": "npm run export -w deck",
     "verify": "playwright test -c verify/playwright.config.ts; playwright show-report verify/playwright-report",
