@@ -62,6 +62,7 @@ const columns = computed(() => {
 .mg-split {
   display: grid;
   margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 /* min-width:0 verhindert, dass breite Grafiken die Spalte über fr sprengen. */
 .mg-split__visual,
