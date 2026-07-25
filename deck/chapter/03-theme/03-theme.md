@@ -102,6 +102,29 @@ A diagram on one side, the explanation on the other, in one tag.
 </CardGrid>
 
 ---
+layout: content
+title: Tabular data, on-brand
+eyebrow: 03 - The Miragon theme
+accent: blue
+---
+
+<!--
+  Native Markdown tables get the white-card frame automatically: no component,
+  no raw HTML, no hex. Header is black with a restrained blue rule; the numeric
+  column is right-aligned with a trailing `:` in the divider row.
+  Transition: "Why bother with a system at all?"
+-->
+
+A plain Markdown table renders in brand CI. No component needed.
+
+| Element | Limit | If exceeded |
+|---|---:|---|
+| Bullets | 5 | Split with `---` |
+| Cards per grid | 3 | Drop one or reword |
+| Lines of code | 18 | Trim or reveal with `v-clicks` |
+| Nested list levels | 1 | Flatten the list |
+
+---
 layout: compare
 title: Why a system
 eyebrow: 03 - The Miragon theme

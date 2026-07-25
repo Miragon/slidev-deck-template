@@ -1,0 +1,62 @@
+/* Tables — Miragon CI frame for native Markdown tables.
+ *
+ * A Markdown table (`| a | b |`) is plain markdown, so it needs no component and
+ * keeps the slide source clean (it passes the no-raw-html check). This file gives
+ * every rendered `<table>` the same white-card treatment the <Card> component and
+ * code fences use: white surface, thin grey border, soft blue brand shadow,
+ * rounded corners. Header text stays BLACK (the heading rule); the single
+ * restrained accent is the blue rule under the header row. Body text is Geist
+ * Mono, matching the "Geist Mono for code and tables" CI invariant.
+ *
+ * Anchor: `#slideshow` is the single container that wraps EVERY slide page
+ * (`#slideshow > .slidev-page > <layout root>`), so this reaches tables in every
+ * layout — including the custom ones (`content`, `compare`, …) whose root is NOT
+ * `.slidev-layout`. Slidev's own defaults live on `.slidev-layout table`
+ * (specificity 0,1,1); anchoring on the `#slideshow` id (1,0,1) wins the cascade
+ * regardless of load order, without needing `!important`. Column alignment
+ * (`:---`, `---:`, `:--:`) is emitted by markdown-it as an inline `text-align`
+ * style, so it keeps working on top of these rules with no extra selectors.
+ *
+ * Colours come from theme.css; the only literal hex are the shared border/row
+ * neutrals already used across the toolkit (see code.css).
+ */
+
+#slideshow table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: auto;
+  margin: 0.5rem 0 1.25rem;
+  font-family: var(--miragon-font-mono);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background: var(--miragon-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.06);
+}
+
+/* Header row: black label, restrained blue accent rule underneath. */
+#slideshow thead th {
+  color: var(--miragon-text-primary);
+  font-weight: 700;
+  background: var(--miragon-blue-light);
+  border-bottom: 2px solid var(--miragon-blue);
+}
+
+#slideshow th,
+#slideshow td {
+  padding: 0.55rem 1.1rem;
+  text-align: left;
+  color: var(--miragon-text-secondary);
+  border-bottom: 1px solid #eef1f5;
+  vertical-align: top;
+}
+
+/* Subtle zebra striping for scannability; last row carries no divider. */
+#slideshow tbody tr:nth-child(even) td {
+  background: var(--miragon-gray-light);
+}
+#slideshow tbody tr:last-child td {
+  border-bottom: none;
+}

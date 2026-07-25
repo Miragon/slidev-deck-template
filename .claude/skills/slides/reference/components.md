@@ -130,6 +130,23 @@ The fence must sit on its own lines with a blank line before and after (like the
 
 ---
 
+## Tables (no component — plain Markdown)
+
+There is **no table component**, and you don't need one: a native Markdown table already renders in brand CI. The theme styles every `<table>` (in `packages/toolkit/styles/table.css`) as a white card, thin grey border, soft blue brand shadow, rounded corners, with a light-blue header band, a black bold header row over a blue accent rule, subtle zebra striping, and Geist Mono body text (the "Geist Mono for code and tables" rule). This keeps the slide source clean — a Markdown table is markdown, so it passes the no-raw-html check; a hand-rolled `<table>`/`<div>` grid would not.
+
+Write a plain Markdown table. Set column alignment with the divider row (`:---` left, `:--:` centre, `---:` right); right-align numeric columns. Keep it modest so it clears the canvas floor: aim for **<= 6 body rows** and short cells (see the overflow limits in `SKILL.md`). Inline `` `code` ``, `**bold**` and `*italic*` work in cells.
+
+```md
+| Element | Limit | If exceeded |
+|---|---:|---|
+| Bullets | 5 | Split with `---` |
+| Cards per grid | 3 | Drop one or reword |
+```
+
+For a table beside a diagram, drop it into a `SplitView`'s default slot like any other body content. Never restyle a table per slide (no `<style>`, no inline colours, no wrapper `<div>`); the theme owns the look.
+
+---
+
 ## Spacing / custom classes (the escape hatch)
 
 Every component here has a **single root element** and does not override `inheritAttrs`, so Vue forwards a `class` or `style` you put on the tag straight onto that root (and merges it with the component's own classes). Slidev bundles UnoCSS, so utility classes resolve out of the box. This is the one sanctioned way to break the "no utility classes / no inline CSS" rule — and it is deliberately **open**: any CSS property is reachable.

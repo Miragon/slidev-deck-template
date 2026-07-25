@@ -184,6 +184,10 @@ Every Markdown ` ```lang ` fence already renders as a white brand card (frame + 
 </CodeBlock>
 ````
 
+### Tables — plain Markdown, no component
+
+Need to show tabular data? Write a **native Markdown table**. There is no table component and you don't need one: the theme (`styles/table.css`) styles every `<table>` on-brand automatically (white card, soft blue shadow, light-blue header band with black labels over a blue accent rule, zebra rows, Geist Mono). It stays clean markdown, so it passes the no-raw-html check. Set alignment with the divider row (`---:` right-aligns numbers); keep to **<= 6 body rows** with short cells so it fits the canvas. Full guidance: [`reference/components.md`](reference/components.md), "Tables". Demo: the "Tabular data, on-brand" slide in `deck/chapter/03-theme/03-theme.md`.
+
 ### Diagrams — always Excalidraw
 
 There are no coded SVG-primitive components. **Every diagram is a `.excalidraw.svg`** generated in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. See the **`excalidraw`** skill for how to author and export one. (BPMN process diagrams use the `bpmn` archetype instead.)
@@ -222,6 +226,7 @@ Slides overflow when content exceeds the 16:9 canvas. Hard limits per slide:
 | Bullets per panel (`compare`, `goodbad`) | 4 |
 | Stacked boxes | 3 |
 | Cards in a grid | 3 (4 if very short) |
+| Table body rows | 6 |
 | Lines of code | 18 |
 | Sentences in a paragraph | 3 |
 | Nested list levels | 1 |
