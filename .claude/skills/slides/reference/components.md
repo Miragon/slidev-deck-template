@@ -130,6 +130,30 @@ The fence must sit on its own lines with a blank line before and after (like the
 
 ---
 
+## Spacing / custom classes (the escape hatch)
+
+Every component here has a **single root element** and does not override `inheritAttrs`, so Vue forwards a `class` or `style` you put on the tag straight onto that root (and merges it with the component's own classes). Slidev bundles UnoCSS, so utility classes resolve out of the box. This is the one sanctioned way to break the "no utility classes / no inline CSS" rule — and it is deliberately **open**: any CSS property is reachable.
+
+Keep it to **spacing and layout nudges** — the gap above/below a component, its width, or how it aligns in a grid cell. Never restyle brand surface through it: no colours, fonts, card backgrounds, borders, or bullet markers (those live in the theme and the components).
+
+| Want | Write |
+|---|---|
+| More air above a card | `<Card title="…" accent="blue" class="mt-8">…</Card>` |
+| An exact top margin | `<Card title="…" accent="blue" class="mt-[18px]">…</Card>` |
+| Same, as inline style | `<Figure src="…" style="margin-top: 2rem"></Figure>` |
+| Nudge a grid cell down | `<Figure src="…" class="self-end"></Figure>` inside a `CardGrid`/`SplitView` |
+
+`class` (UnoCSS: `mt-*`, `mb-*`, `w-*`, `self-*`, `justify-self-*`, arbitrary `mt-[18px]`, …) is preferred over inline `style` because it reads cleaner and stays on the spacing scale, but both work. It passes `npm run verify` — the design-system suite only flags inline `font-family` and per-slide `list-style`, not margins.
+
+```md
+<CardGrid cols="2">
+<Card title="Kept close to the heading" accent="blue">Default spacing.</Card>
+<Card title="Pushed down a touch" accent="green" class="mt-6">A nudge, nothing more.</Card>
+</CardGrid>
+```
+
+---
+
 ## Diagrams
 
 There are no coded SVG-primitive components. **Every diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
