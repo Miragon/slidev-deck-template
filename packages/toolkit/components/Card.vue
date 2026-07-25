@@ -90,17 +90,37 @@ const ACCENTS: Record<string, string> = {
   line-height: 1.55;
   color: #4b5563;
 }
-/* Wrapping the body in blank lines (required for inline Markdown — `code`, **bold**,
-   links — to render inside the slot; see the slides skill) makes Markdown emit a
-   <p>. Left alone it would inherit Slidev's larger prose paragraph size and default
-   margins, so a block-form card would look different from a tight one. Normalise it:
-   inherit the card body size, no outer margins, even spacing between paragraphs. */
+/* Blank-line-wrapped inline Markdown emits a <p>; normalise it to the card body size (no prose bloat). */
 .mg-card__body :deep(p) {
   margin: 0;
   font-size: inherit;
   line-height: inherit;
 }
 .mg-card__body :deep(p + p) { margin-top: 0.6em; }
+/* Same for bullet lists: normalise to the body size with a small blue square marker (like the content layout). */
+.mg-card__body :deep(ul) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mg-card__body :deep(li) {
+  position: relative;
+  font-size: inherit;
+  line-height: inherit;
+  padding-left: 1.1rem;
+  margin: 0;
+}
+.mg-card__body :deep(li + li) { margin-top: 0.4em; }
+.mg-card__body :deep(li)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 0.1rem;
+  background: var(--miragon-blue);
+}
 .mg-card--compact .mg-card__body { flex: 1 1 auto; display: flex; flex-direction: column; }
 /* A trailing diagram (<Figure src>) docks at the card bottom, so the image sits at
    the same position in every card of a stretched grid regardless of text length. */
