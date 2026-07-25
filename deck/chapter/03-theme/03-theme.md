@@ -82,20 +82,23 @@ accent: blue
 
 <!--
   CardGrid + Card: no raw <div>, no hex. Accent walks blue → teal → green.
+  OPTIONAL: `icon` sets an Iconify UnoCSS class (i-carbon-*, i-ph-*) above the
+  title; it takes the card's accent colour. Omit it for a plain text card.
+  Pass the full class literally so UnoCSS generates it at build time.
   Transition: "Why bother with a system at all?"
 -->
 
 <CardGrid cols="3">
 
-<Card title="Card / CardGrid" accent="blue">
+<Card title="Card / CardGrid" accent="blue" icon="i-carbon-grid">
 A row of white cards, written as components, not raw HTML or hex.
 </Card>
 
-<Card title="StepList / Figure" accent="teal">
+<Card title="StepList / Figure" accent="teal" icon="i-carbon-list-boxes">
 Ordered steps and captioned visuals, styled by the theme, not the slide.
 </Card>
 
-<Card title="SplitView" accent="green">
+<Card title="SplitView" accent="green" icon="i-carbon-split-screen">
 A diagram on one side, the explanation on the other, in one tag.
 </Card>
 
