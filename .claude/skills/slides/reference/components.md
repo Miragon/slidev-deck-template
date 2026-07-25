@@ -38,14 +38,18 @@ The canonical white card (white background always, accent on the title only). Fo
 | `accent` | `blue` · `blue-mid` · `teal` · `green-deep` · `green-mid` · `green` | `blue` | a stop on the blue→teal→green progression; the only place the sanctioned hex lives |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
 | `icon` (str) | an Iconify UnoCSS class, e.g. `i-carbon-grid`, `i-ph-cube` | — | optional icon shown above the title in the accent colour; omit for a plain text card |
+| `align` | `left` · `center` · `right` | `left` | horizontal alignment of icon, title, and body |
 | **slot** | — | — | body text (wrap in blank lines if it contains inline Markdown — see "Markdown inside a component body") |
 
 Progression by card count: **2** → blue, green · **3** → blue, teal, green · **4** → blue, blue-mid, green-deep, green · **6** → blue, blue-mid, teal, green-deep, green-mid, green.
 
 `icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass an **Iconify `i-*` class** (the installed collections are `carbon`, `ph`, `svg-spinners`), never an emoji. Write the **full class literally** in the slide (e.g. `icon="i-carbon-grid"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
 
+`align` is optional and defaults to `left` (the previous behaviour). Set `center` or `right` to align the icon, title, and body together; it only touches horizontal alignment and leaves the white background, accent logic, and everything else untouched.
+
 ```md
 <Card title="DaemonSet" accent="teal" icon="i-carbon-container-services">Exactly one pod per node.</Card>
+<Card title="Centered" accent="blue" align="center">Icon, title, and body all centered.</Card>
 ```
 
 ## CardGrid
