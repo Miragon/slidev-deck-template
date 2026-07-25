@@ -11,7 +11,9 @@
     "build": "npm run build -w deck",
     "export": "npm run export -w deck",
     "verify": "playwright test -c verify/playwright.config.ts; playwright show-report verify/playwright-report",
-    "verify:source": "VERIFY_SOURCE_ONLY=1 playwright test -c verify/playwright.config.ts -g @source"
+    "verify:ci": "playwright test -c verify/playwright.config.ts --reporter=list",
+    "verify:source": "VERIFY_SOURCE_ONLY=1 playwright test -c verify/playwright.config.ts -g @source",
+    "shot": "node scripts/shot.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",
