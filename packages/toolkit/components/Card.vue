@@ -17,6 +17,11 @@
  * Der volle Klassenname muss so im Slide stehen, damit UnoCSS ihn beim
  * statischen Scan findet und generiert (Brand-Regel: Iconify `i-*`, kein Emoji).
  *   <Card title="Deployment" accent="blue" icon="i-carbon-rocket">Body …</Card>
+ *
+ * `align` (optional): richtet Icon, Titel und Body aus — `left` (Standard),
+ * `center` oder `right`. Betrifft nur die horizontale Ausrichtung des Inhalts;
+ * Hintergrund, Akzentlogik und alles andere bleiben unverändert.
+ *   <Card title="Deployment" accent="blue" align="center">Body …</Card>
  */
 const props = withDefaults(
   defineProps<{
@@ -24,8 +29,9 @@ const props = withDefaults(
     accent?: 'blue' | 'blue-mid' | 'teal' | 'green-deep' | 'green-mid' | 'green'
     padding?: 'compact' | 'standard' | 'generous'
     icon?: string
+    align?: 'left' | 'center' | 'right'
   }>(),
-  { accent: 'blue', padding: 'standard' },
+  { accent: 'blue', padding: 'standard', align: 'left' },
 )
 
 // Die §6.3-Progressions-Stops. Bewusst lokal: der einzige sanktionierte Hex-Ort.
@@ -40,7 +46,7 @@ const ACCENTS: Record<string, string> = {
 </script>
 
 <template>
-  <div class="mg-card" :class="`mg-card--${props.padding}`">
+  <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`]">
     <span v-if="icon" class="mg-card__icon" :class="icon" :style="{ color: ACCENTS[props.accent] }" aria-hidden="true"></span>
     <h3 v-if="title" class="mg-card__title" :style="{ color: ACCENTS[props.accent] }">{{ title }}</h3>
     <div class="mg-card__body"><slot /></div>
@@ -62,8 +68,11 @@ const ACCENTS: Record<string, string> = {
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
 .mg-card--standard { padding: 1.25rem; }
 .mg-card--generous { padding: 1.5rem; }
-/* Optionales Icon über dem Titel: skaliert über font-size (die i-*-Klasse ist
-   1em breit/hoch), Farbe via currentColor aus dem inline color = Akzent. */
+.mg-card--align-center { text-align: center; }
+.mg-card--align-right { text-align: right; }
+.mg-card--align-center .mg-card__icon { margin-left: auto; margin-right: auto; }
+.mg-card--align-right .mg-card__icon { margin-left: auto; }
+
 .mg-card__icon {
   display: block;
   font-size: 1.6rem;
