@@ -20,9 +20,10 @@
 .step-list {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  font-size: 0.8rem;
-  line-height: 1.4;
+  gap: 0.95rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
   color: var(--miragon-text-secondary);
+  counter-reset: miragon-step;
 }
 </style>
