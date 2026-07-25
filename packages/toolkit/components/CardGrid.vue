@@ -42,5 +42,6 @@ const GAPS: Record<string, string> = {
   gap: var(--mg-gap);
   align-items: stretch;
   margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 </style>
