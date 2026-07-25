@@ -31,3 +31,20 @@
   color: var(--miragon-text-muted);
   font-size: 0.8rem;
 }
+
+/* Inline code (`like this`) — a small on-brand chip in Geist Mono. Without this
+   rule inline code falls back to Slidev/UnoCSS defaults (a lavender pill in a
+   generic mono face). `:not(pre) > code` matches only inline spans, never the
+   <code> inside a Shiki fence (that lives under <pre>), so fences keep their
+   frame above. Applies everywhere the same way, including inside <Card> bodies.
+   NOTE: for inline code to render at all inside a component (<Card>, …), the
+   body must be wrapped in blank lines — see the slides skill. */
+:not(pre) > code {
+  font-family: var(--miragon-font-mono);
+  font-size: 0.85em;
+  color: var(--miragon-blue-dark);
+  background: var(--miragon-blue-light);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.35rem;
+  padding: 0.1em 0.35em;
+}
