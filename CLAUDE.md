@@ -39,6 +39,7 @@ If you do nothing else, respect these:
 - **No em-dashes** (`—`). **No emoji icons** — use inline SVG or Iconify icon classes.
 - **Bullets are plain `<ul><li>`** — the layouts (`content`, `compare`, etc.) provide the markers. Never override list styling per slide.
 - **No raw HTML/CSS/hex in the markdown.** A slide is frontmatter + headings + bullets + component tags. Reach for `Card`/`CardGrid`/`StepList`/`Figure`/`SplitView` instead of `<div class="…">`. **Diagrams are always Excalidraw `.excalidraw.svg`**, embedded via `<Figure src>` (see the `excalidraw` skill); there are no coded SVG-diagram components.
+- **The one sanctioned escape hatch: `class` / `style` on a component nudges its root spacing/layout, nothing else.** Every component forwards `class` and `style` to its own root (native Vue single-root fall-through), so `<Card class="mt-8">` or `<Card style="margin-top: 2rem">` adjusts the gap above a card without touching the theme. Use it sparingly and only for spacing/layout (`mt-*`, `mb-*`, `w-*`, `self-*`, `justify-self-*`, an arbitrary `mt-[18px]`, …). Never to override brand: no colours, fonts, card backgrounds, borders, or bullet markers this way. See the `slides` skill (`reference/components.md`, "Spacing / custom classes").
 - **Components on a single line** in `.md`; **explicit closing tags** (`<Component></Component>`, never self-closing).
 - **Never reduce font size to fit content.** Reduce content, split slides, or use `<v-clicks>`.
 - **`deck/slides.md`** is the entry; each chapter is a folder `deck/chapter/NN-name/` with `NN-name.md` + a `resources/` subfolder, imported via `src:`. Every chapter begins with a `section` archetype slide.
@@ -53,7 +54,7 @@ Everything above is expanded in the `slides` skill.
 ## Pre-flight checklist (before finishing a slide)
 
 - [ ] English only on slide content
-- [ ] No hardcoded hex / raw HTML / utility classes in the markdown (use the components; the sanctioned hex lives inside `Card.vue`)
+- [ ] No hardcoded hex / raw HTML / utility classes in the markdown (use the components; the sanctioned hex lives inside `Card.vue`). The one exception: a `class`/`style` on a component for **spacing/layout only** (e.g. `<Card class="mt-8">`), never to override brand colours, fonts, or card styling
 - [ ] Cards: white, accent on title text only, no colored background or left-border
 - [ ] Headings black; blue only for kickers/accents/small labels
 - [ ] One focal point per slide; at most one green accent word

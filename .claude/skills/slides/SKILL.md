@@ -113,6 +113,8 @@ Full per-layout prop signatures and limits: [`reference/archetypes.md`](referenc
 
 The components encode the visual rules so slides stay clean: a slide should be frontmatter + headings + bullets + component tags, with **no `<style>`, no hardcoded hex, and no Tailwind/utility classes** in the `.md`. Write components on one line with explicit closing tags. Full props: [`reference/components.md`](reference/components.md).
 
+The single sanctioned exception to "no utility classes": a `class` or `style` on a component forwards to that component's root, so you can nudge **spacing or layout** without a wrapper (e.g. `<Card class="mt-8">` for more air above a card, `<Figure style="margin-top: 2rem">`). Use it sparingly and only for spacing/layout; never to override brand colours, fonts, card styling, or bullet markers. Details in [`reference/components.md`](reference/components.md), "Spacing / custom classes".
+
 ### `Card` + `CardGrid` — the canonical white-card grid
 
 `Card` replaces hand-written card `<div>`s: background is always white, the accent lands on the title only. `CardGrid` replaces the raw `<div class="grid grid-cols-N …">` wrapper, so the markdown carries no CSS classes. For 2+ cards, run the accent across them left → right.
