@@ -29,12 +29,14 @@ jobs:
       # Fast structural smoke test: generated layout, exclusions, clean package.json.
       - run: npm test -w packages/create-deck
 
-      # End-to-end: scaffold a deck from this checkout and prove it installs,
-      # builds and passes the source guardrails with the toolkit resolved from npm.
+      # Scaffold a deck and prove it installs, builds and passes the source guardrails.
       - name: Scaffold a deck and verify it builds
         run: |
+          # Install the toolkit from a local tarball, not npm, since release PRs pins an unpublished version.
+          toolkit_tgz="$(npm pack -w packages/toolkit --pack-destination "$RUNNER_TEMP" --json \
+            | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename')"
           CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
           cd "$RUNNER_TEMP/smoke-deck"
-          npm install
+          npm install --no-save "$RUNNER_TEMP/$toolkit_tgz"
           npm run build
           npm run verify:source
