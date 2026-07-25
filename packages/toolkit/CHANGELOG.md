@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/Miragon/slidev-deck-template/compare/v1.4.0...v1.5.0) (2026-07-25)
+
+
+### Features
+
+* **toolkit:** add align prop to Card for content alignment ([#40](https://github.com/Miragon/slidev-deck-template/issues/40)) ([43c5739](https://github.com/Miragon/slidev-deck-template/commit/43c5739de9b5d4b27fb904e3cbb8349e8c2eeb05))
+* **toolkit:** add optional icon prop to Card ([#37](https://github.com/Miragon/slidev-deck-template/issues/37)) ([d914b95](https://github.com/Miragon/slidev-deck-template/commit/d914b95d956082a6ede6e7628fb0107b59cbad69))
+
+
+### Bug Fixes
+
+* **toolkit:** render inline code on-brand inside Card bodies ([#39](https://github.com/Miragon/slidev-deck-template/issues/39)) ([fe6b650](https://github.com/Miragon/slidev-deck-template/commit/fe6b650c7ce5f05de22d80316662d39d4d3201b6))
+
 ## [1.4.0](https://github.com/Miragon/slidev-deck-template/compare/v1.3.0...v1.4.0) (2026-07-25)
 
 
