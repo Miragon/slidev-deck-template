@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.0.3...create-slidev-deck-v1.1.0) (2026-07-25)
+
+
+### Features
+
+* **dev:** adopt portless for worktree-aware dev URLs ([#41](https://github.com/Miragon/slidev-deck-template/issues/41)) ([78de2a7](https://github.com/Miragon/slidev-deck-template/commit/78de2a7132e3bfdbac0ff31ec10c015757ab4be6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.5.0 to 1.5.1
+
 ## [1.0.3](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.0.2...create-slidev-deck-v1.0.3) (2026-07-25)
 
 
