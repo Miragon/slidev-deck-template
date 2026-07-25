@@ -175,7 +175,8 @@ const accentVar = computed(() =>
   text-decoration: none;
   border-bottom: 1px solid currentColor;
 }
-.content-body :deep(code) {
+
+.content-body :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
   background: var(--miragon-blue-light);

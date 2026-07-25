@@ -168,6 +168,20 @@ The standard diagram-left / text-right slide body. The visual goes in the `#visu
 </SplitView>
 ```
 
+### `CodeBlock` — a code snippet in brand CI
+
+Every Markdown ` ```lang ` fence already renders as a white brand card (frame + soft blue shadow, Geist Mono) via `styles/code.css`, with Shiki syntax colours on a clean background — no component needed for a bare snippet. Reach for `CodeBlock` only when the snippet wants a **filename or language label**: it adds a header (filename left, blue language badge right) around the fence. Optional props: `size` (a CSS length for the code font, default unchanged) and `hideHeader` (drop the header even with `file`/`lang` set). Put the fence on its own lines with a blank line before and after, like the `SplitView` bullet rule.
+
+````md
+<CodeBlock file="deck/slides.md" lang="md">
+
+```md
+# Build decks like **code**
+```
+
+</CodeBlock>
+````
+
 ### Diagrams — always Excalidraw
 
 There are no coded SVG-primitive components. **Every diagram is a `.excalidraw.svg`** generated in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. See the **`excalidraw`** skill for how to author and export one. (BPMN process diagrams use the `bpmn` archetype instead.)

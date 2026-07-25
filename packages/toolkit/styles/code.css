@@ -1,0 +1,33 @@
+/* Code blocks — Miragon CI frame for every Shiki fence.
+ *
+ * Slidev renders a Markdown ```lang fence to <pre class="slidev-code shiki …">.
+ * By default that is a bare, unframed block. Here we give every fence the same
+ * white-card treatment the <Card> component uses (white background, thin grey
+ * border, soft blue brand shadow, rounded corners) so code reads as part of the
+ * design system. Font is already Geist Mono via --slidev-code-font-family
+ * (index.css). Colours come from theme.css — no hardcoded hex except the shared
+ * border/scrollbar neutrals already used across the toolkit.
+ *
+ * The <CodeBlock> component wraps a fence in a titled window; it strips this
+ * bare frame from the nested fence itself (see CodeBlock.vue) and supplies its
+ * own header + frame instead.
+ */
+
+/* Every Shiki fence carries both `.shiki` and `.slidev-code`. Targeting both
+   (specificity 0,2,0) frames code in EVERY layout — including custom ones like
+   `goodbad` whose panels sit outside `.slidev-layout` — while staying low enough
+   that the <CodeBlock> component's :deep rules (0,3,0) can still reset it. */
+.shiki.slidev-code {
+  background: var(--miragon-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.06);
+  overflow-x: auto;
+}
+
+/* A caption line under a fence (a following *italic* line) reads as a muted
+   label, not body text. Kept subtle. */
+.shiki.slidev-code + p em:only-child {
+  color: var(--miragon-text-muted);
+  font-size: 0.8rem;
+}

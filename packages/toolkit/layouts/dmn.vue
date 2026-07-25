@@ -165,7 +165,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
   margin: 0;
   line-height: 1.5;
 }
-.dmn-caption :deep(code) {
+.dmn-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
   background: var(--miragon-blue-light);

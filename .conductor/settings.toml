@@ -7,7 +7,7 @@ run_mode = "concurrent"
 
 # Preview the deck with hot reload. Opens the browser on the workspace port.
 [scripts.run.dev]
-command = "npm run dev -- --port $CONDUCTOR_PORT"
+command = "npm run dev"
 default = true
 icon = "play"
 

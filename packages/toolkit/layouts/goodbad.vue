@@ -265,7 +265,8 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   border-radius: 0.18rem;
   background: var(--gb-grad);
 }
-.panel-body :deep(code) {
+
+.panel-body :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
   background: var(--miragon-blue-light);
@@ -276,10 +277,6 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
 .panel-body :deep(pre) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9rem;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-text-primary);
-  padding: 0.8rem 1rem;
-  border-radius: 0.5rem;
   margin: 0.4rem 0 0;
   overflow-x: auto;
 }
