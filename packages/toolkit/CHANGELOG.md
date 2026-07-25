@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/Miragon/slidev-deck-template/compare/v1.3.0...v1.4.0) (2026-07-25)
+
+
+### Features
+
+* **toolkit:** add default bottom margin to CardGrid and SplitView ([#34](https://github.com/Miragon/slidev-deck-template/issues/34)) ([272aa16](https://github.com/Miragon/slidev-deck-template/commit/272aa161bbcf8c9400cdc5b88eacd5163354723f))
+* **toolkit:** on-brand table styling and demo slide ([#36](https://github.com/Miragon/slidev-deck-template/issues/36)) ([e3bd9cd](https://github.com/Miragon/slidev-deck-template/commit/e3bd9cda3bd2b008f7219907ea118c147fcd9f6c))
+
 ## [1.3.0](https://github.com/Miragon/slidev-deck-template/compare/v1.2.1...v1.3.0) (2026-07-25)
 
 
