@@ -91,15 +91,21 @@ accent: blue
 <CardGrid cols="3">
 
 <Card title="Card / CardGrid" accent="blue" icon="i-carbon-grid">
-A row of white cards, written as components, not raw HTML or hex.
+
+A row of white cards, written as components. Inline `code` renders when the body is wrapped in blank lines.
+
 </Card>
 
 <Card title="StepList / Figure" accent="teal" icon="i-carbon-list-boxes">
+
 Ordered steps and captioned visuals, styled by the theme, not the slide.
+
 </Card>
 
 <Card title="SplitView" accent="green" icon="i-carbon-split-screen">
+
 A diagram on one side, the explanation on the other, in one tag.
+
 </Card>
 
 </CardGrid>

@@ -1,8 +1,30 @@
 # Components — full reference
 
-Reusable building blocks in `packages/toolkit/components/` (auto-imported into every deck). Diagrams are not components — they are `.excalidraw.svg` files embedded via `<Figure src>` (see the `excalidraw` skill). Write all components on a single line in markdown with explicit closing tags.
+Reusable building blocks in `packages/toolkit/components/` (auto-imported into every deck). Diagrams are not components — they are `.excalidraw.svg` files embedded via `<Figure src>` (see the `excalidraw` skill). Write all components on a single line in markdown with explicit closing tags — **except when the body contains inline Markdown** (see below).
 
 All colours come from `packages/toolkit/styles/theme.css`; never pass raw hex from a slide.
+
+---
+
+## Markdown inside a component body
+
+Slidev renders the Markdown file first, then hands the result to Vue. A component whose opening tag and body share a line (or sit on adjacent lines with no gap) is parsed as a **raw HTML block**: everything inside is passed through verbatim, so inline Markdown never runs — `` `code` `` shows its backticks, `**bold**` shows its asterisks, `[text](url)` stays literal. This is [documented Slidev/CommonMark behaviour](https://slidev.dev/builtin/components), not a theme bug, and no CSS can fix it.
+
+The fix is to **surround the body with blank lines** so Slidev parses it as a Markdown block:
+
+```md
+<!-- BROKEN — backticks render literally -->
+<Card title="Runtime" accent="blue">Confirm `newsletter.bpmn` deploys.</Card>
+
+<!-- CORRECT — inline code renders as an on-brand chip -->
+<Card title="Runtime" accent="blue">
+
+Confirm `newsletter.bpmn` deploys.
+
+</Card>
+```
+
+A **plain-text** body (no inline Markdown) is unaffected — keep it on the tag line. Inline code renders as a Geist Mono chip in brand blue (`styles/code.css`), the same in body text and inside cards. This applies to every component with a Markdown body: `Card`, `SplitView`, `CodeBlock`, and the `content`/`compare` layout slots (which is why bullet lists already need a preceding blank line).
 
 ---
 
@@ -16,7 +38,7 @@ The canonical white card (white background always, accent on the title only). Fo
 | `accent` | `blue` · `blue-mid` · `teal` · `green-deep` · `green-mid` · `green` | `blue` | a stop on the blue→teal→green progression; the only place the sanctioned hex lives |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
 | `icon` (str) | an Iconify UnoCSS class, e.g. `i-carbon-grid`, `i-ph-cube` | — | optional icon shown above the title in the accent colour; omit for a plain text card |
-| **slot** | — | — | body text |
+| **slot** | — | — | body text (wrap in blank lines if it contains inline Markdown — see "Markdown inside a component body") |
 
 Progression by card count: **2** → blue, green · **3** → blue, teal, green · **4** → blue, blue-mid, green-deep, green · **6** → blue, blue-mid, teal, green-deep, green-mid, green.
 

@@ -80,7 +80,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 - **Bullets are plain `<ul><li>`.** The layout provides the marker. Never override list styling per slide.
 - **Never reduce font size to fit.** Reduce content, split the slide, or use `<v-clicks>`.
 - **No hardcoded hex** in slide markdown. Use components and CSS variables. (The one sanctioned hex lives inside `Card.vue`, not in slides.)
-- **Components on a single line in `.md`, with explicit closing tags** (`<Card>…</Card>`, never self-closing in markdown).
+- **Components on a single line in `.md`, with explicit closing tags** (`<Card>…</Card>`, never self-closing in markdown). **Exception — a body that contains inline Markdown** (`` `code` ``, `**bold**`, links): put the body on its own lines wrapped in blank lines, or Slidev treats it as raw HTML and the Markdown never renders (backticks show literally). See [`reference/components.md`](reference/components.md), "Markdown inside a component body".
 - **Never start, restart, or kill the dev server.** Reuse the author's running `npm run dev` (HMR picks up edits automatically); to check, run `npm run verify`. No `npm run dev`/`slidev --open`, no `pkill`/`kill`/`lsof` on port 3030. (Details in [Verifying](#verifying).)
 
 ---
@@ -132,6 +132,16 @@ The single sanctioned exception to "no utility classes": a `class` or `style` on
 ```
 
 Accent progression: **2 cards** `blue, green` · **3 cards** `blue, teal, green` · **4 cards** `blue, blue-mid, green-deep, green`. (The exact hex stops live inside `Card.vue` — never write them in markdown.)
+
+A plain-text body can stay on the tag line (above). **If the body contains inline Markdown** (`` `code` ``, `**bold**`, a link), it must sit on its own lines wrapped in blank lines, or Slidev renders it as raw HTML and the backticks/asterisks show literally:
+
+```md
+<Card title="Runtime" accent="blue">
+
+Boot the module and confirm `newsletter.bpmn` **auto-deploys**.
+
+</Card>
+```
 
 ### `StepList` / `Step` — compact labelled list beside a diagram
 
