@@ -143,19 +143,22 @@ function buildPackageJson(scratch, deckName, toolkitVersion) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
   const rootPkg = readManifest('package.json')
+  const portlessVersion = deckPkg.devDependencies?.portless
+  if (!portlessVersion) throw new Error('Reference deck/package.json is missing devDependency portless')
   const pkg = {
     name: deckName,
     type: 'module',
     private: true,
     scripts: {
-      dev: 'slidev deck/slides.md --open',
+      dev: 'portless',
+      'dev:app': 'slidev deck/slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1',
       build: 'slidev build deck/slides.md --out ../dist',
       export: 'slidev export deck/slides.md',
       verify: rootPkg.scripts.verify,
       'verify:source': rootPkg.scripts['verify:source'],
     },
     dependencies: { '@miragon/slidev-toolkit': toolkitVersion, ...deckPkg.dependencies },
-    devDependencies: verifyDevDeps(rootPkg),
+    devDependencies: { ...verifyDevDeps(rootPkg), portless: portlessVersion },
   }
   return JSON.stringify(pkg, null, 2) + '\n'
 }
@@ -200,6 +203,8 @@ async function layDownDeck({ scratch, target, deckName, toolkitVersion, ref, pre
 
     const packageJson = buildPackageJson(scratch, deckName, toolkitVersion)
     await writeFile(join(target, 'package.json'), packageJson)
+    const portlessJson = JSON.stringify({ name: deckName, script: 'dev:app' }, null, 2) + '\n'
+    await writeFile(join(target, 'portless.json'), portlessJson)
     await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
   } catch (err) {
     await rollback(target, preexisting)
@@ -215,7 +220,8 @@ Done. Your deck is ready in ${dir}
 Next steps:
   cd ${dir}
   ${pm} install
-  ${pm} run dev
+  npx portless service install   # one-time per machine: HTTPS proxy for the .localhost dev URL
+  ${pm} run dev                  # serves at https://${deckNameFrom(dir)}.localhost
 
 Build with '${pm} run build', check brand guardrails with '${pm} run verify'.`)
 }

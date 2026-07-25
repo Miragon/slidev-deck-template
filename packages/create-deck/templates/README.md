@@ -7,12 +7,14 @@ npm package — you fill in the content, the theme is fixed.
 
 ## Quick start
 
-Needs **Node 20+** and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
+Needs **Node 20+** (**Node 24+** for `npm run dev`) and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
 
 ```bash
 npm install
-npm run dev      # opens the deck on http://localhost:3030 with live reload
+npm run dev      # serves the deck at https://<this-deck>.localhost with live reload
 ```
+
+`npm run dev` runs through [portless](https://portless.sh): a stable `.localhost` URL instead of a `:3030` port, so several decks run at once without colliding. The proxy auto-starts on first run (one-time `sudo`); `npx portless service install` makes it permanent. Use `npm run dev:app` to run the raw server without portless.
 
 Edit files under `deck/` and save — the preview updates instantly. Every demo slide carries a
 `REQUIRED / OPTIONAL / LIMIT / HOW TO USE` comment block: your in-place authoring guide.
@@ -32,7 +34,7 @@ The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you 
 
 | Command | Result |
 |---|---|
-| `npm run dev` | Live preview on `:3030`; `p` for presenter mode, `o` for overview |
+| `npm run dev` | Live preview at `https://<this-deck>.localhost` (portless); `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere |
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium) |
 | `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |

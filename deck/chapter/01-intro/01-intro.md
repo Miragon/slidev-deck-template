@@ -14,7 +14,7 @@ layout: person
 name: Jane Doe
 role: Presenter
 name2: John Roe
-role2: Co-presenter
+role2: Co-Presenter
 eyebrow: 01 - Welcome
 accent: blue
 ---

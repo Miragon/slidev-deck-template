@@ -21,8 +21,10 @@ npx @miragon/create-slidev-deck@latest my-talk
 ```bash
 cd my-talk
 npm install
-npm run dev      # opens the deck on http://localhost:3030 with live reload
+npm run dev      # serves the deck at https://my-talk.localhost with live reload
 ```
+
+`npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `https://<deck>.localhost` URL instead of a `:3030` port, so several decks run side by side without colliding. The first run starts a local HTTPS proxy (a one-time `sudo` prompt); run `npx portless service install` once to make it permanent (and required for a headless Conductor Run button, which has no prompt). To run the raw server without portless, use `npm run dev:app`.
 
 You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and `@miragon/slidev-toolkit` pulled from npm — no toolkit source, no release tooling to prune. Then:
 
@@ -70,7 +72,7 @@ Run these in your deck:
 
 | Command | Result |
 |---|---|
-| `npm run dev` | Live preview on `:3030`; press `p` for presenter mode, `o` for overview |
+| `npm run dev` | Live preview at `https://<deck>.localhost` (portless); press `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere (Mesh animation included, no Node at runtime) |
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium; kept out of `build` so CI stays green) |
 | `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
@@ -91,7 +93,7 @@ The scaffold ships `CLAUDE.md` and the `slides` skill, so a Claude Code session 
 ## Troubleshooting
 
 - **`npm install` fails (node-gyp / build tools).** Check `node --version` (needs 20+); on macOS run `xcode-select --install`.
-- **Port 3030 in use.** `npm run dev -- --port 3031`.
+- **Dev URL won't load / 502 Bad Gateway.** The portless proxy isn't running or trusted. Run `npx portless doctor`, then `npx portless service install`. Bypass portless entirely with `npm run dev:app` (raw `localhost` port).
 - **Export produces an empty PDF.** Run `npm run build` once to warm the pre-bundle, then `npm run export`.
 - **Cover renders white.** WebGL2 is blocked and the gradient fallback too — update or switch browsers.
 
