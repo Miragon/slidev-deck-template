@@ -93,4 +93,4 @@ contact: hello@miragon.io
 
 # Now build **your** deck.
 
-Use this template, edit a chapter, run `npm run verify`, ship.
+Scaffold a deck, edit a chapter, run `npm run verify`, ship.

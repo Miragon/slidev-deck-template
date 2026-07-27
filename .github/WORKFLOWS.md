@@ -14,7 +14,7 @@ The workflows that keep the template building, releasing and secure. All actions
 
 ## Template-only workflows
 
-"Use this template" copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`:
+Forking this repo copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`:
 
 - Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason, and it would pointlessly test a scaffolder it does not own.
 - In a derived repo these workflows run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
