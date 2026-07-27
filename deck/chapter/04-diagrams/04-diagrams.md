@@ -95,7 +95,52 @@ height: 300px
 <!--
   dmn archetype: renders a .dmn decision table (slidev-addon-dmn), the sibling of
   the bpmn archetype. BPMN models the process, DMN models the decisions inside it.
-  File lives in this chapter's resources/. Transition: "Now: how do you write all this?"
+  File lives in this chapter's resources/. Transition: "Slidev can also draw from text: Mermaid."
 -->
 
 A DMN decision table, the business rules behind a process step, from any DMN modeler.
+
+---
+layout: content
+title: Or generate one from text with Mermaid
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  Mermaid renders natively from text, brand-styled via deck/setup/mermaid.ts.
+  Like Excalidraw, the source can live in a file: this flowchart is imported from
+  resources/recruitment-flow.mermaid with the <<< snippet syntax.
+  Transition: "Or write it inline, right on the slide."
+-->
+
+Mermaid renders a diagram from text. Like an Excalidraw asset, the source can live in its own `.mermaid` file.
+
+<<< @/chapter/04-diagrams/resources/recruitment-flow.mermaid
+
+---
+layout: content
+title: Or write it inline on the slide
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  Same Mermaid, defined inline in the slide instead of a file: a sequence diagram
+  of the same hiring flow. Use a file for reuse, inline for a one-off.
+  Transition: "Now: how do you write all this?"
+-->
+
+Or write the source inline on the slide, here as a sequence diagram.
+
+```mermaid {scale: 0.72}
+sequenceDiagram
+  participant C as Candidate
+  participant R as Recruiter
+  participant H as Hiring Manager
+  C->>R: Submit application
+  R->>H: Forward shortlist
+  H->>C: Invite to interview
+  C->>H: Attend interview
+  H-->>C: Send offer
+```
