@@ -1,6 +1,6 @@
 # Layout archetypes — full reference
 
-The theme ships **12 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
+The theme ships **13 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
 
 `accent` is `blue` (default) · `green` · `mixed` unless noted; it tints the gradient accent bar and the bold word.
 
@@ -144,6 +144,19 @@ A `.dmn` file rendered as a decision table via `slidev-addon-dmn`. The sibling o
 | **slot** | optional caption below the table |
 
 **Dependency:** `slidev-addon-dmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
+
+## mermaid — Mermaid diagram framed on-brand (static)
+
+The sibling of `bpmn` / `dmn`, but for a text-generated Mermaid diagram: header above, the diagram framed in a branded white card, optional caption below. Unlike bpmn/dmn (which take a `diagram:` file path), the diagram comes from a ` ```mermaid ` fence — or a `<<< @/…/x.mermaid` import — in the **default slot**. The diagram is the focal point.
+
+| Frontmatter | Values |
+|---|---|
+| `title`, `eyebrow` (str) | — |
+| `accent` | blue / green / mixed |
+| **default slot** | the ` ```mermaid ` fence (or a `<<<` import) — framed in the white card |
+| **`::caption::` slot** | optional caption below the diagram |
+
+No file-path/height prop: the Mermaid SVG sizes itself and is centered in the card; shrink a tall diagram with the fence's scale option (` ```mermaid {scale: 0.8} `), never by editing the theme. The diagram is brand-styled globally by `packages/toolkit/setup/mermaid.ts` (Miragon palette, Geist, rounded box corners) — no per-slide styling. Use this layout when the diagram should be the framed focal point; a Mermaid fence still renders inline in a plain `content` layout when it sits alongside bullets.
 
 ## showcase — interactive feature explorer (static, interactive)
 
