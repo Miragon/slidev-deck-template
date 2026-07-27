@@ -298,6 +298,11 @@ This is the loop for every slide change:
 3. **Verify headless**: `npm run verify:ci`. It drives the deck headless and reports each slide's checklist plus the source-level checks. (Run `npm run build` too when you want to confirm a clean production build / PDF.) To re-check only the slides you just touched, scope it with `VERIFY_PAGES` (a range or list, e.g. `VERIFY_PAGES="4-6" npm run verify:ci` or `VERIFY_PAGES="2,5,9"`); the source-level checks still run across the whole deck. **Check the deck title in the output is this deck** (see the port trap above).
 4. If any check is **red**, fix the slide (the checklist spells out what and how) and re-run. The overflow check is measured against the canvas, so trust it over eyeballing: a slide that touches the bottom edge is overflowing, not "just fitting."
 5. **Do not stop until every check is green.** A slide left red is unfinished work.
+6. **Escalation — stop after 3 failed fix attempts on the same slide.** If the *same* slide still fails the *same* check after **three** edit-and-re-verify cycles, do not keep looping blindly. Pause and ask the author how to proceed, presenting the situation and concrete options rather than churning:
+   - **"I fix it manually"** — hand back with a precise summary: which slide, which check is red, what the checklist says, and exactly what you tried each attempt (so they are not guessing).
+   - **"Guide me / tell me how"** — give a short, ordered set of fix instructions the author can apply themselves.
+   - **"You decide / keep going"** — propose the change *you* would make. When a slide repeatedly overflows or breaks a rule, the fix is usually **structural, not cosmetic**: a different layout archetype (e.g. split a dense `content` slide into two, move a diagram-heavy slide to `content-image`/`bpmn`, turn a comparison into `compare`/`goodbad`), fewer items, or moving detail to speaker notes. Recommend the specific archetype and why, then apply it on approval.
+   Repeatedly retrying the same approach that already failed twice is not progress — surface it. (This 3-attempt ceiling is per slide, per check; a genuinely new failure resets the count.)
 
 ---
 
