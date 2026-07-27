@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/Miragon/slidev-deck-template/compare/v1.5.1...v1.6.0) (2026-07-27)
+
+
+### Features
+
+* **toolkit:** ship Mermaid brand setup from the theme so every deck inherits it ([#52](https://github.com/Miragon/slidev-deck-template/issues/52)) ([14cbbe1](https://github.com/Miragon/slidev-deck-template/commit/14cbbe1ff2d1547abfe9e2126b8427a098e4babf)), closes [#48](https://github.com/Miragon/slidev-deck-template/issues/48)
+* **toolkit:** wrap the Agenda rail into rows for decks with many chapters ([#54](https://github.com/Miragon/slidev-deck-template/issues/54)) ([a2d42f5](https://github.com/Miragon/slidev-deck-template/commit/a2d42f5e7d575f55c403710fb8dabc8cd69f7ee0))
+
 ## [1.5.1](https://github.com/Miragon/slidev-deck-template/compare/v1.5.0...v1.5.1) (2026-07-25)
 
 
