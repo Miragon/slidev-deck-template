@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/Miragon/slidev-deck-template/compare/v1.7.1...v1.7.2) (2026-07-27)
+
+
+### Bug Fixes
+
+* **toolkit:** render inline Markdown in Card and Step bodies ([#61](https://github.com/Miragon/slidev-deck-template/issues/61)) ([1baa987](https://github.com/Miragon/slidev-deck-template/commit/1baa987200c8b748bd2dada5287407a5857a92fd))
+
 ## [1.7.1](https://github.com/Miragon/slidev-deck-template/compare/v1.7.0...v1.7.1) (2026-07-27)
 
 
