@@ -117,7 +117,7 @@ accent: blue
 
 <v-clicks>
 
-- **Use this template** on GitHub, then `npm install`
+- **Scaffold a deck** with `npm create @miragon/slidev-deck`, then `npm install`
 - `npm run dev` to preview, edit a chapter, save, watch it reload
 - `npm run verify` until every check is green, then `npm run build`
 - Push to `main` and GitHub Pages deploys it; or open it with **Claude Code**

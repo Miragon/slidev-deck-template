@@ -24,7 +24,7 @@ npm install
 npm run dev      # serves the deck at https://my-talk.localhost with live reload
 ```
 
-`npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `https://<deck>.localhost` URL instead of a `:3030` port, so several decks run side by side without colliding. The first run starts a local HTTPS proxy (a one-time `sudo` prompt); run `npx portless service install` once to make it permanent (and required for a headless Conductor Run button, which has no prompt). To run the raw server without portless, use `npm run dev:app`.
+`npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `https://<deck>.localhost` URL instead of a `:3030` port, so several decks run side by side without colliding. The first run starts a local HTTPS proxy (a one-time `sudo` prompt); `npx portless service install` makes it permanent — needed for a headless Conductor Run button, which can't answer the prompt. For the raw server without portless, use `npm run dev:app`.
 
 You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and `@miragon/slidev-toolkit` pulled from npm — no toolkit source, no release tooling to prune. Then:
 
@@ -32,8 +32,6 @@ You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `
 2. Point the `seoMeta` block in `deck/slides.md` at your own domain, or delete it — it still carries this template's link preview.
 3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
 4. Or open the repo with Claude Code and let it draft the first pass from your outline.
-
-> **Fallback — "Use this template":** the GitHub button still works, but it copies *every* file, including the toolkit source, the release tooling and the `LICENSE`, which you then prune by hand. Prefer `npm create` unless you specifically want to fork the toolkit itself.
 
 ## The 12 archetypes
 
@@ -103,6 +101,6 @@ Working on the template itself — the `@miragon/slidev-toolkit` design system, 
 
 ## License
 
-MIT — see [LICENSE](LICENSE). It covers this repository: the template scaffolding and the reference deck. `@miragon/slidev-toolkit` ships its own copy ([`packages/toolkit/LICENSE`](packages/toolkit/LICENSE)) inside the npm package, and the bundled Geist fonts are OFL ([`packages/toolkit/assets/fonts/LICENSE.txt`](packages/toolkit/assets/fonts/LICENSE.txt)).
+MIT — see [LICENSE](LICENSE), covering this repository (the template scaffolding and the reference deck). `@miragon/slidev-toolkit` ships its own copy ([`packages/toolkit/LICENSE`](packages/toolkit/LICENSE)) in the npm package, and the bundled Geist fonts are OFL ([`LICENSE.txt`](packages/toolkit/assets/fonts/LICENSE.txt)).
 
-**Decks scaffolded with `npm create` carry no `LICENSE`** — a talk usually wants all rights reserved, and no license file means exactly that. Only the **"Use this template"** fallback copies this `LICENSE` (*MIT, Copyright (c) Miragon GmbH*, which would declare your slides free to copy, sell and sublicense); if you went that route, delete it. Add one back only if you deliberately publish your deck under specific terms.
+Your scaffolded deck carries no `LICENSE`, so your slides stay all-rights-reserved by default. Add your own only if you deliberately publish under specific terms.

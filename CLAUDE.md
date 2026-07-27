@@ -72,8 +72,8 @@ For anything not covered here, consult the `slides` skill.
 
 ## How colleagues create a new deck
 
-1. **Use this template** (GitHub "Use this template" button) → fresh repo.
-2. `npm install`.
+1. **Scaffold a fresh deck**: `npm create @miragon/slidev-deck@latest my-talk`.
+2. `cd my-talk && npm install`.
 3. `npm run dev` to preview.
 4. Open the new repo with Claude Code. CLAUDE.md is auto-loaded; Claude uses the `slides` skill and the demo slides under `deck/` and is ready to author slides in the Miragon style.
 5. Prompt examples (paste into Claude):
