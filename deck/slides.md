@@ -55,6 +55,8 @@ class: agenda-slide
   stepper, each chapter's slides shown as live miniature previews. Chapters are
   discovered automatically from every `layout: section` slide, so this stays in
   sync with the deck. Click a chapter to preview it, click a mini to jump there.
+  Past six chapters the rail wraps into rows and drops the previews, becoming a
+  static top-aligned overview.
   Transition: "Here is the path we will take."
 -->
 
