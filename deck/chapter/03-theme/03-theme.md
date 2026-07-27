@@ -85,6 +85,9 @@ accent: blue
   OPTIONAL: `icon` sets an Iconify UnoCSS class (i-carbon-*, i-ph-*) above the
   title; it takes the card's accent colour. Omit it for a plain text card.
   Pass the full class literally so UnoCSS generates it at build time.
+  A card body can be a lead line followed by a short bullet list: wrap the
+  whole body in blank lines and the theme sizes both to the card text with a
+  small blue marker. Keep it to a lead + 2 bullets so the grid stays on-canvas.
   Transition: "Why bother with a system at all?"
 -->
 
@@ -92,19 +95,28 @@ accent: blue
 
 <Card title="Card / CardGrid" accent="blue" icon="i-carbon-grid">
 
-A row of white cards, written as components. Inline `code` renders when the body is wrapped in blank lines.
+A row of white cards, written as components.
+
+- Accent on the title only
+- Body takes inline `code`
 
 </Card>
 
 <Card title="StepList / Figure" accent="teal" icon="i-carbon-list-boxes">
 
-Ordered steps and captioned visuals, styled by the theme, not the slide.
+Ordered steps and captioned visuals.
+
+- Numbered, theme-styled sequence
+- Images with a title and caption
 
 </Card>
 
 <Card title="SplitView" accent="green" icon="i-carbon-split-screen">
 
-A diagram on one side, the explanation on the other, in one tag.
+A diagram beside its explanation.
+
+- One tag, two columns
+- Set `ratio` for a wider visual
 
 </Card>
 
