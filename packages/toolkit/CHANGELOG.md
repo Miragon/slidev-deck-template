@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/Miragon/slidev-deck-template/compare/v1.6.0...v1.7.0) (2026-07-27)
+
+
+### Features
+
+* **toolkit:** add a mermaid layout and round Mermaid boxes brand-wide ([#56](https://github.com/Miragon/slidev-deck-template/issues/56)) ([2a0d83a](https://github.com/Miragon/slidev-deck-template/commit/2a0d83a80dfa7b2dc7b0082f154cd4f327211639))
+* **toolkit:** add excalidraw layout and reusable DiagramFrame surface ([#58](https://github.com/Miragon/slidev-deck-template/issues/58)) ([d5bb292](https://github.com/Miragon/slidev-deck-template/commit/d5bb292564b599c6dcacf9d80fb492d323b358bb))
+
 ## [1.6.0](https://github.com/Miragon/slidev-deck-template/compare/v1.5.1...v1.6.0) (2026-07-27)
 
 
