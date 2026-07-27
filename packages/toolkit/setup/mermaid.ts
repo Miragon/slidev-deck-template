@@ -1,9 +1,12 @@
 import { defineMermaidSetup } from '@slidev/types'
 
-// Brand-styles every ```mermaid diagram in the deck with the Miragon palette and
-// Geist, so text-generated diagrams stay on-brand. The hex values mirror the
-// tokens in packages/toolkit/styles/theme.css; they live here (config), never in
-// slide markdown, so the "no hardcoded hex in markdown" rule stays intact.
+// Brand-styles every ```mermaid diagram with the Miragon palette and Geist, so
+// text-generated diagrams stay on-brand. Slidev collects setup/* from every root
+// (theme included), so shipping this in the theme package means every deck that
+// sets `theme: '@miragon/slidev-toolkit'` inherits it with zero config. A deck can
+// still override by adding its own setup/mermaid.ts, but never has to.
+// The hex values mirror the tokens in ../styles/theme.css; they live here (config),
+// never in slide markdown, so the "no hardcoded hex in markdown" rule stays intact.
 // Excalidraw remains the default for diagrams; Mermaid is for text-generated flows.
 export default defineMermaidSetup(() => ({
   theme: 'base',

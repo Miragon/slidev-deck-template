@@ -22,6 +22,9 @@
   "dependencies": {
     "@paper-design/shaders": "0.0.78"
   },
+  "devDependencies": {
+    "@slidev/types": "52.18.0"
+  },
   "peerDependencies": {
     "vue": "^3.5.0"
   },
@@ -31,6 +34,7 @@
     "styles",
     "assets",
     "global",
+    "setup",
     "global-top.vue",
     "global-bottom.vue"
   ],
