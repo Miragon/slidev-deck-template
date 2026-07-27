@@ -1,6 +1,6 @@
 ---
 name: slides
-description: Authoring guide for the Miragon-branded Slidev deck in this repo — deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, SplitView), brand colours/typography, and the editorial rules. Diagrams are always Excalidraw .excalidraw.svg (see the excalidraw skill). Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
+description: Authoring guide for the Miragon-branded Slidev deck in this repo — deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, SplitView), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
 ---
 
 # Miragon Slidev Deck
@@ -198,9 +198,13 @@ Every Markdown ` ```lang ` fence already renders as a white brand card (frame + 
 
 Need to show tabular data? Write a **native Markdown table**. There is no table component and you don't need one: the theme (`styles/table.css`) styles every `<table>` on-brand automatically (white card, soft blue shadow, light-blue header band with black labels over a blue accent rule, zebra rows, Geist Mono). It stays clean markdown, so it passes the no-raw-html check. Set alignment with the divider row (`---:` right-aligns numbers); keep to **<= 6 body rows** with short cells so it fits the canvas. Full guidance: [`reference/components.md`](reference/components.md), "Tables". Demo: the "Tabular data, on-brand" slide in `deck/chapter/03-theme/03-theme.md`.
 
-### Diagrams — always Excalidraw
+### Diagrams — Excalidraw by default, Mermaid for text-generated flows
 
-There are no coded SVG-primitive components. **Every diagram is a `.excalidraw.svg`** generated in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. See the **`excalidraw`** skill for how to author and export one. (BPMN process diagrams use the `bpmn` archetype instead.)
+There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** generated in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. See the **`excalidraw`** skill for how to author and export one. (BPMN process diagrams use the `bpmn` archetype instead.)
+
+**When to pick which.** Reach for **Mermaid** when the diagram is a standard graph type that reads naturally as text and benefits from automatic layout: a process flow, a sequence or interaction, a state machine, an ER or decision tree. The payoff is speed and maintenance — the source is a few lines of text, diffable in review and editable in seconds. The cost is control: Mermaid's engine lays the nodes out, so you cannot compose the picture by hand. Stay with **Excalidraw** when placement carries meaning — freeform architecture sketches, annotated conceptual pictures, anything where exact positioning, custom shapes, or hand-drawn polish do the explaining. That covers most deck diagrams (a handful of deliberately arranged boxes), which is why Excalidraw is the default; Mermaid's auto-layout looks generic there.
+
+Slidev renders a ` ```mermaid ` fence natively, no addon, brand-styled globally by `deck/setup/mermaid.ts` (`defineMermaidSetup` with the Miragon `themeVariables` — the one place that hex lives, never in the slide), so it comes out in Miragon blue and Geist, not the default purple. The source can be **inline** in the slide or **imported from a file** with `<<< @/chapter/<chapter>/resources/<name>.mermaid` (the transclusion renders as a diagram, not a code block); use a file when the diagram is reused or long, inline for a one-off. Shrink a tall diagram with the scale option (`` ```mermaid {scale: 0.8} ``), never by editing the theme. Demo: the two "Mermaid" slides in `deck/chapter/04-diagrams/04-diagrams.md`.
 
 ---
 

@@ -202,4 +202,6 @@ Keep it to **spacing and layout nudges** — the gap above/below a component, it
 
 ## Diagrams
 
-There are no coded SVG-primitive components. **Every diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
+There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
+
+For a standard graph type that reads as text and wants auto-layout (a flow, a sequence, a state machine), a native Slidev ` ```mermaid ` fence is the alternative, brand-styled globally by `deck/setup/mermaid.ts`. The source can be inline or imported from a `.mermaid` file with `<<< @/chapter/<chapter>/resources/<name>.mermaid`. Excalidraw stays the default when placement carries meaning. Full when-to-use-which: the "Diagrams" section in [`SKILL.md`](../SKILL.md).

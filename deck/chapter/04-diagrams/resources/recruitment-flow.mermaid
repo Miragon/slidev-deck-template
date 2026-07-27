@@ -1,0 +1,7 @@
+flowchart LR
+  A[Application] --> B{Screening}
+  B -->|Pass| C[Interview]
+  B -->|Reject| D[Rejected]
+  C --> E{Decision}
+  E -->|Hire| F[Offer]
+  E -->|No| D
