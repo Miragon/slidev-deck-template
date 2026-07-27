@@ -31,6 +31,7 @@
   margin: 0;
 }
 .step-list.step-list :deep(p + p) { margin-top: 0.4em; }
+.step-list.step-list :deep(.step__body > p) { display: inline; margin: 0; }
 .step-list.step-list :deep(strong) { font-weight: 700; color: var(--miragon-text-primary); }
 .step-list.step-list :deep(a) {
   color: var(--miragon-blue);
