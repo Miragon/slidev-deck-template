@@ -21,6 +21,7 @@
  *   default  — optional caption / explanatory line below the diagram
  */
 import { computed } from 'vue'
+import DiagramFrame from '../components/DiagramFrame.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -59,14 +60,14 @@ const diagramSrc = computed(() => withBase(props.diagram))
         <h2 v-if="title" class="bpmn-title">{{ title }}</h2>
       </header>
 
-      <div class="bpmn-canvas">
+      <DiagramFrame class="bpmn-canvas" padding="compact">
         <BpmnTokenSimulation
           v-if="diagram"
           :bpmnFilePath="diagramSrc"
           width="100%"
           :height="height"
         />
-      </div>
+      </DiagramFrame>
 
       <div v-if="$slots.default" class="bpmn-caption">
         <slot />
@@ -129,15 +130,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
 .bpmn-canvas {
   flex: 1 1 auto;
   min-height: 0;
-  background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
-  border-radius: 1.1rem;
-  padding: 0.75rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
 }
 
 .bpmn-caption {

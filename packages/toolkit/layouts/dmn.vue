@@ -26,6 +26,7 @@
  *   default  — optional caption / explanatory line below the table
  */
 import { computed } from 'vue'
+import DiagramFrame from '../components/DiagramFrame.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -67,7 +68,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
         <h2 v-if="title" class="dmn-title">{{ title }}</h2>
       </header>
 
-      <div class="dmn-canvas">
+      <DiagramFrame class="dmn-canvas" padding="compact">
         <DmnTable
           v-if="diagram"
           :dmnFilePath="diagramSrc"
@@ -77,7 +78,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
           :fontSize="fontSize"
           :showAnnotations="showAnnotations"
         />
-      </div>
+      </DiagramFrame>
 
       <div v-if="$slots.default" class="dmn-caption">
         <slot />
@@ -140,19 +141,11 @@ const diagramSrc = computed(() => withBase(props.diagram))
 .dmn-canvas {
   flex: 1 1 auto;
   min-height: 0;
-  background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
-  border-radius: 1.1rem;
-  padding: 0.75rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
 }
 /* dmn-js ships its own decision-table CSS (imported by the addon). We keep that
-   rendering intact and only frame it in the branded card above, exactly like the
-   bpmn archetype frames bpmn-js. */
+   rendering intact and only frame it in the branded DiagramFrame card, exactly
+   like the bpmn archetype frames bpmn-js. */
 
 .dmn-caption {
   flex: 0 0 auto;

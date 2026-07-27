@@ -10,18 +10,24 @@ accent: blue
 Hand-drawn schematics and real BPMN, both on-brand.
 
 ---
-layout: content
+layout: excalidraw
 title: Draw it, drop it in
 eyebrow: 04 - Diagrams
 accent: blue
+diagram: resources/04-diagrams/compose-diagram.excalidraw.svg
+alt: Client to gateway to service with two pods
 ---
 
 <!--
-  A diagram is one .excalidraw.svg with the scene embedded, in the Miragon palette.
+  excalidraw archetype: frames one .excalidraw.svg in a branded white card, the
+  sibling of the bpmn/dmn/mermaid archetypes. The diagram comes from the `src`
+  frontmatter; the default slot holds the caption below.
+  REQUIRED: diagram (the .excalidraw.svg in the chapter's resources/).
+  OPTIONAL: title, eyebrow, accent, alt; a caption line in the body.
   Transition: "And you edit it without leaving your editor."
 -->
 
-<Figure src="resources/04-diagrams/compose-diagram.excalidraw.svg" alt="Client to gateway to service with two pods" caption="A diagram is one **.excalidraw.svg** with the scene embedded, in the Miragon palette." max-height="230px"></Figure>
+A diagram is one **.excalidraw.svg** with the scene embedded, in the Miragon palette.
 
 ---
 layout: content
@@ -32,12 +38,16 @@ accent: blue
 
 <!--
   KEY POINT: .excalidraw.svg files open and edit in the IDE via the Excalidraw plugin.
-  SplitView: diagram left, explanation right. Transition: "Need a process? Use BPMN."
+  SplitView: diagram left, explanation right. The <DiagramFrame> gives the diagram
+  the same white card as the diagram layouts, for framing PART of a slide where a
+  text Card is not the right fit. Transition: "Need a process? Use BPMN."
 -->
 
 <SplitView ratio="1/1">
 <template #visual>
+<DiagramFrame height="19rem">
 <Figure src="resources/04-diagrams/service.excalidraw.svg" alt="A service routing to two pods" max-height="220px"></Figure>
+</DiagramFrame>
 </template>
 
 - Install the **Excalidraw plugin** for **VS Code** or **IntelliJ**
