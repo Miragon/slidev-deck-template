@@ -1,28 +1,5 @@
 <script setup lang="ts">
-/**
- * Card — kanonische weiße Brand-Card (Design-System §6).
- * Hintergrund IMMER weiß, Akzent NUR auf dem Titel. `accent` wählt einen Stop
- * der blue → teal → green-Progression (§6.3) — dies ist der einzige
- * sanktionierte Ort für rohe Hex-Werte, hier zentral statt im Deck verstreut.
- *
- * Mehrkartige Grids: Titel von links nach rechts entlang der Progression.
- *   2 Karten: blue, green
- *   3 Karten: blue, teal, green
- *   4 Karten: blue, blue-mid, green-deep, green
- *   <Card title="Deployment" accent="blue">Body …</Card>
- *
- * `icon` (optional): eine Iconify-UnoCSS-Klasse (`i-carbon-idea`, `i-ph-cube`, …).
- * Wird sie gesetzt, erscheint das Icon über dem Titel und trägt dieselbe
- * Akzentfarbe; ohne `icon` bleibt die Karte wie bisher rein textuell.
- * Der volle Klassenname muss so im Slide stehen, damit UnoCSS ihn beim
- * statischen Scan findet und generiert (Brand-Regel: Iconify `i-*`, kein Emoji).
- *   <Card title="Deployment" accent="blue" icon="i-carbon-rocket">Body …</Card>
- *
- * `align` (optional): richtet Icon, Titel und Body aus — `left` (Standard),
- * `center` oder `right`. Betrifft nur die horizontale Ausrichtung des Inhalts;
- * Hintergrund, Akzentlogik und alles andere bleiben unverändert.
- *   <Card title="Deployment" accent="blue" align="center">Body …</Card>
- */
+
 const props = withDefaults(
   defineProps<{
     title?: string
@@ -34,7 +11,6 @@ const props = withDefaults(
   { accent: 'blue', padding: 'standard', align: 'left' },
 )
 
-// Die §6.3-Progressions-Stops. Bewusst lokal: der einzige sanktionierte Hex-Ort.
 const ACCENTS: Record<string, string> = {
   blue: '#335DE5',
   'blue-mid': '#2B5ACE',
@@ -60,11 +36,6 @@ const ACCENTS: Record<string, string> = {
   background: var(--miragon-white);
   box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
 }
-/* Nur Karten mit Zeichnung (compact) werden zur Flex-Spalte: im Grid stretchen
-   die Karten auf gleiche Höhe, eine abschließende Zeichnung (margin-top:auto)
-   dockt am Kartenboden an und liegt über alle Karten hinweg auf gleicher Höhe.
-   Standard-Karten bleiben normaler Fluss, sonst würde inline <strong> im Body
-   zu eigenen Flex-Items (eigene Zeilen) umbrechen. */
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
 .mg-card--standard { padding: 1.25rem; }
 .mg-card--generous { padding: 1.5rem; }
@@ -90,28 +61,36 @@ const ACCENTS: Record<string, string> = {
   line-height: 1.55;
   color: #4b5563;
 }
-/* Blank-line-wrapped inline Markdown emits a <p>; normalise it to the card body size (no prose bloat). */
-.mg-card__body :deep(p) {
-  margin: 0;
+.mg-card .mg-card__body :deep(p),
+.mg-card .mg-card__body :deep(ul),
+.mg-card .mg-card__body :deep(ol),
+.mg-card .mg-card__body :deep(li),
+.mg-card .mg-card__body :deep(h1),
+.mg-card .mg-card__body :deep(h2),
+.mg-card .mg-card__body :deep(h3),
+.mg-card .mg-card__body :deep(h4) {
   font-size: inherit;
   line-height: inherit;
-}
-.mg-card__body :deep(p + p) { margin-top: 0.6em; }
-/* Same for bullet lists: normalise to the body size with a small blue square marker (like the content layout). */
-.mg-card__body :deep(ul) {
-  list-style: none;
+  color: inherit;
+  font-weight: inherit;
+  max-width: none;
   margin: 0;
+}
+.mg-card .mg-card__body :deep(p + p) { margin-top: 0.6em; }
+/* Small breath between a lead paragraph and the list it introduces. */
+.mg-card .mg-card__body :deep(p + ul),
+.mg-card .mg-card__body :deep(p + ol) { margin-top: 0.3em; }
+.mg-card .mg-card__body :deep(ul),
+.mg-card .mg-card__body :deep(ol) {
+  list-style: none;
   padding: 0;
 }
-.mg-card__body :deep(li) {
+.mg-card .mg-card__body :deep(li) {
   position: relative;
-  font-size: inherit;
-  line-height: inherit;
   padding-left: 1.1rem;
-  margin: 0;
 }
-.mg-card__body :deep(li + li) { margin-top: 0.4em; }
-.mg-card__body :deep(li)::before {
+.mg-card .mg-card__body :deep(li + li) { margin-top: 0.4em; }
+.mg-card .mg-card__body :deep(li)::before {
   content: '';
   position: absolute;
   left: 0;
@@ -121,8 +100,25 @@ const ACCENTS: Record<string, string> = {
   border-radius: 0.1rem;
   background: var(--miragon-blue);
 }
+/* Numbered lists keep a decimal counter instead of the square marker. */
+.mg-card .mg-card__body :deep(ol) { counter-reset: mg-card-ol; }
+.mg-card .mg-card__body :deep(ol > li) { counter-increment: mg-card-ol; }
+.mg-card .mg-card__body :deep(ol > li)::before {
+  content: counter(mg-card-ol) '.';
+  top: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  color: var(--miragon-blue);
+  font-weight: 700;
+}
+.mg-card .mg-card__body :deep(strong) { font-weight: 700; color: #1f2937; }
+.mg-card .mg-card__body :deep(a) {
+  color: var(--miragon-blue);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 .mg-card--compact .mg-card__body { flex: 1 1 auto; display: flex; flex-direction: column; }
-/* A trailing diagram (<Figure src>) docks at the card bottom, so the image sits at
-   the same position in every card of a stretched grid regardless of text length. */
 .mg-card--compact .mg-card__body :deep(.mg-figure) { margin-top: auto; }
 </style>
