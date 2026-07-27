@@ -20,7 +20,7 @@
     "slidev": ">=0.48.0"
   },
   "dependencies": {
-    "@paper-design/shaders": "0.0.77"
+    "@paper-design/shaders": "0.0.78"
   },
   "devDependencies": {
     "@slidev/types": "52.18.0"
