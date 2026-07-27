@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/Miragon/slidev-deck-template/compare/v1.7.0...v1.7.1) (2026-07-27)
+
+
+### Bug Fixes
+
+* **toolkit:** keep Card and StepList text sized regardless of host layout ([#59](https://github.com/Miragon/slidev-deck-template/issues/59)) ([562001e](https://github.com/Miragon/slidev-deck-template/commit/562001e65f9e112c79d390aa96e5f46185eb5229))
+
 ## [1.7.0](https://github.com/Miragon/slidev-deck-template/compare/v1.6.0...v1.7.0) (2026-07-27)
 
 
