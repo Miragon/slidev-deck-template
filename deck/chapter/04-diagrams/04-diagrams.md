@@ -101,22 +101,28 @@ height: 300px
 A DMN decision table, the business rules behind a process step, from any DMN modeler.
 
 ---
-layout: content
+layout: mermaid
 title: Or generate one from text with Mermaid
 eyebrow: 04 - Diagrams
 accent: blue
 ---
 
 <!--
-  Mermaid renders natively from text, brand-styled via deck/setup/mermaid.ts.
-  Like Excalidraw, the source can live in a file: this flowchart is imported from
-  resources/recruitment-flow.mermaid with the <<< snippet syntax.
+  mermaid archetype: frames a native ```mermaid diagram in a branded white card,
+  the sibling of the bpmn/dmn archetypes. The diagram is brand-styled globally by
+  the theme's setup/mermaid.ts (Miragon palette, Geist, rounded boxes). Like an
+  Excalidraw asset, the source can live in its own .mermaid file, imported here
+  with the <<< snippet syntax.
+  REQUIRED: the ```mermaid fence (or a <<< import) in the body -> the white card.
+  OPTIONAL: title, eyebrow, accent; a ::caption:: named slot for the line below.
   Transition: "Or write it inline, right on the slide."
 -->
 
-Mermaid renders a diagram from text. Like an Excalidraw asset, the source can live in its own `.mermaid` file.
-
 <<< @/chapter/04-diagrams/resources/recruitment-flow.mermaid
+
+::caption::
+
+Generated from **text** in a `.mermaid` file, framed on-brand by the layout.
 
 ---
 layout: content
