@@ -17,7 +17,7 @@ How to build the Miragon-branded Slidev deck in this repo: where things live, wh
 
 If a value disagrees, **`packages/toolkit/styles/theme.css` wins for colours**, the layout/component `.vue` wins for its prop signature, and this skill wins for editorial/composition rules.
 
-Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 13 layouts) and [`reference/components.md`](reference/components.md) (the components).
+Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 14 layouts) and [`reference/components.md`](reference/components.md) (the components).
 
 ---
 
@@ -28,7 +28,7 @@ A **single deck**. The design system is the **`@miragon/slidev-toolkit`** packag
 ```
 packages/toolkit/          the design system (fixed, brand-controlled)
   styles/theme.css         colour tokens
-  layouts/*.vue            the 13 archetypes
+  layouts/*.vue            the 14 archetypes
   components/*.vue         Card, CardGrid, StepList, Step, Figure, SplitView, BrandMeshBackground
   assets/                  brand assets (logo.svg, komet.svg) — bundled with the theme
 deck/
@@ -71,7 +71,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 
 ## The non-negotiables (one screen)
 
-- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 13 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
+- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 14 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
 - **English only on slide content** (titles, bullets, labels, diagram text). Speaker notes (`<!-- … -->`) may be in another language if requested. Code, brand names, and standard technical terms stay as-is.
 - **Cards are always white** — use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**.
 - **Headings are BLACK, never blue.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour — don't override.
@@ -100,6 +100,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 | A BPMN process diagram with token playback | `bpmn` (needs `slidev-addon-bpmn`) |
 | A DMN decision table (the rules behind a step) | `dmn` (needs `slidev-addon-dmn`) |
 | A Mermaid diagram framed as the focal point | `mermaid` (fence in the body, white card) |
+| An Excalidraw diagram framed as the focal point | `excalidraw` (`diagram:` path, white card) |
 | Click-through feature explorer / mini-quiz | `showcase` |
 | Close the deck | `closing` (animated) |
 | One memorable number / stat | `hero` with the number as the bold word |
@@ -166,6 +167,16 @@ Pass a diagram via `src` (a chapter `.excalidraw.svg`), or inline markup in the 
 <Figure title="Container" src="resources/01-foundations/container.excalidraw.svg" alt="A container" caption="Containers share the **host kernel**."></Figure>
 ```
 
+### `DiagramFrame` — the white card as a nestable surface
+
+The one source of that white card: the diagram layouts (`bpmn`/`dmn`/`mermaid`/`excalidraw`) all frame their diagram with this component internally, and it is also exposed so you can frame **part** of a slide instead of a whole one (e.g. one `SplitView` column). Use it when a visual needs that white surface but a `Card` is the wrong tool: a `Card` is for text (it has a title and a title-accent), `DiagramFrame` just frames a nested visual. Nest a `Figure`, an image, or a ` ```mermaid ` fence inside. Give it more height with the `height` prop (an explicit CSS length like `19rem`); do not use `class="h-full"`/`height="100%"` in a `SplitView` column (a percentage height there is circular and destabilises the layout).
+
+```md
+<DiagramFrame height="19rem">
+<Figure src="resources/04-diagrams/service.excalidraw.svg" alt="A service"></Figure>
+</DiagramFrame>
+```
+
 ### `SplitView` — two-column "visual + explanation"
 
 The standard diagram-left / text-right slide body. The visual goes in the `#visual` slot (a `<Figure src="…">` with the chapter's `.excalidraw.svg`), the bullets or `StepList` in the default slot. Use it instead of a hand-rolled `<div class="grid grid-cols-2 …">`. Both columns are **vertically centred by default** (`align="center"`); set `ratio` for a wider diagram (e.g. `1.5/1`). Keep a blank line before a bullet list so it parses as markdown.
@@ -202,6 +213,8 @@ Need to show tabular data? Write a **native Markdown table**. There is no table 
 ### Diagrams — Excalidraw by default, Mermaid for text-generated flows
 
 There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** generated in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. See the **`excalidraw`** skill for how to author and export one. (BPMN process diagrams use the `bpmn` archetype instead.)
+
+An Excalidraw diagram sits directly on the grey `content` layout by default (the SVG is transparent). When it should be the framed focal point of a whole slide, use the **`excalidraw` archetype** (header + white card + caption). When you want that white card around just **part** of a slide (e.g. a `SplitView` column), wrap the visual in **`<DiagramFrame>`** — the same surface, as a nestable component (see [`reference/components.md`](reference/components.md)).
 
 **When to pick which.** Reach for **Mermaid** when the diagram is a standard graph type that reads naturally as text and benefits from automatic layout: a process flow, a sequence or interaction, a state machine, an ER or decision tree. The payoff is speed and maintenance — the source is a few lines of text, diffable in review and editable in seconds. The cost is control: Mermaid's engine lays the nodes out, so you cannot compose the picture by hand. Stay with **Excalidraw** when placement carries meaning — freeform architecture sketches, annotated conceptual pictures, anything where exact positioning, custom shapes, or hand-drawn polish do the explaining. That covers most deck diagrams (a handful of deliberately arranged boxes), which is why Excalidraw is the default; Mermaid's auto-layout looks generic there.
 

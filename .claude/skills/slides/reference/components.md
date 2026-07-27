@@ -108,6 +108,31 @@ The visual is normally a chapter Excalidraw diagram via `src` (served from the c
 <Figure title="Pod" src="resources/01-foundations/pod.excalidraw.svg" alt="A pod" caption="The **smallest** deployable unit."></Figure>
 ```
 
+## DiagramFrame
+
+The branded white card as a standalone container: white background, subtle border, rounded corners (1.1rem), soft blue shadow, contents centred. It is the **single source of that surface**: the `bpmn` / `dmn` / `mermaid` / `excalidraw` diagram layouts all frame their diagram by using this component internally (their `.*-canvas` class now only sets the flex-fill), so the card lives in one place. Exposed as a component so you can also frame **part** of a slide (e.g. one `SplitView` column) rather than a whole one. Reach for it when a visual needs that white card but a `Card` is wrong (a `Card` is for text, with a title and a title-accent; `DiagramFrame` has neither and just frames a nested visual). Nest anything inside: a `Figure`, an image, a ` ```mermaid ` fence.
+
+| Prop | Values | Default | Notes |
+|---|---|---|---|
+| `padding` | `compact` · `standard` · `generous` | `standard` | inner padding around the nested visual |
+| `height` | CSS length (e.g. `19rem`) | — | fixed frame height; omit to size to the content. Prefer an explicit length over `class="h-full"`/`height="100%"` — a percentage height inside an auto-height `SplitView` column is circular and destabilises the layout |
+| **slot** | the visual to frame | — | a `Figure`, image, or diagram (size it yourself: `Figure`/mermaid do, or set the image `max-height`) |
+
+Like every component it forwards `class`/`style` to its root, so nudge spacing with the sanctioned escape hatch (`class="mt-6"` for air above). Use the `height` prop, not a utility class, to give it more height. Never `class`/`style` for colours or borders.
+
+```md
+<SplitView ratio="1/1">
+<template #visual>
+<DiagramFrame height="19rem">
+<Figure src="resources/04-diagrams/service.excalidraw.svg" alt="A service routing to two pods" max-height="220px"></Figure>
+</DiagramFrame>
+</template>
+
+- First point
+- Second point
+</SplitView>
+```
+
 ## SplitView
 
 The two-column "visual + explanation" container: a diagram (or `Figure`) on the left via the `#visual` slot, the explaining text (bullets or a `StepList`) in the default slot on the right. Use it instead of a hand-rolled `<div class="grid grid-cols-2 …">`. Both columns are **vertically centred by default**, so the bullets sit centred against the diagram.

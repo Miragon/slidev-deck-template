@@ -1,6 +1,6 @@
 # Layout archetypes — full reference
 
-The theme ships **13 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
+The theme ships **14 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block — match it.
 
 `accent` is `blue` (default) · `green` · `mixed` unless noted; it tints the gradient accent bar and the bold word.
 
@@ -157,6 +157,20 @@ The sibling of `bpmn` / `dmn`, but for a text-generated Mermaid diagram: header 
 | **`::caption::` slot** | optional caption below the diagram |
 
 No file-path/height prop: the Mermaid SVG sizes itself and is centered in the card; shrink a tall diagram with the fence's scale option (` ```mermaid {scale: 0.8} `), never by editing the theme. The diagram is brand-styled globally by `packages/toolkit/setup/mermaid.ts` (Miragon palette, Geist, rounded box corners) — no per-slide styling. Use this layout when the diagram should be the framed focal point; a Mermaid fence still renders inline in a plain `content` layout when it sits alongside bullets.
+
+## excalidraw — Excalidraw diagram framed on-brand (static)
+
+The sibling of `bpmn` / `dmn` / `mermaid`, but for a hand-drawn `.excalidraw.svg`: header above, the diagram framed in a branded white card, optional caption below. Like bpmn/dmn it takes a file path in frontmatter (named `diagram`, **not** `src` — `src` is Slidev's reserved slide-import key); the default slot holds the caption.
+
+| Frontmatter | Values |
+|---|---|
+| `title`, `eyebrow` (str) | — |
+| `accent` | blue / green / mixed |
+| `diagram` (str) | the `.excalidraw.svg` in the chapter's `resources/`, e.g. `resources/04-diagrams/x.excalidraw.svg` |
+| `alt` (str) | alt text for the diagram image |
+| **slot** | optional caption below the diagram |
+
+Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use this layout when an Excalidraw diagram should be the framed focal point of a whole slide; to frame one *part* of a slide (e.g. a `SplitView` column) reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.
 
 ## showcase — interactive feature explorer (static, interactive)
 

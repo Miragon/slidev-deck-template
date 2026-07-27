@@ -6,6 +6,8 @@ const props = withDefaults(
   defineProps<{
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
+    diagram?: string
+    alt?: string
     frontmatter?: Record<string, unknown>
   }>(),
   { accent: 'blue' },
@@ -16,30 +18,37 @@ const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 const accentVar = computed(() =>
   props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
 )
+
+function withBase(path?: string) {
+  if (!path) return path
+  if (/^https?:\/\//.test(path)) return path
+  return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
+}
+const imageSrc = computed(() => withBase(props.diagram))
 </script>
 
 <template>
-  <div class="mermaid-layout" :style="{ '--mm-grad': gradientVar, '--mm-accent': accentVar }">
-    <div class="mermaid-inner">
-      <header v-if="title || eyebrow" class="mermaid-head">
-        <span class="mermaid-bar" aria-hidden="true"></span>
-        <div v-if="eyebrow" class="mermaid-eyebrow">{{ eyebrow }}</div>
-        <h2 v-if="title" class="mermaid-title">{{ title }}</h2>
+  <div class="excalidraw-layout" :style="{ '--ex-grad': gradientVar, '--ex-accent': accentVar }">
+    <div class="excalidraw-inner">
+      <header v-if="title || eyebrow" class="excalidraw-head">
+        <span class="excalidraw-bar" aria-hidden="true"></span>
+        <div v-if="eyebrow" class="excalidraw-eyebrow">{{ eyebrow }}</div>
+        <h2 v-if="title" class="excalidraw-title">{{ title }}</h2>
       </header>
 
-      <DiagramFrame class="mermaid-canvas">
-        <slot />
+      <DiagramFrame class="excalidraw-canvas" padding="generous">
+        <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
       </DiagramFrame>
 
-      <div v-if="$slots.caption" class="mermaid-caption">
-        <slot name="caption" />
+      <div v-if="$slots.default" class="excalidraw-caption">
+        <slot />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.mermaid-layout {
+.excalidraw-layout {
   position: relative;
   width: 100%;
   height: 100%;
@@ -50,7 +59,7 @@ const accentVar = computed(() =>
   align-items: stretch;
 }
 
-.mermaid-inner {
+.excalidraw-inner {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -61,27 +70,27 @@ const accentVar = computed(() =>
   flex-direction: column;
 }
 
-.mermaid-head {
+.excalidraw-head {
   flex: 0 0 auto;
   margin-bottom: 1.25rem;
 }
-.mermaid-bar {
+.excalidraw-bar {
   display: block;
   width: 3.5rem;
   height: 0.35rem;
   border-radius: 999px;
-  background: var(--mm-grad);
+  background: var(--ex-grad);
   margin-bottom: 0.9rem;
 }
-.mermaid-eyebrow {
+.excalidraw-eyebrow {
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--mm-accent);
+  color: var(--ex-accent);
   margin-bottom: 0.55rem;
 }
-.mermaid-title {
+.excalidraw-title {
   font-size: clamp(1.7rem, 2.7vw, 2.2rem);
   line-height: 1.15;
   font-weight: 800;
@@ -89,37 +98,29 @@ const accentVar = computed(() =>
   margin: 0;
 }
 
-.mermaid-canvas {
+.excalidraw-canvas {
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
 }
-.mermaid-canvas :deep(.mermaid),
-.mermaid-canvas :deep(.mermaid-svg-wrapper) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-.mermaid-canvas :deep(svg) {
+.excalidraw-img {
   max-width: 100%;
   max-height: 100%;
   height: auto;
 }
 
-.mermaid-caption {
+.excalidraw-caption {
   flex: 0 0 auto;
   margin-top: 1rem;
   font-size: 0.95rem;
   color: var(--miragon-text-muted);
   text-align: center;
 }
-.mermaid-caption :deep(p) {
+.excalidraw-caption :deep(p) {
   margin: 0;
   line-height: 1.5;
 }
-.mermaid-caption :deep(:not(pre) > code) {
+.excalidraw-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
   background: var(--miragon-blue-light);
