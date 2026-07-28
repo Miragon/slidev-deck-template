@@ -57,6 +57,8 @@ class: agenda-slide
   sync with the deck. Click a chapter to preview it, click a mini to jump there.
   Past six chapters the rail wraps into rows and drops the previews, becoming a
   static top-aligned overview.
+  `layout: subsection` slides divide a chapter without opening a new one; add
+  `preview="subsections"` to preview those dividers instead of every slide.
   Transition: "Here is the path we will take."
 -->
 

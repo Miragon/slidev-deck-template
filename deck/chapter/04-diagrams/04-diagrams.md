@@ -78,6 +78,28 @@ accent: blue
 </v-clicks>
 
 ---
+layout: subsection
+index: "4.1"
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  subsection: divides a chapter INTERNALLY without opening a new chapter in the
+  Agenda rail (which counts only `layout: section`). Here it splits the chapter:
+  hand-drawn Excalidraw above, the modeled/standard diagram types below.
+  Visually subordinate to `section`: smaller title, fainter ghost numeral.
+  REQUIRED: none.  OPTIONAL: index (ghost numeral), eyebrow, accent, h1 + <p>.
+  The Agenda can preview these dividers instead of every slide via
+  `<Agenda preview="subsections">`.
+  Transition: "Start with a real process: BPMN."
+-->
+
+# Or a **modeled** diagram
+
+Standard notations: BPMN, DMN, and Mermaid, each on-brand.
+
+---
 layout: bpmn
 title: Or a real BPMN process
 eyebrow: 04 - Diagrams
