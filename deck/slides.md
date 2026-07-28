@@ -59,6 +59,8 @@ class: agenda-slide
   static top-aligned overview.
   `layout: subsection` slides divide a chapter without opening a new one; add
   `preview="subsections"` to preview those dividers instead of every slide.
+  Tune the space between the head and the stepper with `gap` (a CSS length,
+  default "1.4rem"), e.g. `<Agenda gap="2.5rem">`.
   Transition: "Here is the path we will take."
 -->
 
