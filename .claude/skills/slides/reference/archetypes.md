@@ -57,6 +57,19 @@ Large semi-transparent ghost index numeral + accent bar. Each chapter file begin
 | `accent` | blue / green / mixed |
 | **slot** | h1 chapter title + optional `<p>` subtitle |
 
+## subsection — sub-chapter divider (static)
+
+The little sibling of `section`: divides a chapter **internally** without opening a new chapter in the Agenda (which counts only `layout: section`). Visually subordinate — smaller title, fainter ghost numeral. Use for the second-level structure inside a long chapter.
+
+| Frontmatter | Description |
+|---|---|
+| `index` (str) | number, rendered as ghost numeral (e.g. `"2.1"`) |
+| `eyebrow` (str) | uppercase kicker (e.g. the parent chapter) |
+| `accent` | blue / green / mixed |
+| **slot** | h1 sub-chapter title + optional `<p>` subtitle |
+
+The Agenda can render these dividers as a chapter's preview instead of every slide: `<Agenda preview="subsections">`.
+
 ## content — the workhorse (static)
 
 Title + free body. Bullets get an automatic accent-square marker.

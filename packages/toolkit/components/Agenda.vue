@@ -8,7 +8,14 @@
  * Past six the rail WRAPS into balanced rows and drops the previews, becoming a
  * static, top-aligned overview.
  *
- * Props: eyebrow (kicker, default "Agenda"), title (h2), accent (blue|green|mixed).
+ * `layout: subsection` slides do NOT open a chapter (they divide a chapter
+ * internally); they are collected onto the enclosing chapter's `subsections`.
+ * With `preview="subsections"` the previews show just those sub-chapter dividers
+ * instead of every slide — a sparse overview for chapters with many slides.
+ * Chapters without any subsection fall back to their full slide list.
+ *
+ * Props: eyebrow (kicker, default "Agenda"), title (h2), accent (blue|green|mixed),
+ * preview ("slides" | "subsections", default "slides").
  */
 import { computed, ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
@@ -27,8 +34,9 @@ const props = withDefaults(
     eyebrow?: string
     title?: string
     accent?: 'blue' | 'green' | 'mixed'
+    preview?: 'slides' | 'subsections'
   }>(),
-  { eyebrow: 'Agenda', accent: 'mixed' },
+  { eyebrow: 'Agenda', accent: 'mixed', preview: 'slides' },
 )
 
 const { slides, go, currentPage } = useNav()
@@ -48,6 +56,7 @@ interface Chapter {
   eyebrow: string
   title: string
   routes: any[]
+  subsections: any[]
 }
 
 const chapters = computed<Chapter[]>(() => {
@@ -61,9 +70,13 @@ const chapters = computed<Chapter[]>(() => {
         eyebrow: clean(fm.eyebrow) || `Chapter ${n}`,
         title: clean(route.meta?.slide?.title) || clean(fm.eyebrow) || `Chapter ${n}`,
         routes: [route],
+        subsections: [],
       })
     } else if (out.length) {
-      out[out.length - 1].routes.push(route)
+      const chapter = out[out.length - 1]
+      chapter.routes.push(route)
+      // Sub-chapter dividers structure a chapter without opening a new one.
+      if (fm.layout === 'subsection') chapter.subsections.push(route)
     }
   }
   return out
@@ -85,6 +98,17 @@ watch(
 )
 
 const activeChapter = computed(() => chapters.value[selected.value])
+
+// The slides shown as previews for the selected chapter. In "subsections" mode
+// that is just the chapter's sub-chapter dividers (a sparse overview); chapters
+// without any subsection fall back to their full slide list so nothing vanishes.
+const previewRoutes = computed(() => {
+  const ch = activeChapter.value
+  if (!ch) return []
+  return props.preview === 'subsections' && ch.subsections.length
+    ? ch.subsections
+    : ch.routes
+})
 
 // Mini size is computed as if a chapter held at most this many slides, so the
 // frame never shrinks below the clean size; extra slides scroll below the fold.
@@ -146,7 +170,7 @@ const ASPECT = 16 / 9
 const MAX_W = 320
 
 const miniWidth = computed(() => {
-  const n = Math.min(activeChapter.value?.routes.length ?? 0, MAX_MINIS)
+  const n = Math.min(previewRoutes.value.length, MAX_MINIS)
   const W = stageW.value
   const H = stageH.value
   if (!n || W < 1 || H < 1) return 200
@@ -230,7 +254,7 @@ function openSlide(no: number, ev: MouseEvent) {
           <transition name="fade-preview" mode="out-in">
             <div :key="selected" class="preview-row">
               <button
-                v-for="route in activeChapter?.routes"
+                v-for="route in previewRoutes"
                 :key="route.no"
                 type="button"
                 class="mini"
