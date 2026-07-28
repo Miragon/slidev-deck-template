@@ -15,7 +15,8 @@
  * Chapters without any subsection fall back to their full slide list.
  *
  * Props: eyebrow (kicker, default "Agenda"), title (h2), accent (blue|green|mixed),
- * preview ("slides" | "subsections", default "slides").
+ * preview ("slides" | "subsections", default "slides"), gap (CSS length for the
+ * space between the head and the stepper below, default "1.4rem").
  */
 import { computed, ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
@@ -35,8 +36,9 @@ const props = withDefaults(
     title?: string
     accent?: 'blue' | 'green' | 'mixed'
     preview?: 'slides' | 'subsections'
+    gap?: string
   }>(),
-  { eyebrow: 'Agenda', accent: 'mixed', preview: 'slides' },
+  { eyebrow: 'Agenda', accent: 'mixed', preview: 'slides', gap: '1.4rem' },
 )
 
 const { slides, go, currentPage } = useNav()
@@ -197,7 +199,7 @@ function openSlide(no: number, ev: MouseEvent) {
 </script>
 
 <template>
-  <div class="agenda-layout" :style="{ '--ag-grad': gradientVar, '--ag-accent': accentVar }">
+  <div class="agenda-layout" :style="{ '--ag-grad': gradientVar, '--ag-accent': accentVar, '--ag-head-gap': gap }">
     <div class="agenda-inner">
       <header class="agenda-head">
         <span class="agenda-bar" aria-hidden="true"></span>
@@ -280,6 +282,7 @@ function openSlide(no: number, ev: MouseEvent) {
   /* Fallback for the linter; the inline :style binding overrides at runtime. */
   --ag-grad: var(--miragon-gradient-mixed);
   --ag-accent: var(--miragon-blue);
+  --ag-head-gap: 1.4rem;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -303,7 +306,7 @@ function openSlide(no: number, ev: MouseEvent) {
 
 .agenda-head {
   flex: 0 0 auto;
-  margin-bottom: 1.4rem;
+  margin-bottom: var(--ag-head-gap, 1.4rem);
 }
 .agenda-bar {
   display: block;
