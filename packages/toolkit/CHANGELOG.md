@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.2](https://github.com/Miragon/slidev-deck-template/compare/v1.9.1...v1.9.2) (2026-07-28)
+
+
+### Bug Fixes
+
+* **toolkit:** style inline links in every prose layout ([#72](https://github.com/Miragon/slidev-deck-template/issues/72)) ([b26a9a2](https://github.com/Miragon/slidev-deck-template/commit/b26a9a2510e0f6f6188fe71fcdfdb3ed0b14af68))
+
 ## [1.9.1](https://github.com/Miragon/slidev-deck-template/compare/v1.9.0...v1.9.1) (2026-07-28)
 
 
