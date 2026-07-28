@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/Miragon/slidev-deck-template/compare/v1.9.0...v1.9.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **toolkit:** wrap long inline code so chips stay inside their card ([#70](https://github.com/Miragon/slidev-deck-template/issues/70)) ([9c868af](https://github.com/Miragon/slidev-deck-template/commit/9c868af99b9eae400c73df4620b61fa3b697ddb3))
+
 ## [1.9.0](https://github.com/Miragon/slidev-deck-template/compare/v1.8.0...v1.9.0) (2026-07-28)
 
 
