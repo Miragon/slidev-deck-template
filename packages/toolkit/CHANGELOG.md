@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/Miragon/slidev-deck-template/compare/v1.8.0...v1.9.0) (2026-07-28)
+
+
+### Features
+
+* **toolkit:** add gap prop to Agenda for head-to-stepper spacing ([#66](https://github.com/Miragon/slidev-deck-template/issues/66)) ([12655cf](https://github.com/Miragon/slidev-deck-template/commit/12655cf7d5ef8f9a04a7ecf99c4064c8a8451b10))
+
 ## [1.8.0](https://github.com/Miragon/slidev-deck-template/compare/v1.7.2...v1.8.0) (2026-07-28)
 
 
