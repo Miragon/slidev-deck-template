@@ -47,4 +47,5 @@
   border: 1px solid #e5e7eb;
   border-radius: 0.35rem;
   padding: 0.1em 0.35em;
+  overflow-wrap: anywhere;
 }
