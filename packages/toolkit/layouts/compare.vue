@@ -211,4 +211,10 @@ const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'v
   font-weight: 700;
   color: var(--miragon-text-primary);
 }
+.compare-lead :deep(a),
+.panel-body :deep(a) {
+  color: var(--cmp-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 </style>

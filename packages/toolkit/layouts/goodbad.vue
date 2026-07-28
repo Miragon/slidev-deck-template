@@ -242,6 +242,12 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   font-weight: 700;
   color: var(--miragon-text-primary);
 }
+.panel-body :deep(a),
+.goodbad-legend :deep(a) {
+  color: var(--gb-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 .panel-body :deep(ul) {
   list-style: none;
   padding: 0;

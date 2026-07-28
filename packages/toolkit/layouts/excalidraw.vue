@@ -120,6 +120,11 @@ const imageSrc = computed(() => withBase(props.diagram))
   margin: 0;
   line-height: 1.5;
 }
+.excalidraw-caption :deep(a) {
+  color: var(--ex-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 .excalidraw-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;

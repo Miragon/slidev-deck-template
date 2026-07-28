@@ -223,6 +223,12 @@ function onPhotoError(e: Event) {
   margin: 1.5rem 0 0;
   max-width: 34rem;
 }
+.person-bio :deep(a),
+.duo-lead :deep(a) {
+  color: var(--p-role);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 
 /* ═══════════ Duo-Modus ═══════════ */
 .person-duo {

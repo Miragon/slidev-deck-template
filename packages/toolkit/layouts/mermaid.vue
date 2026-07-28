@@ -119,6 +119,11 @@ const accentVar = computed(() =>
   margin: 0;
   line-height: 1.5;
 }
+.mermaid-caption :deep(a) {
+  color: var(--mm-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 .mermaid-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
