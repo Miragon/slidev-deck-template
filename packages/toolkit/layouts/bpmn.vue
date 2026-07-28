@@ -144,6 +144,11 @@ const diagramSrc = computed(() => withBase(props.diagram))
   margin: 0;
   line-height: 1.5;
 }
+.bpmn-caption :deep(a) {
+  color: var(--bp-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 .bpmn-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;

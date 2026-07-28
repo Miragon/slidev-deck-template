@@ -154,6 +154,11 @@ const imageSrc = computed(() => withBase(props.image))
   font-weight: 700;
   color: var(--miragon-text-primary);
 }
+.ci-body :deep(a) {
+  color: var(--ci-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
 
 /* Bullets with accent marker (same pattern as the `content` layout). */
 .ci-body :deep(ul) {
