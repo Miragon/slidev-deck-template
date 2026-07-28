@@ -118,8 +118,9 @@ accent: blue
 <v-clicks>
 
 - **Scaffold a deck** with `npm create @miragon/slidev-deck`, then `npm install`
+- Once per machine: `npx portless service install` for the HTTPS dev URL
 - `npm run dev` to preview, edit a chapter, save, watch it reload
 - `npm run verify` until every check is green, then `npm run build`
-- Push to `main` and GitHub Pages deploys it; or open it with **Claude Code**
+- Push to `main`; CI rebuilds and rechecks. Or open it with **Claude Code**
 
 </v-clicks>

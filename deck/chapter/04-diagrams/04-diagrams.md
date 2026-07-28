@@ -7,7 +7,7 @@ accent: blue
 
 # **Diagrams**
 
-Hand-drawn schematics and real BPMN, both on-brand.
+Hand-drawn, modeled, or generated from text, all on-brand.
 
 ---
 layout: excalidraw
@@ -70,7 +70,7 @@ accent: blue
 
 <v-clicks>
 
-- Colours come from the Miragon palette, the same tokens the SVG layouts use
+- Colours come from the Miragon palette, the same tokens the theme uses
 - Exports are light and transparent, so they sit on any slide
 - The headless verify suite rejects a dark or opaque diagram
 - Or describe it in words and let the **`excalidraw` skill** draw it for you

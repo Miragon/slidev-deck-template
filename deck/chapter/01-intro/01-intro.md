@@ -53,9 +53,9 @@ accent: blue
 <v-clicks>
 
 - **Slidev** turns Markdown into slides, live in the browser
-- A fixed **Miragon theme**: brand tokens, 11 layouts, 7 components
-- **Excalidraw** diagrams you draw and edit right in your IDE
+- A fixed **Miragon theme** from npm: brand tokens, 15 layouts, 10 components
+- **Excalidraw** diagrams you draw in your IDE, or Mermaid from text
 - **Claude skills** so an AI pair knows the rules and builds slides with you
-- A headless **verify** suite that fails the build if a slide goes off-brand
+- A headless **verify** suite; its source checks gate every CI build
 
 </v-clicks>

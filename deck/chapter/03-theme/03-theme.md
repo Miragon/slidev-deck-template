@@ -7,7 +7,7 @@ accent: blue
 
 # **The Miragon theme**
 
-The brand layer: fixed tokens, twelve layouts, seven components.
+The brand layer: fixed tokens, fifteen layouts, ten components.
 
 ---
 layout: content
@@ -32,28 +32,30 @@ accent: blue
 
 ---
 layout: content
-title: Twelve layouts for twelve jobs
+title: Fifteen layouts for fifteen jobs
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
 
 <!--
-  The archetypes, grouped. Each is a `layout:` value. Transition: "Components fill them."
+  The archetypes, grouped. Each is a `layout:` value. The Agenda slide is the one
+  exception: it uses the built-in `default` layout so the component runs full-bleed.
+  Transition: "Components fill them."
 -->
 
 <v-clicks>
 
-- **Openers:** `cover`, `hero`, `person`, `section`
-- **Content:** `content`, `content-image`
+- **Open and close:** `cover`, `hero`, `person`, `closing`
+- **Dividers:** `section`, `subsection`
+- **Content:** `content`, `content-image`, `showcase`
 - **Decisions:** `compare`, `goodbad`
-- **Visuals:** `bpmn`, `dmn`, `showcase`
-- **Close:** `closing`
+- **Diagrams:** `bpmn`, `dmn`, `mermaid`, `excalidraw`
 
 </v-clicks>
 
 ---
 layout: content
-title: Seven components keep markdown clean
+title: Ten components keep markdown clean
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
@@ -67,9 +69,9 @@ accent: blue
 
 - **Card / CardGrid**: white cards in a row, accent on the title only
 - **StepList / Step**: a labelled, ordered sequence
-- **Figure**: a titled, captioned visual (image or diagram)
-- **SplitView**: a visual on one side, the explanation on the other
-- **BrandMeshBackground**: the animated cover/closing shader (brand-locked)
+- **Figure / DiagramFrame**: a captioned visual, and the white card around it
+- **SplitView / CodeBlock**: a visual beside its text, a labelled code window
+- **Agenda / BrandMeshBackground**: the chapter stepper, the brand shader
 
 </v-clicks>
 

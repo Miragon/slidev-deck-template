@@ -182,6 +182,38 @@ The fence must sit on its own lines with a blank line before and after (like the
 </CodeBlock>
 ````
 
+## Agenda
+
+The clickable chapter stepper: the deck's own table of contents, rendered from the live deck. Unlike every other component it **owns the whole slide**, so its slide uses the built-in `layout: default` (the one sanctioned non-archetype) plus `class: agenda-slide` — a theme archetype's header and padding would fight it. There is one per deck, right after the cover.
+
+Chapters are **discovered automatically**: every `layout: section` slide opens a chapter and the slides up to the next `section` belong to it, so the agenda never goes stale as you add chapters. `layout: subsection` slides deliberately do *not* open a chapter; they are collected onto the enclosing chapter instead.
+
+| Prop | Values | Default | Notes |
+|---|---|---|---|
+| `eyebrow` (str) | — | `Agenda` | the kicker above the title |
+| `title` (str) | — | — | the `h2` heading |
+| `accent` | `blue` · `green` · `mixed` | `mixed` | tints the gradient bar and the active chapter |
+| `preview` | `slides` · `subsections` | `slides` | what the miniatures show: every slide of a chapter, or only its `subsection` dividers (a sparse overview for long chapters; chapters without a subsection fall back to their full slide list) |
+| `gap` (str) | CSS length | `1.4rem` | space between the head and the stepper below it |
+
+Layout adapts to the chapter count: **up to six** chapters the rail is one clickable row driving live miniature previews below; **past six** it wraps into balanced rows and drops the previews, becoming a static top-aligned overview. Click a chapter to preview it, click a miniature to jump there.
+
+```md
+---
+layout: default
+title: Agenda
+class: agenda-slide
+---
+
+<Agenda eyebrow="Chapter overview" title="Agenda" accent="mixed"></Agenda>
+```
+
+## BrandMeshBackground
+
+The animated WebGL2 mesh-gradient shader behind the `cover` and `closing` slides. **Takes no props and is never written in a slide**: those two layouts mount it themselves as their bottom layer (`z-index: 0`, `pointer-events: none`), which is the whole reason they are the only animated archetypes. Listed here for completeness, not as something to reach for.
+
+Its colour stops and the DISTORTION / SWIRL / SPEED parameters are a **sacred brand invariant** (see "Sacred invariants" in [`SKILL.md`](../SKILL.md)) — do not change them without brand sign-off. Without WebGL2 it falls back to navy `#0d0d2b`, so the cover never renders white.
+
 ---
 
 ## Tables (no component — plain Markdown)
@@ -229,4 +261,4 @@ Keep it to **spacing and layout nudges** — the gap above/below a component, it
 
 There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
 
-For a standard graph type that reads as text and wants auto-layout (a flow, a sequence, a state machine), a native Slidev ` ```mermaid ` fence is the alternative, brand-styled globally by `deck/setup/mermaid.ts`. The source can be inline or imported from a `.mermaid` file with `<<< @/chapter/<chapter>/resources/<name>.mermaid`. Excalidraw stays the default when placement carries meaning. Full when-to-use-which: the "Diagrams" section in [`SKILL.md`](../SKILL.md).
+For a standard graph type that reads as text and wants auto-layout (a flow, a sequence, a state machine), a native Slidev ` ```mermaid ` fence is the alternative, brand-styled globally by `packages/toolkit/setup/mermaid.ts`. The source can be inline or imported from a `.mermaid` file with `<<< @/chapter/<chapter>/resources/<name>.mermaid`. Excalidraw stays the default when placement carries meaning. Full when-to-use-which: the "Diagrams" section in [`SKILL.md`](../SKILL.md).
