@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/Miragon/slidev-deck-template/compare/v1.7.2...v1.8.0) (2026-07-28)
+
+
+### Features
+
+* **toolkit:** add subsection layout and agenda sub-chapter preview ([#64](https://github.com/Miragon/slidev-deck-template/issues/64)) ([186ea9d](https://github.com/Miragon/slidev-deck-template/commit/186ea9d1b041b0f3bd9a8f8bca4eb0d22c63d70d))
+
 ## [1.7.2](https://github.com/Miragon/slidev-deck-template/compare/v1.7.1...v1.7.2) (2026-07-27)
 
 
