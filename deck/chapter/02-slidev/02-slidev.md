@@ -76,10 +76,10 @@ side: right
 The same `deck/slides.md` becomes:
 
 - A **static site** (`npm run build`) you host anywhere
-- A **PDF** for hand-out and the in-deck download button
-- A live **GitHub Pages** deploy on every push to `main`
+- A **PDF** for hand-out, exported locally with `npm run export`
+- A CI **build check** on every push and every pull request
 
-One file, no copy-paste, no separate export step.
+One file, no copy-paste, no parallel set of slides to keep in sync.
 
 ---
 layout: showcase

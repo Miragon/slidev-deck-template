@@ -1,6 +1,6 @@
 ---
 name: slides
-description: Authoring guide for the Miragon-branded Slidev deck in this repo — deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, SplitView), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
+description: Authoring guide for the Miragon-branded Slidev deck in this repo — deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, DiagramFrame, SplitView, CodeBlock, Agenda), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
 ---
 
 # Miragon Slidev Deck
@@ -12,7 +12,7 @@ How to build the Miragon-branded Slidev deck in this repo: where things live, wh
 1. **Rendering truth (code) — what actually ships:**
    - `packages/toolkit/styles/theme.css` — brand colour tokens (CSS variables).
    - `packages/toolkit/layouts/*.vue` — the layout archetypes (`layout:` in frontmatter).
-   - `packages/toolkit/components/*.vue` — the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<SplitView>`, `<BrandMeshBackground>`).
+   - `packages/toolkit/components/*.vue` — the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<DiagramFrame>`, `<SplitView>`, `<CodeBlock>`, `<Agenda>`, `<BrandMeshBackground>`).
 2. **System truth (this skill)** — how to compose the deck from that code and the editorial rules code can't enforce.
 
 If a value disagrees, **`packages/toolkit/styles/theme.css` wins for colours**, the layout/component `.vue` wins for its prop signature, and this skill wins for editorial/composition rules.
@@ -29,7 +29,8 @@ A **single deck**. The design system is the **`@miragon/slidev-toolkit`** packag
 packages/toolkit/          the design system (fixed, brand-controlled)
   styles/theme.css         colour tokens
   layouts/*.vue            the 15 archetypes
-  components/*.vue         Card, CardGrid, StepList, Step, Figure, SplitView, BrandMeshBackground
+  components/*.vue         Card, CardGrid, StepList, Step, Figure, DiagramFrame,
+                           SplitView, CodeBlock, Agenda, BrandMeshBackground
   assets/                  brand assets (logo.svg, komet.svg) — bundled with the theme
 deck/
   slides.md                entry: headmatter + cover + src imports + closing
@@ -219,7 +220,7 @@ An Excalidraw diagram sits directly on the grey `content` layout by default (the
 
 **When to pick which.** Reach for **Mermaid** when the diagram is a standard graph type that reads naturally as text and benefits from automatic layout: a process flow, a sequence or interaction, a state machine, an ER or decision tree. The payoff is speed and maintenance — the source is a few lines of text, diffable in review and editable in seconds. The cost is control: Mermaid's engine lays the nodes out, so you cannot compose the picture by hand. Stay with **Excalidraw** when placement carries meaning — freeform architecture sketches, annotated conceptual pictures, anything where exact positioning, custom shapes, or hand-drawn polish do the explaining. That covers most deck diagrams (a handful of deliberately arranged boxes), which is why Excalidraw is the default; Mermaid's auto-layout looks generic there.
 
-Slidev renders a ` ```mermaid ` fence natively, no addon, brand-styled globally by `deck/setup/mermaid.ts` (`defineMermaidSetup` with the Miragon `themeVariables` — the one place that hex lives, never in the slide), so it comes out in Miragon blue and Geist, not the default purple. The source can be **inline** in the slide or **imported from a file** with `<<< @/chapter/<chapter>/resources/<name>.mermaid` (the transclusion renders as a diagram, not a code block); use a file when the diagram is reused or long, inline for a one-off. Shrink a tall diagram with the scale option (`` ```mermaid {scale: 0.8} ``), never by editing the theme. Demo: the two "Mermaid" slides in `deck/chapter/04-diagrams/04-diagrams.md`.
+Slidev renders a ` ```mermaid ` fence natively, no addon, brand-styled globally by `packages/toolkit/setup/mermaid.ts` (`defineMermaidSetup` with the Miragon `themeVariables` — the one place that hex lives, never in the slide), so it comes out in Miragon blue and Geist, not the default purple. The source can be **inline** in the slide or **imported from a file** with `<<< @/chapter/<chapter>/resources/<name>.mermaid` (the transclusion renders as a diagram, not a code block); use a file when the diagram is reused or long, inline for a one-off. Shrink a tall diagram with the scale option (`` ```mermaid {scale: 0.8} ``), never by editing the theme. Demo: the two "Mermaid" slides in `deck/chapter/04-diagrams/04-diagrams.md`.
 
 ---
 
