@@ -54,13 +54,26 @@ Progression by card count: **2** → blue, green · **3** → blue, teal, green 
 
 ## CardGrid
 
-The column wrapper for a row of `Card`s (or `Figure`s). Replaces the raw `<div class="grid grid-cols-N …">` so the markdown carries no CSS classes. Cards stretch to equal height.
+The wrapper for a group of `Card`s (or `Figure`s). Replaces the raw `<div class="grid grid-cols-N …">` so the markdown carries no CSS classes. Cards stretch to equal height.
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
-| `cols` (number) | — | `3` | number of equal columns |
+| `direction` | `row` · `column` | `row` | `row` = cards side by side (uses `cols`); `column` = cards stacked top to bottom in one column |
+| `cols` (number) | — | `3` | number of equal columns (ignored when `direction="column"`) |
 | `gap` | `compact` · `standard` · `generous` | `standard` | 16 / 24 / 32 px between cells |
 | **slot** | — | — | the `Card`s (one blank line between them so they parse as markdown) |
+
+Use `direction="column"` to stack cards vertically (e.g. two labelled cards filling a narrow SplitView column):
+
+```md
+<CardGrid direction="column">
+
+<Card title="Error" accent="blue">Always interrupts: the source process stops.</Card>
+
+<Card title="Escalation" accent="teal">Default non-interrupting: the source continues.</Card>
+
+</CardGrid>
+```
 
 ```md
 <CardGrid cols="3">
