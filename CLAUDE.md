@@ -13,7 +13,7 @@ The entry **`deck/slides.md`** holds only the cover and the closing; the body is
 
 **Always invoke the `slides` skill before creating or editing any slide.** Editing the deck is never freehand: load the skill first and follow it for every layout, component, and editorial decision.
 
-1. **The `slides` skill** (`.claude/skills/slides/SKILL.md`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 15 layout archetypes (`cover`, `hero`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Agenda`), the white-card rule, content rules (English, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
+1. **The `slides` skill** (`.claude/skills/slides/SKILL.md`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 15 layout archetypes (`cover`, `hero`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Agenda`), the white-card rule, content rules (one consistent deck language, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
 2. **`deck/`** — the reference implementation. Every archetype has a demo slide with a comment block listing `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE`. Open the relevant `deck/chapter/<chapter>/<chapter>.md` alongside the skill when in doubt.
 
 Do not duplicate rules across files (this one, the skill, project memory). The rendering truth lives in `packages/toolkit/`; point at the `slides` skill for everything else.
@@ -32,7 +32,7 @@ Do not duplicate rules across files (this one, the skill, project memory). The r
 
 If you do nothing else, respect these:
 
-- **English only** on slide content. Speaker notes (`<!-- … -->`) may be in another language if requested.
+- **One language per deck, applied consistently.** Pick the deck's language (English by default; German or another language is a valid choice) and keep all slide content in it, with no mixing per slide. Code, brand names, and standard technical terms stay as-is regardless. Speaker notes (`<!-- … -->`) may be in another language if requested.
 - **Cards are always white** — use the `<Card>` component (inside `<CardGrid>` for a row). Accent goes on the **title text only** (blue → teal → green progression, handled by the component). Never a gradient/colored background, never a colored left-border. The only exception is the `compare` layout's left/right panels, which are semantically coloured by the layout itself.
 - **Headings BLACK, never blue.** Blue is reserved for kickers/eyebrows, accents, small labels.
 - **Heroes pose an active question** the following slides answer (`layout: hero`, `# …**bold**?`). Several per deck is fine.
@@ -53,7 +53,7 @@ Everything above is expanded in the `slides` skill.
 
 ## Pre-flight checklist (before finishing a slide)
 
-- [ ] English only on slide content
+- [ ] One language per deck, applied consistently (no per-slide mixing); code, brand names, and technical terms stay as-is
 - [ ] No hardcoded hex / raw HTML / utility classes in the markdown (use the components; the sanctioned hex lives inside `Card.vue`). The one exception: a `class`/`style` on a component for **spacing/layout only** (e.g. `<Card class="mt-8">`), never to override brand colours, fonts, or card styling
 - [ ] Cards: white, accent on title text only, no colored background or left-border
 - [ ] Headings black; blue only for kickers/accents/small labels

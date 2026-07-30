@@ -73,7 +73,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 ## The non-negotiables (one screen)
 
 - **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 15 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
-- **English only on slide content** (titles, bullets, labels, diagram text). Speaker notes (`<!-- … -->`) may be in another language if requested. Code, brand names, and standard technical terms stay as-is.
+- **One language per deck, applied consistently** across all slide content (titles, bullets, labels, diagram text). The deck's language is a choice: English by default, but German or another language is equally valid; pick one and keep the whole deck in it, with no mixing per slide. Code, brand names, and standard technical terms stay as-is regardless of language. Speaker notes (`<!-- … -->`) may be in another language if requested.
 - **Cards are always white** — use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**.
 - **Headings are BLACK, never blue.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour — don't override.
 - **Heroes pose an active question** the next slides answer (`layout: hero`, `# …**bold**?`).
@@ -226,7 +226,7 @@ Slidev renders a ` ```mermaid ` fence natively, no addon, brand-styled globally 
 
 ## Editorial rules
 
-**Language** — English on slide content (see non-negotiables). Speaker notes may be in another language if requested.
+**Language** — one language per deck, applied consistently (see non-negotiables): pick the deck's language (English by default, or German or another language) and keep every slide in it, never mixing within a slide. Code, brand names, and standard technical terms stay as-is. Speaker notes may be in another language if requested.
 
 **Typography in markdown** — headings black; blue only for kickers/accents/labels; never set `font-family`. The accent bar is the one brand moment per slide — don't add extra bars.
 
