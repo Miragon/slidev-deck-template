@@ -20,6 +20,10 @@
  *                "static"  → <Bpmn>                (still image, no interaction)
  *                "token"   → <BpmnTokenSimulation>  (playable token flow, default)
  *                "modeler" → <BpmnModeler>          (editable modeler canvas)
+ *   engine   — "camunda7" | "zeebe"  (modeler mode only, optional)
+ *              Mounts an engine-specific properties panel in the modeler's
+ *              fullscreen "Edit" view. Omit for a panel-less modeler.
+ *   tokenSimulation — run the token simulation inside the modeler (modeler mode)
  * Slot:
  *   default  — optional caption / explanatory line below the diagram
  */
@@ -33,9 +37,11 @@ const props = withDefaults(
     diagram?: string
     height?: string
     mode?: 'static' | 'token' | 'modeler'
+    engine?: 'camunda7' | 'zeebe'
+    tokenSimulation?: boolean
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', height: '380px', mode: 'token' },
+  { accent: 'blue', height: '380px', mode: 'token', tokenSimulation: false },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -77,6 +83,8 @@ const diagramSrc = computed(() => withBase(props.diagram))
           <BpmnModeler
             v-else-if="mode === 'modeler'"
             :bpmnFilePath="diagramSrc"
+            :engine="engine"
+            :tokenSimulation="tokenSimulation"
             width="100%"
             :height="height"
           />
