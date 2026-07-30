@@ -6,7 +6,7 @@
  * chapter, the slides up to the next section belong to it. Up to six chapters the
  * rail is one row with each chapter's slides as live miniature previews below.
  * Past six the rail WRAPS into balanced rows and drops the previews, becoming a
- * static, top-aligned overview.
+ * top-aligned overview whose dots still jump straight to each chapter's slide.
  *
  * `layout: subsection` slides do NOT open a chapter (they divide a chapter
  * internally); they are collected onto the enclosing chapter's `subsections`.
@@ -214,18 +214,21 @@ function openSlide(no: number, ev: MouseEvent) {
             <span class="track-line" :style="{ left: rowTrackLeft(row), width: rowTrackWidth(row) }"></span>
             <span class="track-fill" :style="{ left: rowTrackLeft(row), width: rowFillWidth(row) }"></span>
           </div>
-          <div
+          <button
             v-for="(ch, i) in row.items"
             :key="ch.no"
-            class="step is-static"
+            type="button"
+            class="step"
             :class="{ 'is-active': row.start + i === currentIndex, 'is-done': row.start + i < currentIndex }"
+            :title="`Go to slide ${ch.no}`"
+            @click="openSlide(ch.no, $event)"
           >
             <span class="step-meta">
               <span class="step-eyebrow">{{ ch.eyebrow }}</span>
               <span class="step-label">{{ ch.title }}</span>
             </span>
             <span class="step-dot"><span class="step-num">{{ row.start + i + 1 }}</span></span>
-          </div>
+          </button>
         </div>
       </nav>
 
@@ -486,7 +489,14 @@ function openSlide(no: number, ev: MouseEvent) {
   min-height: 0;
   margin-bottom: 0;
 }
-.is-wrap .step.is-static { cursor: default; }
+/* Wrap-mode dots navigate straight to their chapter's opening slide. */
+.is-wrap .step:hover .step-dot,
+.is-wrap .step:focus-visible .step-dot {
+  border-color: var(--ag-accent);
+  transform: scale(1.08);
+}
+.is-wrap .step:hover .step-label { color: var(--ag-accent); }
+.is-wrap .step:focus-visible { outline: none; }
 .stepper-row {
   position: relative;
   display: grid;
