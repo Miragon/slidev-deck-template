@@ -2,13 +2,12 @@
 /**
  * bpmn — Slide centered on a BPMN diagram (STATIC world, no Mesh shader).
  *
- * Renders a .bpmn file with the token simulation from `slidev-addon-bpmn`,
+ * Renders a .bpmn file from `slidev-addon-bpmn` in one of three modes,
  * with an optional title/eyebrow header above and an optional caption below.
  * The diagram is the focal point.
  *
  * Requires: `slidev-addon-bpmn` must be listed in the slides.md frontmatter
- * `addons:` block. The component used is `<BpmnTokenSimulation>`, registered
- * automatically by the addon.
+ * `addons:` block. The addon auto-registers all three components used here.
  *
  * Frontmatter props:
  *   title    — slide title (h2-level)
@@ -17,6 +16,10 @@
  *   diagram  — served URL path to the .bpmn file, resolved base-aware
  *              (e.g. "/resources/05-diagrams/recruitment.bpmn")
  *   height   — CSS height for the BPMN canvas (default "380px")
+ *   mode     — render mode (default "token"):
+ *                "static"  → <Bpmn>                (still image, no interaction)
+ *                "token"   → <BpmnTokenSimulation>  (playable token flow, default)
+ *                "modeler" → <BpmnModeler>          (editable modeler canvas)
  * Slot:
  *   default  — optional caption / explanatory line below the diagram
  */
@@ -29,9 +32,10 @@ const props = withDefaults(
     accent?: 'blue' | 'green' | 'mixed'
     diagram?: string
     height?: string
+    mode?: 'static' | 'token' | 'modeler'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', height: '380px' },
+  { accent: 'blue', height: '380px', mode: 'token' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -61,12 +65,28 @@ const diagramSrc = computed(() => withBase(props.diagram))
       </header>
 
       <DiagramFrame class="bpmn-canvas" padding="compact">
-        <BpmnTokenSimulation
-          v-if="diagram"
-          :bpmnFilePath="diagramSrc"
-          width="100%"
-          :height="height"
-        />
+        <template v-if="diagram">
+          <!-- All three addon components share the same
+               bpmnFilePath / width / height signature. -->
+          <Bpmn
+            v-if="mode === 'static'"
+            :bpmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+          />
+          <BpmnModeler
+            v-else-if="mode === 'modeler'"
+            :bpmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+          />
+          <BpmnTokenSimulation
+            v-else
+            :bpmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+          />
+        </template>
       </DiagramFrame>
 
       <div v-if="$slots.default" class="bpmn-caption">

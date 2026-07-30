@@ -127,7 +127,7 @@ Two neutral panels `Model A` / `Model B`, then a one-click reveal of the verdict
 | **`::right::` slot** | — | Model B content |
 | **`::legend::` slot** | — | rule revealed with the verdicts |
 
-## bpmn — BPMN diagram with token simulation (static)
+## bpmn — BPMN diagram (static / token simulation / modeler)
 
 A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 
@@ -137,6 +137,7 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 | `accent` | blue / green / mixed |
 | `diagram` (str) | the `.bpmn` in the chapter's `resources/`, e.g. `/resources/05-diagrams/x.bpmn` |
 | `height` (str) | canvas height (default `"380px"`) |
+| `mode` | `static` (still image) / `token` (playable token flow, **default**) / `modeler` (editable canvas) |
 | **slot** | optional caption below the diagram |
 
 **Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
