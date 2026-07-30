@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/Miragon/slidev-deck-template/compare/v1.10.0...v1.11.0) (2026-07-30)
+
+
+### Features
+
+* **toolkit:** forward engine and tokenSimulation to bpmn layout ([#84](https://github.com/Miragon/slidev-deck-template/issues/84)) ([ea7b891](https://github.com/Miragon/slidev-deck-template/commit/ea7b891fb80fe81da3904d255186b254b0e130e7))
+
 ## [1.10.0](https://github.com/Miragon/slidev-deck-template/compare/v1.9.2...v1.10.0) (2026-07-30)
 
 
