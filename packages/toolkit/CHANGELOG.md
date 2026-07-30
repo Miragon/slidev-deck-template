@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.0](https://github.com/Miragon/slidev-deck-template/compare/v1.9.2...v1.10.0) (2026-07-30)
+
+
+### Features
+
+* **toolkit:** add direction prop to CardGrid for vertical stacking ([#80](https://github.com/Miragon/slidev-deck-template/issues/80)) ([d72c0cc](https://github.com/Miragon/slidev-deck-template/commit/d72c0cc713b1ff4141f6091768c49cc8c661a860)), closes [#79](https://github.com/Miragon/slidev-deck-template/issues/79)
+* **toolkit:** add mode prop to bpmn layout (static / token / modeler) ([#82](https://github.com/Miragon/slidev-deck-template/issues/82)) ([855c885](https://github.com/Miragon/slidev-deck-template/commit/855c88581e3fb76be147d3778489c915cb57a1d0)), closes [#81](https://github.com/Miragon/slidev-deck-template/issues/81)
+* **toolkit:** make wrapped agenda topic dots clickable ([#76](https://github.com/Miragon/slidev-deck-template/issues/76)) ([5215f3c](https://github.com/Miragon/slidev-deck-template/commit/5215f3c4955b9b27a6220e9e9829419bda2d8e3f))
+
 ## [1.9.2](https://github.com/Miragon/slidev-deck-template/compare/v1.9.1...v1.9.2) (2026-07-28)
 
 
