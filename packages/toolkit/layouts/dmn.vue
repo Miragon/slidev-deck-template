@@ -1,16 +1,15 @@
 <script setup lang="ts">
 /**
- * dmn — Slide centered on a DMN decision table (STATIC world, no Mesh shader).
+ * dmn — Slide centered on a DMN decision (STATIC world, no Mesh shader).
  *
- * Renders a .dmn file as a decision table via `slidev-addon-dmn`, with an
+ * Renders a .dmn file from `slidev-addon-dmn` in one of four modes, with an
  * optional title/eyebrow header above and an optional caption below. The
- * decision table is the focal point. The sibling of the `bpmn` archetype: BPMN
- * models the process, DMN models the decisions inside it.
+ * decision is the focal point. The sibling of the `bpmn` archetype: BPMN models
+ * the process, DMN models the decisions inside it — and like `bpmn`, the `mode`
+ * prop dynamically controls which addon component is rendered.
  *
  * Requires: `slidev-addon-dmn` must be listed in the slides.md frontmatter
- * `addons:` block. The component used is `<DmnTable>`, registered automatically
- * by the addon (it also ships `<DmnDrd>` for the requirement diagram and
- * `<DmnModeler>` for an editor, not used here).
+ * `addons:` block. The addon auto-registers all four components used here.
  *
  * Frontmatter props:
  *   title           — slide title (h2-level)
@@ -18,12 +17,31 @@
  *   accent          — "blue" | "green" | "mixed" (default blue)
  *   diagram         — served URL path to the .dmn file, resolved base-aware
  *                     (e.g. "/resources/04-diagrams/approval.dmn")
- *   height          — CSS height for the table canvas (default "360px")
- *   decisionId      — which decision to show when the file holds several (optional)
- *   fontSize        — table font size (default "15px")
- *   showAnnotations — show the trailing annotations column (default false)
+ *   height          — CSS height for the table/canvas (default "360px")
+ *   mode            — render mode (default "table"):
+ *                       "table"    → <DmnTable>     (static decision table, default)
+ *                       "simulate" → <DmnSimulate>  (live input form; evaluate the
+ *                                    decision and highlight the firing rule — DMN's
+ *                                    answer to the bpmn "token" simulation. Ships a
+ *                                    built-in Fullscreen button next to the form.)
+ *                       "drd"      → <DmnDrd>        (static requirement diagram, the
+ *                                    graphical view — bpmn's "static" equivalent)
+ *                       "modeler"  → <DmnModeler>    (editable modeler canvas)
+ *   decisionId      — which decision to show when the file holds several
+ *                     (optional; "table" / "simulate" modes)
+ *   fontSize        — table/diagram font size (default "15px";
+ *                     "table" / "simulate" / "drd" modes)
+ *   fullscreenFontSize — table font size once the simulation is blown up to the
+ *                     full viewport (default "18px"; "simulate" mode — raise it so
+ *                     the table reads from the back of the room)
+ *   showAnnotations — show the trailing annotations column (default false;
+ *                     "table" / "simulate" modes)
+ *   showDrdButton   — show the built-in "View DRD" button (default false;
+ *                     "table" / "simulate" modes)
+ *   engine          — "camunda" — mounts the Camunda properties panel in the
+ *                     modeler ("modeler" mode only; omit for a panel-less modeler)
  * Slot:
- *   default  — optional caption / explanatory line below the table
+ *   default  — optional caption / explanatory line below the decision
  */
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
@@ -34,12 +52,24 @@ const props = withDefaults(
     accent?: 'blue' | 'green' | 'mixed'
     diagram?: string
     height?: string
+    mode?: 'table' | 'simulate' | 'drd' | 'modeler'
     decisionId?: string
     fontSize?: string
+    fullscreenFontSize?: string
     showAnnotations?: boolean
+    showDrdButton?: boolean
+    engine?: 'camunda'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', height: '360px', fontSize: '15px', showAnnotations: false },
+  {
+    accent: 'blue',
+    height: '360px',
+    mode: 'table',
+    fontSize: '15px',
+    fullscreenFontSize: '18px',
+    showAnnotations: false,
+    showDrdButton: false,
+  },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -69,15 +99,45 @@ const diagramSrc = computed(() => withBase(props.diagram))
       </header>
 
       <DiagramFrame class="dmn-canvas" padding="compact">
-        <DmnTable
-          v-if="diagram"
-          :dmnFilePath="diagramSrc"
-          width="100%"
-          :height="height"
-          :decisionId="decisionId"
-          :fontSize="fontSize"
-          :showAnnotations="showAnnotations"
-        />
+        <template v-if="diagram">
+          <!-- Each addon component takes the dmnFilePath / width / height
+               signature; the extra props differ per mode (see prop docs). -->
+          <DmnSimulate
+            v-if="mode === 'simulate'"
+            :dmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+            :decisionId="decisionId"
+            :fontSize="fontSize"
+            :fullscreenFontSize="fullscreenFontSize"
+            :showAnnotations="showAnnotations"
+            :showDrdButton="showDrdButton"
+          />
+          <DmnDrd
+            v-else-if="mode === 'drd'"
+            :dmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+            :fontSize="fontSize"
+          />
+          <DmnModeler
+            v-else-if="mode === 'modeler'"
+            :dmnFilePath="diagramSrc"
+            :engine="engine"
+            width="100%"
+            :height="height"
+          />
+          <DmnTable
+            v-else
+            :dmnFilePath="diagramSrc"
+            width="100%"
+            :height="height"
+            :decisionId="decisionId"
+            :fontSize="fontSize"
+            :showAnnotations="showAnnotations"
+            :showDrdButton="showDrdButton"
+          />
+        </template>
       </DiagramFrame>
 
       <div v-if="$slots.default" class="dmn-caption">

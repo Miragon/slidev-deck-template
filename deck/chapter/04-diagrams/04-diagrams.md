@@ -124,16 +124,24 @@ title: And the decisions inside it
 eyebrow: 04 - Diagrams
 accent: blue
 diagram: /resources/04-diagrams/hiring.dmn
-height: 300px
+height: 230px
+mode: simulate
+fontSize: 10px
+fullscreenFontSize: 12px
 ---
 
 <!--
-  dmn archetype: renders a .dmn decision table (slidev-addon-dmn), the sibling of
-  the bpmn archetype. BPMN models the process, DMN models the decisions inside it.
-  File lives in this chapter's resources/. Transition: "Slidev can also draw from text: Mermaid."
+  dmn archetype: renders a .dmn decision (slidev-addon-dmn), the sibling of the
+  bpmn archetype. BPMN models the process, DMN models the decisions inside it.
+  The mode prop mirrors bpmn: "table" (default) / "simulate" / "drd" / "modeler".
+  "simulate" is DMN's answer to the bpmn token flow: pick inputs, hit Simulate,
+  watch the firing rule light up. The Fullscreen button next to the form blows the
+  table up to the full viewport (fullscreenFontSize sizes it for the back of the
+  room). File lives in this chapter's resources/.
+  Transition: "Slidev can also draw from text: Mermaid."
 -->
 
-A DMN decision table, the business rules behind a process step, from any DMN modeler.
+A DMN decision, live: feed the inputs in and watch which rule fires.
 
 ---
 layout: mermaid

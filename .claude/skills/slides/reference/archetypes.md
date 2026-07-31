@@ -145,20 +145,24 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 
 **Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
-## dmn — DMN decision table (static)
+## dmn — DMN decision (table / live simulation / DRD / modeler)
 
-A `.dmn` file rendered as a decision table via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN models the process, DMN the decisions inside it. The table is the focal point.
+A `.dmn` file rendered via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN models the process, DMN the decisions inside it. Like `bpmn`, the `mode` prop dynamically controls which addon component is rendered. The decision is the focal point.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | — |
 | `accent` | blue / green / mixed |
 | `diagram` (str) | the `.dmn` in the chapter's `resources/`, e.g. `/resources/04-diagrams/x.dmn` |
-| `height` (str) | canvas height (default `"360px"`) |
-| `decisionId` (str) | which decision to show when the file holds several (optional) |
-| `fontSize` (str) | table font size (default `"15px"`) |
-| `showAnnotations` (bool) | show the trailing annotations column (default `false`) |
-| **slot** | optional caption below the table |
+| `height` (str) | table/canvas height (default `"360px"`) |
+| `mode` | `table` (static decision table, **default**) / `simulate` (live input form: pick inputs, evaluate the decision, highlight the firing rule — DMN's answer to bpmn's `token` simulation; ships a built-in Fullscreen button next to the form) / `drd` (static requirement diagram, bpmn's `static` equivalent) / `modeler` (editable canvas) |
+| `decisionId` (str) | which decision to show when the file holds several (optional; `table` / `simulate` modes) |
+| `fontSize` (str) | table/diagram font size (default `"15px"`; `table` / `simulate` / `drd` modes) |
+| `fullscreenFontSize` (str) | table font size when the simulation is blown up to the full viewport (default `"18px"`; `simulate` mode) |
+| `showAnnotations` (bool) | show the trailing annotations column (default `false`; `table` / `simulate` modes) |
+| `showDrdButton` (bool) | show the built-in "View DRD" button (default `false`; `table` / `simulate` modes) |
+| `engine` | `camunda` — mounts the Camunda properties panel in the modeler (`modeler` mode only; omit for a panel-less modeler) |
+| **slot** | optional caption below the decision |
 
 **Dependency:** `slidev-addon-dmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
