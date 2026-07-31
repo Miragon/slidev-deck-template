@@ -121,7 +121,7 @@ function chapterResources() {
 export default {
   plugins: [chapterResources()],
   optimizeDeps: {
-    include: ['@paper-design/shaders'],
+    include: ['@paper-design/shaders', 'randomcolor'],
   },
   server: {
     allowedHosts: ['.localhost'],
