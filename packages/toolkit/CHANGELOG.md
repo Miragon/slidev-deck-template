@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/Miragon/slidev-deck-template/compare/v1.11.0...v1.12.0) (2026-07-31)
+
+
+### Features
+
+* **toolkit:** add mode prop to dmn layout (table / simulate / drd / modeler) ([#88](https://github.com/Miragon/slidev-deck-template/issues/88)) ([7885b9d](https://github.com/Miragon/slidev-deck-template/commit/7885b9d082bec0f679d70129cc608b1942079b2d))
+* **toolkit:** add transactionBoundaries prop to bpmn layout ([#86](https://github.com/Miragon/slidev-deck-template/issues/86)) ([8321b25](https://github.com/Miragon/slidev-deck-template/commit/8321b25ed062ae28e7847d7d1e96333c6d37f2c6))
+
 ## [1.11.0](https://github.com/Miragon/slidev-deck-template/compare/v1.10.0...v1.11.0) (2026-07-30)
 
 
