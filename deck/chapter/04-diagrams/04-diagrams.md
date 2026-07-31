@@ -107,13 +107,13 @@ accent: blue
 diagram: /resources/04-diagrams/recruitment.bpmn
 height: 330px
 mode: modeler
+transactionBoundaries: true
+engine: camunda7
 ---
 
 <!--
   bpmn archetype: renders a .bpmn file via slidev-addon-bpmn.
   File lives in this chapter's resources/.
-  OPTIONAL mode: "static" (still image) | "token" (playable simulation, default) | "modeler" (editable canvas).
-  Transition: "And the decisions inside it: DMN."
 -->
 
 A real BPMN file, straight from Camunda Modeler or bpmn.io.

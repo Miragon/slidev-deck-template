@@ -140,6 +140,7 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 | `mode` | `static` (still image) / `token` (playable token flow, **default**) / `modeler` (editable canvas) |
 | `engine` | `camunda7` / `zeebe` — `modeler` mode only. Mounts an engine-specific properties panel in the modeler's fullscreen "Edit" view. Omit for a panel-less modeler. |
 | `tokenSimulation` (bool) | run the token simulation inside the modeler (`modeler` mode, default `false`) |
+| `transactionBoundaries` (bool) | overlay Camunda 7 transaction boundaries in the modeler's fullscreen "Edit" view (`modeler` mode, requires `engine: camunda7`, default `false`) |
 | **slot** | optional caption below the diagram |
 
 **Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.

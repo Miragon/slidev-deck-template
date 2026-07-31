@@ -24,6 +24,9 @@
  *              Mounts an engine-specific properties panel in the modeler's
  *              fullscreen "Edit" view. Omit for a panel-less modeler.
  *   tokenSimulation — run the token simulation inside the modeler (modeler mode)
+ *   transactionBoundaries — overlay Camunda 7 transaction boundaries in the
+ *              modeler's fullscreen "Edit" view (modeler mode, requires
+ *              engine="camunda7"; ignored otherwise)
  * Slot:
  *   default  — optional caption / explanatory line below the diagram
  */
@@ -39,9 +42,16 @@ const props = withDefaults(
     mode?: 'static' | 'token' | 'modeler'
     engine?: 'camunda7' | 'zeebe'
     tokenSimulation?: boolean
+    transactionBoundaries?: boolean
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', height: '380px', mode: 'token', tokenSimulation: false },
+  {
+    accent: 'blue',
+    height: '380px',
+    mode: 'token',
+    tokenSimulation: false,
+    transactionBoundaries: false,
+  },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -85,6 +95,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
             :bpmnFilePath="diagramSrc"
             :engine="engine"
             :tokenSimulation="tokenSimulation"
+            :transactionBoundaries="transactionBoundaries"
             width="100%"
             :height="height"
           />
