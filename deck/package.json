@@ -16,6 +16,6 @@
     "vue": "3.5.40"
   },
   "devDependencies": {
-    "portless": "0.15.4"
+    "portless": "0.15.5"
   }
 }
