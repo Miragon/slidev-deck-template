@@ -50,6 +50,19 @@
   --miragon-gradient-blue: linear-gradient(135deg, #335DE5 0%, #1E3EBF 100%);
   --miragon-gradient-green: linear-gradient(135deg, #00E676 0%, #00C263 100%);
   --miragon-gradient-mixed: linear-gradient(135deg, #335DE5 0%, #1B4FE0 60%, #00C263 100%);
+
+  /* --- Card accent ramp (Card title + icon) -------------------------- */
+  /* The six stops the <Card accent="…"> prop selects, running blue → teal →
+     green. Card.vue references these tokens (no hardcoded hex in the
+     component), so a co-branded deck can remap the whole ramp from its own
+     stylesheet instead of shadowing Card.vue. Defaults are the Miragon CI
+     values — do not change them here. */
+  --miragon-card-accent-blue: #335DE5;
+  --miragon-card-accent-blue-mid: #2B5ACE;
+  --miragon-card-accent-teal: #1E7A8A;
+  --miragon-card-accent-green-deep: #0E8E6E;
+  --miragon-card-accent-green-mid: #00974F;
+  --miragon-card-accent-green: #00C263;
 }
 
 /*
