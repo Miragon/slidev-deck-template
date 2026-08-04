@@ -68,12 +68,13 @@ const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value
 const activeItem = computed(() => props.items[selected.value])
 
 // Frontmatter values are plain strings, not compiled by Slidev, so render the
-// allowed inline Markdown ourselves. HTML-safe: escape first, then mark up
-// (mirrors Figure.vue's caption).
+// allowed inline Markdown ourselves (code, links, bold, italic). HTML-safe:
+// escape first, then mark up (mirrors Figure.vue's caption).
 function inline(text: string): string {
   const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   return escaped
     .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
 }
@@ -273,6 +274,12 @@ function select(i: number, e: MouseEvent) {
 }
 .showcase-detail :deep(em) {
   font-style: italic;
+}
+.showcase-detail :deep(a) {
+  color: var(--miragon-blue);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-weight: 600;
 }
 .showcase-detail :deep(code) {
   font-family: var(--miragon-font-mono);
