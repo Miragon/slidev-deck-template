@@ -17,7 +17,7 @@
     "shot": "node scripts/shot.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "1.62.0",
-    "playwright-chromium": "1.62.0"
+    "@playwright/test": "1.62.1",
+    "playwright-chromium": "1.62.1"
   }
 }
