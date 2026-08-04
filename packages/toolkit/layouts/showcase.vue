@@ -10,10 +10,15 @@
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default mixed)
- *   items    — array of `{ label, body }` objects (recommended: 3–4 cards).
+ *   items    — array of `{ label, body, icon? }` objects (recommended: 3–4 cards).
  *              `body` is a string (one paragraph) or a string array (bullet list).
+ *              `icon` is an optional Iconify class (e.g. "i-carbon-chip") that
+ *              replaces the card's numbered index; write it literally so UnoCSS
+ *              picks it up. It takes the accent colour, like the index.
  *   hint     — navigation footer, hidden by default. `true` for the standard
  *              line, or a string for your own.
+ *   gap      — CSS length for the space between the card row and the detail
+ *              panel below. Default "1rem" (matches the gap between cards).
  */
 import { computed, onUnmounted, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
@@ -21,6 +26,7 @@ import { useNav, useSlideContext } from '@slidev/client'
 interface Item {
   label: string
   body: string | string[]
+  icon?: string
 }
 
 const props = withDefaults(
@@ -29,9 +35,10 @@ const props = withDefaults(
     accent?: 'blue' | 'green' | 'mixed'
     items?: Item[]
     hint?: boolean | string
+    gap?: string
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'mixed', items: () => [], hint: false },
+  { accent: 'mixed', items: () => [], hint: false, gap: '1rem' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -81,7 +88,7 @@ function select(i: number, e: MouseEvent) {
 </script>
 
 <template>
-  <div class="showcase-layout" :style="{ '--sc-grad': gradientVar, '--sc-accent': accentVar }">
+  <div class="showcase-layout" :style="{ '--sc-grad': gradientVar, '--sc-accent': accentVar, '--sc-gap': gap }">
     <div class="showcase-inner">
       <header v-if="title || eyebrow" class="showcase-head">
         <span class="showcase-bar" aria-hidden="true"></span>
@@ -98,7 +105,8 @@ function select(i: number, e: MouseEvent) {
           :class="{ 'is-active': i === selected }"
           @click="select(i, $event)"
         >
-          <span class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
+          <span v-if="item.icon" class="card-icon" :class="item.icon" aria-hidden="true"></span>
+          <span v-else class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
           <span class="card-label">{{ item.label }}</span>
         </button>
       </div>
@@ -172,7 +180,7 @@ function select(i: number, e: MouseEvent) {
   flex: 0 0 auto;
   display: grid;
   gap: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: var(--sc-gap);
 }
 .showcase-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .showcase-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
@@ -214,6 +222,12 @@ function select(i: number, e: MouseEvent) {
   color: var(--miragon-text-muted);
   transition: color 320ms ease;
 }
+
+.card-icon {
+  font-size: 1.6rem;
+  color: var(--miragon-text-muted);
+  transition: color 320ms ease;
+}
 .card-label {
   font-size: 1.05rem;
   font-weight: 700;
@@ -226,7 +240,8 @@ function select(i: number, e: MouseEvent) {
   border-color: var(--sc-accent);
   box-shadow: 0 16px 36px rgba(51, 93, 229, 0.18);
 }
-.showcase-card.is-active .card-index {
+.showcase-card.is-active .card-index,
+.showcase-card.is-active .card-icon {
   color: var(--sc-accent);
 }
 .showcase-card:not(.is-active) {
@@ -251,7 +266,7 @@ function select(i: number, e: MouseEvent) {
   color: var(--miragon-text-secondary);
   margin: 0;
 }
-/* Inline Markdown in the body: same treatment as the content layout. */
+
 .showcase-detail :deep(strong) {
   font-weight: 700;
   color: var(--miragon-text-primary);
@@ -267,7 +282,7 @@ function select(i: number, e: MouseEvent) {
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }
-/* Bullet list: same accent-gradient square marker as the content layout. */
+
 .detail-list {
   list-style: none;
   padding: 0;
