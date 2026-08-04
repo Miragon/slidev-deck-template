@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.0](https://github.com/Miragon/slidev-deck-template/compare/v1.13.0...v1.14.0) (2026-08-04)
+
+
+### Features
+
+* **toolkit:** add icon variant and gap prop to showcase layout ([#99](https://github.com/Miragon/slidev-deck-template/issues/99)) ([171aa7c](https://github.com/Miragon/slidev-deck-template/commit/171aa7cbac1e4d46342491a564e1922c3905b3cb))
+* **toolkit:** drive showcase selection via Slidev clicks ([#97](https://github.com/Miragon/slidev-deck-template/issues/97)) ([6ff79e9](https://github.com/Miragon/slidev-deck-template/commit/6ff79e99c57261c63fcdc0b97f47071b17b0eff7))
+
 ## [1.13.0](https://github.com/Miragon/slidev-deck-template/compare/v1.12.0...v1.13.0) (2026-08-04)
 
 
