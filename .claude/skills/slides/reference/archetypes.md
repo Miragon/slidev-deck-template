@@ -195,15 +195,16 @@ Internally it frames the diagram with the `DiagramFrame` component (see `referen
 
 ## showcase — interactive feature explorer (static, interactive)
 
-A row of clickable cards; one active at a time, cross-fading a detail panel. Fully frontmatter-driven (no body slot).
+A row of cards; one active at a time, cross-fading a detail panel. Fully frontmatter-driven (no body slot). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click) — both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | — |
 | `accent` | blue / green / mixed (default mixed) |
 | `items` (array) | YAML array of `{ label, body }` |
+| `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
 
-`body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items.
+`body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 
 ```yaml
 items:

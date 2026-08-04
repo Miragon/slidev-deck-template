@@ -2,23 +2,21 @@
 /**
  * showcase — interactive feature explorer (STATIC world, no shader).
  *
- * A row of clickable cards; one is active at a time. Click any card to switch
- * the active item; the detail panel below cross-fades to the new content.
- * Demonstrates Vue reactivity, CSS transitions, and Vue components living
- * inside a slide — beyond static Markdown.
- *
- * Items are passed as a YAML array via frontmatter; the layout iterates and
- * the user clicks to explore. Default state: first item active.
+ * A row of cards, one active at a time; the detail panel below cross-fades to
+ * the active item. The active card is Slidev's per-slide click counter, so a
+ * card click and advancing the slide (arrow keys / space) are the same action.
  *
  * Frontmatter props:
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default mixed)
  *   items    — array of `{ label, body }` objects (recommended: 3–4 cards).
- *              `body` is either a string (one paragraph) or a string array,
- *              which renders as a plain bullet list in the detail panel.
+ *              `body` is a string (one paragraph) or a string array (bullet list).
+ *   hint     — navigation footer, hidden by default. `true` for the standard
+ *              line, or a string for your own.
  */
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
+import { useNav, useSlideContext } from '@slidev/client'
 
 interface Item {
   label: string
@@ -30,28 +28,56 @@ const props = withDefaults(
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
     items?: Item[]
+    hint?: boolean | string
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'mixed', items: () => [] },
+  { accent: 'mixed', items: () => [], hint: false },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
+const hintText = computed(() =>
+  props.hint === true
+    ? 'Click a card or press the arrow keys to switch.'
+    : typeof props.hint === 'string' && props.hint.trim()
+      ? props.hint
+      : null,
+)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 const accentVar = computed(() =>
   props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
 )
 
-const selected = ref(0)
+const { $clicks, $clicksContext } = useSlideContext()
+const { currentPage, go } = useNav()
+
+// Register `items.length - 1` click steps so the slide only advances past the
+// last card, without the author declaring `clicks:` in frontmatter.
+const steps = computed(() => Math.max(0, props.items.length - 1))
+const CLICK_KEY = Symbol('showcase')
+watch(steps, (max) => $clicksContext.register(CLICK_KEY, { delta: 0, max }), { immediate: true })
+onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
+
+const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value))
 const activeItem = computed(() => props.items[selected.value])
 
-// Defensive: clamp selection if the items list shrinks below the current
-// index (e.g. when the slide is re-entered with a different array).
-watch(
-  () => props.items.length,
-  (len) => {
-    if (selected.value >= len) selected.value = 0
-  },
-)
+// Frontmatter values are plain strings, not compiled by Slidev, so render the
+// allowed inline Markdown ourselves. HTML-safe: escape first, then mark up
+// (mirrors Figure.vue's caption).
+function inline(text: string): string {
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  return escaped
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
+}
+
+// Route the card click through Slidev's own nav so mouse and keyboard share one
+// state. Blur afterwards: a focused card button swallows the arrow keys, which
+// would otherwise stop slide navigation until the user clicked away.
+function select(i: number, e: MouseEvent) {
+  go(currentPage.value, i)
+  ;(e.currentTarget as HTMLElement | null)?.blur()
+}
 </script>
 
 <template>
@@ -70,7 +96,7 @@ watch(
           type="button"
           class="showcase-card"
           :class="{ 'is-active': i === selected }"
-          @click="selected = i"
+          @click="select(i, $event)"
         >
           <span class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
           <span class="card-label">{{ item.label }}</span>
@@ -80,13 +106,13 @@ watch(
       <div class="showcase-detail">
         <transition name="fade-detail" mode="out-in">
           <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
-            <li v-for="(line, li) in activeItem.body" :key="li">{{ line }}</li>
+            <li v-for="(line, li) in activeItem.body" :key="li" v-html="inline(line)"></li>
           </ul>
-          <p v-else :key="selected" class="detail-body">{{ activeItem?.body }}</p>
+          <p v-else :key="selected" class="detail-body" v-html="inline(activeItem?.body ?? '')"></p>
         </transition>
       </div>
 
-      <p class="showcase-hint" aria-hidden="true">Click a card to switch.</p>
+      <p v-if="hintText" class="showcase-hint" aria-hidden="true">{{ hintText }}</p>
     </div>
   </div>
 </template>
@@ -224,6 +250,22 @@ watch(
   line-height: 1.55;
   color: var(--miragon-text-secondary);
   margin: 0;
+}
+/* Inline Markdown in the body: same treatment as the content layout. */
+.showcase-detail :deep(strong) {
+  font-weight: 700;
+  color: var(--miragon-text-primary);
+}
+.showcase-detail :deep(em) {
+  font-style: italic;
+}
+.showcase-detail :deep(code) {
+  font-family: var(--miragon-font-mono);
+  font-size: 0.9em;
+  background: var(--miragon-blue-light);
+  color: var(--miragon-blue-darker);
+  padding: 0.1em 0.4em;
+  border-radius: 0.35rem;
 }
 /* Bullet list: same accent-gradient square marker as the content layout. */
 .detail-list {
