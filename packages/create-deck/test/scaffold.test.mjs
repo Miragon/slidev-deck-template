@@ -48,7 +48,7 @@ test('emits the deck skeleton', () => {
     'verify/playwright.config.ts',
     '.npmrc',
     '.gitignore',
-    '.github/workflows/build-and-deploy.yml',
+    '.github/workflows/ci.yml',
     '.github/workflows/pin-check.yml',
   ]
   for (const f of required) assert.ok(existsSync(join(out, f)), `missing ${f}`)

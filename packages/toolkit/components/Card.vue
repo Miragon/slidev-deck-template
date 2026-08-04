@@ -10,21 +10,12 @@ const props = withDefaults(
   }>(),
   { accent: 'blue', padding: 'standard', align: 'left' },
 )
-
-const ACCENTS: Record<string, string> = {
-  blue: '#335DE5',
-  'blue-mid': '#2B5ACE',
-  teal: '#1E7A8A',
-  'green-deep': '#0E8E6E',
-  'green-mid': '#00974F',
-  green: '#00C263',
-}
 </script>
 
 <template>
-  <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`]">
-    <span v-if="icon" class="mg-card__icon" :class="icon" :style="{ color: ACCENTS[props.accent] }" aria-hidden="true"></span>
-    <h3 v-if="title" class="mg-card__title" :style="{ color: ACCENTS[props.accent] }">{{ title }}</h3>
+  <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`, `mg-card--accent-${props.accent}`]">
+    <span v-if="icon" class="mg-card__icon" :class="icon" aria-hidden="true"></span>
+    <h3 v-if="title" class="mg-card__title">{{ title }}</h3>
     <div class="mg-card__body"><slot /></div>
   </div>
 </template>
@@ -44,16 +35,29 @@ const ACCENTS: Record<string, string> = {
 .mg-card--align-center .mg-card__icon { margin-left: auto; margin-right: auto; }
 .mg-card--align-right .mg-card__icon { margin-left: auto; }
 
+/* Accent ramp (blue → teal → green) applied to the title + icon only.
+   The stops live in theme.css as --miragon-card-accent-* tokens, so a deck
+   can remap the whole ramp from its own stylesheet without shadowing this
+   component. */
+.mg-card--accent-blue { --mg-card-accent: var(--miragon-card-accent-blue); }
+.mg-card--accent-blue-mid { --mg-card-accent: var(--miragon-card-accent-blue-mid); }
+.mg-card--accent-teal { --mg-card-accent: var(--miragon-card-accent-teal); }
+.mg-card--accent-green-deep { --mg-card-accent: var(--miragon-card-accent-green-deep); }
+.mg-card--accent-green-mid { --mg-card-accent: var(--miragon-card-accent-green-mid); }
+.mg-card--accent-green { --mg-card-accent: var(--miragon-card-accent-green); }
+
 .mg-card__icon {
   display: block;
   font-size: 1.6rem;
   margin-bottom: 0.6rem;
+  color: var(--mg-card-accent);
 }
 .mg-card__title {
   margin: 0;
   font-weight: 700;
   font-size: 1.05rem;
   line-height: 1.2;
+  color: var(--mg-card-accent);
 }
 .mg-card__body {
   margin-top: 0.5rem;

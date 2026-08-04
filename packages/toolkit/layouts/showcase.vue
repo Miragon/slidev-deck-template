@@ -14,13 +14,15 @@
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default mixed)
- *   items    — array of `{ label, body }` objects (recommended: 3–4 cards)
+ *   items    — array of `{ label, body }` objects (recommended: 3–4 cards).
+ *              `body` is either a string (one paragraph) or a string array,
+ *              which renders as a plain bullet list in the detail panel.
  */
 import { computed, ref, watch } from 'vue'
 
 interface Item {
   label: string
-  body: string
+  body: string | string[]
 }
 
 const props = withDefaults(
@@ -77,7 +79,10 @@ watch(
 
       <div class="showcase-detail">
         <transition name="fade-detail" mode="out-in">
-          <p :key="selected" class="detail-body">{{ activeItem?.body }}</p>
+          <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
+            <li v-for="(line, li) in activeItem.body" :key="li">{{ line }}</li>
+          </ul>
+          <p v-else :key="selected" class="detail-body">{{ activeItem?.body }}</p>
         </transition>
       </div>
 
@@ -219,6 +224,32 @@ watch(
   line-height: 1.55;
   color: var(--miragon-text-secondary);
   margin: 0;
+}
+/* Bullet list: same accent-gradient square marker as the content layout. */
+.detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.detail-list li {
+  position: relative;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--miragon-text-secondary);
+  padding-left: 1.75rem;
+}
+.detail-list li + li {
+  margin-top: 0.55rem;
+}
+.detail-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.52em;
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 0.2rem;
+  background: var(--sc-grad);
 }
 
 /* Cross-fade for the detail panel content when the user picks another card. */
