@@ -88,7 +88,10 @@ eyebrow: 02 - Slidev
 accent: blue
 items:
   - label: Live preview
-    body: Slidev recompiles on save, so the deck reflects every edit in real time without restarting.
+    body:
+      - Slidev recompiles on every save
+      - The deck reflects each edit in real time
+      - No restart, no manual refresh
   - label: Vue inside slides
     body: Drop a Vue component into a slide and it becomes part of the deck, with full reactivity and no detour.
   - label: Click-through reveal
@@ -98,5 +101,7 @@ items:
 ---
 
 <!--
-  showcase: clickable cards, detail panel cross-fades. Transition: "Now the brand layer."
+  showcase: clickable cards, detail panel cross-fades.
+  item.body is a string (one paragraph) OR a YAML list of strings (bullet list,
+  as on card 01 here). Transition: "Now the brand layer."
 -->
