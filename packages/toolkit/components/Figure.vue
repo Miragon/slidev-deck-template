@@ -44,6 +44,7 @@ const captionHtml = computed(() => {
     .replace(/>/g, '&gt;')
   return escaped
     .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
 })
@@ -93,6 +94,12 @@ const captionHtml = computed(() => {
 }
 .mg-figure__caption :deep(em) {
   font-style: italic;
+}
+.mg-figure__caption :deep(a) {
+  color: var(--miragon-blue);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-weight: 600;
 }
 .mg-figure__caption :deep(code) {
   font-family: var(--miragon-font-mono, ui-monospace, monospace);
