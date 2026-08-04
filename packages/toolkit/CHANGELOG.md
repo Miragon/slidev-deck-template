@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/Miragon/slidev-deck-template/compare/v1.14.0...v1.14.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* **toolkit:** render inline links in showcase and figure captions ([#100](https://github.com/Miragon/slidev-deck-template/issues/100)) ([ac76494](https://github.com/Miragon/slidev-deck-template/commit/ac7649402f96b6b4867211ba2b1abffa9ecd053e))
+
 ## [1.14.0](https://github.com/Miragon/slidev-deck-template/compare/v1.13.0...v1.14.0) (2026-08-04)
 
 
