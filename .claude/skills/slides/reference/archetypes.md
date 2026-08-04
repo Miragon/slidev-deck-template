@@ -201,19 +201,24 @@ A row of cards; one active at a time, cross-fading a detail panel. Fully frontma
 |---|---|
 | `title`, `eyebrow` (str) | — |
 | `accent` | blue / green / mixed (default mixed) |
-| `items` (array) | YAML array of `{ label, body }` |
+| `items` (array) | YAML array of `{ label, body, icon? }` |
 | `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
+| `gap` (str) | CSS length between the card row and the detail panel; default `1rem` (matches the card gap) |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
+
+`icon` (optional, per item) is an **Iconify UnoCSS class** (`i-carbon-*` or `i-ph-*`; installed sets are `carbon`, `ph`, `svg-spinners`). When set it **replaces** that card's numbered `01/02/03` index, sits top-left above the label, and takes the accent colour (muted → accent when active) just like the index. Cards without `icon` keep the number, so use all-or-none per slide. Write the class **literally** (e.g. `icon: i-carbon-chip`) so UnoCSS generates it; no emoji.
 
 ```yaml
 items:
   - label: Ticket schreiben
+    icon: i-carbon-document
     body:
       - Anforderungen entstehen in Jira
       - KI analysiert Tickets, Doku und Code
       - Daraus entstehen Akzeptanzkriterien
   - label: Operations
+    icon: i-carbon-settings
     body: Ein Satz genuegt hier auch weiterhin.
 ```
 
