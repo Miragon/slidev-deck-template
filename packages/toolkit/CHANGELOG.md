@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/Miragon/slidev-deck-template/compare/v1.12.0...v1.13.0) (2026-08-04)
+
+
+### Features
+
+* **toolkit:** drive Card accent ramp from CSS tokens ([#93](https://github.com/Miragon/slidev-deck-template/issues/93)) ([556adfa](https://github.com/Miragon/slidev-deck-template/commit/556adfaca7d84aacecf7fe520653caee6da34ba2))
+* **toolkit:** support bullet-list body in showcase layout ([#95](https://github.com/Miragon/slidev-deck-template/issues/95)) ([b355439](https://github.com/Miragon/slidev-deck-template/commit/b3554396666aeadd954ef53ac07b701effb83cd3))
+
 ## [1.12.0](https://github.com/Miragon/slidev-deck-template/compare/v1.11.0...v1.12.0) (2026-07-31)
 
 
