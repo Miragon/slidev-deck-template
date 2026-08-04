@@ -203,7 +203,20 @@ A row of clickable cards; one active at a time, cross-fading a detail panel. Ful
 | `accent` | blue / green / mixed (default mixed) |
 | `items` (array) | YAML array of `{ label, body }` |
 
-**Limit:** 3–4 cards. Keep `label` to one to three words, `body` to a single sentence.
+`body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items.
+
+```yaml
+items:
+  - label: Ticket schreiben
+    body:
+      - Anforderungen entstehen in Jira
+      - KI analysiert Tickets, Doku und Code
+      - Daraus entstehen Akzeptanzkriterien
+  - label: Operations
+    body: Ein Satz genuegt hier auch weiterhin.
+```
+
+**Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items).
 
 ## closing — animated closing slide
 
