@@ -67,11 +67,26 @@ onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
 const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value))
 const activeItem = computed(() => props.items[selected.value])
 
+// A body/label line that YAML mis-parsed. An unquoted colon-space (`Foo: bar`)
+// is read by YAML as a mapping, so the line arrives here as `{ Foo: 'bar' }`
+// instead of the string `'Foo: bar'`. Rebuild the intended string from a
+// single-key object (the common case), and coerce anything else, so a
+// frontmatter typo (e.g. an unquoted `Foo: bar`) degrades to visible text
+// instead of throwing and blanking the whole slide.
+function toText(value: unknown): string {
+  if (typeof value === 'string') return value
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const entries = Object.entries(value as Record<string, unknown>)
+    if (entries.length === 1) return `${entries[0][0]}: ${entries[0][1]}`
+  }
+  return String(value ?? '')
+}
+
 // Frontmatter values are plain strings, not compiled by Slidev, so render the
 // allowed inline Markdown ourselves (code, links, bold, italic). HTML-safe:
 // escape first, then mark up (mirrors Figure.vue's caption).
-function inline(text: string): string {
-  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+function inline(value: unknown): string {
+  const escaped = toText(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   return escaped
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
@@ -108,7 +123,7 @@ function select(i: number, e: MouseEvent) {
         >
           <span v-if="item.icon" class="card-icon" :class="item.icon" aria-hidden="true"></span>
           <span v-else class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
-          <span class="card-label">{{ item.label }}</span>
+          <span class="card-label">{{ toText(item.label) }}</span>
         </button>
       </div>
 
