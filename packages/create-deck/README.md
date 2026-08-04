@@ -56,7 +56,7 @@ my-talk/
 │   ├── slides/
 │   └── excalidraw/
 ├── .github/workflows/             # only Build Deck + Pin Check
-│   ├── build-and-deploy.yml
+│   ├── ci.yml
 │   └── pin-check.yml
 ├── CLAUDE.md                      # design-system rules, auto-loaded by Claude Code
 ├── .npmrc                         # save-exact=true

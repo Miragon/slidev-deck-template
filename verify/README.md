@@ -14,7 +14,7 @@ npm run verify          # full: boots Slidev, checks every slide, opens the HTML
 npm run verify:source   # fast: source guardrails only, no dev server or browser
 ```
 
-`verify:source` also runs in CI (`.github/workflows/build-and-deploy.yml`, so forks
+`verify:source` also runs in CI (`.github/workflows/ci.yml`, so forks
 inherit it) and is the `verify-source` Conductor Run target. `VERIFY_PORT=<port>`
 targets a specific dev server; `VERIFY_PAGES="4-6"` (or `"2,5,9"`) limits the
 rendered run to some slides.

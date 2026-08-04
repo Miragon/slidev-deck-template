@@ -1,7 +1,7 @@
 # Miragon Slidev Deck Template
 
 [![License: MIT](https://img.shields.io/github/license/Miragon/slidev-deck-template)](LICENSE)
-[![Build Deck](https://github.com/Miragon/slidev-deck-template/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/Miragon/slidev-deck-template/actions/workflows/build-and-deploy.yml)
+[![Build Deck](https://github.com/Miragon/slidev-deck-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Miragon/slidev-deck-template/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@miragon/slidev-toolkit)](https://www.npmjs.com/package/@miragon/slidev-toolkit)
 
 A reusable [Slidev](https://sli.dev) template in the Miragon corporate design. Fill in your content — the design, animations and colours are done.
