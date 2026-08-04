@@ -44,7 +44,7 @@ const SKELETON = [
   'CLAUDE.md',
   '.npmrc',
   '.gitignore',
-  '.github/workflows/build-and-deploy.yml',
+  '.github/workflows/ci.yml',
   '.github/workflows/pin-check.yml',
 ]
 
