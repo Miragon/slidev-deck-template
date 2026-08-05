@@ -40,13 +40,15 @@ accent: blue
 <!--
   Shows the CodeBlock component: a titled code window in Miragon CI (filename
   left, language badge right, white brand card frame). The bare fence below it
-  picks up the same frame globally via code.css. Transition: "And one source
-  gives you every output."
+  picks up the same frame globally via code.css. `expandable` adds the macOS-style
+  expand button (top-right, on hover) that blows the snippet up to fullscreen —
+  hover the window and click it to read the code at full size, Esc to close.
+  Transition: "And one source gives you every output."
 -->
 
 The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>` or `<Figure>` when text alone is not enough.
 
-<CodeBlock file="deck/chapter/02-slidev/02-slidev.md" lang="md">
+<CodeBlock file="deck/chapter/02-slidev/02-slidev.md" lang="md" expandable>
 
 ```md
 # Three habits of great **retros**
