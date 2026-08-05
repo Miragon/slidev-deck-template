@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.0](https://github.com/Miragon/slidev-deck-template/compare/v1.14.1...v1.15.0) (2026-08-05)
+
+
+### Features
+
+* **toolkit:** add fullscreen expand mode to CodeBlock ([#105](https://github.com/Miragon/slidev-deck-template/issues/105)) ([b1aa68a](https://github.com/Miragon/slidev-deck-template/commit/b1aa68a4b5f2e1f1e752ebec19a84b84004bd8ea))
+
+
+### Bug Fixes
+
+* **toolkit:** keep showcase resilient to YAML-misparsed item values ([#102](https://github.com/Miragon/slidev-deck-template/issues/102)) ([73e07e1](https://github.com/Miragon/slidev-deck-template/commit/73e07e121a8274cec4083a6ba9dc3101842db435))
+
 ## [1.14.1](https://github.com/Miragon/slidev-deck-template/compare/v1.14.0...v1.14.1) (2026-08-04)
 
 
