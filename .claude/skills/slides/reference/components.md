@@ -178,13 +178,14 @@ A titled code "window" in Miragon CI: a white brand card (like `Card`) with a he
 | `file` (str) | — | — | filename / path shown left in the header (muted mono) |
 | `lang` (str) | — | — | language badge shown right (blue pill, e.g. `md`, `ts`) |
 | `size` (str) | CSS length | — | font size of the code, e.g. `"0.9rem"` / `"14px"`; omit for the default |
+| `expandedSize` (str) | CSS length | `1.25rem` | font size of the code in fullscreen (only with `expandable`); omit for the default, which is at least the inline `size` and never below `1.25rem` |
 | `hideHeader` (bool) | — | `false` | hide the filename/language header even when `file`/`lang` are set |
 | `expandable` (bool) | — | `false` | show a subtle expand button (top-right, diagonal arrows, appears on hover) that blows the window up to fullscreen, macOS expand/minify style. Esc or a click on the dimmed backdrop closes it |
 | **slot** | — | — | a single Markdown code fence, on its own lines with blank lines around it |
 
 Fenced code renders in pure form: Shiki syntax colours on the white card, no background behind the tokens (the layouts' blue inline-code pill is scoped to real inline code, `:not(pre) > code`, so it never leaks onto a fence).
 
-`expandable` changes only the fullscreen view: the header stays pinned and long code scrolls with the mouse. The inline block is unchanged, so it must still fit the canvas (the 18-line limit) — use `size` to shrink a snippet that is slightly too tall. Highlighting is language-specific via the fence tag (` ```kotlin `); `lang` only sets the badge.
+`expandable` changes only the fullscreen view: the header stays pinned and long code scrolls with the mouse. The inline block is unchanged, so it must still fit the canvas (the 18-line limit) — use `size` to shrink a snippet that is slightly too tall. That small inline `size` is not carried into fullscreen: the expanded window reads at a comfortable size (default `1.25rem`, never below the inline `size`); set `expandedSize` to pick a different fullscreen size. Highlighting is language-specific via the fence tag (` ```kotlin `); `lang` only sets the badge.
 
 The fence must sit on its own lines with a blank line before and after (like the bullet rule in `SplitView`) so it parses as Markdown. Keep to the 18-line code limit.
 
