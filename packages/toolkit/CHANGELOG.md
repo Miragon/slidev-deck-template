@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.1](https://github.com/Miragon/slidev-deck-template/compare/v1.15.0...v1.15.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **toolkit:** use a comfortable font size for CodeBlock in fullscreen ([#107](https://github.com/Miragon/slidev-deck-template/issues/107)) ([961d295](https://github.com/Miragon/slidev-deck-template/commit/961d29549e2293f24133300406a6574b0023b7a2))
+
 ## [1.15.0](https://github.com/Miragon/slidev-deck-template/compare/v1.14.1...v1.15.0) (2026-08-05)
 
 
