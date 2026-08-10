@@ -10,10 +10,12 @@
  * Props:
  *   file        Dateiname/Pfad in der Kopfzeile (optional).
  *   lang        Sprach-Badge rechts in der Kopfzeile (optional, z. B. "md").
- *   size        CSS-Schriftgröße des Codes (z. B. "0.9rem"); ohne Angabe Standard.
- *   hideHeader  Kopfzeile ausblenden, auch wenn file/lang gesetzt sind.
- *   expandable  Expand-Button (oben rechts, auf Hover), der das Fenster im
- *               Vollbild aufklappt; Esc oder Backdrop-Klick schließt.
+ *   size         CSS-Schriftgröße des Codes (z. B. "0.9rem"); ohne Angabe Standard.
+ *   expandedSize CSS-Schriftgröße des Codes im Vollbild (Standard 1.25rem,
+ *                mindestens die Inline-Größe); nur mit expandable relevant.
+ *   hideHeader   Kopfzeile ausblenden, auch wenn file/lang gesetzt sind.
+ *   expandable   Expand-Button (oben rechts, auf Hover), der das Fenster im
+ *                Vollbild aufklappt; Esc oder Backdrop-Klick schließt.
  *
  * Nutzung (Fence auf eigenen Zeilen, Leerzeilen drumherum):
  *
@@ -25,17 +27,26 @@
  *
  *   </CodeBlock>
  */
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, computed } from 'vue'
 
 const props = defineProps<{
   file?: string
   lang?: string
   size?: string
+  expandedSize?: string
   hideHeader?: boolean
   expandable?: boolean
 }>()
 
 const showHeader = () => Boolean((props.file || props.lang) && !props.hideHeader)
+
+// CSS-Variablen für Inline- und Vollbild-Schriftgröße nur setzen, wenn gesetzt.
+const windowStyle = computed(() => {
+  const s: Record<string, string> = {}
+  if (props.size) s['--mg-code-size'] = props.size
+  if (props.expandedSize) s['--mg-code-expanded-size'] = props.expandedSize
+  return Object.keys(s).length ? s : undefined
+})
 
 const expanded = ref(false)
 function collapse() {
@@ -64,7 +75,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
       <div
         class="mg-code__window"
         :class="{ 'mg-code--sized': size }"
-        :style="size ? { '--mg-code-size': size } : undefined"
+        :style="windowStyle"
       >
         <div
           v-if="showHeader() || expandable"
@@ -239,8 +250,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 .mg-code--expanded .mg-code__body::-webkit-scrollbar-thumb:hover {
   background: rgba(51, 93, 229, 0.5);
 }
-.mg-code--expanded .mg-code__window:not(.mg-code--sized) :deep(.slidev-code) {
-  font-size: 1.15rem !important;
+
+.mg-code--expanded .mg-code__window :deep(.slidev-code) {
+  font-size: var(--mg-code-expanded-size, max(1.25rem, var(--mg-code-size, 0px))) !important;
 }
 
 /* Shiki-Fence: Rahmen aus code.css zurücksetzen, die Komponente besitzt ihn. */
