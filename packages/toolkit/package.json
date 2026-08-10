@@ -23,10 +23,10 @@
     "@paper-design/shaders": "0.0.78"
   },
   "devDependencies": {
-    "@slidev/types": "52.18.0"
+    "@slidev/types": "52.19.0"
   },
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "3.5.41"
   },
   "files": [
     "layouts",
