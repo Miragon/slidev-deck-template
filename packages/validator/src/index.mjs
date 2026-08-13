@@ -11,6 +11,7 @@ import { loadConfig } from './config.mjs'
 import { runSourceRules, runRenderedRules, summarize } from './engine.mjs'
 import { sourceRules, renderedRules, allRules } from './rules/index.mjs'
 import { measureDeck } from './rendered-runner.mjs'
+import { slideSourceFiles, excalidrawSvgFiles } from './helpers.mjs'
 import { selfInfo, resolvedToolkitVersion, compat } from './versions.mjs'
 
 export { loadConfig, ConfigError } from './config.mjs'
@@ -25,7 +26,13 @@ export { selfInfo, resolvedToolkitVersion, compat } from './versions.mjs'
 export async function validate(opts = {}) {
   const config = await loadConfig(opts.configPath)
 
-  const sourceResults = runSourceRules(sourceRules, config)
+  // Resolve the deck's real file set ONCE (async, via Slidev's loader), then hand
+  // it to every source rule — structure-agnostic discovery, no fixed folder shape.
+  const sourceContext = {
+    sourceFiles: await slideSourceFiles(),
+    excalidrawFiles: excalidrawSvgFiles(),
+  }
+  const sourceResults = runSourceRules(sourceRules, config, sourceContext)
 
   let renderedResults
   let deckTitle

@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { excalidrawSvgFiles, toRel } from '../../helpers.mjs'
+import { toRel } from '../../helpers.mjs'
 
 /**
  * The COMMITTED .excalidraw.svg is the editable source. It must render light in
@@ -16,9 +16,9 @@ export const excalidrawCommittedLight = {
   title: 'committed excalidraw diagrams are light (no dark filter, light background)',
   message: 'Committed Excalidraw diagrams must be light (no dark filter, light background)',
   meta: { category: 'recommended', default: 'error' },
-  check() {
+  check({ excalidrawFiles = [] } = {}) {
     const offenders = []
-    for (const file of excalidrawSvgFiles()) {
+    for (const file of excalidrawFiles) {
       const svg = readFileSync(file, 'utf8')
       const rel = toRel(file)
       const tag = (svg.match(/<svg\b[^>]*>/) || [''])[0]

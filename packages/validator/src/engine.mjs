@@ -51,8 +51,13 @@ export function classify(config, rule, outcome) {
   return { rule, status, errors, warns, suppressed, expired }
 }
 
-/** Run the source rules that are active (or referenced by an exception) and classify them. */
-export function runSourceRules(rules, config) {
+/**
+ * Run the source rules that are active (or referenced by an exception) and classify
+ * them. `context` carries the pre-resolved file lists (`sourceFiles`,
+ * `excalidrawFiles`) so discovery — which is async, via Slidev's loader — happens
+ * ONCE up front and each rule's sync `check()` just consumes the resolved set.
+ */
+export function runSourceRules(rules, config, context = {}) {
   return rules.map((rule) => {
     const referenced = config.exceptions.some((e) => e.rule === rule.id)
     if (!isActive(config, rule.id) && !referenced) {
@@ -60,7 +65,7 @@ export function runSourceRules(rules, config) {
     }
     let outcome
     try {
-      outcome = rule.check()
+      outcome = rule.check(context)
     } catch (err) {
       outcome = [{ file: undefined, message: `rule threw: ${err.message}` }]
     }

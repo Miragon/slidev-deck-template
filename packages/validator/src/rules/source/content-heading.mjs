@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { parseSync } from '@slidev/parser'
-import { slideSourceFiles, toRel } from '../../helpers.mjs'
+import { toRel } from '../../helpers.mjs'
 
 /**
  * Content headings (frontmatter `title` → `<h2 class="*-title">`) must stay on one
@@ -77,9 +77,9 @@ export const contentHeading = {
   title: 'content headings stay single-line',
   message: 'Content headings must be single-line: no explicit break, and within the layout character budget',
   meta: { category: 'required', default: 'error' },
-  check() {
+  check({ sourceFiles = [] } = {}) {
     const offenders = []
-    for (const file of slideSourceFiles()) {
+    for (const file of sourceFiles) {
       const rel = toRel(file)
       for (const s of slideHeadings(file)) {
         if (s.src) continue // import stub — heading lives in the imported file

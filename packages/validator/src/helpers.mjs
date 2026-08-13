@@ -3,13 +3,18 @@
  *
  * The validator runs against the deck in the CURRENT WORKING DIRECTORY: in the
  * template monorepo that is the repo root; in a scaffolded deck it is the deck
- * root. Both have the same `deck/` layout (entry + one folder per chapter), so a
- * cwd-relative root works in both. These are functions, not module-level
- * constants, so tests can `process.chdir()` into a fixture between calls.
+ * root. Both keep their slides under `deck/`, entered at `deck/slides.md`, but the
+ * on-disk shape below that is the DECK'S choice: the reference template is flat
+ * (one folder per chapter), other decks nest arbitrarily (e.g.
+ * `deck/content/<topic>/<chapter>/slides.md`). So source discovery derives the file
+ * set from what Slidev actually loads (following every `src:` import), never from a
+ * fixed folder shape. These are functions, not module-level constants, so tests can
+ * `process.chdir()` / point `SLIDEV_VALIDATOR_ROOT` at a fixture between calls.
  */
 
-import { readdirSync, existsSync } from 'node:fs'
+import { readdirSync, existsSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { load } from '@slidev/parser/fs'
 
 /** A file path made repo-relative with forward slashes (for display + glob match). */
 export function toRel(file) {
@@ -26,38 +31,80 @@ export function deckEntry() {
   return join(repoRoot(), 'deck', 'slides.md')
 }
 
-/** Each chapter is a folder deck/chapter/<chapter>/ with <chapter>.md + resources/. */
-export function chapterDir() {
-  return join(repoRoot(), 'deck', 'chapter')
+/** The deck root everything under `deck/` is discovered from. */
+export function deckDir() {
+  return join(repoRoot(), 'deck')
 }
 
-/** The slide source files: the entry + one <chapter>.md per chapter folder. */
-export function slideSourceFiles() {
-  const files = []
+/**
+ * The flat reference convention: one folder per chapter, deck/chapter/<chapter>/
+ * with <chapter>.md + resources/. Only used as a FALLBACK when the Slidev loader
+ * yields nothing (a malformed entry), so a broken deck still gets scanned instead
+ * of silently passing on an empty file set.
+ */
+export function chapterDir() {
+  return join(deckDir(), 'chapter')
+}
+
+/**
+ * The slide source files the deck ACTUALLY renders: the distinct set of
+ * `source.filepath` values from Slidev's own FS loader (the same loader
+ * `slideFileMap()` uses), which follows every `src:` import to any depth, plus the
+ * entry itself. This is structure-agnostic: a flat deck and a deeply nested one
+ * both resolve to their full, real file set. Async because the loader is.
+ *
+ * Fallback: if the loader yields nothing (throws, or an entry with no resolvable
+ * slides), scan the flat deck/chapter/<chapter>/<chapter>.md convention so a broken
+ * deck surfaces something to check rather than an accidental green on zero files.
+ */
+export async function slideSourceFiles() {
+  const files = new Set()
   const entry = deckEntry()
-  if (existsSync(entry)) files.push(entry)
-  const dir = chapterDir()
-  if (existsSync(dir)) {
-    for (const ch of readdirSync(dir)) {
-      const md = join(dir, ch, `${ch}.md`)
-      if (existsSync(md)) files.push(md)
+  if (existsSync(entry)) files.add(entry)
+  try {
+    const data = await load(repoRoot(), entry)
+    for (const s of data.slides) {
+      const fp = s.source?.filepath
+      if (fp) files.add(fp)
+    }
+  } catch {
+    // loader failed — fall through to the flat-convention fallback below
+  }
+  if (files.size <= (existsSync(entry) ? 1 : 0)) {
+    const dir = chapterDir()
+    if (existsSync(dir)) {
+      for (const ch of readdirSync(dir)) {
+        const md = join(dir, ch, `${ch}.md`)
+        if (existsSync(md)) files.add(md)
+      }
     }
   }
-  return files
+  return [...files]
 }
 
-/** Every chapter's exported Excalidraw diagrams (committed sources). */
+/**
+ * Every committed Excalidraw diagram source in the deck. Recurses all of `deck/`
+ * for `*.excalidraw.svg` (under any `resources/` folder, at any nesting depth), so
+ * diagrams in a nested deck are found the same as in the flat reference deck.
+ */
 export function excalidrawSvgFiles() {
   const out = []
-  const dir = chapterDir()
-  if (!existsSync(dir)) return out
-  for (const ch of readdirSync(dir)) {
-    const resDir = join(dir, ch, 'resources')
-    if (!existsSync(resDir)) continue
-    for (const f of readdirSync(resDir)) {
-      if (f.endsWith('.excalidraw.svg')) out.push(join(resDir, f))
+  const walk = (d) => {
+    if (!existsSync(d)) return
+    for (const n of readdirSync(d)) {
+      if (n === 'node_modules' || n === '.git') continue
+      const p = join(d, n)
+      let st
+      try {
+        st = statSync(p)
+      } catch {
+        continue
+      }
+      if (st.isDirectory()) walk(p)
+      else if (n.endsWith('.excalidraw.svg')) out.push(p)
     }
   }
+  walk(deckDir())
   return out
 }
 
