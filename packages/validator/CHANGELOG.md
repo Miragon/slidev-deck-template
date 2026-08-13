@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.4.0...slidev-validator-v0.5.0) (2026-08-13)
+
+
+### Features
+
+* **validator:** add `rules` command to list the rule catalog ([#119](https://github.com/Miragon/slidev-deck-template/issues/119)) ([96f792f](https://github.com/Miragon/slidev-deck-template/commit/96f792f2a6657d6aef370a4006e277ef1de571e4))
+
 ## [0.4.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.3.0...slidev-validator-v0.4.0) (2026-08-13)
 
 
