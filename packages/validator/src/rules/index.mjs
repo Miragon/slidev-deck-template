@@ -12,17 +12,17 @@ import { sanctionedLayout } from './source/sanctioned-layout.mjs'
 import { noRawHtml } from './source/no-raw-html.mjs'
 import { noHtmlEntities } from './source/no-html-entities.mjs'
 import { contentHeading } from './source/content-heading.mjs'
+import { noEmDash } from './source/no-em-dash.mjs'
+import { noEmoji } from './source/no-emoji.mjs'
+import { noNestedBullets } from './source/no-nested-bullets.mjs'
+import { noInlineFont } from './source/no-inline-font.mjs'
+import { noRestyledBullets } from './source/no-restyled-bullets.mjs'
 import { excalidrawCommittedLight } from './source/excalidraw-committed-light.mjs'
 import { excalidrawBuiltTransparent } from './source/excalidraw-built-transparent.mjs'
 
 import { elementOverflow } from './rendered/element-overflow.mjs'
-import { noEmDash } from './rendered/no-em-dash.mjs'
-import { noEmoji } from './rendered/no-emoji.mjs'
 import { headingBlack } from './rendered/heading-black.mjs'
 import { cardWhite } from './rendered/card-white.mjs'
-import { noInlineFont } from './rendered/no-inline-font.mjs'
-import { noRestyledBullets } from './rendered/no-restyled-bullets.mjs'
-import { noNestedBullets } from './rendered/no-nested-bullets.mjs'
 import { overlaySafeArea } from './rendered/overlay-safe-area.mjs'
 
 /** Every rule, source then rendered, in report order. */
@@ -31,16 +31,16 @@ export const allRules = [
   noRawHtml,
   noHtmlEntities,
   contentHeading,
+  noEmDash,
+  noEmoji,
+  noNestedBullets,
+  noInlineFont,
+  noRestyledBullets,
   excalidrawCommittedLight,
   excalidrawBuiltTransparent,
   elementOverflow,
-  noEmDash,
-  noEmoji,
   headingBlack,
   cardWhite,
-  noInlineFont,
-  noRestyledBullets,
-  noNestedBullets,
   overlaySafeArea,
 ]
 
