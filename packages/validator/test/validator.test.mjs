@@ -61,6 +61,22 @@ test('recommended preset lists every rule', () => {
   assert.equal(Object.keys(recommended.rules).length, knownRuleIds().size)
 })
 
+test('rule catalog lists every rule with a stable, complete shape', async () => {
+  const { ruleCatalog } = await import('../src/rules/index.mjs')
+  const catalog = ruleCatalog()
+  assert.equal(catalog.length, knownRuleIds().size)
+  assert.deepEqual(
+    catalog.map((r) => r.id).sort(),
+    [...knownRuleIds()].sort(),
+  )
+  for (const r of catalog) {
+    assert.ok(r.id && r.title, `${r.id} has id + title`)
+    assert.ok(['source', 'rendered'].includes(r.type), `${r.id} type`)
+    assert.ok(['required', 'recommended'].includes(r.category), `${r.id} category`)
+    assert.ok(['off', 'warn', 'error'].includes(r.default), `${r.id} default severity`)
+  }
+})
+
 test('required preset is the required subset, all at error', () => {
   for (const [id, sev] of Object.entries(required.rules)) {
     assert.equal(sev, 'error')

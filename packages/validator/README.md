@@ -54,8 +54,13 @@ slidev-validator --config <path> # use a specific config file
 slidev-validator --max-warnings 0 # fail if there are any warnings
 slidev-validator init            # write a starter slidev-validator.config.mjs
 slidev-validator migrate         # adopt the validator in an existing deck
+slidev-validator rules           # list every rule id, type, category, default severity
+slidev-validator rules --format json  # the same catalog, machine-readable
 slidev-validator --version       # print validator + resolved toolkit versions
 ```
+
+`rules` prints the catalog of stable rule ids you configure (`off` | `warn` |
+`error`, overrides, exceptions) — the same ids listed under [Rules](#rules) below.
 
 Exit code is non-zero on any **error**-severity violation, an **expired exception**,
 a **config error**, or warnings above `--max-warnings`.

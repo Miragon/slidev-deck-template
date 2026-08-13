@@ -56,3 +56,19 @@ export function ruleById(id) {
 export function knownRuleIds() {
   return new Set(allRules.map((r) => r.id))
 }
+
+/**
+ * The rule catalog: every rule as a plain, report-ordered row for tooling, docs,
+ * and the `slidev-validator rules` command. Lets deck authors discover the stable
+ * ids they configure (off/warn/error, overrides, exceptions) without reading the
+ * source. Stable shape: { id, type, category, default, title }.
+ */
+export function ruleCatalog() {
+  return allRules.map((r) => ({
+    id: r.id,
+    type: r.type,
+    category: r.meta.category,
+    default: r.meta.default,
+    title: r.title,
+  }))
+}
