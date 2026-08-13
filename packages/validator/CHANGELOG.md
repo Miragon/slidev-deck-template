@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.3.0...slidev-validator-v0.4.0) (2026-08-13)
+
+
+### Features
+
+* **validator:** sanctioned-layout accepts deck-local deck/layouts/*.vue ([#116](https://github.com/Miragon/slidev-deck-template/issues/116)) ([44c2973](https://github.com/Miragon/slidev-deck-template/commit/44c2973ee3b5b6c7206a33c9186879ef323f9aae))
+
 ## [0.3.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.2.0...slidev-validator-v0.3.0) (2026-08-13)
 
 
