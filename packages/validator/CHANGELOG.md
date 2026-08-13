@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.5.0...slidev-validator-v0.5.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **validator:** overlay-safe-area ignores decorative aria-hidden / pointer-events:none layers ([#121](https://github.com/Miragon/slidev-deck-template/issues/121)) ([f9c1bb7](https://github.com/Miragon/slidev-deck-template/commit/f9c1bb71f181f5379fbf81f3aea50db79d5c7ad7))
+
 ## [0.5.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.4.0...slidev-validator-v0.5.0) (2026-08-13)
 
 
