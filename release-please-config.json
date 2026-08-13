@@ -15,6 +15,11 @@
       "package-name": "@miragon/create-slidev-deck",
       "component": "create-slidev-deck",
       "include-component-in-tag": true
+    },
+    "packages/validator": {
+      "package-name": "@miragon/slidev-validator",
+      "component": "slidev-validator",
+      "include-component-in-tag": true
     }
   }
 }

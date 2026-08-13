@@ -48,10 +48,7 @@ my-talk/
 │   │   ├── 04-diagrams/…          # .bpmn, .dmn, .excalidraw.svg demos
 │   │   └── 05-authoring/…
 │   └── README.md
-├── verify/                        # brand guardrails — `npm run verify`
-│   ├── rules/                     # sanctioned-layout, no-raw-html, excalidraw checks…
-│   ├── slides.spec.ts
-│   └── …
+├── slidev-validator.config.mjs    # guardrail config — extends @miragon/slidev-validator/recommended
 ├── .claude/skills/                # authoring guidance for Claude Code
 │   ├── slides/
 │   └── excalidraw/
@@ -80,11 +77,12 @@ keeping the two release lines independent.
 *derived* from the fetched skeleton's own manifests at scaffold time:
 
 - Slidev runtime deps (`@slidev/cli`, the addons, `vue`) come from the reference `deck/package.json`.
-- The verify tooling (`@playwright/test`, `playwright-chromium`) and the verify scripts come from the
-  root `package.json`.
-- Only `@miragon/slidev-toolkit` comes from this package's own pinned devDependency (the reference
-  deck resolves the toolkit via a workspace symlink, so it has no version to read). `--toolkit-version`
-  overrides it.
+- The guardrail linter is the `@miragon/slidev-validator` package, added as an exact-pinned
+  devDependency (it brings `playwright-chromium` transitively for the rendered checks). The generated
+  deck also gets a `slidev-validator.config.mjs` extending the central `recommended` preset.
+- `@miragon/slidev-toolkit` and `@miragon/slidev-validator` versions come from this package's own
+  pinned devDependencies (the reference deck resolves both via workspace symlinks, so it has no
+  versions to read). `--toolkit-version` and `--validator-version` override them.
 
 All of those manifests are kept current by the monorepo's Dependabot, so a freshly-scaffolded deck
 always gets the versions the reference deck currently uses — with no version list to maintain in this

@@ -24,7 +24,7 @@ Edit files under `deck/` and save — the preview updates instantly. Every demo 
 | Path | What it is |
 |---|---|
 | `deck/` | **Your content** — `slides.md` is the entry (cover + one `src:` import per chapter + closing); each chapter is a folder `deck/chapter/NN-name/` with its own `resources/`. |
-| `verify/` | Brand guardrails (`npm run verify`) — every slide declares a sanctioned layout, cards stay white, no em-dashes, headings black, diagrams light/transparent. |
+| `slidev-validator.config.mjs` | Your copy of the guardrail config (extends `@miragon/slidev-validator/recommended`). Brand guardrails ship as the versioned `@miragon/slidev-validator` package (`npm run verify`) — sanctioned layouts, white cards, no em-dashes, black headings, light/transparent diagrams — so central improvements arrive over `npm update`, and you tune or scope rules here without forking. |
 | `CLAUDE.md` + `.claude/skills/` | Authoring guidance for Claude Code, so a session knows the design system on the first prompt. |
 | `.github/workflows/` | **Build Deck** (static build plus `npm run verify:source`) and **Pin Check** run on every push and PR. |
 

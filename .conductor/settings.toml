@@ -15,7 +15,7 @@ icon = "play"
 command = "npm run build"
 icon = "package"
 
-# Run the Playwright verify suite and open its HTML report.
+# Run the full validator (source + rendered checks); boots Slidev + Chromium.
 [scripts.run.verify]
 command = "VERIFY_PORT=$CONDUCTOR_PORT npm run verify"
 icon = "test-tube"

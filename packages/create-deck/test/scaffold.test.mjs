@@ -45,7 +45,7 @@ test('emits the deck skeleton', () => {
     'deck/slides.md',
     '.claude/skills/slides/SKILL.md',
     'CLAUDE.md',
-    'verify/playwright.config.ts',
+    'slidev-validator.config.mjs',
     '.npmrc',
     '.gitignore',
     '.github/workflows/ci.yml',
@@ -57,6 +57,7 @@ test('emits the deck skeleton', () => {
 test('omits the template-only files', () => {
   const forbidden = [
     'packages',
+    'verify', // the validator now ships as @miragon/slidev-validator, not a copied folder
     'release-please-config.json',
     '.release-please-manifest.json',
     'LICENSE',
@@ -79,17 +80,29 @@ test('generates a clean standalone package.json', () => {
   )
 })
 
-test('derives runtime + verify deps from the reference manifests', () => {
+test('derives runtime deps from the reference manifest; validator + portless as devDeps', () => {
   const pkg = pkgOf(out)
   // Slidev runtime comes from the reference deck/package.json …
   for (const dep of ['@slidev/cli', 'slidev-addon-bpmn', 'slidev-addon-dmn', 'vue']) {
     assert.match(pkg.dependencies[dep], /^\d/, `missing runtime dep ${dep}`)
   }
-  // … and the verify tooling from the root package.json.
-  for (const dep of ['@playwright/test', 'playwright-chromium']) {
-    assert.match(pkg.devDependencies[dep], /^\d/, `missing verify dep ${dep}`)
-  }
+  // … the validator is an exact-pinned devDependency (its bin backs the verify scripts,
+  // and it brings playwright-chromium transitively — no @playwright/test in the deck).
+  assert.match(pkg.devDependencies['@miragon/slidev-validator'], /^\d+\.\d+\.\d+$/, 'validator must be exact-pinned')
+  assert.equal(pkg.devDependencies['@playwright/test'], undefined, 'deck must not pull @playwright/test directly')
   assert.match(pkg.devDependencies.portless, /^\d/, 'missing portless devDependency')
+  assert.equal(pkg.scripts.verify, 'slidev-validator --rendered', 'verify runs the validator bin')
+  assert.equal(pkg.scripts['verify:source'], 'slidev-validator', 'verify:source runs source rules')
+})
+
+test('--validator-version overrides the pinned default', () => {
+  const t = target()
+  try {
+    run([t.dir, '--validator-version', '8.8.8'])
+    assert.equal(pkgOf(t.dir).devDependencies['@miragon/slidev-validator'], '8.8.8')
+  } finally {
+    t.cleanup()
+  }
 })
 
 test('wires the deck for a portless dev URL', () => {

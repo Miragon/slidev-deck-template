@@ -14,7 +14,7 @@ name: Release
 # Every job is therefore guarded by `github.repository == '<this repo>'`; in a
 # derived repo the run shows up as skipped and does nothing. The guard is a
 # literal string per job on purpose — the `env` context is not available in
-# `jobs.<id>.if`. If this repo is ever renamed or moved, update all three.
+# `jobs.<id>.if`. If this repo is ever renamed or moved, update all of them.
 #
 # npm publish uses Trusted Publishing (OIDC). npm's registry validates the OIDC
 # token against the trusted-publisher config on npmjs.com, and EVERY claim must
@@ -57,6 +57,7 @@ jobs:
     outputs:
       toolkit_released: ${{ steps.release_please.outputs['packages/toolkit--release_created'] }}
       create_deck_released: ${{ steps.release_please.outputs['packages/create-deck--release_created'] }}
+      validator_released: ${{ steps.release_please.outputs['packages/validator--release_created'] }}
     steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
@@ -106,6 +107,35 @@ jobs:
             npm publish -w packages/toolkit --provenance --access public
           fi
 
+  publish-validator:
+    needs: release-please
+    if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
+      !cancelled() && needs.release-please.result != 'failure' &&
+      (needs.release-please.outputs.validator_released == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - name: Publish @miragon/slidev-validator
+        run: |
+          name="$(node -p "require('./packages/validator/package.json').name")"
+          version="$(node -p "require('./packages/validator/package.json').version")"
+          if npm view "$name@$version" version > /dev/null 2>&1; then
+            echo "$name@$version already published — skipping"
+          else
+            npm publish -w packages/validator --provenance --access public
+          fi
+
   publish-create-deck:
     needs: release-please
     if: >-
@@ -151,3 +181,4 @@ jobs:
       - run: npm ci
       - run: npm publish -w packages/toolkit --access public --dry-run
       - run: npm publish -w packages/create-deck --access public --dry-run
+      - run: npm publish -w packages/validator --access public --dry-run

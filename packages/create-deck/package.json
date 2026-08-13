@@ -31,7 +31,8 @@
     "giget": "3.3.1"
   },
   "devDependencies": {
-    "@miragon/slidev-toolkit": "1.15.1"
+    "@miragon/slidev-toolkit": "1.15.1",
+    "@miragon/slidev-validator": "0.1.0"
   },
   "files": [
     "bin",
