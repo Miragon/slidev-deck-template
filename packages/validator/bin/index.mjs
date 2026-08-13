@@ -6,6 +6,7 @@
  *   slidev-validator --rendered      also boot Slidev + Chromium and run rendered rules
  *   slidev-validator init            write a starter slidev-validator.config.mjs
  *   slidev-validator migrate         adopt the validator in an existing deck (config + scripts)
+ *   slidev-validator rules           list every rule id, type, category, and default severity
  *
  * Flags: --pages "4-6", --port 3030, --format json, --config <path>,
  *        --max-warnings <n>, -v/--version, -h/--help.
@@ -17,7 +18,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
-import { validate, ConfigError, selfInfo, resolvedToolkitVersion } from '../src/index.mjs'
+import { validate, ConfigError, selfInfo, resolvedToolkitVersion, ruleCatalog } from '../src/index.mjs'
 import { formatText, toJson } from '../src/report.mjs'
 
 const STARTER_CONFIG = `// Miragon Slidev validator config. See @miragon/slidev-validator.
@@ -44,6 +45,7 @@ Commands:
   (default)                run the validator over ./deck (source rules)
   init                     write a starter slidev-validator.config.mjs
   migrate                  adopt the validator in an existing deck (config + scripts)
+  rules                    list every rule id, type, category, and default severity
 
 Options:
   --rendered               also run the rendered (browser) checks
@@ -122,6 +124,25 @@ function cmdMigrate() {
   return 0
 }
 
+/** List the rule catalog so authors can discover the ids they configure. */
+function cmdRules(values) {
+  const catalog = ruleCatalog()
+  if (values.format === 'json') {
+    console.log(JSON.stringify(catalog, null, 2))
+    return 0
+  }
+  const idW = Math.max(...catalog.map((r) => r.id.length), 'ID'.length)
+  const typeW = Math.max(...catalog.map((r) => r.type.length), 'TYPE'.length)
+  const catW = Math.max(...catalog.map((r) => r.category.length), 'CATEGORY'.length)
+  const sevW = Math.max(...catalog.map((r) => r.default.length), 'DEFAULT'.length)
+  const row = (id, type, cat, sev, title) => `  ${id.padEnd(idW)}  ${type.padEnd(typeW)}  ${cat.padEnd(catW)}  ${sev.padEnd(sevW)}  ${title}`
+  console.log(`${catalog.length} rules — configure any by id in slidev-validator.config.mjs (off | warn | error):\n`)
+  console.log(row('ID', 'TYPE', 'CATEGORY', 'DEFAULT', 'DESCRIPTION'))
+  for (const r of catalog) console.log(row(r.id, r.type, r.category, r.default, r.title))
+  console.log('\n[required] rules cannot be lowered below error in `rules`; suppress them deliberately via an `exceptions` entry.')
+  return 0
+}
+
 async function cmdRun(values) {
   try {
     const { results, summary, meta } = await validate({
@@ -162,6 +183,7 @@ async function main() {
   }
   if (command === 'init') return cmdInit()
   if (command === 'migrate') return cmdMigrate()
+  if (command === 'rules') return cmdRules(values)
   if (command && command !== 'run') {
     console.error(`Unknown command: ${command}\n`)
     console.log(USAGE)

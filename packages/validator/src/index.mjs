@@ -15,7 +15,7 @@ import { slideSourceFiles, excalidrawSvgFiles } from './helpers.mjs'
 import { selfInfo, resolvedToolkitVersion, compat } from './versions.mjs'
 
 export { loadConfig, ConfigError } from './config.mjs'
-export { allRules, sourceRules, renderedRules, ruleById, knownRuleIds } from './rules/index.mjs'
+export { allRules, sourceRules, renderedRules, ruleById, knownRuleIds, ruleCatalog } from './rules/index.mjs'
 export { formatText, toJson } from './report.mjs'
 export { selfInfo, resolvedToolkitVersion, compat } from './versions.mjs'
 
