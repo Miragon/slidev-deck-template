@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 import { pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 import { parseSync } from '@slidev/parser'
-import { repoRoot, slideSourceFiles, toRel } from '../../helpers.mjs'
+import { repoRoot, toRel } from '../../helpers.mjs'
 
 /**
  * The theme's layout archetypes live one-.vue-file-per-layout under the toolkit's
@@ -61,11 +61,11 @@ export const sanctionedLayout = {
   title: 'every slide declares a sanctioned layout',
   message: 'Every slide must declare a sanctioned layout archetype',
   meta: { category: 'required', default: 'error' },
-  check() {
+  check({ sourceFiles = [] } = {}) {
     const allowed = sanctionedLayouts()
     const list = [...allowed].sort().join(', ')
     const offenders = []
-    for (const file of slideSourceFiles()) {
+    for (const file of sourceFiles) {
       const rel = toRel(file)
       for (const s of slideFrontmatters(file)) {
         if (s.src) continue // import stub — the layout lives in the imported file

@@ -18,12 +18,27 @@ import { fileURLToPath } from 'node:url'
 import { loadConfig, ConfigError } from '../src/config.mjs'
 import { classify, runRenderedRules, summarize, isActive } from '../src/engine.mjs'
 import { renderedRules, ruleById, knownRuleIds } from '../src/rules/index.mjs'
+import { slideSourceFiles, excalidrawSvgFiles, toRel } from '../src/helpers.mjs'
 import recommended from '../src/presets/recommended.mjs'
 import required from '../src/presets/required.mjs'
 import { satisfies } from '../src/versions.mjs'
 import { globToRegExp, matchesAny } from '../src/glob.mjs'
 
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..')
+const TEST_DIR = dirname(fileURLToPath(import.meta.url))
+const REPO_ROOT = join(TEST_DIR, '..', '..', '..')
+const NESTED_DECK = join(TEST_DIR, 'fixtures', 'nested-deck')
+
+/** Run `fn` with the validator rooted at `root`, restoring the env after. */
+async function withRoot(root, fn) {
+  const prev = process.env.SLIDEV_VALIDATOR_ROOT
+  process.env.SLIDEV_VALIDATOR_ROOT = root
+  try {
+    return await fn()
+  } finally {
+    if (prev === undefined) delete process.env.SLIDEV_VALIDATOR_ROOT
+    else process.env.SLIDEV_VALIDATOR_ROOT = prev
+  }
+}
 
 /** Write a temp config file and load it (explicit path — no deck needed). */
 async function withConfig(body) {
@@ -195,20 +210,56 @@ test('rendered rules are skipped (not applicable) when the run did not happen', 
   assert.ok(results.every((r) => r.status === 'skipped'))
 })
 
+// --- Structure-agnostic source discovery ------------------------------------
+
+test('flat reference deck resolves to the entry + one file per chapter (unchanged)', async () => {
+  await withRoot(REPO_ROOT, async () => {
+    const rel = (await slideSourceFiles()).map(toRel).sort()
+    assert.deepEqual(rel, [
+      'deck/chapter/01-intro/01-intro.md',
+      'deck/chapter/02-slidev/02-slidev.md',
+      'deck/chapter/03-theme/03-theme.md',
+      'deck/chapter/04-diagrams/04-diagrams.md',
+      'deck/chapter/05-authoring/05-authoring.md',
+      'deck/slides.md',
+    ])
+  })
+})
+
+test('nested deck (content/<topic>/<chapter>, no deck/chapter/) scans EVERY source file, following src: to any depth', async () => {
+  await withRoot(NESTED_DECK, async () => {
+    const rel = (await slideSourceFiles()).map(toRel).sort()
+    // The old flat discovery returned only ['deck/slides.md'] here — a false green.
+    assert.deepEqual(rel, [
+      'deck/content/topic-a/01-intro/parts/extra.md', // proves arbitrary-depth src: nesting
+      'deck/content/topic-a/01-intro/slides.md',
+      'deck/content/topic-a/02-detail/slides.md',
+      'deck/content/topic-b/01-overview/slides.md',
+      'deck/slides.md',
+    ])
+    assert.equal(rel.length, 5, 'expected every source file scanned, not 1')
+  })
+})
+
+test('excalidraw discovery finds diagrams under nested resources/ folders', async () => {
+  await withRoot(NESTED_DECK, async () => {
+    const rel = excalidrawSvgFiles().map(toRel).sort()
+    assert.deepEqual(rel, [
+      'deck/content/topic-a/01-intro/resources/diagram-a.excalidraw.svg',
+      'deck/content/topic-b/01-overview/resources/diagram-b.excalidraw.svg',
+    ])
+  })
+})
+
 // --- Light integration: source rules on the real reference deck -------------
 
-test('source rules pass on the repo reference deck (new-project baseline)', async (t) => {
+test('source rules pass on the repo reference deck (new-project baseline)', async () => {
   const { validate } = await import('../src/index.mjs')
-  const prev = process.env.SLIDEV_VALIDATOR_ROOT
-  process.env.SLIDEV_VALIDATOR_ROOT = REPO_ROOT
-  try {
+  await withRoot(REPO_ROOT, async () => {
     const { results, summary } = await validate({ rendered: false })
     // Every source rule that ran must pass; rendered rules are skipped here.
     const ranSource = results.filter((r) => r.rule.type === 'source' && r.status !== 'off' && r.status !== 'skipped')
     assert.ok(ranSource.length >= 3, 'expected several source rules to run')
     assert.equal(summary.failed, false, 'reference deck must pass source rules')
-  } finally {
-    if (prev === undefined) delete process.env.SLIDEV_VALIDATOR_ROOT
-    else process.env.SLIDEV_VALIDATOR_ROOT = prev
-  }
+  })
 })

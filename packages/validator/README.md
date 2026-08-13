@@ -161,6 +161,11 @@ reproducible.
 - `src/engine.mjs` — classifies each violation (error / warn / suppressed /
   expired / off / skipped).
 - `src/rendered-runner.mjs` — boots/reuses Slidev, drives Chromium, measures.
+- `src/helpers.mjs` — file discovery. The source-file set is derived from Slidev's
+  own FS loader (following every `src:` import to any depth), not a fixed folder
+  shape, so a flat `deck/chapter/<chapter>/` deck and a nested
+  `deck/content/<topic>/<chapter>/slides.md` deck are both scanned in full. Excalidraw
+  discovery recurses all of `deck/` for `*.excalidraw.svg`.
 - `bin/index.mjs` — the CLI.
 
 Add a rule: create its file, list it in `src/rules/index.mjs`, document it here.

@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { slideSourceFiles, toRel } from '../../helpers.mjs'
+import { toRel } from '../../helpers.mjs'
 
 /**
  * Consistency guardrail: a slide is markdown + Miragon/Slidev components, never raw
@@ -25,9 +25,9 @@ export const noRawHtml = {
   title: 'no raw HTML in slide source — markdown and components only',
   message: 'Slides must use markdown and components only — replace raw HTML with a component or plain markdown',
   meta: { category: 'required', default: 'error' },
-  check() {
+  check({ sourceFiles = [] } = {}) {
     const offenders = []
-    for (const file of slideSourceFiles()) {
+    for (const file of sourceFiles) {
       const rel = toRel(file)
       let src = readFileSync(file, 'utf8')
       src = blank(src, /```[\s\S]*?```/g) // fenced code blocks
