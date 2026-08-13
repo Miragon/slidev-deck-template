@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.1.16...create-slidev-deck-v1.2.0) (2026-08-13)
+
+
+### Features
+
+* **validator:** extract guardrails into versioned @miragon/slidev-validator package ([#113](https://github.com/Miragon/slidev-deck-template/issues/113)) ([0255577](https://github.com/Miragon/slidev-deck-template/commit/02555777d48c46382f9524a5ce32f7e41ec9a1c0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.15.1 to 1.16.0
+    * @miragon/slidev-validator bumped from 0.1.0 to 0.2.0
+
 ## [1.1.16](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.1.15...create-slidev-deck-v1.1.16) (2026-08-10)
 
 
