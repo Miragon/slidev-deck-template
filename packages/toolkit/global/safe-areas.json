@@ -1,0 +1,72 @@
+{
+  "$comment": [
+    "Central, machine-readable safe-area model for the global template overlays.",
+    "The rendering truth for these overlays lives in the sibling Vue components:",
+    "ChapterFooter.vue (page/chapter display, bottom-left) and ProgressBar.vue",
+    "(progress bar, top). This file does NOT restate their geometry — the validator",
+    "measures each overlay's PAINTED rectangle live from the DOM (selector below), so",
+    "the zone can never drift from the CSS. What this file adds is the part a renderer",
+    "cannot express: which edges the overlay is anchored to, how much extra breathing",
+    "room (margins) author content must keep beyond the painted rect, the overlay's",
+    "z-index (to reason about front/behind), and the layouts where the overlay is not",
+    "drawn (so no zone is reserved there).",
+    "",
+    "Coordinate system: CANVAS pixels. Origin = top-left of the fixed 980x552 Slidev",
+    "canvas (16:9). x grows right, y grows down. Margins are in canvas px and are",
+    "therefore viewport-independent: the validator converts the live viewport pixels",
+    "to canvas px with the single visual scale (viewportWidth / 980) before comparing.",
+    "",
+    "This lives in the TOOLKIT (not the deck) on purpose: a presentation consumes it",
+    "read-only and cannot switch the protection off. Per-slide, per-overlay exceptions",
+    "are the only escape hatch (see the slides skill), and they are always reported,",
+    "never silent."
+  ],
+  "canvas": {
+    "width": 980,
+    "height": 552
+  },
+  "overlays": [
+    {
+      "id": "page-display",
+      "label": "page / chapter display",
+      "selector": ".miragon-footer-text",
+      "anchor": {
+        "vertical": "bottom",
+        "horizontal": "left"
+      },
+      "margins": {
+        "top": 8,
+        "right": 8,
+        "bottom": 0,
+        "left": 0
+      },
+      "zIndex": 40,
+      "hiddenLayouts": [
+        "cover",
+        "closing",
+        "section"
+      ]
+    },
+    {
+      "id": "progress-bar",
+      "label": "progress bar",
+      "selector": ".miragon-progress",
+      "anchor": {
+        "vertical": "top",
+        "horizontal": "full"
+      },
+      "margins": {
+        "top": 0,
+        "right": 0,
+        "bottom": 6,
+        "left": 0
+      },
+      "zIndex": 50,
+      "hiddenLayouts": [
+        "cover",
+        "closing",
+        "section"
+      ]
+    }
+  ]
+}

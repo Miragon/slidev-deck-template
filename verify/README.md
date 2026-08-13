@@ -24,6 +24,8 @@ rendered run to some slides.
 | Check | Rule |
 |---|---|
 | Fits the 16:9 canvas | no content past the 980x552 canvas |
+| Clears the page/chapter display | no content collides with / crowds / hides the bottom-left overlay's safe area |
+| Clears the progress bar | no content collides with / crowds / hides the top progress-bar strip |
 | No em-dashes | no `—` in slide content |
 | No emoji icons | use inline SVG or Iconify classes |
 | Headings black, not blue | blue only for kickers/accents/labels |
@@ -48,6 +50,43 @@ when all pass, red on any fail, each item ✓/✗ with how to fix). Screenshots 
 | `excalidraw-built-transparent` | built `.excalidraw.svg` has its background stripped (transparent on the slide) |
 
 Failures name the offending `file:line` and how to fix it.
+
+## Global overlays and safe areas
+
+The template paints global chrome on every content slide: the **page/chapter display**
+bottom-left (`toolkit global/ChapterFooter.vue`) and the **progress bar** top
+(`ProgressBar.vue`), both `position: fixed` and `pointer-events: none`. The older fit
+check deliberately *skips* fixed elements and only enforces a uniform bottom band, so it
+cannot see a card or diagram that renders through the page display, and never checks the
+left edge or z-order at all. The safe-area check closes that gap.
+
+- **Model** — `packages/toolkit/global/safe-areas.json` (toolkit-owned, so a deck cannot
+  disable it) describes each overlay: a selector, which canvas edges it is anchored to,
+  the z-index, the layouts where it is hidden, and a margin buffer (canvas px) content
+  must keep beyond the overlay's painted rect. The painted geometry itself is **measured
+  live** from the DOM, so the zone can never drift from the CSS.
+- **Geometry** — `verify/safe-area.ts` is a pure, browser-free evaluator: given measured
+  rectangles (canvas px) and the config, it returns typed violations. Because the caller
+  measures the real, post-transform `getBoundingClientRect()`, grouped / translated /
+  rotated / scaled elements are handled for free. Coordinate frame: the transformed
+  `.slidev-slide-content` (the fixed overlays' containing block), so overlays and content
+  compare in one space; raw viewport px are normalised to canvas px with the single visual
+  scale (`viewportWidth / 980`).
+- **Codes** — `overlap`, `insufficient-bottom-margin`, `insufficient-left-margin`,
+  `insufficient-top-margin`, `insufficient-right-margin`, `hidden-by-overlay`,
+  `missing-geometry`. Each message names the slide, the element, the reserved zone, the
+  actual vs required clearance, and how to fix it.
+- **Exceptions** — a slide may opt an overlay out in frontmatter
+  (`safeAreaExceptions: [{ overlay, reason }]`); the collision is then **reported** (with
+  the reason) rather than failed, never silently ignored. No global off switch.
+- **Z-order note** — Slidev exposes no general z-order model, so front/behind is
+  approximated from the overlays' known CSS z-indices: content stacked above an *opaque*
+  region of an overlay is `hidden-by-overlay`; otherwise a geometric overlap is `overlap`.
+  The page display's background is transparent, so in practice its collisions are
+  `overlap` (label renders through content), which is the visual defect we care about.
+
+`verify/safe-area.spec.ts` unit-tests the evaluator (fast, `@source`); `slides.spec.ts`
+measures the live deck and also injects a corner element end-to-end to prove the check fires.
 
 ## Architecture
 

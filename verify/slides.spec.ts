@@ -4,9 +4,15 @@ import { join } from 'node:path'
 import { slugFromTitle, repoRoot, TOLERANCE, MIN_BOTTOM_MARGIN, parsePages } from './helpers'
 import { sourceRules } from './rules'
 import { runRules, formatFailure } from './validator'
+import { loadSafeAreaConfig } from './safe-area-config'
+import { evaluateSlide, type ContentBox, type Exception, type OverlayInstance, type Rect } from './safe-area'
 
 /** A single design-system check on one slide. */
 type Check = { label: string; ok: boolean; detail: string }
+
+// The central, toolkit-owned safe-area model (loaded once; a deck cannot switch
+// it off — only add per-slide, per-overlay exceptions). See verify/safe-area.ts.
+const safeAreaConfig = loadSafeAreaConfig()
 
 /**
  * Navigate to slide `n` and fully reveal it (all v-clicks shown), so we test
@@ -155,6 +161,155 @@ async function runChecks(page: Page, n: number): Promise<Check[]> {
   ]
 }
 
+/**
+ * Measure the global overlays (page display, progress bar) and the author content
+ * that sits near a canvas edge, all in CANVAS pixels, for slide `n`.
+ *
+ * Coordinate frame: the transformed slide container `.slidev-slide-content` is the
+ * containing block for the `position: fixed` overlays AND the ancestor of the
+ * layout content, so measuring both against it (its rect = origin, its clientWidth
+ * = the 980px canvas) puts overlays and content in one comparable space. Raw
+ * getBoundingClientRect()s are used, so grouped / translated / rotated / scaled
+ * elements are handled for free (the AABB is exactly what the browser reports).
+ *
+ * Only content near an edge is returned (bottom or top band): edge-anchored zones
+ * cannot be reached from the middle of the slide, so this keeps the payload small
+ * without missing a collision. Transparent layout shells and full-canvas wrappers
+ * are excluded — only elements that actually paint (text leaves, borders,
+ * backgrounds, images/svg) can visually clash with an overlay.
+ */
+async function measureSafeArea(page: Page, n: number) {
+  const overlaySel = safeAreaConfig.overlays.map((o) => ({ id: o.id, selector: o.selector, zIndex: o.zIndex }))
+  return page.evaluate(
+    ({ n, overlaySel, canvas }) => {
+      const root = document.querySelector(`.slidev-page-${n}:not(.disable-view-transition)`)
+      if (!root) return null
+      const frame = (root.closest('.slidev-slide-content') as HTMLElement) || (root as HTMLElement)
+      const box = frame.getBoundingClientRect()
+      const cw = frame.clientWidth || canvas.width
+      const scale = box.width / cw || 1
+      const toCanvas = (r: DOMRect): Rect => ({
+        left: (r.left - box.left) / scale,
+        top: (r.top - box.top) / scale,
+        right: (r.right - box.left) / scale,
+        bottom: (r.bottom - box.top) / scale,
+      })
+      const rgb = (s: string) => {
+        const m = s.match(/rgba?\(([^)]+)\)/)
+        if (!m) return null
+        const p = m[1].split(',').map((x) => parseFloat(x))
+        return { r: p[0], g: p[1], b: p[2], a: p[3] === undefined ? 1 : p[3] }
+      }
+
+      // --- Global overlays (measured live; null when not rendered on this slide) ---
+      const overlays = overlaySel.map((o) => {
+        const el = document.querySelector(o.selector) as HTMLElement | null
+        if (!el) return { id: o.id, rect: null as Rect | null }
+        const cs = getComputedStyle(el)
+        if (cs.display === 'none' || cs.visibility === 'hidden') return { id: o.id, rect: null }
+        const r = el.getBoundingClientRect()
+        if (!r.width || !r.height) return { id: o.id, rect: null }
+        return { id: o.id, rect: toCanvas(r) }
+      })
+
+      // --- Author content near an edge ---
+      const layout = (root.querySelector('.slidev-layout') as HTMLElement) || (root as HTMLElement)
+      const REPLACED = new Set(['img', 'svg', 'canvas', 'video', 'image'])
+      const paints = (el: HTMLElement) => {
+        const tag = el.tagName.toLowerCase()
+        if (REPLACED.has(tag)) return true
+        const cs = getComputedStyle(el)
+        const bg = rgb(cs.backgroundColor)
+        if (bg && bg.a > 0.05) return true
+        if (cs.backgroundImage && cs.backgroundImage !== 'none') return true
+        const border = ['Top', 'Right', 'Bottom', 'Left'].some((s) => {
+          const w = parseFloat(cs[('border' + s + 'Width') as any] as string) || 0
+          const c = rgb(cs[('border' + s + 'Color') as any] as string)
+          return w > 0 && c && c.a > 0.05
+        })
+        if (border) return true
+        // A text leaf: no element children but visible text of its own.
+        return el.children.length === 0 && (el.textContent || '').trim().length > 0
+      }
+      const opaqueBg = (el: HTMLElement) => {
+        const tag = el.tagName.toLowerCase()
+        if (REPLACED.has(tag)) return true
+        const bg = rgb(getComputedStyle(el).backgroundColor)
+        return !!bg && bg.a > 0.5
+      }
+      const content: any[] = []
+      for (const el of [...layout.querySelectorAll<HTMLElement>('*')]) {
+        const r = el.getBoundingClientRect()
+        if (!r.width || !r.height) continue
+        const cs = getComputedStyle(el)
+        if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) < 0.05) continue
+        if (cs.position === 'fixed') continue // the overlays themselves / other chrome
+        const c = toCanvas(r)
+        const nearBottom = c.bottom > canvas.height - 80
+        const nearTop = c.top < 80
+        if (!nearBottom && !nearTop) continue
+        if (height(c) / canvas.height >= 0.92 && width(c) / canvas.width >= 0.92) continue // full-canvas shell
+        if (!paints(el)) continue
+        const z = cs.zIndex
+        content.push({
+          label: `${el.tagName.toLowerCase()}${el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/)[0] : ''}`,
+          rect: c,
+          zIndex: z === 'auto' || z === '' ? null : Number(z),
+          opaque: opaqueBg(el),
+        })
+      }
+
+      function width(r: Rect) {
+        return r.right - r.left
+      }
+      function height(r: Rect) {
+        return r.bottom - r.top
+      }
+
+      const fm = ((window as any).__slidev__.nav.slides?.[n - 1]?.meta?.slide?.frontmatter ?? {}) as any
+      const exceptions = Array.isArray(fm.safeAreaExceptions) ? fm.safeAreaExceptions : []
+      return { overlays, content, exceptions, frame: { cw, scale: +scale.toFixed(4) } }
+    },
+    { n, overlaySel, canvas: safeAreaConfig.canvas },
+  )
+}
+
+/**
+ * Turn the measured geometry into design-system checks: one per overlay ("Clears
+ * the page/chapter display", "Clears the progress bar"). A check fails only on a
+ * NON-excepted violation; excepted collisions are still surfaced in the detail so
+ * they never pass silently (they read "allowed exception: <reason>").
+ */
+function safeAreaChecks(geom: Awaited<ReturnType<typeof measureSafeArea>>): Check[] {
+  if (!geom) return []
+  const rectMap = new Map(geom.overlays.map((o) => [o.id, o.rect]))
+  const instances: OverlayInstance[] = safeAreaConfig.overlays.map((descriptor) => ({
+    descriptor,
+    rect: (rectMap.get(descriptor.id) ?? null) as Rect | null,
+  }))
+  const exceptions = geom.exceptions as Exception[]
+  const content = geom.content as ContentBox[]
+  const all = evaluateSlide(instances, content, { exceptions, canvas: safeAreaConfig.canvas })
+
+  return safeAreaConfig.overlays.map((o) => {
+    const vs = all.filter((v) => v.overlayId === o.id)
+    const real = vs.filter((v) => !v.excepted)
+    const allowed = vs.filter((v) => v.excepted)
+    const worst = [...real].sort((a, b) => b.intrusionPx - a.intrusionPx)[0]
+    const parts: string[] = []
+    if (worst) {
+      const more = real.length > 1 ? ` (+${real.length - 1} more)` : ''
+      parts.push(`[${worst.code}] ${worst.content} ${worst.detail}${more} Move or shrink the element to clear the reserved zone.`)
+    }
+    for (const a of allowed) parts.push(`allowed exception on ${a.content} [${a.code}]: ${a.reason ?? 'no reason given'}.`)
+    return {
+      label: `Clears the ${o.label}`,
+      ok: real.length === 0,
+      detail: parts.join(' ') || `Content collides with the ${o.label} safe area.`,
+    }
+  })
+}
+
 const esc = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!))
 
@@ -259,6 +414,7 @@ test.describe('Design-system verification', () => {
         await test.step(`Slide ${pad}`, async () => {
           await gotoSlideRevealed(page, n)
           const checks = await runChecks(page, n)
+          checks.push(...safeAreaChecks(await measureSafeArea(page, n)))
           const failed = checks.filter((c) => !c.ok)
           const headline = failed.length
             ? `Slide ${n}: ${failed.length} of ${checks.length} checks failed`
@@ -284,6 +440,45 @@ test.describe('Design-system verification', () => {
       : `${isSubset ? scope[0].toUpperCase() + scope.slice(1) : `All ${total} slide(s)`} of "${title}" pass every design-system check.`
     console.log(summary)
     console.log(`Screenshots in verify/screenshots/${slug}/`)
+  })
+
+  /**
+   * End-to-end proof that the safe-area check is live, not a no-op: inject a
+   * painted element into a real slide's bottom-left corner and confirm the
+   * "Clears the page/chapter display" check flips to failing, then remove it and
+   * confirm it passes again. Guards against the wiring silently measuring nothing.
+   */
+  test('the safe-area check catches a real corner collision', async ({ page }) => {
+    await page.goto('/6', { waitUntil: 'networkidle' })
+    await page.waitForFunction(() => !!(window as any).__slidev__?.nav)
+    await gotoSlideRevealed(page, 6)
+
+    const passLabel = 'Clears the page / chapter display'
+    const before = safeAreaChecks(await measureSafeArea(page, 6)).find((c) => c.label === passLabel)
+    expect(before?.ok, 'slide 6 should start clean').toBeTruthy()
+
+    const marker = await page.evaluate(() => {
+      const root = document.querySelector('.slidev-page-6:not(.disable-view-transition)') as HTMLElement
+      const layout = (root.querySelector('.slidev-layout') as HTMLElement) || root
+      const d = document.createElement('div')
+      d.className = 'sa-test-collider'
+      d.textContent = 'x'
+      // Bottom-left corner, over the page display, with a painted background.
+      d.style.cssText = 'position:absolute;left:8px;bottom:2px;width:140px;height:34px;background:#fff;z-index:5'
+      layout.appendChild(d)
+      return true
+    })
+    expect(marker).toBe(true)
+    await page.waitForTimeout(50)
+
+    const during = safeAreaChecks(await measureSafeArea(page, 6)).find((c) => c.label === passLabel)
+    expect(during?.ok, 'the injected corner element must be flagged').toBeFalsy()
+    expect(during?.detail).toMatch(/reserved zone/)
+
+    await page.evaluate(() => document.querySelector('.sa-test-collider')?.remove())
+    await page.waitForTimeout(50)
+    const after = safeAreaChecks(await measureSafeArea(page, 6)).find((c) => c.label === passLabel)
+    expect(after?.ok, 'removing the element clears the violation').toBeTruthy()
   })
 })
 
