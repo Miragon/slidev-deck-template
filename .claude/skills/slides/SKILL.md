@@ -80,6 +80,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 - **No em-dashes** (`—`). Use commas, colons, parentheses. **No emoji** — use inline SVG or Iconify `i-*` classes.
 - **Bullets are plain `<ul><li>`.** The layout provides the marker. Never override list styling per slide.
 - **Never reduce font size to fit.** Reduce content, split the slide, or use `<v-clicks>`.
+- **Keep content clear of the global chrome.** The template paints a page/chapter display bottom-left and a progress bar along the top on every content slide. Author content must not collide with or crowd them; the verify suite reserves a safe area around each and flags any overlap. See [Global overlays and safe areas](#global-overlays-and-safe-areas).
 - **No hardcoded hex** in slide markdown. Use components and CSS variables. (The one sanctioned hex lives inside `Card.vue`, not in slides.)
 - **Components on a single line in `.md`, with explicit closing tags** (`<Card>…</Card>`, never self-closing in markdown). **Exception — a body that contains inline Markdown** (`` `code` ``, `**bold**`, links): put the body on its own lines wrapped in blank lines, or Slidev treats it as raw HTML and the Markdown never renders (backticks show literally). See [`reference/components.md`](reference/components.md), "Markdown inside a component body".
 - **Never start, restart, or kill the dev server.** Reuse the author's running `npm run dev` (HMR picks up edits automatically); to check, run `npm run verify`. No `npm run dev`, no `pkill`/`kill`/`lsof` on the dev server or its portless proxy. (Details in [Verifying](#verifying).)
@@ -265,6 +266,29 @@ When you exceed a limit: split with `---`, reveal progressively with `<v-clicks>
 
 ---
 
+## Global overlays and safe areas
+
+On every content slide the template paints two **global overlays** (chrome that Slidev injects, not author content):
+
+- the **page / chapter display** bottom-left (`global/ChapterFooter.vue`) — the small "date · NN · Chapter · n / N" label;
+- the **progress bar** along the top (`global/ProgressBar.vue`) — the thin blue→green gradient.
+
+Both are hidden on `cover`, `closing` and `section`. Around each, the toolkit reserves a **safe area** (the painted element plus a small breathing buffer) that author content must not enter. The verify suite measures the live geometry and fails a slide when content **overlaps**, **crowds** (too little clearance), or **hides** an overlay — with the exact code (`overlap`, `insufficient-bottom-margin`, `insufficient-left-margin`, `insufficient-top-margin`, `hidden-by-overlay`) and how many pixels to move. The safe-area model is central and toolkit-owned (`packages/toolkit/global/safe-areas.json`); a deck cannot switch it off.
+
+**The fix is almost always structural**, the same as overflow: raise or shrink the offending element, drop an item, or split the slide. A full-bleed diagram that reaches the bottom-left corner is the usual culprit — frame it in a `Figure`/`DiagramFrame` that respects the margin, or give it less height.
+
+**Exceptions — explicit, justified, never silent.** If a slide *must* let an element sit under an overlay (a deliberate full-bleed background), opt in per-slide in the slide's frontmatter:
+
+```yaml
+safeAreaExceptions:
+  - overlay: page-display      # or: progress-bar
+    reason: Full-bleed map bleeds behind the label by design
+```
+
+This downgrades that overlay's collision on that slide from an error to a **reported** exception (it still appears in the verify report with your reason, so it is never hidden). A `reason` is required. There is no global off switch, and an exception for one overlay never silences the other.
+
+---
+
 ## Speaker notes and transitions
 
 Every content slide gets `<!-- … -->` notes ending with a `Transition: "…"` line that hands off to the next slide.
@@ -290,7 +314,7 @@ npm run verify:ci   # same suite, list reporter, NO blocking report viewer — u
 node scripts/shot.mjs <page> [base]   # screenshot one rendered slide (auto-detects the portless dev URL)
 ```
 
-`npm run build` only proves the Markdown/Vue **compiles** — it says nothing about whether a slide overflows or breaks a design rule. For that, `npm run verify` runs the **Playwright design-system suite** (`verify/`, always **headless**). It walks the live, fully-revealed slides and measures the DOM-checkable rules: fits the canvas with a bottom margin (content must clear the 552px floor by >= 16px, not merely fit), no em-dashes, no emoji, headings black, cards white, no inline fonts, no restyled or nested bullets. It also runs source-level checks: **every slide declares a sanctioned layout** (each slide's `layout:` must be a theme archetype or the built-in `default`; `src:` stubs are exempt), **no raw HTML** (slide bodies are markdown + components only; tags like `<div>`/`<span>` are flagged, while code fences and comments are exempt so HTML can be shown as an example), **no HTML entities in the slide source** (write the literal character, never `&#39;`/`&amp;`/…) and **every `.excalidraw.svg` is light and transparent** (no dark-mode filter, no baked white background). These source-level checks run fast on their own via `npm run verify:source` (no dev server) and gate CI so forks inherit them. It captures a slide + checklist screenshot per slide under `verify/screenshots/<slug>/` and opens an HTML report.
+`npm run build` only proves the Markdown/Vue **compiles** — it says nothing about whether a slide overflows or breaks a design rule. For that, `npm run verify` runs the **Playwright design-system suite** (`verify/`, always **headless**). It walks the live, fully-revealed slides and measures the DOM-checkable rules: fits the canvas with a bottom margin (content must clear the 552px floor by >= 16px, not merely fit), clears the global overlays (no content collides with or crowds the page/chapter display or the progress bar — see [Global overlays and safe areas](#global-overlays-and-safe-areas)), no em-dashes, no emoji, headings black, cards white, no inline fonts, no restyled or nested bullets. It also runs source-level checks: **every slide declares a sanctioned layout** (each slide's `layout:` must be a theme archetype or the built-in `default`; `src:` stubs are exempt), **no raw HTML** (slide bodies are markdown + components only; tags like `<div>`/`<span>` are flagged, while code fences and comments are exempt so HTML can be shown as an example), **no HTML entities in the slide source** (write the literal character, never `&#39;`/`&amp;`/…) and **every `.excalidraw.svg` is light and transparent** (no dark-mode filter, no baked white background). These source-level checks run fast on their own via `npm run verify:source` (no dev server) and gate CI so forks inherit them. It captures a slide + checklist screenshot per slide under `verify/screenshots/<slug>/` and opens an HTML report.
 
 The suite defaults to port **3030** (override with `VERIFY_PORT=<port>`). If nothing is on 3030 it starts its own fresh server for `deck/slides.md`; if a server is already there it **reuses** it. Full reference: [`verify/README.md`](../../../verify/README.md).
 
