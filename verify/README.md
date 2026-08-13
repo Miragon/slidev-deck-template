@@ -46,6 +46,7 @@ when all pass, red on any fail, each item ✓/✗ with how to fix). Screenshots 
 | `sanctioned-layout` | every slide's `layout:` is a theme archetype (from `packages/toolkit/layouts/*.vue`) or the built-in `default`; `src:` stubs exempt |
 | `no-raw-html` | slide bodies are markdown + components only; raw tags (`<div>`, `<span>`, …) are flagged. Code fences and comments exempt, so HTML can be shown as an example |
 | `no-html-entities` | write the literal character, never `&#39;`/`&amp;`/… |
+| `content-heading` | content headings (frontmatter `title:` on `content`/`content-image`/`compare`/`showcase`/`goodbad`/diagram layouts) stay single-line: no explicit break (`<br>`, newline, trailing `\`), and within a per-layout character budget. Opt out one slide with `allowMultilineHeading: true`. The budget is a heuristic; the binding single-line width measurement is a separate rendered check |
 | `excalidraw-committed-light` | committed `.excalidraw.svg` previews light (no dark `filter`, baked light background) |
 | `excalidraw-built-transparent` | built `.excalidraw.svg` has its background stripped (transparent on the slide) |
 

@@ -7,6 +7,7 @@
 import { sanctionedLayout } from './sanctioned-layout'
 import { noRawHtml } from './no-raw-html'
 import { noHtmlEntities } from './no-html-entities'
+import { contentHeading } from './content-heading'
 import { excalidrawCommittedLight } from './excalidraw-committed-light'
 import { excalidrawBuiltTransparent } from './excalidraw-built-transparent'
 import type { Rule } from './types'
@@ -15,6 +16,7 @@ export const sourceRules: Rule[] = [
   sanctionedLayout,
   noRawHtml,
   noHtmlEntities,
+  contentHeading,
   excalidrawCommittedLight,
   excalidrawBuiltTransparent,
 ]
