@@ -72,6 +72,8 @@ export function measureSafeArea({ n, overlaySel, canvas }) {
     const cs = getComputedStyle(el)
     if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) < 0.05) continue
     if (cs.position === 'fixed') continue // the overlays themselves / other chrome
+    if (cs.pointerEvents === 'none') continue
+    if (el.getAttribute('aria-hidden') === 'true' || el.closest('[aria-hidden="true"]')) continue
     const c = toCanvas(r)
     const nearBottom = c.bottom > canvas.height - 80
     const nearTop = c.top < 80
