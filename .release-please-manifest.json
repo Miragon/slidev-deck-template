@@ -1,5 +1,5 @@
 {
   "packages/toolkit": "1.16.0",
-  "packages/create-deck": "1.2.0",
-  "packages/validator": "0.2.0"
+  "packages/create-deck": "1.2.1",
+  "packages/validator": "0.3.0"
 }
