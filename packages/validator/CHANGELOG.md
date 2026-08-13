@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.2.0...slidev-validator-v0.3.0) (2026-08-13)
+
+
+### Features
+
+* **validator:** structure-agnostic source discovery for nested decks ([#114](https://github.com/Miragon/slidev-deck-template/issues/114)) ([f5abbdf](https://github.com/Miragon/slidev-deck-template/commit/f5abbdf915c25d84155ec4cb5c5ad82efaf97c9c))
+
 ## [0.2.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.1.0...slidev-validator-v0.2.0) (2026-08-13)
 
 
