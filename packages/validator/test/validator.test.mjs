@@ -19,6 +19,7 @@ import { loadConfig, ConfigError } from '../src/config.mjs'
 import { classify, runRenderedRules, summarize, isActive } from '../src/engine.mjs'
 import { renderedRules, ruleById, knownRuleIds } from '../src/rules/index.mjs'
 import { slideSourceFiles, excalidrawSvgFiles, toRel } from '../src/helpers.mjs'
+import { sanctionedLayout } from '../src/rules/source/sanctioned-layout.mjs'
 import recommended from '../src/presets/recommended.mjs'
 import required from '../src/presets/required.mjs'
 import { satisfies } from '../src/versions.mjs'
@@ -27,6 +28,7 @@ import { globToRegExp, matchesAny } from '../src/glob.mjs'
 const TEST_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(TEST_DIR, '..', '..', '..')
 const NESTED_DECK = join(TEST_DIR, 'fixtures', 'nested-deck')
+const DECK_LOCAL_LAYOUT = join(TEST_DIR, 'fixtures', 'deck-local-layout')
 
 /** Run `fn` with the validator rooted at `root`, restoring the env after. */
 async function withRoot(root, fn) {
@@ -248,6 +250,17 @@ test('excalidraw discovery finds diagrams under nested resources/ folders', asyn
       'deck/content/topic-a/01-intro/resources/diagram-a.excalidraw.svg',
       'deck/content/topic-b/01-overview/resources/diagram-b.excalidraw.svg',
     ])
+  })
+})
+
+// --- sanctioned-layout accepts deck-local layouts --------------------------
+
+test('sanctioned-layout accepts deck-local deck/layouts/*.vue, still rejects unknown', async () => {
+  await withRoot(DECK_LOCAL_LAYOUT, async () => {
+    const offenders = sanctionedLayout.check({ sourceFiles: [join(DECK_LOCAL_LAYOUT, 'deck', 'slides.md')] })
+    // `default` (builtin) and `reference-repo` (deck-local) pass; only `bar` is flagged
+    assert.equal(offenders.length, 1)
+    assert.match(offenders[0].message, /layout: bar is not a sanctioned archetype/)
   })
 })
 

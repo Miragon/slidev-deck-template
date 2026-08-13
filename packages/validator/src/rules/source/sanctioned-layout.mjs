@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 import { pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 import { parseSync } from '@slidev/parser'
-import { repoRoot, toRel } from '../../helpers.mjs'
+import { repoRoot, deckDir, toRel } from '../../helpers.mjs'
 
 /**
  * The theme's layout archetypes live one-.vue-file-per-layout under the toolkit's
@@ -29,12 +29,23 @@ function layoutsDir() {
  */
 const BUILTIN_LAYOUTS = ['default']
 
+/**
+ * Custom layouts a deck legitimately defines under its OWN `deck/layouts/`. Slidev
+ * natively resolves these (relative to the entry `deck/slides.md`), so a deck adding
+ * an on-brand archetype there is using a real, working layout — not a freehand
+ * drift. Guarded by `existsSync`: the flat reference deck has no `deck/layouts/`.
+ */
+function deckLocalLayoutsDir() {
+  return join(deckDir(), 'layouts')
+}
+
 function sanctionedLayouts() {
   const names = new Set(BUILTIN_LAYOUTS)
-  const dir = layoutsDir()
-  if (existsSync(dir)) {
-    for (const f of readdirSync(dir)) {
-      if (f.endsWith('.vue')) names.add(f.slice(0, -'.vue'.length))
+  for (const dir of [layoutsDir(), deckLocalLayoutsDir()]) {
+    if (existsSync(dir)) {
+      for (const f of readdirSync(dir)) {
+        if (f.endsWith('.vue')) names.add(f.slice(0, -'.vue'.length))
+      }
     }
   }
   return names
@@ -52,8 +63,9 @@ function slideFrontmatters(file) {
 /**
  * Consistency guardrail: every slide must opt into a layout archetype, so no slide
  * silently falls back to a freehand/default rendering that drifts off the design
- * system. The allowed set is DERIVED from the installed toolkit's `layouts/*.vue`
- * (never hardcoded), plus the built-in `default`. `src:` import stubs are exempt.
+ * system. The allowed set is DERIVED (never hardcoded) from the installed toolkit's
+ * `layouts/*.vue` AND any deck-local `deck/layouts/*.vue` (which Slidev natively
+ * supports), plus the built-in `default`. `src:` import stubs are exempt.
  */
 export const sanctionedLayout = {
   id: 'sanctioned-layout',
