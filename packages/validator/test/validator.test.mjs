@@ -187,21 +187,20 @@ test('rendered rules fire on bad metrics and map to error', async () => {
   const cfg = await withConfig(`export default { extends: ['@miragon/slidev-validator/recommended'] }`)
   const badMetrics = {
     cw: 980, ch: 552, right: 1040, contentBottom: 552, // overflow + no bottom margin
-    emDash: true, emoji: true, blueHeads: 1, badCards: 2, inlineFonts: 1, listOverrides: 1, nestedLists: 1,
+    blueHeads: 1, badCards: 2,
   }
   const measured = [{ slide: 5, file: 'deck/chapter/01-intro/01-intro.md', metrics: badMetrics }]
   const results = runRenderedRules(renderedRules, cfg, measured)
   const byId = Object.fromEntries(results.map((r) => [r.rule.id, r]))
-  for (const id of ['element-overflow', 'no-em-dash', 'no-emoji', 'heading-black', 'card-white', 'no-inline-font', 'no-restyled-bullets']) {
+  for (const id of ['element-overflow', 'heading-black', 'card-white']) {
     assert.equal(byId[id].status, 'error', `${id} should error on bad metrics`)
   }
-  assert.equal(byId['no-nested-bullets'].status, 'warn') // default warn
   assert.equal(summarize(results).failed, true)
 })
 
 test('rendered rules pass on clean metrics', async () => {
   const cfg = await withConfig(`export default { extends: ['@miragon/slidev-validator/recommended'] }`)
-  const ok = { cw: 980, ch: 552, right: 980, contentBottom: 500, emDash: false, emoji: false, blueHeads: 0, badCards: 0, inlineFonts: 0, listOverrides: 0, nestedLists: 0 }
+  const ok = { cw: 980, ch: 552, right: 980, contentBottom: 500, blueHeads: 0, badCards: 0 }
   const results = runRenderedRules(renderedRules, cfg, [{ slide: 1, file: 'deck/slides.md', metrics: ok }])
   assert.equal(summarize(results).failed, false)
 })

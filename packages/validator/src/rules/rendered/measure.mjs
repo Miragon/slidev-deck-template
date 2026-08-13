@@ -41,12 +41,6 @@ export function measureSlide(n) {
   right = Math.round(Math.max(right, layout.scrollWidth))
   contentBottom = Math.round(contentBottom)
 
-  // --- Text rules ---
-  const text = layout.innerText || ''
-  const emDash = text.includes('—')
-  const pictographic = '\\p{Extended' + '_Pictographic}'
-  const emoji = new RegExp(pictographic, 'u').test(text)
-
   // --- Headings must be black, never blue ---
   const blueHeads = [...layout.querySelectorAll('h1, h2')].filter((h) => isBlue(rgb(getComputedStyle(h).color))).length
 
@@ -65,12 +59,5 @@ export function measureSlide(n) {
     return false
   }).length
 
-  // --- Layouts own typography: no inline font-family in author slide content ---
-  const inlineFonts = all.filter((el) => el.style && el.style.fontFamily && !el.closest('svg, pre, code, button')).length
-
-  // --- Bullets: layout owns the marker; no per-slide list-style override; max 1 nesting level ---
-  const listOverrides = [...layout.querySelectorAll('ul, li')].filter((el) => el.style && (el.style.listStyle || el.style.listStyleType)).length
-  const nestedLists = layout.querySelectorAll('ul ul, ul ol, ol ul, ol ol').length
-
-  return { cw, ch, right, contentBottom, emDash, emoji, blueHeads, badCards, inlineFonts, listOverrides, nestedLists }
+  return { cw, ch, right, contentBottom, blueHeads, badCards }
 }

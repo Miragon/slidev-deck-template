@@ -8,10 +8,20 @@ instead of a frozen copy — and each deck can tune or scope rules without forki
 It runs two kinds of checks:
 
 - **Source rules** — static checks over the deck's Markdown and `.excalidraw.svg`
-  sources. Fast, no browser; this is what CI runs.
+  sources. Fast, no browser. Most guardrails live here, including the content rules
+  (em-dashes, emoji, nested bullets, inline font/list-style): anything an author can
+  only introduce through the source is checked here, not in the browser.
 - **Rendered rules** — measured on the live, fully-revealed slide in headless
-  Chromium (booted against a Slidev dev server). Catches overflow, colour and
-  typography issues the source can't see.
+  Chromium (booted against a Slidev dev server). Reserved for what the source truly
+  cannot show: real layout geometry (`element-overflow`, `overlay-safe-area`) and
+  colours resolved through the CSS cascade (`heading-black`, `card-white`). These
+  four require the server; every other guardrail runs without it.
+
+The content rules moved from rendered to source with no loss of author-facing
+coverage: Slidev does not enable the markdown-it `typographer` (no `---` → `—`) and
+HTML entities are banned at source, so the source text matches the rendered text.
+The source scans deliberately do not police the fixed toolkit's own internals — that
+is the toolkit's test suite's job.
 
 ## Install
 
@@ -116,16 +126,16 @@ config, so a report — and a CI log — is self-describing.
 | `no-raw-html` | source | required | error |
 | `no-html-entities` | source | required | error |
 | `content-heading` | source | required | error |
+| `no-em-dash` | source | required | error |
+| `no-emoji` | source | required | error |
+| `no-nested-bullets` | source | recommended | warn |
+| `no-inline-font` | source | recommended | error |
+| `no-restyled-bullets` | source | recommended | error |
 | `excalidraw-committed-light` | source | recommended | error |
 | `excalidraw-built-transparent` | source | recommended | warn |
 | `element-overflow` | rendered | recommended | error |
-| `no-em-dash` | rendered | required | error |
-| `no-emoji` | rendered | required | error |
 | `heading-black` | rendered | required | error |
 | `card-white` | rendered | required | error |
-| `no-inline-font` | rendered | recommended | error |
-| `no-restyled-bullets` | rendered | recommended | error |
-| `no-nested-bullets` | rendered | recommended | warn |
 | `overlay-safe-area` | rendered | required | error |
 
 `content-heading` has a per-slide opt-out (`allowMultilineHeading: true` in the
