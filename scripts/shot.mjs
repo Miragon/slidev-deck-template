@@ -1,4 +1,4 @@
-import { chromium } from '@playwright/test'
+import { chromium } from 'playwright-chromium'
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -68,7 +68,7 @@ if (!title) {
   process.exit(1)
 }
 
-const outDir = 'verify/screenshots'
+const outDir = '.screenshots'
 mkdirSync(outDir, { recursive: true })
 const out = `${outDir}/shot-${pageArg}.png`
 const url = `${base}/${pageArg}?clicks=${clicks}`

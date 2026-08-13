@@ -1,7 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { relative } from 'node:path'
-import { repoRoot, slideSourceFiles } from '../helpers'
-import type { Rule } from './types'
+import { slideSourceFiles, toRel } from '../../helpers.mjs'
 
 /**
  * Authors must write the literal character, never an HTML escape: an entity like
@@ -10,16 +8,19 @@ import type { Rule } from './types'
  */
 const ENTITY = /&(#[0-9]+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]+);/
 
-export const noHtmlEntities: Rule = {
+export const noHtmlEntities = {
   id: 'no-html-entities',
+  type: 'source',
   title: 'no HTML entities in slide source',
   message: 'HTML entities must not appear in slide source — write the literal character instead',
+  meta: { category: 'required', default: 'error' },
   check() {
-    const offenders: string[] = []
+    const offenders = []
     for (const file of slideSourceFiles()) {
+      const rel = toRel(file)
       readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
         const m = line.match(ENTITY)
-        if (m) offenders.push(`${relative(repoRoot, file)}:${i + 1}  ${m[0]}  →  ${line.trim()}`)
+        if (m) offenders.push({ file: rel, line: i + 1, message: `${m[0]}  →  ${line.trim()}` })
       })
     }
     return offenders

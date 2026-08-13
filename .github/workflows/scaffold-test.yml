@@ -26,17 +26,21 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # Fast structural smoke test: generated layout, exclusions, clean package.json.
+      # Fast structural smoke tests: generated layout + the validator's own units.
       - run: npm test -w packages/create-deck
+      - run: npm test -w packages/validator
 
       # Scaffold a deck and prove it installs, builds and passes the source guardrails.
       - name: Scaffold a deck and verify it builds
         run: |
-          # Install the toolkit from a local tarball, not npm, since release PRs pins an unpublished version.
-          toolkit_tgz="$(npm pack -w packages/toolkit --pack-destination "$RUNNER_TEMP" --json \
-            | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename')"
+          # Install the toolkit AND validator from local tarballs, not npm, since a
+          # release PR pins versions not yet published to the registry.
+          pack() { npm pack -w "$1" --pack-destination "$RUNNER_TEMP" --json \
+            | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename'; }
+          toolkit_tgz="$(pack packages/toolkit)"
+          validator_tgz="$(pack packages/validator)"
           CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
           cd "$RUNNER_TEMP/smoke-deck"
-          npm install --no-save "$RUNNER_TEMP/$toolkit_tgz"
+          npm install --no-save "$RUNNER_TEMP/$toolkit_tgz" "$RUNNER_TEMP/$validator_tgz"
           npm run build
           npm run verify:source

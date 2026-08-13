@@ -18,7 +18,7 @@ Forking this repo copies every file here into the new repo, but only this repo o
 
 - Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason, and it would pointlessly test a scaffolder it does not own.
 - In a derived repo these workflows run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
-- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all six occurrences** (four jobs in `release-please.yml`, plus `pr-title.yml` and `scaffold-test.yml`), otherwise releases stop silently.
+- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all seven occurrences** (five jobs in `release-please.yml`, plus `pr-title.yml` and `scaffold-test.yml`), otherwise releases stop silently.
 
 Build Deck and Pin Check are deliberately *not* guarded — every deck repo wants them.
 
@@ -26,10 +26,11 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 `release-please.yml` publishes without an `NPM_TOKEN` secret. npm validates an OIDC token against the trusted-publisher config on npmjs.com, so the setup is deliberately constrained — read the header comment in the file before touching it:
 
-- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename).
+- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`, `publish-validator`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename).
 - **No GitHub environment** on the publish jobs (the environment-name claim must stay empty).
 - Publishing is **idempotent** — a job skips if that package's current version is already on npm.
-- `workflow_dispatch` inputs allow a dry-run (both packages) or a manual `publish_current` recovery republish.
+- `@miragon/slidev-validator` is newer: its **first** publish must be done once by a maintainer (Trusted Publishing cannot create a brand-new package name); afterwards `publish-validator` takes over.
+- `workflow_dispatch` inputs allow a dry-run (all packages) or a manual `publish_current` recovery republish.
 
 ## Dependency updates
 

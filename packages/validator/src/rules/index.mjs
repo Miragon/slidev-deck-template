@@ -1,0 +1,58 @@
+/**
+ * The single registry of guardrails. Every rule has a stable `id` (the public API,
+ * used in config files), a `type` ('source' = static file check, no browser;
+ * 'rendered' = interprets the per-slide DOM measurement), and `meta.category`
+ * ('required' rules cannot be silently disabled) + `meta.default` severity.
+ *
+ * Add a rule: create its file, import it here, list it below. It becomes
+ * configurable, documented, and part of both presets automatically.
+ */
+
+import { sanctionedLayout } from './source/sanctioned-layout.mjs'
+import { noRawHtml } from './source/no-raw-html.mjs'
+import { noHtmlEntities } from './source/no-html-entities.mjs'
+import { contentHeading } from './source/content-heading.mjs'
+import { excalidrawCommittedLight } from './source/excalidraw-committed-light.mjs'
+import { excalidrawBuiltTransparent } from './source/excalidraw-built-transparent.mjs'
+
+import { elementOverflow } from './rendered/element-overflow.mjs'
+import { noEmDash } from './rendered/no-em-dash.mjs'
+import { noEmoji } from './rendered/no-emoji.mjs'
+import { headingBlack } from './rendered/heading-black.mjs'
+import { cardWhite } from './rendered/card-white.mjs'
+import { noInlineFont } from './rendered/no-inline-font.mjs'
+import { noRestyledBullets } from './rendered/no-restyled-bullets.mjs'
+import { noNestedBullets } from './rendered/no-nested-bullets.mjs'
+import { overlaySafeArea } from './rendered/overlay-safe-area.mjs'
+
+/** Every rule, source then rendered, in report order. */
+export const allRules = [
+  sanctionedLayout,
+  noRawHtml,
+  noHtmlEntities,
+  contentHeading,
+  excalidrawCommittedLight,
+  excalidrawBuiltTransparent,
+  elementOverflow,
+  noEmDash,
+  noEmoji,
+  headingBlack,
+  cardWhite,
+  noInlineFont,
+  noRestyledBullets,
+  noNestedBullets,
+  overlaySafeArea,
+]
+
+export const sourceRules = allRules.filter((r) => r.type === 'source')
+export const renderedRules = allRules.filter((r) => r.type === 'rendered')
+
+/** A rule looked up by its stable id, or undefined. */
+export function ruleById(id) {
+  return allRules.find((r) => r.id === id)
+}
+
+/** The set of all known rule ids (for config validation). */
+export function knownRuleIds() {
+  return new Set(allRules.map((r) => r.id))
+}

@@ -11,7 +11,7 @@ An npm workspace with four sub-projects, each with its own README:
 | [`deck/`](deck/) | The reference deck — cover, chapters, closing. Doubles as the demo and the verify target. | [deck/README.md](deck/README.md) |
 | [`packages/toolkit/`](packages/toolkit/) | The `@miragon/slidev-toolkit` design system: theme, layouts, components. Fixed by brand. | [packages/toolkit/README.md](packages/toolkit/README.md) |
 | [`packages/create-deck/`](packages/create-deck/) | The `@miragon/create-slidev-deck` scaffolder behind `npm create @miragon/slidev-deck`. | [packages/create-deck/README.md](packages/create-deck/README.md) |
-| [`verify/`](verify/) | The design-system verification suite (`npm run verify`). | [verify/README.md](verify/README.md) |
+| [`packages/validator/`](packages/validator/) | The `@miragon/slidev-validator` design-system linter (`npm run verify`) — versioned + configurable. | [packages/validator/README.md](packages/validator/README.md) |
 | [`.github/`](.github/) | CI, deploy, release and supply-chain automation. | [.github/WORKFLOWS.md](.github/WORKFLOWS.md) |
 
 The reference deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); in this monorepo the workspace symlink resolves it, so editing `packages/toolkit/` is reflected live in the deck.

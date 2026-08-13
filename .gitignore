@@ -2,9 +2,7 @@ node_modules/
 dist/
 .slidev/
 *.log
-verify/screenshots/
-verify/test-results/
-verify/playwright-report/
+.screenshots/
 playwright-report/
 /.idea/
 .claude/logs/

@@ -26,7 +26,7 @@ npm run dev      # serves the deck at https://my-talk.localhost with live reload
 
 `npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `https://<deck>.localhost` URL instead of a `:3030` port, so several decks run side by side without colliding. The first run starts a local HTTPS proxy (a one-time `sudo` prompt); `npx portless service install` makes it permanent — needed for a headless Conductor Run button, which can't answer the prompt. For the raw server without portless, use `npm run dev:app`.
 
-You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `verify/`, the Build Deck + Pin Check workflows) and `@miragon/slidev-toolkit` pulled from npm — no toolkit source, no release tooling to prune. Then:
+You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `slidev-validator.config.mjs`, the Build Deck + Pin Check workflows) and both `@miragon/slidev-toolkit` (the theme) and `@miragon/slidev-validator` (the guardrail linter) pulled from npm — no toolkit source, no copied validator, no release tooling to prune. Then:
 
 1. Replace the demo content under `deck/`; keep the `REQUIRED / OPTIONAL / LIMIT / HOW TO USE` comment-block guardrails on each demo slide.
 2. Point the `seoMeta` block in `deck/slides.md` at your own domain, or delete it — it still carries this template's link preview.

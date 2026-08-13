@@ -2,20 +2,24 @@
 // Scaffold a lean Miragon Slidev deck.
 //
 // Emits ONLY what a deck needs: the shared skeleton (deck/, .claude/, CLAUDE.md,
-// verify/, .npmrc, .gitignore, the two CI workflows) plus a generated overlay (a
-// standalone package.json + a deck-focused README). The toolkit is NOT vendored:
-// it is added as an exact-pinned npm dependency and consumed via the theme.
+// .npmrc, .gitignore, the two CI workflows) plus a generated overlay (a standalone
+// package.json + a starter validator config + a deck-focused README). Neither the
+// toolkit NOR the validator is vendored: both are added as exact-pinned npm
+// dependencies. The deck consumes the toolkit via the theme and runs the validator
+// via its `slidev-validator` bin, so central guardrail improvements reach the deck
+// over a controlled `npm update` instead of a frozen copy of verify/.
 //
 // The generated package.json is DERIVED from the fetched skeleton's own manifests
-// (deck/package.json for the Slidev runtime deps, the root package.json for the
-// verify tooling), so the deck's versions are whatever the reference deck currently
-// pins — kept current by the monorepo's Dependabot, nothing to hand-maintain here.
-// Only the toolkit version comes from this package (the reference deck resolves it
-// via a workspace symlink, so it has no version to read).
+// (deck/package.json for the Slidev runtime deps), so the deck's versions are
+// whatever the reference deck currently pins — kept current by the monorepo's
+// Dependabot. The toolkit AND validator versions come from THIS package's own
+// pinned devDependencies (the reference deck resolves both via workspace symlinks,
+// so it has no versions to read).
 //
 // Reproducibility: the skeleton is fetched from this template repo pinned to the
 // tag that matches THIS package's version, so a given create-slidev-deck version
-// always emits an identical deck. `--ref` and `--toolkit-version` override.
+// always emits an identical deck. `--ref`, `--toolkit-version` and
+// `--validator-version` override.
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { cp, mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises'
@@ -29,18 +33,19 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = 'Miragon/slidev-deck-template'
 const SELF = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 
-// The toolkit version written into the generated package.json: this package's own
-// pinned @miragon/slidev-toolkit devDependency, so Dependabot keeps the default
-// current and a given create-slidev-deck version emits a byte-identical deck.
+// The toolkit + validator versions written into the generated package.json: this
+// package's own pinned devDependencies, so Dependabot keeps the defaults current
+// and a given create-slidev-deck version emits a byte-identical deck.
 const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
+const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 
 // Paths copied verbatim from the fetched skeleton into the new deck. Anything not
-// listed (packages/, release-please*, pr-title.yml, LICENSE, netlify.toml, docs/)
-// is intentionally left out — that is the whole point of the scaffold.
+// listed (packages/, verify/ [now the @miragon/slidev-validator package],
+// release-please*, pr-title.yml, LICENSE, netlify.toml, docs/) is intentionally
+// left out — that is the whole point of the scaffold.
 const SKELETON = [
   'deck',
   '.claude',
-  'verify',
   'CLAUDE.md',
   '.npmrc',
   '.gitignore',
@@ -55,9 +60,18 @@ const MANIFESTS = ['package.json', 'deck/package.json']
 // workspace sub-manifest is replaced by the generated root package.json below.
 const PRUNE = ['deck/package.json']
 
-// The verify tooling the generated deck needs, pulled (by name) from the root
-// package.json's devDependencies so the versions track the reference repo.
-const VERIFY_DEV_DEPS = ['@playwright/test', 'playwright-chromium']
+// A starter validator config generated into every new deck: extends the central
+// recommended preset, checked in so it is versionable and overridable per project.
+const STARTER_VALIDATOR_CONFIG = `// Miragon Slidev validator config. See @miragon/slidev-validator.
+// Severities: 'off' | 'warn' | 'error'. Rules marked [required] cannot be lowered
+// below 'error' here — suppress them deliberately via an 'exceptions' entry instead.
+export default {
+  extends: ['@miragon/slidev-validator/recommended'],
+  rules: {},
+  overrides: [],
+  exceptions: [],
+}
+`
 
 /** Parse argv with node:util — it validates unknown options and missing values for us. */
 function parseCliArgs(argv) {
@@ -67,6 +81,7 @@ function parseCliArgs(argv) {
     options: {
       ref: { type: 'string' },
       'toolkit-version': { type: 'string' },
+      'validator-version': { type: 'string' },
       version: { type: 'boolean', short: 'v' },
       help: { type: 'boolean', short: 'h' },
     },
@@ -76,6 +91,7 @@ function parseCliArgs(argv) {
     target: positionals[0],
     ref: values.ref,
     toolkitVersion: values['toolkit-version'],
+    validatorVersion: values['validator-version'],
     version: values.version,
     help: values.help,
   }
@@ -88,6 +104,7 @@ const USAGE = `Usage: npm create @miragon/slidev-deck@latest <dir> [options]
 Options:
   --ref <tag|sha|branch>   skeleton source ref (default: this version's release tag)
   --toolkit-version <x>    pin @miragon/slidev-toolkit to <x> (default: ${TOOLKIT_VERSION})
+  --validator-version <x>  pin @miragon/slidev-validator to <x> (default: ${VALIDATOR_VERSION})
   -v, --version            print the create-slidev-deck version
   -h, --help               show this help
 
@@ -127,22 +144,10 @@ function deckNameFrom(dir) {
   return basename(dir).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || 'my-deck'
 }
 
-/** The verify tooling versions, read (by name) from the root package.json's devDependencies. */
-function verifyDevDeps(rootPkg) {
-  const deps = {}
-  for (const name of VERIFY_DEV_DEPS) {
-    const version = rootPkg.devDependencies?.[name]
-    if (!version) throw new Error(`Root package.json is missing devDependency ${name}`)
-    deps[name] = version
-  }
-  return deps
-}
-
 /** Build the standalone deck package.json from the fetched skeleton's manifests. */
-function buildPackageJson(scratch, deckName, toolkitVersion) {
+function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
-  const rootPkg = readManifest('package.json')
   const portlessVersion = deckPkg.devDependencies?.portless
   if (!portlessVersion) throw new Error('Reference deck/package.json is missing devDependency portless')
   const pkg = {
@@ -154,11 +159,14 @@ function buildPackageJson(scratch, deckName, toolkitVersion) {
       'dev:app': 'slidev deck/slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1',
       build: 'slidev build deck/slides.md --out ../dist',
       export: 'slidev export deck/slides.md',
-      verify: rootPkg.scripts.verify,
-      'verify:source': rootPkg.scripts['verify:source'],
+      // The validator ships as its own bin; rendered mode boots Slidev + Chromium
+      // (pulled transitively via the validator), source mode is fast and CI-safe.
+      verify: 'slidev-validator --rendered',
+      'verify:ci': 'slidev-validator --rendered',
+      'verify:source': 'slidev-validator',
     },
     dependencies: { '@miragon/slidev-toolkit': toolkitVersion, ...deckPkg.dependencies },
-    devDependencies: { ...verifyDevDeps(rootPkg), portless: portlessVersion },
+    devDependencies: { '@miragon/slidev-validator': validatorVersion, portless: portlessVersion },
   }
   return JSON.stringify(pkg, null, 2) + '\n'
 }
@@ -195,16 +203,17 @@ async function rollback(target, preexisting) {
 }
 
 /** Assemble the deck in `target`: skeleton, prune, then the generated overlay. */
-async function layDownDeck({ scratch, target, deckName, toolkitVersion, ref, preexisting }) {
+async function layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, ref, preexisting }) {
   try {
     await mkdir(target, { recursive: true })
     await copySkeleton(scratch, target, ref)
     for (const rel of PRUNE) await rm(join(target, rel), { force: true })
 
-    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion)
+    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion)
     await writeFile(join(target, 'package.json'), packageJson)
     const portlessJson = JSON.stringify({ name: deckName, script: 'dev:app' }, null, 2) + '\n'
     await writeFile(join(target, 'portless.json'), portlessJson)
+    await writeFile(join(target, 'slidev-validator.config.mjs'), STARTER_VALIDATOR_CONFIG)
     await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
   } catch (err) {
     await rollback(target, preexisting)
@@ -241,6 +250,7 @@ async function main() {
   const preexisting = await ensureEmptyTarget(target)
   const ref = opts.ref ?? `create-slidev-deck-v${SELF.version}`
   const toolkitVersion = opts.toolkitVersion ?? TOOLKIT_VERSION
+  const validatorVersion = opts.validatorVersion ?? VALIDATOR_VERSION
   const deckName = deckNameFrom(target)
 
   const source = process.env.CREATE_DECK_SKELETON ? 'local checkout' : `${REPO}#${ref}`
@@ -248,7 +258,7 @@ async function main() {
 
   const scratch = await fetchSkeleton(ref)
   try {
-    await layDownDeck({ scratch, target, deckName, toolkitVersion, ref, preexisting })
+    await layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, ref, preexisting })
   } finally {
     await rm(scratch, { recursive: true, force: true })
   }

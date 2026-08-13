@@ -11,13 +11,9 @@
     "dev:plain": "npm run dev:app -w deck",
     "build": "npm run build -w deck",
     "export": "npm run export -w deck",
-    "verify": "playwright test -c verify/playwright.config.ts; playwright show-report verify/playwright-report",
-    "verify:ci": "playwright test -c verify/playwright.config.ts --reporter=list",
-    "verify:source": "VERIFY_SOURCE_ONLY=1 playwright test -c verify/playwright.config.ts -g @source",
+    "verify": "slidev-validator --rendered",
+    "verify:ci": "slidev-validator --rendered",
+    "verify:source": "slidev-validator",
     "shot": "node scripts/shot.mjs"
-  },
-  "devDependencies": {
-    "@playwright/test": "1.62.1",
-    "playwright-chromium": "1.62.1"
   }
 }
