@@ -1,6 +1,6 @@
 {
   "name": "@miragon/slidev-validator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "The Miragon Slidev deck validator: a configurable design-system linter (stable rule IDs, off/warn/error severities, extends/overrides/exceptions) shipped as a versioned CLI so central guardrail improvements reach decks over npm instead of a frozen copy.",
   "keywords": [

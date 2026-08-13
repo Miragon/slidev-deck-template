@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/Miragon/slidev-deck-template/compare/v1.15.1...v1.16.0) (2026-08-13)
+
+
+### Features
+
+* **verify:** reserve and validate safe areas around global overlays ([#110](https://github.com/Miragon/slidev-deck-template/issues/110)) ([fa86e8f](https://github.com/Miragon/slidev-deck-template/commit/fa86e8f1da9cb6d323e0a74187df55208bb771d1))
+
 ## [1.15.1](https://github.com/Miragon/slidev-deck-template/compare/v1.15.0...v1.15.1) (2026-08-10)
 
 
