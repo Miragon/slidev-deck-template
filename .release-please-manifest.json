@@ -1,5 +1,6 @@
 {
   "packages/toolkit": "1.16.0",
   "packages/create-deck": "1.2.4",
-  "packages/validator": "0.5.1"
+  "packages/validator": "0.5.1",
+  "miragon-slidev-plugin": "1.0.0"
 }

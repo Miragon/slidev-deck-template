@@ -25,7 +25,7 @@ Edit files under `deck/` and save — the preview updates instantly. Every demo 
 |---|---|
 | `deck/` | **Your content** — `slides.md` is the entry (cover + one `src:` import per chapter + closing); each chapter is a folder `deck/chapter/NN-name/` with its own `resources/`. |
 | `slidev-validator.config.mjs` | Your copy of the guardrail config (extends `@miragon/slidev-validator/recommended`). Brand guardrails ship as the versioned `@miragon/slidev-validator` package (`npm run verify`) — sanctioned layouts, white cards, no em-dashes, black headings, light/transparent diagrams — so central improvements arrive over `npm update`, and you tune or scope rules here without forking. |
-| `CLAUDE.md` + `.claude/skills/` | Authoring guidance for Claude Code, so a session knows the design system on the first prompt. |
+| `CLAUDE.md` + `.claude/settings.json` | Authoring guidance for Claude Code. `CLAUDE.md` loads on the first prompt; `settings.json` registers the `miragon-slidev` plugin marketplace so the `slides` + `excalidraw` skills install (and auto-update) instead of shipping as a frozen copy. |
 | `.github/workflows/` | **Build Deck** (static build plus `npm run verify:source`) and **Pin Check** run on every push and PR. |
 
 The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you never touch the theme.
@@ -47,7 +47,7 @@ The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you 
 3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
 4. Or open the repo with Claude Code and let it draft the first pass from your outline.
 
-Authoring conventions live in the `slides` skill (`.claude/skills/slides/`). Starter prompts:
+Authoring conventions live in the `slides` skill (the `miragon-slidev` plugin; `miragon-slidev:slides`). Starter prompts:
 
 > Outline a 30-minute talk on [topic] using `cover`, three `section` chapters with two `content` slides each, then `closing`.
 
@@ -55,7 +55,22 @@ Authoring conventions live in the `slides` skill (`.claude/skills/slides/`). Sta
 
 ## Staying up to date
 
-Your dependencies (`@miragon/slidev-toolkit`, `@slidev/cli`, the addons) are exact-pinned so installs stay
+**Authoring skills.** The `slides` and `excalidraw` skills ship as the `miragon-slidev` Claude Code plugin, not a
+frozen copy in this repo, so central improvements reach you automatically. `.claude/settings.json` already
+registers the marketplace with auto-update on: the first time you trust this folder in Claude Code you are
+prompted to install the plugin, and later versions arrive in the background (run `/reload-plugins` when prompted).
+To manage it by hand — or if the prompt does not appear:
+
+```
+/plugin marketplace add Miragon/slidev-deck-template
+/plugin install miragon-slidev@miragon-slidev
+/plugin marketplace update miragon-slidev   # pull the latest catalog on demand
+```
+
+The skills are then invoked as `miragon-slidev:slides` and `miragon-slidev:excalidraw` (Claude also selects them
+automatically when you work under `deck/`).
+
+**Dependencies.** Your npm dependencies (`@miragon/slidev-toolkit`, `@slidev/cli`, the addons) are exact-pinned so installs stay
 reproducible. For a deck you keep around, enable [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates)
 so it opens PRs when new versions ship — you get the latest toolkit and Slidev without hunting for updates,
 and **Build Deck** + **Pin Check** gate each PR. Add `.github/dependabot.yml`:

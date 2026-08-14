@@ -1,7 +1,7 @@
 # CLAUDE.md — Miragon Slidev Deck Template
 
 > This file is read automatically by Claude Code on every task.
-> It is intentionally short. **The authoring guide is the `slides` skill** (`.claude/skills/slides/`); the rendering truth is the code in `packages/toolkit/` (`styles/theme.css`, `layouts/*.vue`, `components/*.vue`).
+> It is intentionally short. **The authoring guide is the `slides` skill**, shipped by the auto-installed `miragon-slidev` Claude Code plugin (invoked as `miragon-slidev:slides`); the rendering truth is the code in `packages/toolkit/` (`styles/theme.css`, `layouts/*.vue`, `components/*.vue`).
 
 This repo is a **template** for a single Miragon-branded Slidev presentation. The design system is the **`@miragon/slidev-toolkit`** package in **`packages/toolkit/`**, an npm-workspace package that the deck consumes by name; the deck lives under **`deck/`** and pulls the theme via `theme: '@miragon/slidev-toolkit'`. Fill the deck with content; the theme is fixed.
 
@@ -11,9 +11,9 @@ The entry **`deck/slides.md`** holds only the cover and the closing; the body is
 
 ## Required reading (always, before any task)
 
-**Always invoke the `slides` skill before creating or editing any slide.** Editing the deck is never freehand: load the skill first and follow it for every layout, component, and editorial decision.
+**Always invoke the `slides` skill (`miragon-slidev:slides`) before creating or editing any slide.** Editing the deck is never freehand: load the skill first and follow it for every layout, component, and editorial decision.
 
-1. **The `slides` skill** (`.claude/skills/slides/SKILL.md`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 15 layout archetypes (`cover`, `hero`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Agenda`), the white-card rule, content rules (one consistent deck language, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
+1. **The `slides` skill** (the `miragon-slidev` plugin; `miragon-slidev:slides`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 15 layout archetypes (`cover`, `hero`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Agenda`), the white-card rule, content rules (one consistent deck language, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
 2. **`deck/`** — the reference implementation. Every archetype has a demo slide with a comment block listing `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE`. Open the relevant `deck/chapter/<chapter>/<chapter>.md` alongside the skill when in doubt.
 
 Do not duplicate rules across files (this one, the skill, project memory). The rendering truth lives in `packages/toolkit/`; point at the `slides` skill for everything else.

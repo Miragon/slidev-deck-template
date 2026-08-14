@@ -43,7 +43,7 @@ after(() => cleanup())
 test('emits the deck skeleton', () => {
   const required = [
     'deck/slides.md',
-    '.claude/skills/slides/SKILL.md',
+    '.claude/settings.json',
     'CLAUDE.md',
     'slidev-validator.config.mjs',
     '.npmrc',
@@ -54,9 +54,26 @@ test('emits the deck skeleton', () => {
   for (const f of required) assert.ok(existsSync(join(out, f)), `missing ${f}`)
 })
 
+test('wires the miragon-slidev plugin marketplace instead of copying skills', () => {
+  // The authoring skills ship as the miragon-slidev Claude Code plugin, not a frozen
+  // copy — so no .claude/skills/ and no plugin source in the deck …
+  assert.ok(!existsSync(join(out, '.claude/skills')), 'must not copy skills into the deck')
+  assert.ok(!existsSync(join(out, 'miragon-slidev-plugin')), 'must not copy the plugin source into the deck')
+  // … instead the generated settings register the marketplace + enable the plugin.
+  const settings = JSON.parse(readFileSync(join(out, '.claude/settings.json'), 'utf8'))
+  assert.deepEqual(settings.extraKnownMarketplaces['miragon-slidev'].source, {
+    source: 'github',
+    repo: 'Miragon/slidev-deck-template',
+  })
+  assert.equal(settings.extraKnownMarketplaces['miragon-slidev'].autoUpdate, true)
+  assert.equal(settings.enabledPlugins['miragon-slidev@miragon-slidev'], true)
+})
+
 test('omits the template-only files', () => {
   const forbidden = [
     'packages',
+    'miragon-slidev-plugin', // the skills now ship as that plugin, not a copied folder
+    '.claude-plugin', // the marketplace manifest stays in the template repo
     'verify', // the validator now ships as @miragon/slidev-validator, not a copied folder
     'release-please-config.json',
     '.release-please-manifest.json',
