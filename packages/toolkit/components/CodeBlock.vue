@@ -176,12 +176,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   background: rgba(255, 255, 255, 0.85);
   color: var(--miragon-text-muted);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-}
-.mg-code:hover .mg-code__toggle,
-.mg-code__toggle:focus-visible {
   opacity: 1;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 .mg-code__toggle:hover {
   color: var(--miragon-blue);
