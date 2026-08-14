@@ -5,27 +5,50 @@ import { toRel } from '../../helpers.mjs'
 /**
  * Content headings (frontmatter `title` → `<h2 class="*-title">`) must stay on one
  * line; a wrap shrinks the content area below. Statement headings (`hero`/`section`/
- * `subsection`/`cover`, markdown `#` → `<h1>`) may wrap and are not checked.
+ * `subsection`/`cover`/`closing` and the full-bleed `default`, markdown `#` → `<h1>`)
+ * may wrap and are the only layouts exempt from the budget.
+ *
+ * Every other title-bearing layout is budgeted — including any deck-local
+ * `deck/layouts/*.vue`. An unknown layout defaults to the BASE limit rather than
+ * silently passing; a layout with no `title:` frontmatter never triggers a check.
  *
  * Two checks: an explicit break (`<br>`/newline/trailing `\`) is always flagged; the
  * char budget is a heuristic ("WWW" and "iii" differ in width).
  */
 
 /**
- * Max heading chars per layout, derived from each layout's container width + font
- * size (~0.5em advance) with headroom over the longest real heading (38).
- * `content-image`'s title sits in one narrow grid column.
+ * Base single-line budget for a content title. Calibrated against the rendered
+ * heading, not guessed: limit ≈ floor(titleWidthPx / advancePerChar) minus a ~12%
+ * margin, where advancePerChar is measured once in the brand font at the title's
+ * size/weight/letter-spacing (Geist, weight 800, ~33.7px, letter-spacing -0.02em →
+ * ~17.3px/char over an ~820px title column ⇒ ~47-char wrap point ⇒ 44 with margin).
+ * The margin keeps limits clear of the pixel boundary where a few px of
+ * kerning/hinting flips a heading onto a second line in the presenter's browser.
+ */
+const BASE_LIMIT = 44
+
+/**
+ * Statement layouts whose heading is a markdown `#` → `<h1>` that may legitimately
+ * wrap; never budget-checked. Everything not listed here is budgeted.
+ */
+const STATEMENT_LAYOUTS = new Set(['hero', 'section', 'subsection', 'cover', 'closing', 'default'])
+
+/**
+ * Per-layout budget where the title area differs from the base content column.
+ * `content-image`'s title sits in one narrow grid column; the wide diagram/showcase
+ * layouts give the title the full slide width. Layouts absent here use BASE_LIMIT.
+ * Same re-calibration formula as BASE_LIMIT, per layout's title width.
  */
 const HEADING_LIMITS = {
-  content: 50,
-  compare: 50,
-  'content-image': 28,
-  showcase: 56,
-  goodbad: 56,
-  excalidraw: 56,
-  bpmn: 56,
-  dmn: 56,
-  mermaid: 56,
+  content: 44,
+  compare: 44,
+  'content-image': 24,
+  showcase: 49,
+  goodbad: 49,
+  excalidraw: 49,
+  bpmn: 49,
+  dmn: 49,
+  mermaid: 49,
 }
 
 /** Off-by-default per-slide opt-out from both checks. */
@@ -44,14 +67,14 @@ function hasExplicitBreak(title) {
 /** Pure per-heading check (fixture-testable). Returns reasons; [] = ok. */
 export function scanHeading(title, layout, optOut = false) {
   if (optOut) return []
-  if (!layout || !(layout in HEADING_LIMITS)) return []
+  if (!layout || STATEMENT_LAYOUTS.has(layout)) return []
   if (typeof title !== 'string' || !title.trim()) return []
 
   const reasons = []
   if (hasExplicitBreak(title)) {
     reasons.push('content heading contains an explicit line break; write it as a single-line heading')
   }
-  const limit = HEADING_LIMITS[layout]
+  const limit = HEADING_LIMITS[layout] ?? BASE_LIMIT
   const len = visibleLength(title)
   if (len > limit) {
     reasons.push(`content heading is ${len} characters; the ${layout} layout allows up to ${limit}. Shorten it or use a shorter heading`)
