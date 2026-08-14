@@ -38,6 +38,8 @@ const props = defineProps<{
   expandable?: boolean
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const showHeader = () => Boolean((props.file || props.lang) && !props.hideHeader)
 
 // CSS-Variablen für Inline- und Vollbild-Schriftgröße nur setzen, wenn gesetzt.
@@ -71,7 +73,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 
 <template>
   <Teleport to="body" :disabled="!expanded">
-    <div class="mg-code" :class="{ 'mg-code--expanded': expanded }" @click.self="collapse">
+    <div class="mg-code" :class="{ 'mg-code--expanded': expanded }" v-bind="$attrs" @click.self="collapse">
       <div
         class="mg-code__window"
         :class="{ 'mg-code--sized': size }"
