@@ -1,0 +1,17 @@
+{
+  "name": "miragon-slidev",
+  "owner": {
+    "name": "Miragon",
+    "url": "https://github.com/Miragon"
+  },
+  "metadata": {
+    "description": "Miragon Slidev authoring capabilities for Claude Code, distributed alongside the @miragon/slidev-toolkit template."
+  },
+  "plugins": [
+    {
+      "name": "miragon-slidev",
+      "source": "./miragon-slidev-plugin",
+      "description": "Miragon Slidev authoring skills: the `slides` design-system guide and the `excalidraw` diagram author/repair skill."
+    }
+  ]
+}

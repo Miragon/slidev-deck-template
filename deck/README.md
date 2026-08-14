@@ -2,7 +2,7 @@
 
 This is the part you edit. The deck consumes the [`@miragon/slidev-toolkit`](../packages/toolkit/) theme by name and fills it with content. The deck itself *is* its documentation: it teaches this repo while demoing every archetype.
 
-> Never author freehand. Load the **`slides` skill** (`.claude/skills/slides/`) first — it is the authoring guide for layouts, components and editorial rules.
+> Never author freehand. Load the **`slides` skill** (`miragon-slidev:slides`, from the `miragon-slidev` plugin) first — it is the authoring guide for layouts, components and editorial rules.
 
 ## Structure
 

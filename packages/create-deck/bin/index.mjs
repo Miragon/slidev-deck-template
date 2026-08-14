@@ -1,13 +1,20 @@
 #!/usr/bin/env node
 // Scaffold a lean Miragon Slidev deck.
 //
-// Emits ONLY what a deck needs: the shared skeleton (deck/, .claude/, CLAUDE.md,
-// .npmrc, .gitignore, the two CI workflows) plus a generated overlay (a standalone
-// package.json + a starter validator config + a deck-focused README). Neither the
-// toolkit NOR the validator is vendored: both are added as exact-pinned npm
-// dependencies. The deck consumes the toolkit via the theme and runs the validator
-// via its `slidev-validator` bin, so central guardrail improvements reach the deck
-// over a controlled `npm update` instead of a frozen copy of verify/.
+// Emits ONLY what a deck needs: the shared skeleton (deck/, CLAUDE.md, .npmrc,
+// .gitignore, the two CI workflows) plus a generated overlay (a standalone
+// package.json + a starter validator config + a `.claude/settings.json` that wires the
+// Miragon plugin marketplace + a deck-focused README). Neither the toolkit NOR the
+// validator is vendored: both are added as exact-pinned npm dependencies. The deck
+// consumes the toolkit via the theme and runs the validator via its `slidev-validator`
+// bin, so central guardrail improvements reach the deck over a controlled `npm update`
+// instead of a frozen copy of verify/.
+//
+// The AI authoring capabilities (the `slides` + `excalidraw` skills) are likewise NOT
+// vendored: instead of a frozen copy under .claude/skills/, they ship as the
+// `miragon-slidev` Claude Code plugin. The generated .claude/settings.json registers
+// the template repo as a plugin marketplace (autoUpdate on) and enables the plugin, so
+// the skills update in place instead of drifting from a scaffold-time snapshot.
 //
 // The generated package.json is DERIVED from the fetched skeleton's own manifests
 // (deck/package.json for the Slidev runtime deps), so the deck's versions are
@@ -40,12 +47,13 @@ const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
 const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 
 // Paths copied verbatim from the fetched skeleton into the new deck. Anything not
-// listed (packages/, verify/ [now the @miragon/slidev-validator package],
-// release-please*, pr-title.yml, LICENSE, netlify.toml, docs/) is intentionally
-// left out — that is the whole point of the scaffold.
+// listed (packages/, miragon-slidev-plugin/ [the skills now ship as that plugin],
+// verify/ [now the @miragon/slidev-validator package], release-please*, pr-title.yml,
+// LICENSE, netlify.toml, docs/) is intentionally left out — that is the whole point of
+// the scaffold. `.claude/` is NOT copied: its only deck-facing content is the generated
+// settings.json (below) that wires the plugin marketplace.
 const SKELETON = [
   'deck',
-  '.claude',
   'CLAUDE.md',
   '.npmrc',
   '.gitignore',
@@ -72,6 +80,25 @@ export default {
   exceptions: [],
 }
 `
+
+// Generated into every new deck as .claude/settings.json: registers the template repo
+// as a Claude Code plugin marketplace and enables the `miragon-slidev` plugin (the
+// `slides` + `excalidraw` authoring skills). autoUpdate keeps them current in the
+// background; trusting the deck folder in Claude Code prompts the one-time install.
+// Checked in so it is versionable and a consultant can pin or disable it per project.
+const CLAUDE_SETTINGS = JSON.stringify(
+  {
+    extraKnownMarketplaces: {
+      'miragon-slidev': {
+        source: { source: 'github', repo: 'Miragon/slidev-deck-template' },
+        autoUpdate: true,
+      },
+    },
+    enabledPlugins: { 'miragon-slidev@miragon-slidev': true },
+  },
+  null,
+  2,
+) + '\n'
 
 /** Parse argv with node:util — it validates unknown options and missing values for us. */
 function parseCliArgs(argv) {
@@ -214,6 +241,8 @@ async function layDownDeck({ scratch, target, deckName, toolkitVersion, validato
     const portlessJson = JSON.stringify({ name: deckName, script: 'dev:app' }, null, 2) + '\n'
     await writeFile(join(target, 'portless.json'), portlessJson)
     await writeFile(join(target, 'slidev-validator.config.mjs'), STARTER_VALIDATOR_CONFIG)
+    await mkdir(join(target, '.claude'), { recursive: true })
+    await writeFile(join(target, '.claude', 'settings.json'), CLAUDE_SETTINGS)
     await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
   } catch (err) {
     await rollback(target, preexisting)

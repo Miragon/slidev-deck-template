@@ -20,6 +20,20 @@
       "package-name": "@miragon/slidev-validator",
       "component": "slidev-validator",
       "include-component-in-tag": true
+    },
+    "miragon-slidev-plugin": {
+      "release-type": "simple",
+      "package-name": "miragon-slidev-plugin",
+      "component": "miragon-slidev-plugin",
+      "include-component-in-tag": true,
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

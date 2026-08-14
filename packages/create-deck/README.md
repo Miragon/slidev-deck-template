@@ -49,9 +49,7 @@ my-talk/
 │   │   └── 05-authoring/…
 │   └── README.md
 ├── slidev-validator.config.mjs    # guardrail config — extends @miragon/slidev-validator/recommended
-├── .claude/skills/                # authoring guidance for Claude Code
-│   ├── slides/
-│   └── excalidraw/
+├── .claude/settings.json          # ← generated overlay: registers the miragon-slidev plugin marketplace
 ├── .github/workflows/             # only Build Deck + Pin Check
 │   ├── ci.yml
 │   └── pin-check.yml
@@ -62,9 +60,15 @@ my-talk/
 └── package.json                   # ← generated overlay (standalone, toolkit pinned, no workspace)
 ```
 
-Everything except the two `← generated overlay` files is the shared **skeleton**, fetched from the
+Everything except the `← generated overlay` files is the shared **skeleton**, fetched from the
 template repo (a single source of design truth). It never emits the template-only infrastructure:
-`packages/`, the release-please / pr-title workflows and config, `LICENSE`, or `netlify.toml`.
+`packages/`, the `miragon-slidev-plugin/` skill source and its `.claude-plugin/` marketplace manifest, the
+release-please / pr-title workflows and config, `LICENSE`, or `netlify.toml`.
+
+The authoring skills (`slides`, `excalidraw`) are delivered as the `miragon-slidev` Claude Code plugin,
+not emitted into the deck. The generated `.claude/settings.json` registers the template repo as a plugin
+marketplace, so a deck pulls the skills from there and Claude Code keeps them up to date, rather than
+carrying a scaffold-time snapshot.
 
 ## How it stays a single source of truth
 

@@ -1,0 +1,17 @@
+{
+  "name": "miragon-slidev",
+  "description": "Miragon Slidev authoring skills: the `slides` design-system guide (layout archetypes, components, brand rules) and the `excalidraw` diagram author/repair skill. Targets @miragon/slidev-toolkit >=1.15.0 <2.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Miragon"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/miragon-slidev-plugin#readme",
+  "repository": "https://github.com/Miragon/slidev-deck-template/tree/main/miragon-slidev-plugin",
+  "keywords": [
+    "slidev",
+    "miragon",
+    "skills",
+    "design-system"
+  ]
+}
