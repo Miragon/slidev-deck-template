@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.1](https://github.com/Miragon/slidev-deck-template/compare/v1.16.0...v1.16.1) (2026-08-14)
+
+
+### Bug Fixes
+
+* **toolkit:** CodeBlock forwards class/style to its root ([#126](https://github.com/Miragon/slidev-deck-template/issues/126)) ([6c0de71](https://github.com/Miragon/slidev-deck-template/commit/6c0de719bd56a721bc83dc3600994935ba6e4e26))
+
 ## [1.16.0](https://github.com/Miragon/slidev-deck-template/compare/v1.15.1...v1.16.0) (2026-08-13)
 
 
