@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.5.1...slidev-validator-v0.6.0) (2026-08-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **validator:** content-heading is a required, error-level rule; the tighter budgets can newly fail decks that were green under the old limits.
+
+### Features
+
+* **validator:** tighten content-heading budgets and cover all title-bearing layouts ([#125](https://github.com/Miragon/slidev-deck-template/issues/125)) ([f4fac07](https://github.com/Miragon/slidev-deck-template/commit/f4fac079f0c5bb65525dd6d817b74830d76e0343))
+
 ## [0.5.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.5.0...slidev-validator-v0.5.1) (2026-08-13)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.2.4...create-slidev-deck-v1.3.0) (2026-08-14)
+
+
+### Features
+
+* **miragon-slidev:** ship authoring skills as an auto-updating plugin ([#123](https://github.com/Miragon/slidev-deck-template/issues/123)) ([4abc33b](https://github.com/Miragon/slidev-deck-template/commit/4abc33bd7e74e6febec78997402fbc4d78dfa8d5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-validator bumped from 0.5.1 to 0.6.0
+
 ## [1.2.4](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.2.3...create-slidev-deck-v1.2.4) (2026-08-13)
 
 
