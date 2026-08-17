@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.1.0...miragon-slidev-plugin-v1.2.0) (2026-08-17)
+
+
+### Features
+
+* **toolkit:** add split mode to diagram layouts ([#133](https://github.com/Miragon/slidev-deck-template/issues/133)) ([4f5a29f](https://github.com/Miragon/slidev-deck-template/commit/4f5a29fe86c5d84dddab45f8a47652e061289b30))
+
 ## [1.1.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.0.0...miragon-slidev-plugin-v1.1.0) (2026-08-14)
 
 
