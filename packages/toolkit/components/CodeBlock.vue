@@ -251,6 +251,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 
 .mg-code--expanded .mg-code__window :deep(.slidev-code) {
   font-size: var(--mg-code-expanded-size, max(1.25rem, var(--mg-code-size, 0px))) !important;
+  line-height: 1.9 !important;
 }
 
 /* Shiki-Fence: Rahmen aus code.css zurücksetzen, die Komponente besitzt ihn. */

@@ -23,6 +23,7 @@
   border-radius: 0.6rem;
   box-shadow: 0 8px 20px rgba(51, 93, 229, 0.06);
   overflow-x: auto;
+  line-height: 1.2 !important;
 }
 
 /* A caption line under a fence (a following *italic* line) reads as a muted
