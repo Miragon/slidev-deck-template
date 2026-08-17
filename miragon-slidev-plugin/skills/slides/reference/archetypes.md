@@ -141,7 +141,11 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 | `engine` | `camunda7` / `zeebe` — `modeler` mode only. Mounts an engine-specific properties panel in the modeler's fullscreen "Edit" view. Omit for a panel-less modeler. |
 | `tokenSimulation` (bool) | run the token simulation inside the modeler (`modeler` mode, default `false`) |
 | `transactionBoundaries` (bool) | overlay Camunda 7 transaction boundaries in the modeler's fullscreen "Edit" view (`modeler` mode, requires `engine: camunda7`, default `false`) |
-| **slot** | optional caption below the diagram |
+| `side` | `left` / `right` — **split mode**: frame the diagram on that side, the slot becomes the content column opposite. Omit for full-width + caption below. |
+| `ratio` (str) | diagram/content column ratio in split mode (default `"1/1"`) |
+| **slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram (bullets / `<StepList>` / `<Card>`, styled like a content slide). |
+
+**Split mode** (`side`) puts the framed diagram on one side and your points on the other, without the `content` + `SplitView` scaffolding. Vary `side` across slides so the diagram is not always on the same edge, and keep the content column short (~4 bullets) so it clears the bottom-left page chrome (verify flags collisions).
 
 **Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
@@ -162,7 +166,11 @@ A `.dmn` file rendered via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN model
 | `showAnnotations` (bool) | show the trailing annotations column (default `false`; `table` / `simulate` modes) |
 | `showDrdButton` (bool) | show the built-in "View DRD" button (default `false`; `table` / `simulate` modes) |
 | `engine` | `camunda` — mounts the Camunda properties panel in the modeler (`modeler` mode only; omit for a panel-less modeler) |
-| **slot** | optional caption below the decision |
+| `side` | `left` / `right` — **split mode**: frame the decision on that side, the slot becomes the content column opposite. Omit for full-width + caption below. |
+| `ratio` (str) | decision/content column ratio in split mode (default `"1/1"`) |
+| **slot** | full mode: optional caption below the decision. **split mode**: the content column beside the decision (bullets / `<StepList>` / `<Card>`, styled like a content slide). |
+
+**Split mode** works exactly like `bpmn`'s (`side` + `ratio`); keep the content column short so it clears the bottom-left page chrome.
 
 **Dependency:** `slidev-addon-dmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
@@ -174,10 +182,13 @@ The sibling of `bpmn` / `dmn`, but for a text-generated Mermaid diagram: header 
 |---|---|
 | `title`, `eyebrow` (str) | — |
 | `accent` | blue / green / mixed |
+| `side` | `left` / `right` — **split mode**: frame the diagram on that side; the `::caption::` slot becomes the content column opposite. Omit for full-width + caption below. |
+| `ratio` (str) | diagram/content column ratio in split mode (default `"1/1"`) |
+| `height` (str) | height of the framed diagram card in split mode (default `"22rem"`; ignored in full mode) |
 | **default slot** | the ` ```mermaid ` fence (or a `<<<` import) — framed in the white card |
-| **`::caption::` slot** | optional caption below the diagram |
+| **`::caption::` slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram. |
 
-No file-path/height prop: the Mermaid SVG sizes itself and is centered in the card; shrink a tall diagram with the fence's scale option (` ```mermaid {scale: 0.8} `), never by editing the theme. The diagram is brand-styled globally by `packages/toolkit/setup/mermaid.ts` (Miragon palette, Geist, rounded box corners) — no per-slide styling. Use this layout when the diagram should be the framed focal point; a Mermaid fence still renders inline in a plain `content` layout when it sits alongside bullets.
+In full mode there is no file-path/height prop: the Mermaid SVG sizes itself and is centered in the card; shrink a tall diagram with the fence's scale option (` ```mermaid {scale: 0.8} `), never by editing the theme. In **split mode** the diagram still comes from the default slot, while the `::caption::` slot moves beside it as the content column (bounded by `height`). The diagram is brand-styled globally by `packages/toolkit/setup/mermaid.ts` (Miragon palette, Geist, rounded box corners) — no per-slide styling. Use this layout when the diagram should be the framed focal point; a Mermaid fence still renders inline in a plain `content` layout when it sits alongside bullets.
 
 ## excalidraw — Excalidraw diagram framed on-brand (static)
 
@@ -189,9 +200,12 @@ The sibling of `bpmn` / `dmn` / `mermaid`, but for a hand-drawn `.excalidraw.svg
 | `accent` | blue / green / mixed |
 | `diagram` (str) | the `.excalidraw.svg` in the chapter's `resources/`, e.g. `resources/04-diagrams/x.excalidraw.svg` |
 | `alt` (str) | alt text for the diagram image |
-| **slot** | optional caption below the diagram |
+| `side` | `left` / `right` — **split mode**: frame the diagram on that side, the slot becomes the content column opposite. Omit for full-width + caption below. |
+| `ratio` (str) | diagram/content column ratio in split mode (default `"1/1"`) |
+| `height` (str) | height of the framed diagram card in split mode (default `"22rem"`; ignored in full mode) |
+| **slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram (bullets / `<StepList>` / `<Card>`, styled like a content slide). |
 
-Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use this layout when an Excalidraw diagram should be the framed focal point of a whole slide; to frame one *part* of a slide (e.g. a `SplitView` column) reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.
+Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use full mode when an Excalidraw diagram should be the framed focal point of a whole slide, and **split mode** (`side`) when it should sit beside its explanation without hand-building a `content` + `SplitView` layout. To frame one *part* of a slide manually reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.
 
 ## showcase — interactive feature explorer (static, interactive)
 

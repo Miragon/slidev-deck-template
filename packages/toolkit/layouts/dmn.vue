@@ -40,11 +40,18 @@
  *                     "table" / "simulate" modes)
  *   engine          — "camunda" — mounts the Camunda properties panel in the
  *                     modeler ("modeler" mode only; omit for a panel-less modeler)
+ *   side            — split layout: "left" | "right" places the decision on that
+ *                     side and the slot becomes the content column on the other
+ *                     side. Omit for the default full-width decision + caption.
+ *   ratio           — decision/content column ratio in split mode (default "1/1")
  * Slot:
- *   default  — optional caption / explanatory line below the decision
+ *   default  — full mode: optional caption below the decision.
+ *              split mode: the content column beside the decision (bullets,
+ *              <StepList>, <Card> …), styled like a content slide.
  */
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
+import SplitView from '../components/SplitView.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -59,6 +66,8 @@ const props = withDefaults(
     showAnnotations?: boolean
     showDrdButton?: boolean
     engine?: 'camunda'
+    side?: 'left' | 'right'
+    ratio?: string
     frontmatter?: Record<string, unknown>
   }>(),
   {
@@ -69,6 +78,7 @@ const props = withDefaults(
     fullscreenFontSize: '18px',
     showAnnotations: false,
     showDrdButton: false,
+    ratio: '1/1',
   },
 )
 
@@ -98,51 +108,76 @@ const diagramSrc = computed(() => withBase(props.diagram))
         <h2 v-if="title" class="dmn-title">{{ title }}</h2>
       </header>
 
-      <DiagramFrame class="dmn-canvas" padding="compact">
-        <template v-if="diagram">
-          <!-- Each addon component takes the dmnFilePath / width / height
-               signature; the extra props differ per mode (see prop docs). -->
-          <DmnSimulate
-            v-if="mode === 'simulate'"
-            :dmnFilePath="diagramSrc"
-            width="100%"
-            :height="height"
-            :decisionId="decisionId"
-            :fontSize="fontSize"
-            :fullscreenFontSize="fullscreenFontSize"
-            :showAnnotations="showAnnotations"
-            :showDrdButton="showDrdButton"
-          />
-          <DmnDrd
-            v-else-if="mode === 'drd'"
-            :dmnFilePath="diagramSrc"
-            width="100%"
-            :height="height"
-            :fontSize="fontSize"
-          />
-          <DmnModeler
-            v-else-if="mode === 'modeler'"
-            :dmnFilePath="diagramSrc"
-            :engine="engine"
-            width="100%"
-            :height="height"
-          />
-          <DmnTable
-            v-else
-            :dmnFilePath="diagramSrc"
-            width="100%"
-            :height="height"
-            :decisionId="decisionId"
-            :fontSize="fontSize"
-            :showAnnotations="showAnnotations"
-            :showDrdButton="showDrdButton"
-          />
-        </template>
-      </DiagramFrame>
+      <template v-if="!side">
+        <DiagramFrame class="dmn-canvas" padding="compact">
+          <template v-if="diagram">
+            <!-- Each addon component takes the dmnFilePath / width / height
+                 signature; the extra props differ per mode (see prop docs). -->
+            <DmnSimulate
+              v-if="mode === 'simulate'"
+              :dmnFilePath="diagramSrc"
+              width="100%"
+              :height="height"
+              :decisionId="decisionId"
+              :fontSize="fontSize"
+              :fullscreenFontSize="fullscreenFontSize"
+              :showAnnotations="showAnnotations"
+              :showDrdButton="showDrdButton"
+            />
+            <DmnDrd v-else-if="mode === 'drd'" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
+            <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
+            <DmnTable
+              v-else
+              :dmnFilePath="diagramSrc"
+              width="100%"
+              :height="height"
+              :decisionId="decisionId"
+              :fontSize="fontSize"
+              :showAnnotations="showAnnotations"
+              :showDrdButton="showDrdButton"
+            />
+          </template>
+        </DiagramFrame>
 
-      <div v-if="$slots.default" class="dmn-caption">
-        <slot />
-      </div>
+        <div v-if="$slots.default" class="dmn-caption">
+          <slot />
+        </div>
+      </template>
+
+      <SplitView v-else class="dmn-split" :ratio="ratio" :reverse="side === 'right'" align="center">
+        <template #visual>
+          <DiagramFrame class="dmn-canvas dmn-canvas--split" padding="compact" :height="height">
+            <template v-if="diagram">
+              <DmnSimulate
+                v-if="mode === 'simulate'"
+                :dmnFilePath="diagramSrc"
+                width="100%"
+                :height="height"
+                :decisionId="decisionId"
+                :fontSize="fontSize"
+                :fullscreenFontSize="fullscreenFontSize"
+                :showAnnotations="showAnnotations"
+                :showDrdButton="showDrdButton"
+              />
+              <DmnDrd v-else-if="mode === 'drd'" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
+              <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
+              <DmnTable
+                v-else
+                :dmnFilePath="diagramSrc"
+                width="100%"
+                :height="height"
+                :decisionId="decisionId"
+                :fontSize="fontSize"
+                :showAnnotations="showAnnotations"
+                :showDrdButton="showDrdButton"
+              />
+            </template>
+          </DiagramFrame>
+        </template>
+        <div class="dmn-body mg-diagram-body" :style="{ '--mg-body-grad': gradientVar, '--mg-body-accent': accentVar }">
+          <slot />
+        </div>
+      </SplitView>
     </div>
   </div>
 </template>
@@ -201,6 +236,14 @@ const diagramSrc = computed(() => withBase(props.diagram))
 .dmn-canvas {
   flex: 1 1 auto;
   min-height: 0;
+  width: 100%;
+}
+.dmn-split {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: center;
+}
+.dmn-canvas--split {
   width: 100%;
 }
 /* dmn-js ships its own decision-table CSS (imported by the addon). We keep that
