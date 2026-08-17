@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.17.0](https://github.com/Miragon/slidev-deck-template/compare/v1.16.1...v1.17.0) (2026-08-17)
+
+
+### Features
+
+* **toolkit:** add split mode to diagram layouts ([#133](https://github.com/Miragon/slidev-deck-template/issues/133)) ([4f5a29f](https://github.com/Miragon/slidev-deck-template/commit/4f5a29fe86c5d84dddab45f8a47652e061289b30))
+
+
+### Bug Fixes
+
+* **toolkit:** give StepList default block spacing ([#132](https://github.com/Miragon/slidev-deck-template/issues/132)) ([fce14dd](https://github.com/Miragon/slidev-deck-template/commit/fce14dd66127cca4195a3c206bd1422f0e6d1873))
+* **toolkit:** keep CodeBlock fullscreen toggle always visible ([#128](https://github.com/Miragon/slidev-deck-template/issues/128)) ([958062a](https://github.com/Miragon/slidev-deck-template/commit/958062a7d0165f875ba3220ece5550c07cd01e88))
+* **toolkit:** scale code line-height with font size ([#131](https://github.com/Miragon/slidev-deck-template/issues/131)) ([202c8c9](https://github.com/Miragon/slidev-deck-template/commit/202c8c95adf8ab64223c64f7159c35c76310d09f))
+
 ## [1.16.1](https://github.com/Miragon/slidev-deck-template/compare/v1.16.0...v1.16.1) (2026-08-14)
 
 
