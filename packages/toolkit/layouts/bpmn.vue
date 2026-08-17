@@ -27,11 +27,18 @@
  *   transactionBoundaries — overlay Camunda 7 transaction boundaries in the
  *              modeler's fullscreen "Edit" view (modeler mode, requires
  *              engine="camunda7"; ignored otherwise)
+ *   side     — split layout: "left" | "right" places the diagram on that side
+ *              and the slot becomes the content column on the other side.
+ *              Omit for the default full-width diagram with a caption below.
+ *   ratio    — diagram/content column ratio in split mode (default "1/1")
  * Slot:
- *   default  — optional caption / explanatory line below the diagram
+ *   default  — full mode: optional caption below the diagram.
+ *              split mode: the content column beside the diagram (bullets,
+ *              <StepList>, <Card> …), styled like a content slide.
  */
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
+import SplitView from '../components/SplitView.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -43,6 +50,8 @@ const props = withDefaults(
     engine?: 'camunda7' | 'zeebe'
     tokenSimulation?: boolean
     transactionBoundaries?: boolean
+    side?: 'left' | 'right'
+    ratio?: string
     frontmatter?: Record<string, unknown>
   }>(),
   {
@@ -51,6 +60,7 @@ const props = withDefaults(
     mode: 'token',
     tokenSimulation: false,
     transactionBoundaries: false,
+    ratio: '1/1',
   },
 )
 
@@ -80,37 +90,52 @@ const diagramSrc = computed(() => withBase(props.diagram))
         <h2 v-if="title" class="bpmn-title">{{ title }}</h2>
       </header>
 
-      <DiagramFrame class="bpmn-canvas" padding="compact">
-        <template v-if="diagram">
-          <!-- All three addon components share the same
-               bpmnFilePath / width / height signature. -->
-          <Bpmn
-            v-if="mode === 'static'"
-            :bpmnFilePath="diagramSrc"
-            width="100%"
-            :height="height"
-          />
-          <BpmnModeler
-            v-else-if="mode === 'modeler'"
-            :bpmnFilePath="diagramSrc"
-            :engine="engine"
-            :tokenSimulation="tokenSimulation"
-            :transactionBoundaries="transactionBoundaries"
-            width="100%"
-            :height="height"
-          />
-          <BpmnTokenSimulation
-            v-else
-            :bpmnFilePath="diagramSrc"
-            width="100%"
-            :height="height"
-          />
-        </template>
-      </DiagramFrame>
+      <template v-if="!side">
+        <DiagramFrame class="bpmn-canvas" padding="compact">
+          <template v-if="diagram">
+            <!-- All three addon components share the same
+                 bpmnFilePath / width / height signature. -->
+            <Bpmn v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+            <BpmnModeler
+              v-else-if="mode === 'modeler'"
+              :bpmnFilePath="diagramSrc"
+              :engine="engine"
+              :tokenSimulation="tokenSimulation"
+              :transactionBoundaries="transactionBoundaries"
+              width="100%"
+              :height="height"
+            />
+            <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+          </template>
+        </DiagramFrame>
 
-      <div v-if="$slots.default" class="bpmn-caption">
-        <slot />
-      </div>
+        <div v-if="$slots.default" class="bpmn-caption">
+          <slot />
+        </div>
+      </template>
+
+      <SplitView v-else class="bpmn-split" :ratio="ratio" :reverse="side === 'right'" align="center">
+        <template #visual>
+          <DiagramFrame class="bpmn-canvas bpmn-canvas--split" padding="compact" :height="height">
+            <template v-if="diagram">
+              <Bpmn v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+              <BpmnModeler
+                v-else-if="mode === 'modeler'"
+                :bpmnFilePath="diagramSrc"
+                :engine="engine"
+                :tokenSimulation="tokenSimulation"
+                :transactionBoundaries="transactionBoundaries"
+                width="100%"
+                :height="height"
+              />
+              <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+            </template>
+          </DiagramFrame>
+        </template>
+        <div class="bpmn-body mg-diagram-body" :style="{ '--mg-body-grad': gradientVar, '--mg-body-accent': accentVar }">
+          <slot />
+        </div>
+      </SplitView>
     </div>
   </div>
 </template>
@@ -169,6 +194,15 @@ const diagramSrc = computed(() => withBase(props.diagram))
 .bpmn-canvas {
   flex: 1 1 auto;
   min-height: 0;
+  width: 100%;
+}
+
+.bpmn-split {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: center;
+}
+.bpmn-canvas--split {
   width: 100%;
 }
 

@@ -8,6 +8,7 @@
 @import './fonts.css';
 @import './code.css';
 @import './table.css';
+@import './prose.css';
 
 /* Brand typography: Geist for everything, Geist Mono for code. Set on the app
    root so it cascades into every layout; redirect Slidev's code-font variable

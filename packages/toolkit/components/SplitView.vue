@@ -10,11 +10,15 @@
  * die Stichpunkte mittig zur Grafik sitzen.
  *
  * Props:
- *   ratio — Spaltenverhältnis links/rechts als "a/b" (Default "1/1";
- *           z. B. "1.5/1" für eine breitere Grafik)
- *   align — vertikale Ausrichtung der Spalten: "center" | "start" | "end" |
- *           "stretch" (Default "center")
- *   gap   — Spaltenabstand als CSS-Länge (Default "2.5rem")
+ *   ratio   — Spaltenverhältnis Grafik/Text als "a/b" (Default "1/1";
+ *             z. B. "1.5/1" für eine breitere Grafik). Bezieht sich immer auf
+ *             Grafik/Text, unabhängig von `reverse`.
+ *   align   — vertikale Ausrichtung der Spalten: "center" | "start" | "end" |
+ *             "stretch" (Default "center")
+ *   gap     — Spaltenabstand als CSS-Länge (Default "2.5rem")
+ *   reverse — Grafik (#visual) nach rechts, Text nach links (Default false).
+ *             Rein visuell (CSS order); die DOM-/Lesereihenfolge bleibt
+ *             Grafik-zuerst.
  *
  * Verwendung:
  *   <SplitView ratio="1.5/1">
@@ -36,21 +40,26 @@ const props = withDefaults(
     ratio?: string
     align?: 'center' | 'start' | 'end' | 'stretch'
     gap?: string
+    reverse?: boolean
   }>(),
-  { ratio: '1/1', align: 'center', gap: '2.5rem' },
+  { ratio: '1/1', align: 'center', gap: '2.5rem', reverse: false },
 )
 
+// `ratio` bezeichnet stets Grafik/Text. Bei `reverse` sitzt die Grafik rechts,
+// also müssen auch die Spaltenbreiten gespiegelt werden, damit das Verhältnis
+// grafikseitig gleich bleibt.
 const columns = computed(() => {
   const parts = props.ratio.split('/').map((n) => n.trim() || '1')
-  const left = parts[0] || '1'
-  const right = parts[1] || '1'
-  return `${left}fr ${right}fr`
+  const visual = parts[0] || '1'
+  const body = parts[1] || '1'
+  return props.reverse ? `${body}fr ${visual}fr` : `${visual}fr ${body}fr`
 })
 </script>
 
 <template>
   <div
     class="mg-split"
+    :class="{ 'mg-split--reverse': reverse }"
     :style="{ gridTemplateColumns: columns, alignItems: align, gap }"
   >
     <div class="mg-split__visual"><slot name="visual" /></div>
@@ -69,4 +78,8 @@ const columns = computed(() => {
 .mg-split__body {
   min-width: 0;
 }
+/* reverse: Grafik nach rechts, Text nach links — nur visuell via order,
+   die DOM-Reihenfolge (Grafik zuerst) bleibt für Screenreader erhalten. */
+.mg-split--reverse .mg-split__visual { order: 2; }
+.mg-split--reverse .mg-split__body { order: 1; }
 </style>

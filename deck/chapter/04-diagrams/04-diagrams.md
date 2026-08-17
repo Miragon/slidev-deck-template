@@ -30,6 +30,34 @@ alt: Client to gateway to service with two pods
 A diagram is one **.excalidraw.svg** with the scene embedded, in the Miragon palette.
 
 ---
+layout: excalidraw
+title: Or set it beside your points
+eyebrow: 04 - Diagrams
+accent: blue
+diagram: resources/04-diagrams/service.excalidraw.svg
+alt: A service routing to two pods
+side: right
+ratio: "1/1"
+height: 20rem
+---
+
+<!--
+  excalidraw SPLIT mode: `side` frames the diagram on one side (here right) and
+  turns the default slot into the content column opposite, styled like a content
+  slide (branded bullets, StepList, Card ...). Omit `side` for the full-width
+  diagram with a caption below (slide before this one). dmn and mermaid take the
+  same side/ratio/height props; mermaid feeds its column from the ::caption:: slot.
+  REQUIRED: diagram.  OPTIONAL: side, ratio, height, title, eyebrow, accent, alt.
+  LIMIT: keep the column to ~4 bullets so it clears the bottom-left page chrome.
+  Transition: "Need to edit it? Open it in your IDE."
+-->
+
+- The diagram is framed on **one side**, your points on the other
+- Same white card as full mode, now next to the text
+- **Bullets** render exactly like a content slide
+- Vary `side` so the diagram is not always on the left
+
+---
 layout: content
 title: Edit it right in your IDE
 eyebrow: 04 - Diagrams
@@ -117,6 +145,34 @@ engine: camunda7
 -->
 
 A real BPMN file, straight from Camunda Modeler or bpmn.io.
+
+---
+layout: bpmn
+title: Put the process beside its rules
+eyebrow: 04 - Diagrams
+accent: blue
+diagram: /resources/04-diagrams/recruitment.bpmn
+mode: token
+side: left
+ratio: "1.2/1"
+height: 320px
+---
+
+<!--
+  bpmn SPLIT mode: `side: left|right` frames the diagram on that side and turns
+  the default slot into the content column opposite (here: process left, talking
+  points right). Omit `side` for the full-width diagram + caption (slide before).
+  All bpmn modes (static/token/modeler) work in split; keep the modeler for
+  full-width slides where it has room to breathe. dmn and mermaid split the same.
+  REQUIRED: diagram.  OPTIONAL: side, ratio, height, mode, engine, title, eyebrow, accent.
+  LIMIT: ~4 bullets / a short StepList so the column does not crowd the diagram.
+  Transition: "The decisions inside it split the same way."
+-->
+
+- Read the **model** and the **narrative** in one glance
+- No `content` + `SplitView` scaffolding, just `side`
+- The framed white card sits only on the diagram side
+- The column is styled like a normal content slide
 
 ---
 layout: dmn
