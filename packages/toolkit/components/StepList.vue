@@ -12,6 +12,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.95rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
   font-size: 1.2rem;
   line-height: 1.5;
   color: var(--miragon-text-secondary);
