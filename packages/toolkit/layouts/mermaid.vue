@@ -1,14 +1,41 @@
 <script setup lang="ts">
+/**
+ * mermaid — Slide centered on a Mermaid diagram (framed on-brand).
+ *
+ * Unlike bpmn/dmn/excalidraw, the diagram comes from the DEFAULT slot (a
+ * ```mermaid fence or a <<< import), and the ::caption:: slot holds the text.
+ *
+ * Full mode (default): diagram fills the width, optional caption below.
+ * Split mode (`side`): the framed diagram sits on the given side and the
+ * ::caption:: slot becomes the content column on the other side.
+ *
+ * Frontmatter props:
+ *   title    — slide title (h2-level)
+ *   eyebrow  — uppercase kicker
+ *   accent   — "blue" | "green" | "mixed" (default blue)
+ *   side     — split layout: "left" | "right" places the diagram on that side;
+ *              the ::caption:: slot becomes the content column opposite.
+ *   ratio    — diagram/content column ratio in split mode (default "1/1")
+ *   height   — CSS height for the framed diagram card in split mode (default
+ *              "22rem"; ignored in full mode, where the card fills the slide)
+ * Slots:
+ *   default    — the ```mermaid fence (framed in the white card)
+ *   ::caption:: — full mode: caption below. split mode: the content column.
+ */
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
+import SplitView from '../components/SplitView.vue'
 
 const props = withDefaults(
   defineProps<{
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
+    side?: 'left' | 'right'
+    ratio?: string
+    height?: string
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue' },
+  { accent: 'blue', ratio: '1/1', height: '22rem' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -27,13 +54,26 @@ const accentVar = computed(() =>
         <h2 v-if="title" class="mermaid-title">{{ title }}</h2>
       </header>
 
-      <DiagramFrame class="mermaid-canvas">
-        <slot />
-      </DiagramFrame>
+      <template v-if="!side">
+        <DiagramFrame class="mermaid-canvas">
+          <slot />
+        </DiagramFrame>
 
-      <div v-if="$slots.caption" class="mermaid-caption">
-        <slot name="caption" />
-      </div>
+        <div v-if="$slots.caption" class="mermaid-caption">
+          <slot name="caption" />
+        </div>
+      </template>
+
+      <SplitView v-else class="mermaid-split" :ratio="ratio" :reverse="side === 'right'" align="center">
+        <template #visual>
+          <DiagramFrame class="mermaid-canvas mermaid-canvas--split" :height="height">
+            <slot />
+          </DiagramFrame>
+        </template>
+        <div class="mermaid-body mg-diagram-body" :style="{ '--mg-body-grad': gradientVar, '--mg-body-accent': accentVar }">
+          <slot name="caption" />
+        </div>
+      </SplitView>
     </div>
   </div>
 </template>
@@ -106,6 +146,14 @@ const accentVar = computed(() =>
   max-width: 100%;
   max-height: 100%;
   height: auto;
+}
+.mermaid-split {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: center;
+}
+.mermaid-canvas--split {
+  width: 100%;
 }
 
 .mermaid-caption {

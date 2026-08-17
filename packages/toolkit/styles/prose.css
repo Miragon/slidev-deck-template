@@ -1,0 +1,82 @@
+/* Geteiltes Body-Styling für die Content-Spalte der Diagramm-Layouts im
+   Split-Modus (bpmn / dmn / excalidraw / mermaid). Bewusst UNSCOPED und global,
+   damit es ohne :deep() direkt auf das gerenderte Markdown greift — dieselben
+   gebrandeten Bullets/Text/Links/Code wie eine content-Slide, nur einmal
+   definiert statt in jedem Layout dupliziert.
+
+   Der Bullet-Marker liest --mg-body-grad; jedes Layout setzt diese Variable aus
+   seinem accent (Fallback unten). Regeln 1:1 aus layouts/content.vue (.content-
+   body :deep(...)) übernommen. */
+.mg-diagram-body {
+  --mg-body-grad: var(--miragon-gradient-blue);
+  --mg-body-accent: var(--miragon-blue);
+}
+
+.mg-diagram-body p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--miragon-text-secondary);
+  margin: 0 0 1rem;
+  max-width: 48rem;
+}
+
+/* Aufzählungen: klarer Akzent-Marker (CSS-Quadrat, kein Emoji). */
+.mg-diagram-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mg-diagram-body li {
+  position: relative;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--miragon-text-secondary);
+  padding-left: 2rem;
+  margin: 0 0 1.1rem;
+  max-width: 50rem;
+}
+.mg-diagram-body li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 0.2rem;
+  background: var(--mg-body-grad);
+}
+/* Eine Verschachtelungsebene: dezenter, kleinerer Marker. */
+.mg-diagram-body li ul {
+  margin-top: 0.8rem;
+}
+.mg-diagram-body li li {
+  font-size: 1.05rem;
+  color: var(--miragon-text-muted);
+  margin-bottom: 0.6rem;
+}
+.mg-diagram-body li li::before {
+  top: 0.55em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--mg-body-accent);
+}
+
+.mg-diagram-body strong {
+  font-weight: 700;
+  color: var(--miragon-text-primary);
+}
+.mg-diagram-body a {
+  color: var(--mg-body-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.mg-diagram-body :not(pre) > code {
+  font-family: var(--miragon-font-mono);
+  font-size: 0.9em;
+  background: var(--miragon-blue-light);
+  color: var(--miragon-blue-darker);
+  padding: 0.1em 0.4em;
+  border-radius: 0.35rem;
+}

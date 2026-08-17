@@ -152,11 +152,12 @@ The two-column "visual + explanation" container: a diagram (or `Figure`) on the 
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
-| `ratio` (str) | `"a/b"` | `1/1` | left/right column width, e.g. `1.5/1` for a wider diagram |
+| `ratio` (str) | `"a/b"` | `1/1` | visual/text column width, e.g. `1.5/1` for a wider diagram. Always visual/text, independent of `reverse`. |
 | `align` | `center` · `start` · `end` · `stretch` | `center` | vertical alignment of the columns |
 | `gap` (str) | CSS length | `2.5rem` | space between the columns |
+| `reverse` (bool) | — | `false` | put the `#visual` column on the **right**, the text on the left. Purely visual (CSS order); the reading order stays visual-first. |
 
-Unlike inline components, `SplitView` is a multi-line container (like `StepList`/`Figure`): the `#visual` template holds the diagram, the default slot holds the markdown body. Keep a blank line before the bullet list so it parses as markdown. The bullet markers still come from the `content` layout; do not restyle the list.
+Unlike inline components, `SplitView` is a multi-line container (like `StepList`/`Figure`): the `#visual` template holds the diagram, the default slot holds the markdown body. Keep a blank line before the bullet list so it parses as markdown. The bullet markers still come from the `content` layout; do not restyle the list. (The `bpmn`/`dmn`/`excalidraw`/`mermaid` diagram layouts use this internally for their `side` split mode.)
 
 ```md
 <SplitView ratio="1.5/1">
