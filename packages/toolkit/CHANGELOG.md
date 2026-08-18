@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/Miragon/slidev-deck-template/compare/v1.17.0...v1.17.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* **toolkit:** vertically center goodbad panel body content ([#135](https://github.com/Miragon/slidev-deck-template/issues/135)) ([41fdf48](https://github.com/Miragon/slidev-deck-template/commit/41fdf4896762d405a058ce05a2d80c47189d65a5))
+
 ## [1.17.0](https://github.com/Miragon/slidev-deck-template/compare/v1.16.1...v1.17.0) (2026-08-17)
 
 
