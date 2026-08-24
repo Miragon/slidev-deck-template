@@ -33,7 +33,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@slidev/parser": "52.19.0",
+    "@slidev/parser": "52.19.1",
     "markdown-it": "15.0.0",
     "playwright-chromium": "1.62.1"
   },
