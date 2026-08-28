@@ -22,9 +22,9 @@ withDefaults(
 .mg-frame {
   box-sizing: border-box;
   background: var(--miragon-white);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   border-radius: 1.1rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -15,6 +15,12 @@
  *   accent   — "blue" | "green" | "mixed" (default blue)
  *   diagram  — served URL path to the .bpmn file, resolved base-aware
  *              (e.g. "/resources/05-diagrams/recruitment.bpmn")
+ *   diagramAlt — accessible name for the diagram, i.e. the process in one
+ *              sentence ("Recruitment: application arrives, HR screens, team
+ *              interviews, offer goes out"). A process model is content, not
+ *              decoration, so it needs a name (CI rule C4); the naming follows
+ *              content-image.vue's `imageAlt`. Omitted, the diagram stays out
+ *              of the accessibility tree instead of dictating raw SVG node ids.
  *   height   — CSS height for the BPMN canvas (default "380px")
  *   mode     — render mode (default "token"):
  *                "static"  → <Bpmn>                (still image, no interaction)
@@ -45,6 +51,7 @@ const props = withDefaults(
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
     diagram?: string
+    diagramAlt?: string
     height?: string
     mode?: 'static' | 'token' | 'modeler'
     engine?: 'camunda7' | 'zeebe'
@@ -66,9 +73,10 @@ const props = withDefaults(
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 // Base-Pfad respektieren (GitHub Pages baut unter /<repo>/). Runtime-Strings
 // werden von Vite NICHT umgeschrieben — daher manuell mit BASE_URL auflösen.
@@ -79,6 +87,25 @@ function withBase(path?: string) {
   return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
 }
 const diagramSrc = computed(() => withBase(props.diagram))
+
+// Barrierefreier Name für den Diagramm-Container (CI-Regel C4).
+//   mit `diagramAlt`  → der Container wird ein benanntes Objekt.
+//     - mode="static": ein reines Bild, also role="img" — die SVG-Kinder
+//       verschwinden hinter dem Namen, genau wie bei einem <img alt="…">.
+//     - mode="token"/"modeler": das Diagramm ist bedienbar. role="img" würde
+//       seine Kinder für Screenreader zu Deko erklären, deshalb role="group":
+//       benannt, aber begehbar.
+//   ohne `diagramAlt` → aria-hidden, damit statt einer Aussage nicht der rohe
+//     SVG-Knotensalat (Task_1, Flow_3, …) vorgelesen wird. Das gilt NUR für den
+//     statischen Modus: aria-hidden über fokussierbaren Bedienelementen wäre
+//     selbst ein Verstoß (WCAG 4.1.2), also bleiben die interaktiven Modi
+//     unangetastet, wenn kein Name gesetzt ist.
+const interactive = computed(() => props.mode !== 'static')
+const diagramA11y = computed<Record<string, string>>(() => {
+  if (props.diagramAlt)
+    return { role: interactive.value ? 'group' : 'img', 'aria-label': props.diagramAlt }
+  return interactive.value ? {} : { 'aria-hidden': 'true' }
+})
 </script>
 
 <template>
@@ -91,7 +118,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
       </header>
 
       <template v-if="!side">
-        <DiagramFrame class="bpmn-canvas" padding="compact">
+        <DiagramFrame class="bpmn-canvas" padding="compact" v-bind="diagramA11y">
           <template v-if="diagram">
             <!-- All three addon components share the same
                  bpmnFilePath / width / height signature. -->
@@ -116,7 +143,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
 
       <SplitView v-else class="bpmn-split" :ratio="ratio" :reverse="side === 'right'" align="center">
         <template #visual>
-          <DiagramFrame class="bpmn-canvas bpmn-canvas--split" padding="compact" :height="height">
+          <DiagramFrame class="bpmn-canvas bpmn-canvas--split" padding="compact" :height="height" v-bind="diagramA11y">
             <template v-if="diagram">
               <Bpmn v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
               <BpmnModeler

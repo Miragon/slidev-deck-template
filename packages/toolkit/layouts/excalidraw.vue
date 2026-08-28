@@ -11,7 +11,12 @@
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default blue)
  *   diagram  — served URL path to the .excalidraw.svg, resolved base-aware
- *   alt      — alt text for the diagram image
+ *   alt      — alt text for the diagram image (default ""). Empty means
+ *              "decorative, skip me" — the right default when the caption
+ *              already carries the statement. Without a default the <img> would
+ *              render with NO alt attribute at all and screen readers fall back
+ *              to reading the file path (CI rule C4). Content-bearing diagrams
+ *              set `alt` explicitly.
  *   side     — split layout: "left" | "right" places the diagram on that side
  *              and the slot becomes the content column on the other side.
  *   ratio    — diagram/content column ratio in split mode (default "1/1")
@@ -37,14 +42,15 @@ const props = withDefaults(
     height?: string
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', ratio: '1/1', height: '22rem' },
+  { accent: 'blue', ratio: '1/1', height: '22rem', alt: '' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 function withBase(path?: string) {
   if (!path) return path

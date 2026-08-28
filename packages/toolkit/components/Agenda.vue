@@ -44,9 +44,10 @@ const props = withDefaults(
 const { slides, go, currentPage } = useNav()
 
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 // Markdown bold (** **) survives into the auto-extracted title; strip it.
 function clean(s?: string) {
@@ -360,7 +361,7 @@ function openSlide(no: number, ev: MouseEvent) {
   height: 0.18rem;
   border-radius: 999px;
 }
-.track-line { background: #E2E6F0; }
+.track-line { background: var(--miragon-border); }
 .track-fill { background: var(--ag-accent); transition: width 320ms cubic-bezier(0.2, 0.7, 0.2, 1); }
 
 .step {
@@ -416,8 +417,8 @@ function openSlide(no: number, ev: MouseEvent) {
   display: grid;
   place-items: center;
   background: var(--miragon-white);
-  border: 2px solid #E2E6F0;
-  box-shadow: 0 4px 12px rgba(51, 93, 229, 0.08);
+  border: 2px solid var(--miragon-border);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 280ms ease, background 280ms ease;
 }
 .step-num {
@@ -432,7 +433,7 @@ function openSlide(no: number, ev: MouseEvent) {
 .step.is-active .step-dot {
   background: var(--ag-accent);
   border-color: var(--ag-accent);
-  box-shadow: 0 6px 16px rgba(51, 93, 229, 0.28);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--miragon-blue) 28%, transparent);
   transform: scale(1.1);
 }
 .step.is-active .step-num { color: var(--miragon-white); }
@@ -496,7 +497,6 @@ function openSlide(no: number, ev: MouseEvent) {
   transform: scale(1.08);
 }
 .is-wrap .step:hover .step-label { color: var(--ag-accent); }
-.is-wrap .step:focus-visible { outline: none; }
 .stepper-row {
   position: relative;
   display: grid;
@@ -555,18 +555,17 @@ function openSlide(no: number, ev: MouseEvent) {
 .mini-frame {
   border-radius: 0.7rem;
   overflow: hidden;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 10px 24px rgba(51, 93, 229, 0.12);
+  border: 1px solid var(--miragon-border);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--miragon-blue) 12%, transparent);
   pointer-events: none;
   transition: border-color 280ms ease, box-shadow 280ms ease;
 }
 .mini:hover .mini-frame,
 .mini:focus-visible .mini-frame {
   border-color: var(--ag-accent);
-  box-shadow: 0 16px 34px rgba(51, 93, 229, 0.2);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--miragon-blue) 20%, transparent);
 }
 .mini-frame :deep(*) { user-select: none; }
-.mini:focus-visible { outline: none; }
 .mini-no {
   position: absolute;
   top: 0.35rem;
@@ -577,7 +576,7 @@ function openSlide(no: number, ev: MouseEvent) {
   height: 1.05rem;
   padding: 0 0.28rem;
   border-radius: 0.35rem;
-  background: rgba(15, 23, 42, 0.72);
+  background: color-mix(in srgb, var(--miragon-black) 72%, transparent);
   color: var(--miragon-white);
   font-size: 0.6rem;
   font-weight: 700;
@@ -592,5 +591,45 @@ function openSlide(no: number, ev: MouseEvent) {
 .fade-preview-leave-to {
   opacity: 0;
   transform: translateY(6px);
+}
+
+/* ---- Fokus (CI-Regel C3) ------------------------------------------------ */
+/* Kapitel-Buttons und Slide-Miniaturen hatten `outline: none` und liehen sich
+   die Hover-Optik als Fokusanzeige. Auf einem bereits aktiven oder besuchten
+   Kapitel sieht Hover aber genauso aus wie der Ruhezustand des aktiven Steps —
+   der Tastaturfokus war dort schlicht unsichtbar. Ein echter Ring ist eine
+   eigene visuelle Form, die weder Hover (Dot-Skalierung, Farbwechsel) noch
+   Aktiv (gefüllter Dot) verwendet, und bleibt in jedem Zustand erkennbar.
+   Farbe aus dem Token, kein rohes Hex. */
+.step:focus-visible,
+.mini:focus-visible {
+  outline: 2px solid var(--miragon-blue);
+  outline-offset: 3px;
+}
+/* Der Button hat keinen eigenen Radius; ein leicht gerundeter Ring passt zur
+   Formensprache der Karten und Dots. */
+.step:focus-visible {
+  border-radius: 0.6rem;
+}
+
+/* ---- Bewegung (CI-Regel C3) --------------------------------------------- */
+/* prefers-reduced-motion: alles, was Position oder Größe bewegt, wird
+   abgeschaltet; Farb- und Opazitätswechsel bleiben, weil sie den Zustand
+   tragen und niemandem Übelkeit machen. */
+@media (prefers-reduced-motion: reduce) {
+  /* Wachsender Fortschrittsbalken: springt statt zu laufen. */
+  .track-fill { transition: none; }
+  /* Dot behält seinen Farbwechsel, verliert aber die Skalier-Animation. */
+  .step-dot { transition: border-color 280ms ease, background 280ms ease; }
+  .is-wrap .step:hover .step-dot,
+  .is-wrap .step:focus-visible .step-dot { transform: none; }
+  /* Mini-Hover-Lift: der Rahmen- und Schattenwechsel reicht als Feedback. */
+  .mini { transition: none; }
+  .mini:hover { transform: none; }
+  /* Preview-Wechsel: reine Überblendung, kein Hochschieben. */
+  .fade-preview-enter-active,
+  .fade-preview-leave-active { transition: opacity 200ms ease; }
+  .fade-preview-enter-from,
+  .fade-preview-leave-to { transform: none; }
 }
 </style>

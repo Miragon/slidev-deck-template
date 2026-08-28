@@ -51,9 +51,10 @@ const title = computed(() => props.frontmatter?.title as string | undefined)
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 // Verdict-Logik: leftIsGood entscheidet, welche Seite das grüne Recommended
 // und welche das graue Avoid bekommt.
@@ -182,10 +183,10 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
 }
 .goodbad-panel {
   background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--miragon-border);
   border-radius: 1.1rem;
   padding: 1.25rem 1.5rem 1.5rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -222,8 +223,8 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-.verdict-good .verdict-dot { background: var(--miragon-green-dark); }
-.verdict-good .verdict-label { color: var(--miragon-green-deep); }
+.verdict-good .verdict-dot { background: var(--miragon-green); }
+.verdict-good .verdict-label { color: var(--miragon-success); }
 .verdict-bad .verdict-dot { background: var(--miragon-text-muted); }
 .verdict-bad .verdict-label { color: var(--miragon-text-muted); }
 
@@ -296,9 +297,9 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   margin-top: 1.5rem;
   padding: 0.9rem 1.2rem;
   background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--miragon-border);
   border-radius: 0.8rem;
-  box-shadow: 0 4px 12px rgba(51, 93, 229, 0.05);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 5%, transparent);
 }
 .goodbad-legend :deep(p) {
   font-size: 1.02rem;

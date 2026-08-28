@@ -3,6 +3,9 @@
 const props = withDefaults(
   defineProps<{
     title?: string
+    /* "blue" | "blue-mid" are the sanctioned title colours (text on white).
+       The remaining values are deprecated leftovers of the old blue → teal →
+       green ramp; they still resolve, but to "blue-mid". */
     accent?: 'blue' | 'blue-mid' | 'teal' | 'green-deep' | 'green-mid' | 'green'
     padding?: 'compact' | 'standard' | 'generous'
     icon?: string
@@ -23,9 +26,9 @@ const props = withDefaults(
 <style scoped>
 .mg-card {
   border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   background: var(--miragon-white);
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
 }
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
 .mg-card--standard { padding: 1.25rem; }
@@ -35,16 +38,20 @@ const props = withDefaults(
 .mg-card--align-center .mg-card__icon { margin-left: auto; margin-right: auto; }
 .mg-card--align-right .mg-card__icon { margin-left: auto; }
 
-/* Accent ramp (blue → teal → green) applied to the title + icon only.
-   The stops live in theme.css as --miragon-card-accent-* tokens, so a deck
-   can remap the whole ramp from its own stylesheet without shadowing this
-   component. */
+/* Accent applied to the title + icon only. A card title is TEXT ON WHITE, so
+   the CI leaves exactly two colours available: the brand blue and the derived
+   link blue. Green is out (#00E676 on white is 1.67:1) — the green accent
+   belongs on surfaces and graphics, not in text.
+   The stops live in theme.css as --miragon-card-accent-* tokens, so a deck can
+   remap them from its own stylesheet without shadowing this component. */
 .mg-card--accent-blue { --mg-card-accent: var(--miragon-card-accent-blue); }
 .mg-card--accent-blue-mid { --mg-card-accent: var(--miragon-card-accent-blue-mid); }
-.mg-card--accent-teal { --mg-card-accent: var(--miragon-card-accent-teal); }
-.mg-card--accent-green-deep { --mg-card-accent: var(--miragon-card-accent-green-deep); }
-.mg-card--accent-green-mid { --mg-card-accent: var(--miragon-card-accent-green-mid); }
-.mg-card--accent-green { --mg-card-accent: var(--miragon-card-accent-green); }
+/* Deprecated ramp values from the old blue → teal → green progression. Kept so
+   existing decks keep rendering, mapped onto the two sanctioned stops. */
+.mg-card--accent-teal,
+.mg-card--accent-green-deep,
+.mg-card--accent-green-mid,
+.mg-card--accent-green { --mg-card-accent: var(--miragon-card-accent-blue-mid); }
 
 .mg-card__icon {
   display: block;
@@ -63,7 +70,7 @@ const props = withDefaults(
   margin-top: 0.5rem;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: #4b5563;
+  color: var(--miragon-text-secondary);
 }
 .mg-card .mg-card__body :deep(p),
 .mg-card .mg-card__body :deep(ul),
@@ -117,7 +124,7 @@ const props = withDefaults(
   color: var(--miragon-blue);
   font-weight: 700;
 }
-.mg-card .mg-card__body :deep(strong) { font-weight: 700; color: #1f2937; }
+.mg-card .mg-card__body :deep(strong) { font-weight: 700; color: var(--miragon-text-primary); }
 .mg-card .mg-card__body :deep(a) {
   color: var(--miragon-blue);
   text-decoration: none;

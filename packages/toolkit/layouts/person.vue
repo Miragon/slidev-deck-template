@@ -35,7 +35,12 @@ const props = withDefaults(
     accent?: 'blue' | 'green' | 'mixed'
     side?: 'left' | 'right'
   }>(),
-  { accent: 'blue', side: 'left' },
+  // `name`/`name2` sind zugleich der Alt-Text der Porträts. Ohne Default würde
+  // `:alt="name"` bei einem Foto ohne Namen GAR KEIN alt-Attribut rendern, und
+  // Screenreader lesen dann den Dateipfad vor (CI-Regel C4). '' heißt
+  // "dekorativ, überspringen" — richtig, wenn es keinen Namen zu nennen gibt.
+  // '' ist falsy, `isDuo` und die `v-if`-Prüfungen verhalten sich unverändert.
+  { accent: 'blue', side: 'left', name: '', name2: '' },
 )
 
 const isDuo = computed(() => !!props.name2)
@@ -52,9 +57,10 @@ const photo2Src = computed(() => withBase(props.photo2))
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const roleVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const roleVar = 'var(--miragon-blue)'
 
 function toInitials(name?: string) {
   const parts = (name ?? '').trim().split(/\s+/).filter(Boolean)
@@ -146,7 +152,7 @@ function onPhotoError(e: Event) {
   align-items: center;
   justify-content: center;
   background: var(--p-grad);
-  box-shadow: 0 18px 48px rgba(13, 13, 43, 0.18);
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--miragon-black) 18%, transparent);
 }
 .person-photo {
   width: 100%;
