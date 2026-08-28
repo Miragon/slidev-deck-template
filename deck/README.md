@@ -1,15 +1,15 @@
-# deck — the presentation content
+# deck: the presentation content
 
 This is the part you edit. The deck consumes the [`@miragon/slidev-toolkit`](../packages/toolkit/) theme by name and fills it with content. The deck itself *is* its documentation: it teaches this repo while demoing every archetype.
 
-> Never author freehand. Load the **`slides` skill** (`miragon-slidev:slides`, from the `miragon-slidev` plugin) first — it is the authoring guide for layouts, components and editorial rules.
+> Never author freehand. Load the **`slides` skill** (`miragon-slidev:slides`, from the `miragon-slidev` plugin) first. It is the authoring guide for layouts, components and editorial rules.
 
 ## Structure
 
-- **`slides.md`** — the entry. Deck headmatter (theme, addons, SEO), the `cover` slide, one `src:` import per chapter, and the `closing` slide.
-- **`chapter/NN-name/`** — one folder per chapter, holding `NN-name.md` (the slides; each opens with a `section` divider) and a **`resources/`** subfolder with that chapter's own assets (images, photos, `.bpmn`, `.dmn`, `.excalidraw.svg`).
-- **`public/`** — deck-wide static assets (e.g. `og-image.png`).
-- **`vite.config.ts`** — serves each chapter's `resources/` at `/resources/<chapter>/<file>` and pre-bundles the shader for a stable PDF export.
+- **`slides.md`**: the entry. Deck headmatter (theme, addons, SEO), the `cover` slide, one `src:` import per chapter, and the `closing` slide.
+- **`chapter/NN-name/`**: one folder per chapter, holding `NN-name.md` (the slides; each opens with a `section` divider) and a **`resources/`** subfolder with that chapter's own assets (images, photos, `.bpmn`, `.dmn`, `.excalidraw.svg`).
+- **`public/`**: deck-wide static assets (e.g. `og-image.png`).
+- **`vite.config.ts`**: serves each chapter's `resources/` at `/resources/<chapter>/<file>` and pre-bundles the shader for a stable PDF export.
 
 Reference a resource by that served path, e.g. `photo: /resources/01-intro/me.png`.
 
@@ -44,6 +44,6 @@ From the repo root: `npm run dev` (preview), `npm run build` (static `dist/`), `
 
 ## Troubleshooting
 
-- **Cover/closing render white.** WebGL2 is unavailable and the `linear-gradient` fallback is blocked too — update or switch browsers.
+- **Cover/closing render white.** WebGL2 is unavailable and the `linear-gradient` fallback is blocked too. Update or switch browsers.
 - **`npm run export` gives an almost-empty PDF.** Vite re-optimized mid-export. Run `npm run build` once (warms the pre-bundle in `vite.config.ts`), then export.
-- **Brand colours look wrong.** The tokens live in `../packages/toolkit/styles/theme.css`, loaded unscoped by `index.css`. Don't move or rename either.
+- **Brand colours look wrong.** The palette is owned by the `miragon-brand` plugin's `corporate-design` skill (`assets/tokens.json`); `../packages/toolkit/styles/theme.css` only mirrors it as CSS variables, loaded unscoped by `index.css`. Don't move or rename either file, and never "correct" a colour in `theme.css` without changing `tokens.json` first.
