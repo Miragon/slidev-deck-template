@@ -66,4 +66,14 @@ const isHidden = computed(() => {
   pointer-events: none;
   transition: width 0.3s ease;
 }
+
+/* Bewegung (CI-Regel C3): Bei jedem Folienwechsel wächst der Balken über die
+   volle Breite mit. Wer reduzierte Bewegung eingestellt hat, bekommt den neuen
+   Stand direkt gesetzt — die Information (wie weit im Deck) bleibt identisch,
+   nur die Laufbewegung entfällt. */
+@media (prefers-reduced-motion: reduce) {
+  .miragon-progress {
+    transition: none;
+  }
+}
 </style>

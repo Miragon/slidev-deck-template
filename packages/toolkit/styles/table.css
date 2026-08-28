@@ -30,10 +30,10 @@
   font-size: 0.95rem;
   line-height: 1.5;
   background: var(--miragon-white);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   border-radius: 0.6rem;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.06);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
 }
 
 /* Header row: black label, restrained blue accent rule underneath. */
@@ -49,13 +49,13 @@
   padding: 0.55rem 1.1rem;
   text-align: left;
   color: var(--miragon-text-secondary);
-  border-bottom: 1px solid #eef1f5;
+  border-bottom: 1px solid var(--miragon-border);
   vertical-align: top;
 }
 
 /* Subtle zebra striping for scannability; last row carries no divider. */
 #slideshow tbody tr:nth-child(even) td {
-  background: var(--miragon-gray-light);
+  background: var(--miragon-gray-bg);
 }
 #slideshow tbody tr:last-child td {
   border-bottom: none;

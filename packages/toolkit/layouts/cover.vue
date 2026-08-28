@@ -13,7 +13,13 @@ defineProps<{
 
 // Brand-Asset reist mit dem Theme: statischer Import, von Vite gebundlet und
 // base-aware. Das Deck erbt das Logo aus dem Theme, ohne es selbst zu duplizieren.
-import logoSrc from '../assets/logo.svg'
+//
+// WEISSE Variante, nicht die grüne: dieses Layout liegt auf dem animierten
+// Mesh, dessen Farbstopps selbst Grün enthalten (#00E676, #00C853). Die grüne
+// Wortmarke stand dort stellenweise bei 1.55:1 gegen den Hintergrund. Die CI
+// schreibt für dunklen/farbigen Grund und Fotos ohnehin Weiß vor.
+// Die Datei ist der unveränderte offizielle Vektor (miragon-logo-weiss.svg).
+import logoSrc from '../assets/logo-white.svg'
 function onLogoError(e: Event) {
   (e.target as HTMLImageElement).style.display = 'none'
 }
@@ -47,7 +53,7 @@ function onLogoError(e: Event) {
   /* Brand-Gradient als unterste Ebene: greift, falls BrandMeshBackground (WebGL) gar nicht
      mountet (PDF/headless ohne GPU) — so nie Weiß, immer der Miragon-Verlauf.
      BrandMeshBackground liegt mit position:absolute darüber und verdeckt ihn live. */
-  background: linear-gradient(125deg, #335DE5 0%, #1a1a4e 35%, #0d0d2b 55%, #00C853 100%);
+  background: var(--miragon-mesh-fallback);
 }
 
 .cover-content {
@@ -70,28 +76,36 @@ function onLogoError(e: Event) {
   margin-bottom: 1.25rem;
 }
 
-/* Titel: weiß, kursiv, sehr fett — Miragon-Charakter */
+/* Titel: weiß, sehr fett, aufrecht.
+   BEWUSST NICHT kursiv: fonts.css liefert Geist nur mit font-style: normal,
+   einen echten Kursivschnitt gibt es also gar nicht. `font-style: italic`
+   erzeugt hier nur eine synthetische Schrägstellung, die der Browser
+   errechnet und die die Buchstabenformen verzerrt. Die nach vorn geneigte
+   Markenanmutung trägt ohnehin die Wortmarke im Fuß. */
 .cover-body :deep(h1) {
   font-size: 3.6rem;
   line-height: 1.05;
   font-weight: 900;
-  font-style: italic;
   color: var(--miragon-white);
   margin: 0;
-  text-shadow: 0 2px 24px rgba(13, 13, 43, 0.35);
+  text-shadow: 0 2px 24px color-mix(in srgb, var(--miragon-mesh-navy) 35%, transparent);
 }
 
 .cover-body :deep(p) {
   font-size: 1.4rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.88);
+  color: color-mix(in srgb, var(--miragon-white) 88%, transparent);
   margin-top: 1.25rem;
   max-width: 42rem;
 }
 
 .cover-body :deep(a) {
-  color: var(--miragon-green);
-  text-decoration: none;
+  /* Weiß, nicht grün: auf dem Mesh liegen grüne Farbstopps, und die CI erlaubt
+     pro Motiv nur ein, zwei grüne Akzente. Der eine Grün-Akzent ist der
+     Eyebrow. Die Unterstreichung trägt hier die Link-Affordanz. */
+  color: var(--miragon-white);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .cover-footer {
@@ -105,10 +119,10 @@ function onLogoError(e: Event) {
   justify-content: space-between;
 }
 
-.cover-logo { height: 1.75rem; opacity: 0.95; }
+.cover-logo { height: 1.75rem; }
 
 .cover-footer-text {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: color-mix(in srgb, var(--miragon-white) 70%, transparent);
 }
 </style>

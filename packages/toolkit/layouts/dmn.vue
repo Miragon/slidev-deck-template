@@ -17,6 +17,13 @@
  *   accent          — "blue" | "green" | "mixed" (default blue)
  *   diagram         — served URL path to the .dmn file, resolved base-aware
  *                     (e.g. "/resources/04-diagrams/approval.dmn")
+ *   diagramAlt      — accessible name for the decision, i.e. what it decides in
+ *                     one sentence ("Approval: who signs off, by order value").
+ *                     A decision is content, not decoration, so it needs a name
+ *                     (CI rule C4); the naming follows content-image.vue's
+ *                     `imageAlt`. Omitted, the graphical DRD stays out of the
+ *                     accessibility tree instead of dictating raw SVG node ids;
+ *                     the table modes are readable text and stay reachable.
  *   height          — CSS height for the table/canvas (default "360px")
  *   mode            — render mode (default "table"):
  *                       "table"    → <DmnTable>     (static decision table, default)
@@ -58,6 +65,7 @@ const props = withDefaults(
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
     diagram?: string
+    diagramAlt?: string
     height?: string
     mode?: 'table' | 'simulate' | 'drd' | 'modeler'
     decisionId?: string
@@ -84,9 +92,10 @@ const props = withDefaults(
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 // Base-Pfad respektieren (Deploys bauen ggf. unter /<repo>/). Runtime-Strings
 // werden von Vite NICHT umgeschrieben — daher manuell mit BASE_URL auflösen.
@@ -97,6 +106,23 @@ function withBase(path?: string) {
   return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
 }
 const diagramSrc = computed(() => withBase(props.diagram))
+
+// Barrierefreier Name für den Diagramm-Container (CI-Regel C4), gleiche Logik
+// wie in bpmn.vue, nur auf die vier DMN-Modi gemünzt:
+//   mode="drd" ist eine reine Grafik → mit Name role="img" (die SVG-Kinder
+//     treten hinter den Namen zurück), ohne Name aria-hidden, damit nicht die
+//     rohen Knoten-Ids vorgelesen werden.
+//   mode="table"/"simulate"/"modeler" sind lesbare Tabelle bzw. Bedienelemente.
+//     Mit Name bekommen sie role="group": benannt, aber begehbar. Ohne Name
+//     bleiben sie unangetastet — eine Entscheidungstabelle auszublenden würde
+//     echten Text verstecken, und aria-hidden über fokussierbaren Elementen
+//     wäre selbst ein Verstoß (WCAG 4.1.2).
+const isGraphic = computed(() => props.mode === 'drd')
+const diagramA11y = computed<Record<string, string>>(() => {
+  if (props.diagramAlt)
+    return { role: isGraphic.value ? 'img' : 'group', 'aria-label': props.diagramAlt }
+  return isGraphic.value ? { 'aria-hidden': 'true' } : {}
+})
 </script>
 
 <template>
@@ -109,7 +135,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
       </header>
 
       <template v-if="!side">
-        <DiagramFrame class="dmn-canvas" padding="compact">
+        <DiagramFrame class="dmn-canvas" padding="compact" v-bind="diagramA11y">
           <template v-if="diagram">
             <!-- Each addon component takes the dmnFilePath / width / height
                  signature; the extra props differ per mode (see prop docs). -->
@@ -146,7 +172,7 @@ const diagramSrc = computed(() => withBase(props.diagram))
 
       <SplitView v-else class="dmn-split" :ratio="ratio" :reverse="side === 'right'" align="center">
         <template #visual>
-          <DiagramFrame class="dmn-canvas dmn-canvas--split" padding="compact" :height="height">
+          <DiagramFrame class="dmn-canvas dmn-canvas--split" padding="compact" :height="height" v-bind="diagramA11y">
             <template v-if="diagram">
               <DmnSimulate
                 v-if="mode === 'simulate'"

@@ -43,17 +43,25 @@ const title = computed(() => props.frontmatter?.title as string | undefined)
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 // Panel-Töne folgen dem accent: "mixed" trägt die Problem/Lösung-Semantik
 // (links blau, rechts grün); "blue"/"green" macht beide Seiten einfarbig.
-// Default bleibt mixed-artig (blau/grün), damit bestehende Decks unverändert sind.
+// Default bleibt mixed-artig, damit bestehende Decks unverändert sind.
+//
+// Die Töne färben PANEL-TITEL, also Text auf heller Fläche. Marken-Grün
+// #00E676 erreicht dort nur 1.67:1 und scheidet damit aus (CI: Grün nur als
+// Fläche oder Grafik-Akzent). Die grün/blau-Semantik trägt deshalb die farbige
+// Markierungsleiste (leftMark/rightMark), der Titel nimmt einen AA-tauglichen
+// Ton: links das Marken-Blau (5.47:1), rechts die Statusfarbe für den
+// Lösungs-/Ziel-Zustand (5.34:1).
 const twoTone = computed(() => props.accent !== 'blue' && props.accent !== 'green')
-const mono = computed(() => (props.accent === 'green' ? 'green-deep' : 'blue-deep'))
-const leftTone = computed(() => (twoTone.value ? 'var(--miragon-blue-deep)' : `var(--miragon-${mono.value})`))
-const rightTone = computed(() => (twoTone.value ? 'var(--miragon-green-deep)' : `var(--miragon-${mono.value})`))
+const monoTone = computed(() => (props.accent === 'green' ? 'var(--miragon-success)' : 'var(--miragon-blue)'))
+const leftTone = computed(() => (twoTone.value ? 'var(--miragon-blue)' : monoTone.value))
+const rightTone = computed(() => (twoTone.value ? 'var(--miragon-success)' : monoTone.value))
 const leftMark = computed(() => (twoTone.value || props.accent === 'blue' ? 'var(--miragon-gradient-blue)' : 'var(--miragon-gradient-green)'))
 const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'var(--miragon-gradient-green)' : 'var(--miragon-gradient-blue)'))
 </script>
@@ -153,13 +161,13 @@ const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'v
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
-/* Weisse Panels (white-card rule §6) — die Semantik trägt der Titel + Marker. */
+/* Weiße Panels (white-card rule §6) — die Semantik trägt der Titel + Marker. */
 .compare-panel {
   background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--miragon-border);
   border-radius: 1.1rem;
   padding: 2rem 2rem 1.5rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
 }
 .panel-title {
   font-size: 1.35rem;

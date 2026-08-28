@@ -15,6 +15,12 @@ import { computed } from 'vue'
  * BASE_URL aufgelöst — KEIN Markdown-Bild verwenden: Slidev kompiliert ein
  * `![](…)` in einen Vite-Import, der bei Public-Assets den Build bricht.
  *   <Figure src="images/foo.excalidraw.png" alt="…" caption="…"></Figure>
+ *
+ * `alt` ist bewusst mit `''` vorbelegt (CI-Regel C4, Barrierefreiheit): ohne
+ * Default renderte das <img> GANZ OHNE alt-Attribut, und Screenreader lesen
+ * dann den Dateipfad vor. Leerer Alt-Text = "dekorativ, überspringen" — der
+ * richtige Default, wenn die Aussage bereits in Titel/Caption steht.
+ * Inhaltstragende Grafiken setzen `alt` explizit.
  */
 const props = withDefaults(
   defineProps<{
@@ -24,7 +30,7 @@ const props = withDefaults(
     alt?: string
     maxHeight?: string
   }>(),
-  { maxHeight: '340px' },
+  { maxHeight: '340px', alt: '' },
 )
 
 // Assets werden unter BASE_URL serviert (z. B. "/" lokal, "/<repo>/" auf GitHub

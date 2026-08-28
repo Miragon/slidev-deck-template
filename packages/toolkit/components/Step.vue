@@ -30,7 +30,7 @@ defineProps<{ label?: string }>()
   height: 1.5rem;
   border-radius: 50%;
   background: var(--miragon-blue);
-  color: #fff;
+  color: var(--miragon-white);
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.5rem;

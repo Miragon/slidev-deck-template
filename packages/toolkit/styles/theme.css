@@ -1,79 +1,117 @@
 /**
- * Miragon Design Tokens — CI. DO NOT CHANGE brand colors.
- * Rule: NEVER hardcode hex in slides — use these variables or accent props
+ * Miragon Design Tokens. CI. DO NOT CHANGE brand colors.
+ *
+ * SOURCE OF TRUTH is the `miragon-brand` plugin, skill `corporate-design`,
+ * file `assets/tokens.json`. This file MIRRORS those values for Slidev; where
+ * the two disagree, tokens.json wins and this file gets pulled back in line.
+ * The sanctioned palette is exactly:
+ *
+ *   blau    #335DE5   primary: surfaces, buttons, links, accents
+ *   gruen   #00E676   accent only: key visual, highlights, one word. Never
+ *                     body text on white (1.67:1, fails WCAG AA).
+ *   grau    #F9F7F7   quiet neutral surface
+ *   schwarz #1D1D1D   text on light. NOT pure #000000: the brand excludes it.
+ *   weiss   #FFFFFF   text on colour, surfaces
+ *   derived #2B50D4 (blau-link, AA on white) and #6B8AFF (blau-hell, dark mode)
+ *   status  #0B7A55 / #92610A / #C92A2A / #2B50D4: for STATES only, never as
+ *           a design colour.
+ *
+ * Everything else here is derived from those values with color-mix(), so no
+ * foreign hue can enter through a hand-picked hex. If you need a new shade,
+ * mix it from a brand token, do not paste a hex.
+ *
+ * Rule: NEVER hardcode hex in slides: use these variables or accent props
  * ("blue" | "green" | "mixed") on layouts. See the slides skill.
  */
 
 :root {
   /* --- Typografie (CI) ----------------------------------------------- */
-  /* Geist (OFL) — bundled variable fonts, see fonts.css. Geist for headings
+  /* Geist (OFL): bundled variable fonts, see fonts.css. Geist for headings
      and body, Geist Mono for code and tables. Fallbacks keep the deck readable
      before the font loads or if it is unavailable. */
   --miragon-font: 'Geist', 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --miragon-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-  /* --- Markenfarben (CI) --------------------------------------------- */
+  /* --- Markenfarben (CI), die fünf Palettenwerte, exakt -------------- */
   --miragon-blue: #335DE5;          /* Primär */
-  --miragon-green: #00E676;         /* Sekundär — sparsam einsetzen */
+  --miragon-green: #00E676;         /* Akzent: sparsam, nie Text auf Weiß */
   --miragon-gray-bg: #F9F7F7;
-  --miragon-black: #000000;
+  --miragon-black: #1D1D1D;         /* CI-Schwarz, kein reines #000000 */
   --miragon-white: #FFFFFF;
 
-  /* --- Blau-Varianten ------------------------------------------------ */
-  --miragon-blue-dark: #335DE5;     /* kanonisch: Headings, Akzente */
-  --miragon-blue-darker: #1E3EBF;   /* Hover, Borders */
-  --miragon-blue-mid: #2B4ACB;
-  --miragon-blue-light: #F0F4FF;    /* dezente Hintergründe */
-  --miragon-blue-soft: #F5F7FF;
-  --miragon-blue-warm: #D6E0F8;
-  --miragon-blue-deep: #1A3278;
+  /* Abgeleitete Blaus aus tokens.json (die einzigen zwei sanktionierten). */
+  --miragon-blue-link: #2B50D4;     /* 6.56:1 auf Weiß: Links, Akzenttext */
+  --miragon-blue-bright: #6B8AFF;   /* Dark Mode / Text auf dunklem Grund */
+  /* Rückwärtskompatibler Alias: hieß früher "das kanonische Blau für Headings
+     und Akzente" und trug denselben Wert wie --miragon-blue. Wird noch von
+     code.css und CodeBlock.vue gelesen. */
+  --miragon-blue-dark: var(--miragon-blue);
 
-  /* --- Grün-Varianten ------------------------------------------------ */
-  --miragon-green-dark: #00E676;
-  --miragon-green-light: #E8F5E9;
-  --miragon-green-soft: #D4F5DC;
-  --miragon-green-deep: #006838;
+  /* --- Blau-Tints (aus --miragon-blue gemischt, keine Fremdtöne) ----- */
+  --miragon-blue-light: color-mix(in srgb, var(--miragon-blue) 7%, var(--miragon-white));
+  --miragon-blue-warm: color-mix(in srgb, var(--miragon-blue) 18%, var(--miragon-white));
+  /* Rückwärtskompatibler Alias: früher ein eigenes, dunkleres Blau (#1E3EBF).
+     Zeigt jetzt auf das sanktionierte Link-Blau. */
+  --miragon-blue-darker: var(--miragon-blue-link);
 
-  /* --- Neutrals ------------------------------------------------------- */
-  --miragon-gray: #64748B;
-  --miragon-gray-light: #F8FAFC;
-  --miragon-gray-dark: #1E293B;
-  --miragon-grad-mid: #E0ECF5;
-  --miragon-grad-mid-accent: #1E6E8A;
+  /* --- Neutrals (aus --miragon-black aufgehellt) --------------------- */
+  /* Kein Slate, kein Blaustich: reine Ableitungen des CI-Schwarz.
+     Kontraste nachgerechnet gegen #FFFFFF und gegen #F9F7F7. */
+  --miragon-border: color-mix(in srgb, var(--miragon-black) 12%, var(--miragon-white));
 
   /* --- Text ---------------------------------------------------------- */
-  --miragon-text-primary: #000000;
-  --miragon-text-secondary: #334155;
-  --miragon-text-muted: #64748B;
+  --miragon-text-primary: var(--miragon-black);                                     /* 16.86:1 / 15.79:1 */
+  --miragon-text-secondary: color-mix(in srgb, var(--miragon-black) 86%, var(--miragon-white)); /* ~10.9:1 / 10.2:1 */
+  --miragon-text-muted: color-mix(in srgb, var(--miragon-black) 72%, var(--miragon-white));     /* ~6.7:1 / 6.3:1 */
+
+  /* --- Statusfarben (nur Zustände, nie als Gestaltungsfarbe) --------- */
+  --miragon-success: #0B7A55;
+  --miragon-warning: #92610A;
+  --miragon-danger: #C92A2A;
 
   /* --- Static content gradients (chrome only, never cards) ----------- */
-  --miragon-gradient-blue: linear-gradient(135deg, #335DE5 0%, #1E3EBF 100%);
-  --miragon-gradient-green: linear-gradient(135deg, #00E676 0%, #00C263 100%);
-  --miragon-gradient-mixed: linear-gradient(135deg, #335DE5 0%, #1B4FE0 60%, #00C263 100%);
+  /* Ausschließlich aus Palettenwerten aufgebaut. `mixed` ist der
+     Marken-Verlauf aus tokens.json (gradient.brand). */
+  --miragon-gradient-blue: linear-gradient(135deg, var(--miragon-blue) 0%, var(--miragon-blue-link) 100%);
+  --miragon-gradient-green: linear-gradient(135deg, var(--miragon-green) 0%, var(--miragon-green) 100%);
+  --miragon-gradient-mixed: linear-gradient(120deg, var(--miragon-blue) 30%, var(--miragon-green));
+
+  /* --- Mesh-Hintergrund (cover / closing) ---------------------------- */
+  /* Die sechs Stops sind tokens.json gradient.mesh-hero. Sie liegen BEWUSST
+     außerhalb der Grundpalette und gelten ausschließlich für diesen Shader
+     (BrandMeshBackground.vue) und seinen CSS-Fallback. Nirgends sonst
+     verwenden. Als Token, damit der Fallback-Verlauf in cover.vue/closing.vue
+     die Werte nicht ein drittes Mal dupliziert. */
+  --miragon-mesh-navy: #0D0D2B;
+  --miragon-mesh-indigo: #1A1A4E;
+  --miragon-mesh-green-deep: #00C853;
+  --miragon-mesh-fallback: linear-gradient(
+    125deg,
+    var(--miragon-blue) 0%,
+    var(--miragon-mesh-indigo) 35%,
+    var(--miragon-mesh-navy) 55%,
+    var(--miragon-mesh-green-deep) 100%
+  );
 
   /* --- Card accent ramp (Card title + icon) -------------------------- */
-  /* The six stops the <Card accent="…"> prop selects, running blue → teal →
-     green. Card.vue references these tokens (no hardcoded hex in the
-     component), so a co-branded deck can remap the whole ramp from its own
-     stylesheet instead of shadowing Card.vue. Defaults are the Miragon CI
-     values — do not change them here. */
-  --miragon-card-accent-blue: #335DE5;
-  --miragon-card-accent-blue-mid: #2B5ACE;
-  --miragon-card-accent-teal: #1E7A8A;
-  --miragon-card-accent-green-deep: #0E8E6E;
-  --miragon-card-accent-green-mid: #00974F;
-  --miragon-card-accent-green: #00C263;
+  /* Kartentitel sind TEXT AUF WEISS. Damit sind laut CI genau zwei Farben
+     zulässig: das Marken-Blau und das abgeleitete Link-Blau. Grün fällt hier
+     aus, weil es auf Weiß keinen AA-Kontrast erreicht (#00E676 = 1.67:1).
+     Der grüne Akzent gehört auf Flächen und Grafik, nicht in Fließtext.
+     Card.vue akzeptiert die alten Rampenwerte weiterhin, bildet sie aber auf
+     diese zwei Stufen ab, damit bestehende Decks nicht brechen. */
+  --miragon-card-accent-blue: var(--miragon-blue);
+  --miragon-card-accent-blue-mid: var(--miragon-blue-link);
 }
 
 /*
  * Card rule (see the slides skill; use the <Card> component):
- * Cards are ALWAYS white (rounded-xl border border-gray-200 bg-white +
- * box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08)). When a set of cards needs
- * an accent, colour the card's TITLE text only, running the blue → teal →
- * green progression. Never gradient or coloured card backgrounds.
+ * Cards are ALWAYS white (rounded-xl border + soft brand-blue shadow). When a
+ * set of cards needs an accent, colour the card's TITLE text only, using the
+ * two sanctioned blues above. Never gradient or coloured card backgrounds.
  *
  * The earlier `.mira-card-1/2/3` gradient utilities are intentionally NOT
- * defined here — they violated the white-card rule and have been removed.
+ * defined here: they violated the white-card rule and have been removed.
  */
 
 /*

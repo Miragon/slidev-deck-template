@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * CardGrid — Raster fuer Karten/Figuren (Design-System §6).
+ * CardGrid — Raster für Karten/Figuren (Design-System §6).
  * Ersetzt das rohe `<div class="grid grid-cols-N gap-…">` im Markdown, damit Folien
  * keine Utility-Klassen tragen: nur semantische Tags. Karten im Grid strecken auf
- * gleiche Hoehe (align: stretch).
+ * gleiche Höhe (align: stretch).
  *
- * `direction` waehlt die Fliessrichtung:
+ * `direction` wählt die Fließrichtung:
  *   - `row` (Default): `cols` gleich breite Spalten, Karten laufen nebeneinander.
  *   - `column`: eine Spalte, Karten stapeln von oben nach unten (`cols` wird ignoriert).
  * `cols` setzt die Spaltenzahl (nur bei `row`), `gap` den Abstand.
