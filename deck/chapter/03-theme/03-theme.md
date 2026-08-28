@@ -84,7 +84,7 @@ accent: blue
 
 <!--
   CardGrid + Card: no raw <div>, no hex. Accent walks blue → teal → green.
-  OPTIONAL: `icon` sets an Iconify UnoCSS class (i-carbon-*, i-ph-*) above the
+  OPTIONAL: `icon` sets an Iconify UnoCSS class (i-lucide-*) above the
   title; it takes the card's accent colour. Omit it for a plain text card.
   Pass the full class literally so UnoCSS generates it at build time.
   A card body can be a lead line followed by a short bullet list: wrap the
@@ -95,7 +95,7 @@ accent: blue
 
 <CardGrid cols="3">
 
-<Card title="Card / CardGrid" accent="blue" icon="i-carbon-grid">
+<Card title="Card / CardGrid" accent="blue" icon="i-lucide-grid-3x3">
 
 A row of white cards, written as components.
 
@@ -104,7 +104,7 @@ A row of white cards, written as components.
 
 </Card>
 
-<Card title="StepList / Figure" accent="teal" icon="i-carbon-list-boxes">
+<Card title="StepList / Figure" accent="teal" icon="i-lucide-list">
 
 Ordered steps and captioned visuals.
 
@@ -113,7 +113,7 @@ Ordered steps and captioned visuals.
 
 </Card>
 
-<Card title="SplitView" accent="green" icon="i-carbon-split-screen">
+<Card title="SplitView" accent="green" icon="i-lucide-columns-2">
 
 A diagram beside its explanation.
 
