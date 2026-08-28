@@ -138,10 +138,33 @@ config, so a report — and a CI log — is self-describing.
 | `no-restyled-bullets` | source | recommended | error |
 | `excalidraw-committed-light` | source | recommended | error |
 | `excalidraw-built-transparent` | source | recommended | warn |
+| `brand-palette` | source | required | error |
+| `brand-logo-asset` | source | required | error |
+| `brand-token-defined` | source | required | error |
 | `element-overflow` | rendered | recommended | error |
 | `heading-black` | rendered | required | error |
 | `card-white` | rendered | required | error |
 | `overlay-safe-area` | rendered | required | error |
+
+`brand-palette` and `brand-logo-asset` read their expected values from
+`src/rules/source/brand-palette.json` — the validator's single machine-readable copy
+of the palette (five brand colours, two sanctioned derivations, four status
+colours), mirroring the `miragon-brand` plugin's `corporate-design/assets/tokens.json`.
+`brand-palette` scans the toolkit's own styles, components/layouts and mermaid theme
+plus the deck's committed Excalidraw diagrams, and reads all three ways of writing a
+colour: a hex literal, an `rgb()`/`rgba()` value, and a CSS colour keyword in value
+position (`color: black`, `fill="tomato"`). Colours inside comments are ignored, so
+a file may document a forbidden value. The mesh-hero stops are allowlisted to the
+hero shader and the theme tokens; the logo vectors are excluded there and asserted by
+`brand-logo-asset` (viewBox + the single fill each variant carries).
+
+`brand-token-defined` asserts that every literal `var(--miragon-*)` resolves to a
+token `packages/toolkit/styles/theme.css` actually defines. It exists because CSS
+drops an undefined custom property silently: the element inherits instead, so the
+build stays green and the breakage shows up on exactly the one slide that uses the
+token, usually as something plausible-looking. A computed name
+(`var(--miragon-gradient-${accent})`) cannot be resolved statically and is skipped
+rather than guessed at.
 
 `content-heading` has a per-slide opt-out (`allowMultilineHeading: true` in the
 slide frontmatter). `overlay-safe-area` reads the toolkit-owned safe-area model and

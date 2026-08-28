@@ -1,0 +1,54 @@
+{
+  "$description": "The Miragon palette, machine-readable. This file is the ONLY place the validator keeps brand colour values, so the `brand-palette` and `brand-logo-asset` rules cannot drift apart from each other or grow a hand-maintained copy inside a rule. Mirrors the miragon-brand plugin, skill `corporate-design`, `assets/tokens.json`; where the two disagree, tokens.json wins and this file gets pulled back in line.",
+  "$source": "miragon-brand plugin -> skills/corporate-design/assets/tokens.json (color.*, functional.*, gradient.mesh-hero, logo.*)",
+  "$rule": "brand-review rule B1 (exact palette colours) is a HARD fail, hence category `required` / default `error`.",
+
+  "palette": [
+    { "name": "blau", "hex": "#335DE5", "role": "primary", "note": "Primary: surfaces, buttons, links, accents." },
+    { "name": "gruen", "hex": "#00E676", "role": "accent", "note": "Accent only: key visual, highlights, one word. Never body text on white (1.67:1, fails WCAG AA)." },
+    { "name": "grau", "hex": "#F9F7F7", "role": "surface", "note": "Quiet neutral surface." },
+    { "name": "schwarz", "hex": "#1D1D1D", "role": "text", "note": "Text on light, monochrome logo. The brand excludes pure #000000." },
+    { "name": "weiss", "hex": "#FFFFFF", "role": "surface", "note": "Text on colour, surfaces." },
+    { "name": "blau-link", "hex": "#2B50D4", "role": "interaction", "note": "Derived from blau: links and accent text on white, 6.56:1 (AA). Also tokens.json functional.info." },
+    { "name": "blau-hell", "hex": "#6B8AFF", "role": "interaction-dark", "note": "Derived from blau: links and accents on dark ground." },
+    { "name": "success", "hex": "#0B7A55", "role": "status", "note": "STATE only, never a design colour." },
+    { "name": "warning", "hex": "#92610A", "role": "status", "note": "STATE only, never a design colour." },
+    { "name": "danger", "hex": "#C92A2A", "role": "status", "note": "STATE only, never a design colour." }
+  ],
+
+  "restricted": [
+    {
+      "name": "mesh-hero",
+      "hexes": ["#1A1A4E", "#0D0D2B", "#00C853"],
+      "files": [
+        "packages/toolkit/components/BrandMeshBackground.vue",
+        "packages/toolkit/styles/theme.css"
+      ],
+      "note": "tokens.json gradient.mesh-hero. Deliberately outside the base palette and valid ONLY for the animated hero shader and its CSS fallback tokens. #335DE5 and #00E676 are the other two stops and are already palette values."
+    }
+  ],
+
+  "scan": {
+    "$note": "Repo-relative globs, matched with src/glob.mjs. Only files the toolkit ships (its own styles, components, layouts, mermaid theme) plus the deck's committed Excalidraw diagrams carry author-chosen colour; slide markdown is covered by `no-raw-html` (no hex may appear there at all).",
+    "include": [
+      "packages/toolkit/styles/*.css",
+      "packages/toolkit/**/*.vue",
+      "packages/toolkit/setup/*.ts",
+      "deck/**/*.excalidraw.svg"
+    ],
+    "exclude": [
+      "packages/toolkit/assets/*.svg"
+    ],
+    "$excludeReason": "The logo vectors are official artwork, not authored colour: they are checked byte-for-intent by the `brand-logo-asset` rule below instead."
+  },
+
+  "logo": {
+    "$note": "The official vectors, unaltered. brand-review rule B5: a recoloured or reshaped logo is a hard fail. viewBox values come from tokens.json logo.wordmarkViewBox / logo.kometViewBox; each file carries exactly one fill, declared once in its <style> block.",
+    "assets": [
+      { "file": "packages/toolkit/assets/logo.svg", "variant": "gruen", "viewBox": "0 0 316.05 48.42", "fill": "#00e676" },
+      { "file": "packages/toolkit/assets/logo-white.svg", "variant": "weiss", "viewBox": "0 0 316.05 48.42", "fill": "#fff" },
+      { "file": "packages/toolkit/assets/logo-blue.svg", "variant": "blau", "viewBox": "0 0 316.05 48.42", "fill": "#335de5" },
+      { "file": "packages/toolkit/assets/komet.svg", "variant": "gruen", "viewBox": "0 0 288.08 89.63", "fill": "#00e676" }
+    ]
+  }
+}
