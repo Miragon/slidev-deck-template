@@ -5,12 +5,15 @@
   "description": "Reference deck that consumes @miragon/slidev-toolkit. This is the template body: cover, chapters and closing.",
   "scripts": {
     "dev": "portless",
+    "predev:app": "slide-ids --stamp",
     "dev:app": "slidev slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1",
     "build": "slidev build slides.md --out ../dist",
-    "export": "slidev export slides.md"
+    "export": "slidev export slides.md",
+    "dev:profile": "SLIDEV_PROFILE_EDIT=1 npm run dev:app"
   },
   "dependencies": {
     "@slidev/cli": "52.19.0",
+    "@miragon/slidev-speaker-profiles": "0.1.0",
     "slidev-addon-bpmn": "1.10.1",
     "slidev-addon-dmn": "1.7.0",
     "vue": "3.5.41"

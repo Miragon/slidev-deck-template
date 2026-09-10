@@ -1,4 +1,5 @@
 ---
+id: s-2851e9d0
 layout: section
 index: "03"
 eyebrow: Chapter 03
@@ -10,6 +11,7 @@ accent: blue
 The brand layer: fixed tokens, fifteen layouts, ten components.
 
 ---
+id: s-89f98aa2
 layout: content
 title: The brand is fixed, on purpose
 eyebrow: 03 - The Miragon theme
@@ -31,6 +33,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-990db564
 layout: content
 title: Fifteen layouts for fifteen jobs
 eyebrow: 03 - The Miragon theme
@@ -54,6 +57,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-474aa93d
 layout: content
 title: Ten components keep markdown clean
 eyebrow: 03 - The Miragon theme
@@ -76,6 +80,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-4e0c2290
 layout: content
 title: Components in action
 eyebrow: 03 - The Miragon theme
@@ -125,6 +130,7 @@ A diagram beside its explanation.
 </CardGrid>
 
 ---
+id: s-89805ad0
 layout: content
 title: Tabular data, on-brand
 eyebrow: 03 - The Miragon theme
@@ -148,6 +154,7 @@ A plain Markdown table renders in brand CI. No component needed.
 | Nested list levels | 1 | Flatten the list |
 
 ---
+id: s-a7e444f7
 layout: compare
 title: Why a system
 eyebrow: 03 - The Miragon theme

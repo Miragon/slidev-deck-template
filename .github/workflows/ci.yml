@@ -29,6 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The speaker profiles address slides by the `id:` in their frontmatter.
+      # `npm run dev` stamps a new slide automatically, so this only fails when
+      # someone commits without ever having started the dev server - and then it
+      # fails here rather than silently shifting somebody's selection.
+      - name: Verify every slide has a stable id
+        run: npm run check:ids
+
       - name: Build HTML
         run: npx slidev build deck/slides.md --base /${{ github.event.repository.name }}/ --out ../dist
         

@@ -16,6 +16,8 @@ The entry **`deck/slides.md`** holds only the cover and the closing; the body is
 1. **The `slides` skill** (the `miragon-slidev` plugin; `miragon-slidev:slides`) — the authoring guide for everything visual and editorial: repo structure and workflow, the 15 layout archetypes (`cover`, `hero`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Agenda`), the white-card rule, content rules (one consistent deck language, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
 2. **`deck/`** — the reference implementation. Every archetype has a demo slide with a comment block listing `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE`. Open the relevant `deck/chapter/<chapter>/<chapter>.md` alongside the skill when in doubt.
 
+**Slides carry a machine-owned `id:`.** `@miragon/slidev-speaker-profiles` (`packages/speaker-profiles/`) lets each speaker keep their own selection of slides in `.slidev-profiles/<name>.json`, and it addresses slides by that id. Never write, change, copy or delete one. New slides get theirs from `npm run dev`; `npm run check:ids` (in verify and CI) refuses a deck with an unstamped slide. Anything that drives the deck slide by slide needs `SLIDEV_PROFILE=none`, which the `verify*` scripts already set.
+
 Do not duplicate rules across files (this one, the skill, project memory). The rendering truth lives in `packages/toolkit/`; point at the `slides` skill for everything else.
 
 ---

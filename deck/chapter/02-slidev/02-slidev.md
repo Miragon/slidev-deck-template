@@ -1,4 +1,5 @@
 ---
+id: s-70b4d393
 layout: section
 index: "02"
 eyebrow: Chapter 02
@@ -10,6 +11,7 @@ accent: blue
 The engine: slides written as Markdown, rendered in the browser.
 
 ---
+id: s-4e469cca
 layout: content
 title: Slides are Markdown
 eyebrow: 02 - Slidev
@@ -31,6 +33,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-bd9b8a2d
 layout: content
 title: A slide is just Markdown
 eyebrow: 02 - Slidev
@@ -61,6 +64,7 @@ The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>
 </CodeBlock>
 
 ---
+id: s-c4821064
 layout: content-image
 title: One source, every output
 eyebrow: 02 - Slidev
@@ -84,6 +88,7 @@ The same `deck/slides.md` becomes:
 One file, no copy-paste, no parallel set of slides to keep in sync.
 
 ---
+id: s-f0ac3978
 layout: showcase
 title: What you get for free
 eyebrow: 02 - Slidev
