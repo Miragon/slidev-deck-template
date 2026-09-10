@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.2](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.1...create-slidev-deck-v1.4.2) (2026-09-10)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-speaker-profiles bumped from 0.2.1 to 0.2.2
+
 ## [1.4.1](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.0...create-slidev-deck-v1.4.1) (2026-09-10)
 
 
