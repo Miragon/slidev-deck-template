@@ -33,9 +33,9 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@slidev/parser": "52.19.0",
-    "markdown-it": "15.0.0",
-    "playwright-chromium": "1.62.1"
+    "@slidev/parser": "52.19.1",
+    "markdown-it": "15.0.1",
+    "playwright-chromium": "1.63.0"
   },
   "peerDependencies": {
     "@miragon/slidev-toolkit": ">=1.15.0 <2"
