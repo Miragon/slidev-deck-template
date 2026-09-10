@@ -5,7 +5,6 @@
   "description": "Reference deck that consumes @miragon/slidev-toolkit. This is the template body: cover, chapters and closing.",
   "scripts": {
     "dev": "portless",
-    "predev:app": "slide-ids --stamp",
     "dev:app": "slidev slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1",
     "build": "slidev build slides.md --out ../dist",
     "export": "slidev export slides.md",

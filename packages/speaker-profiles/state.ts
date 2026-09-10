@@ -94,18 +94,17 @@ export const hiddenCount = computed(() => hiddenIds.value.size)
 /**
  * Drift against the profile's `knownIds`: unknown means visible, so a slide
  * added on main shows up for every speaker instead of silently disappearing.
- * Ids that vanished are reported but never dropped from `hidden` - the slide
- * may come back on another branch.
+ *
+ * Only additions. A deck can be run in pieces - the developer trainings have a
+ * separate entry per chapter - and "gone" would then mean "not in this chapter",
+ * which is true and useless. Ids that vanished are never dropped from `hidden`
+ * either: the slide may come back on another branch.
  */
 export function drift(currentIds: string[]) {
   if (!knownIds.value.length)
-    return { added: [], removed: [] }
+    return { added: [] }
   const known = new Set(knownIds.value)
-  const current = new Set(currentIds)
-  return {
-    added: currentIds.filter(id => !known.has(id)),
-    removed: knownIds.value.filter(id => !current.has(id)),
-  }
+  return { added: currentIds.filter(id => !known.has(id)) }
 }
 
 /**
@@ -166,7 +165,10 @@ export async function save(currentIds: string[]) {
         speaker: speaker.value,
         hidden: [...hiddenIds.value],
         order: null,
-        knownIds: currentIds,
+        // Additive, never a replacement. Saving from a single-chapter run must
+        // not shrink what this profile has already seen, or every slide of the
+        // other chapters would count as new the next time the whole deck runs.
+        knownIds: [...new Set([...knownIds.value, ...currentIds])],
       }),
     })
     const data = await res.json()

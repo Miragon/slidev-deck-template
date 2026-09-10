@@ -114,7 +114,8 @@ test('derives runtime deps from the reference manifest; validator + portless as 
   assert.equal(pkg.scripts.verify, 'SLIDEV_PROFILE=none slidev-validator --rendered', 'verify runs the validator bin')
   assert.equal(pkg.scripts['verify:source'], 'SLIDEV_PROFILE=none slidev-validator', 'verify:source runs source rules')
   assert.equal(pkg.scripts['preverify:source'], 'npm run check:ids', 'verify is gated on every slide having an id')
-  assert.match(pkg.scripts['predev:app'], /^slide-ids --stamp/, 'starting the dev server stamps new slides')
+  assert.equal(pkg.scripts['predev:app'], undefined, 'stamping is the addon\'s job, not a script hook')
+  assert.match(pkg.scripts['stamp:ids'], /^slide-ids --stamp/, 'stamping stays available on demand')
   assert.match(pkg.dependencies['@miragon/slidev-speaker-profiles'], /^\d/, 'speaker profiles must be an exact-pinned dependency')
 })
 

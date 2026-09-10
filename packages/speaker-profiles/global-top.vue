@@ -233,10 +233,10 @@ function goTo(no: number) {
         </div>
       </header>
 
-      <div v-if="changes.added.length || changes.removed.length" class="sp-drift">
+      <div v-if="changes.added.length" class="sp-drift">
         <div class="sp-drift-head">
           <span>
-            {{ changes.added.length }} new slide(s) since your last change, {{ changes.removed.length }} gone.
+            {{ changes.added.length }} new slide(s) since your last change.
             New slides are on by default.
           </span>
           <button v-if="changes.added.length" class="sp-btn" @click="hideAllNew">

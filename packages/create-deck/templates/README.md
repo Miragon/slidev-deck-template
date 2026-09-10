@@ -59,9 +59,10 @@ produces the complete deck; a personal PDF spells the name out
 picks a profile.
 
 This is why every slide carries an `id:` in its frontmatter. It is written for
-you when you start the dev server and it is what a selection points at, so
+you when the dev server starts and it is what a selection points at, so
 retitling or reordering slides cannot silently switch off the wrong one. Do not
-edit those ids by hand. Details: [`@miragon/slidev-speaker-profiles`](https://www.npmjs.com/package/@miragon/slidev-speaker-profiles).
+edit those ids by hand; `npm run check:ids` (which CI runs) fails if one is
+missing or duplicated. Details: [`@miragon/slidev-speaker-profiles`](https://www.npmjs.com/package/@miragon/slidev-speaker-profiles).
 
 ## Next steps
 

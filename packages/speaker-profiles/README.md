@@ -24,26 +24,38 @@ addons:
 ---
 ```
 
-And wire the CLI into your scripts:
+That is the whole installation. **Ids are stamped by the addon itself**, when a
+dev server starts, whatever the script that started it is called - which matters
+for a deck with one dev script per chapter, where a `predev` hook would have to
+be repeated in each of them and would be forgotten in one.
+
+Add two things to your scripts: a way in for the speaker, and the guard for CI.
 
 ```json
 {
   "scripts": {
-    "predev": "slide-ids --stamp",
     "dev": "slidev slides.md --open",
     "dev:profile": "SLIDEV_PROFILE_EDIT=1 npm run dev",
-    "check:ids": "slide-ids --check"
+    "check:ids": "slide-ids --check",
+    "preverify": "npm run check:ids",
+    "verify": "SLIDEV_PROFILE=none slidev-validator --rendered"
   }
 }
 ```
 
-`predev` gives every new slide an id before the server starts, so nobody has to
-think about ids. Run `check:ids` in CI (and before your verify step) so an
-unstamped slide cannot reach `main`. **Do not stamp in a build**: a build must
-not mutate its own sources.
+`check:ids` belongs in CI: it is what guarantees that everything on `main` is
+addressable, for the case where somebody commits a slide without ever having
+started the dev server. **Do not stamp in a build** - a build must not mutate
+its own sources.
 
-If your dev server is started by several scripts (one per chapter, say), add
-`slide-ids --stamp && ` to each of them, or route them through one entry point.
+`SLIDEV_PROFILE=none` belongs on anything that drives the deck slide by slide
+(the validator, a screenshot run). It switches the addon off for that run, so
+the skip logic cannot navigate away from the slide the tool is waiting for, and
+so the run cannot leave a modified working tree behind.
+
+Two ways to keep the dev server's hands off your sources, if you want that:
+`SLIDEV_SPEAKER_PROFILES_NO_STAMP=1` for a single run, or stamp explicitly with
+`slide-ids --stamp` from a `predev` hook.
 
 ## What a speaker does
 
@@ -85,6 +97,13 @@ Here the switched-off slides are really removed, not just skipped.
 disappearing without a word. `dev:profile` lists the new ones by name with a
 **Hide all new** button; plain `dev` shows a short notice that takes itself off
 screen again.
+
+**Pick your slides in the full deck.** A deck can have an entry per chapter, and
+running one of those shows and skips exactly what your profile says - that part
+is right, because the ids live in the slide files. But saving from there only
+ever adds to what your profile has seen, never replaces it, so a chapter-sized
+run cannot make the other chapters look new. Presenting a single chapter is
+fine; choosing is a job for the whole deck.
 
 ## Slide ids
 
@@ -162,8 +181,10 @@ because the slide may come back on another branch.
 
 `order` is reserved for reordering and is always `null` today.
 
-Add `.slidev-profiles/.current` to `.gitignore`: it says which profile *this
-machine* uses and belongs to nobody else.
+Gitignore two entries in `.slidev-profiles/`: `.current`, which says which
+profile *this machine* uses and belongs to nobody else, and `.stamp.lock`, the
+transient lock that keeps two dev servers starting at once from both minting
+ids.
 
 ## Environment
 
@@ -172,6 +193,7 @@ machine* uses and belongs to nobody else.
 | `SLIDEV_PROFILE=<name>` | pick the profile explicitly; wins over `.current` |
 | `SLIDEV_PROFILE=none` | switch the addon off entirely |
 | `SLIDEV_PROFILE_EDIT=1` | unlock the editing controls |
+| `SLIDEV_SPEAKER_PROFILES_NO_STAMP=1` | the dev server does not write ids this run |
 
 **Anything that drives the deck slide by slide needs `SLIDEV_PROFILE=none`** (a
 validator, a screenshot run): the skip logic would navigate away from the slide

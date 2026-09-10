@@ -1,2 +1,4 @@
-# Which profile this machine uses. Local, never committed.
+# Which profile this machine uses, and the transient stamping lock.
+# Local, never committed.
 .current
+.stamp.lock

@@ -66,6 +66,23 @@ way to shelve content (the two developer trainings park dozens of slides that
 way), and unstamped, every one of them would come back as a new slide for every
 speaker the day the line is deleted. The file on disk keeps its `hide: true`.
 
+**Stamping runs from the dev server, not from an npm hook.** A deck can have any
+number of ways to start one - the two developer trainings have a script per
+chapter, eight and nine of them - and a `predev` hook would have to be repeated
+in each and would be forgotten in one. `setup/vite-plugins.ts` calls
+`stampSlides` once per server start instead. It holds `.slidev-profiles/.stamp.lock`
+while it writes, because those decks are meant to be run several at once and two
+servers starting together on an unstamped deck would both mint ids; the loser
+skips, which is safe because stamping is idempotent. It never throws: a
+read-only checkout is worth a warning, not a dev server that will not start.
+`slide-ids --check` in CI is what actually guarantees the deck on main.
+
+**Drift reports additions only.** `removed` used to be shown as "N gone", which
+is a lie in a deck with an entry per chapter: everything outside that chapter
+looks gone. For the same reason `save` merges `knownIds` instead of replacing
+them, so saving from a chapter-sized run cannot shrink what the profile has
+seen.
+
 ## Things that will bite you
 
 **`hide: true` is evaluated while parsing.** A hidden slide never reaches the

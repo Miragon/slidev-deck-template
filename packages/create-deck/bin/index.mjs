@@ -187,10 +187,10 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion) {
     scripts: {
       dev: 'portless',
       // Every slide needs a stable `id:` for the speaker profiles, and nobody
-      // should have to think about it: starting the dev server stamps the ones
-      // that have none. `check:ids` guards verify and CI. A build never stamps -
-      // it must not mutate its own sources.
-      'predev:app': 'slide-ids --stamp --entry deck/slides.md',
+      // has to think about it: the addon stamps the ones that have none when a
+      // dev server starts, whichever script started it. `check:ids` guards
+      // verify and CI; `stamp:ids` is there for the deck that parks files no
+      // entry imports. A build never stamps - it must not mutate its sources.
       'dev:app': 'slidev deck/slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1',
       'dev:profile': 'SLIDEV_PROFILE_EDIT=1 npm run dev:app',
       build: 'slidev build deck/slides.md --out ../dist',

@@ -41,6 +41,7 @@
     "global-top.vue",
     "slide-top.vue",
     "state.ts",
+    "stamp.mjs",
     "identity.mjs",
     "profiles.mjs"
   ],
