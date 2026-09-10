@@ -90,21 +90,21 @@ eyebrow: 02 - Slidev
 accent: blue
 items:
   - label: Live preview
-    icon: i-carbon-flash
+    icon: i-lucide-zap
     body:
       - Slidev recompiles on every save
       - The deck reflects **each edit** in real time
       - No restart, no manual refresh
   - label: Vue inside slides
-    icon: i-carbon-cube
+    icon: i-lucide-box
     body: Drop a Vue component into a slide and it becomes part of the deck, with
       full reactivity and no detour.
   - label: Click-through
-    icon: i-carbon-cursor-1
+    icon: i-lucide-mouse-pointer-2
     body: Wrap content in `<v-clicks>` to walk the audience through a slide one step
       at a time.
   - label: Code and diagrams
-    icon: i-carbon-code
+    icon: i-lucide-code
     body: Highlighted snippets, Mermaid charts, BPMN simulations, all rendered
       natively. The full list lives in the [Slidev
       docs](https://sli.dev/features/).

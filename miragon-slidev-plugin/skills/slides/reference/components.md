@@ -1,22 +1,22 @@
-# Components — full reference
+# Components: full reference
 
-Reusable building blocks in `packages/toolkit/components/` (auto-imported into every deck). Diagrams are not components — they are `.excalidraw.svg` files embedded via `<Figure src>` (see the `excalidraw` skill). Write all components on a single line in markdown with explicit closing tags — **except when the body contains inline Markdown** (see below).
+Reusable building blocks in `packages/toolkit/components/` (auto-imported into every deck). Diagrams are not components: they are `.excalidraw.svg` files embedded via `<Figure src>` (see the `excalidraw` skill). Write all components on a single line in markdown with explicit closing tags, **except when the body contains inline Markdown** (see below).
 
-All colours come from `packages/toolkit/styles/theme.css`; never pass raw hex from a slide.
+All colours come from `packages/toolkit/styles/theme.css`, which mirrors `tokens.json` in the `miragon-brand` plugin's `corporate-design` skill (the actual source of truth). Never pass raw hex from a slide.
 
 ---
 
 ## Markdown inside a component body
 
-Slidev renders the Markdown file first, then hands the result to Vue. A component whose opening tag and body share a line (or sit on adjacent lines with no gap) is parsed as a **raw HTML block**: everything inside is passed through verbatim, so inline Markdown never runs — `` `code` `` shows its backticks, `**bold**` shows its asterisks, `[text](url)` stays literal. This is [documented Slidev/CommonMark behaviour](https://slidev.dev/builtin/components), not a theme bug, and no CSS can fix it.
+Slidev renders the Markdown file first, then hands the result to Vue. A component whose opening tag and body share a line (or sit on adjacent lines with no gap) is parsed as a **raw HTML block**: everything inside is passed through verbatim, so inline Markdown never runs: `` `code` `` shows its backticks, `**bold**` shows its asterisks, `[text](url)` stays literal. This is [documented Slidev/CommonMark behaviour](https://slidev.dev/builtin/components), not a theme bug, and no CSS can fix it.
 
 The fix is to **surround the body with blank lines** so Slidev parses it as a Markdown block:
 
 ```md
-<!-- BROKEN — backticks render literally -->
+<!-- BROKEN: backticks render literally -->
 <Card title="Runtime" accent="blue">Confirm `newsletter.bpmn` deploys.</Card>
 
-<!-- CORRECT — inline code renders as an on-brand chip -->
+<!-- CORRECT: inline code renders as an on-brand chip -->
 <Card title="Runtime" accent="blue">
 
 Confirm `newsletter.bpmn` deploys.
@@ -24,7 +24,7 @@ Confirm `newsletter.bpmn` deploys.
 </Card>
 ```
 
-A **plain-text** body (no inline Markdown) is unaffected — keep it on the tag line. Inline code renders as a Geist Mono chip in brand blue (`styles/code.css`), the same in body text and inside cards. This applies to every component with a Markdown body: `Card`, `SplitView`, `CodeBlock`, and the `content`/`compare` layout slots (which is why bullet lists already need a preceding blank line).
+A **plain-text** body (no inline Markdown) is unaffected, so keep it on the tag line. Inline code renders as a Geist Mono chip in brand blue (`styles/code.css`), the same in body text and inside cards. This applies to every component with a Markdown body: `Card`, `SplitView`, `CodeBlock`, and the `content`/`compare` layout slots (which is why bullet lists already need a preceding blank line).
 
 ---
 
@@ -34,21 +34,23 @@ The canonical white card (white background always, accent on the title only). Fo
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
-| `title` (str) | — | — | card title (gets the accent colour) |
-| `accent` | `blue` · `blue-mid` · `teal` · `green-deep` · `green-mid` · `green` | `blue` | a stop on the blue→teal→green progression; the only place the sanctioned hex lives |
+| `title` (str) | free text | none | card title (gets the accent colour) |
+| `accent` | `blue` · `blue-mid` | `blue` | the two sanctioned stops (`#335DE5` / `#2B50D4`, both AA on white). `teal` · `green-deep` · `green-mid` · `green` are **deprecated aliases** that render as `blue-mid`; accepted so older decks keep working, never written in new slides |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
-| `icon` (str) | an Iconify UnoCSS class, e.g. `i-carbon-grid`, `i-ph-cube` | — | optional icon shown above the title in the accent colour; omit for a plain text card |
+| `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-grid-3x3`, `i-lucide-box` | none | optional icon shown above the title in the accent colour; omit for a plain text card |
 | `align` | `left` · `center` · `right` | `left` | horizontal alignment of icon, title, and body |
-| **slot** | — | — | body text (wrap in blank lines if it contains inline Markdown — see "Markdown inside a component body") |
+| **slot** | free markdown | none | body text (wrap in blank lines if it contains inline Markdown, see "Markdown inside a component body") |
 
-Progression by card count: **2** → blue, green · **3** → blue, teal, green · **4** → blue, blue-mid, green-deep, green · **6** → blue, blue-mid, teal, green-deep, green-mid, green.
+Accent by card count, alternating the two stops left → right: **2** → blue, blue-mid · **3** → blue, blue-mid, blue · **4** → blue, blue-mid, blue, blue-mid · **6** → the same alternation continued.
 
-`icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass an **Iconify `i-*` class** (the installed collections are `carbon`, `ph`, `svg-spinners`), never an emoji. Write the **full class literally** in the slide (e.g. `icon="i-carbon-grid"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
+**Why there is no green stop.** A card title is text on a white card. Miragon green `#00E676` sits at 1.67:1 on white and fails WCAG AA, so it is never a title colour; green stays on surfaces and graphics (the gradient accent bar, the bullet markers, one node in a diagram). Even a hero's `**bold**` word renders in brand blue for the same reason. Teal is not part of the Miragon palette at all. Both survive only as the deprecated aliases above. The stops resolve to the `--miragon-card-accent-*` tokens in `theme.css`, which mirror `tokens.json`.
+
+`icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass a **Lucide Iconify class** (`i-lucide-*`), never an emoji. **Lucide is the one sanctioned icon set** (outline, 24px grid); it ships with the toolkit as `@iconify-json/lucide`, and mixing in a second family (Carbon, Phosphor, Material, …) breaks the brand's one-set rule even though other collections happen to resolve. Write the **full class literally** in the slide (e.g. `icon="i-lucide-grid-3x3"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
 
 `align` is optional and defaults to `left` (the previous behaviour). Set `center` or `right` to align the icon, title, and body together; it only touches horizontal alignment and leaves the white background, accent logic, and everything else untouched.
 
 ```md
-<Card title="DaemonSet" accent="teal" icon="i-carbon-container-services">Exactly one pod per node.</Card>
+<Card title="DaemonSet" accent="blue-mid" icon="i-lucide-container">Exactly one pod per node.</Card>
 <Card title="Centered" accent="blue" align="center">Icon, title, and body all centered.</Card>
 ```
 
@@ -59,9 +61,9 @@ The wrapper for a group of `Card`s (or `Figure`s). Replaces the raw `<div class=
 | Prop | Values | Default | Notes |
 |---|---|---|---|
 | `direction` | `row` · `column` | `row` | `row` = cards side by side (uses `cols`); `column` = cards stacked top to bottom in one column |
-| `cols` (number) | — | `3` | number of equal columns (ignored when `direction="column"`) |
+| `cols` (number) | any integer | `3` | number of equal columns (ignored when `direction="column"`) |
 | `gap` | `compact` · `standard` · `generous` | `standard` | 16 / 24 / 32 px between cells |
-| **slot** | — | — | the `Card`s (one blank line between them so they parse as markdown) |
+| **slot** | the `Card`s | none | one blank line between them so they parse as markdown |
 
 Use `direction="column"` to stack cards vertically (e.g. two labelled cards filling a narrow SplitView column):
 
@@ -70,7 +72,7 @@ Use `direction="column"` to stack cards vertically (e.g. two labelled cards fill
 
 <Card title="Error" accent="blue">Always interrupts: the source process stops.</Card>
 
-<Card title="Escalation" accent="teal">Default non-interrupting: the source continues.</Card>
+<Card title="Escalation" accent="blue-mid">Default non-interrupting: the source continues.</Card>
 
 </CardGrid>
 ```
@@ -80,9 +82,9 @@ Use `direction="column"` to stack cards vertically (e.g. two labelled cards fill
 
 <Card title="Pick one scenario" accent="blue">Keep all examples in one coherent world.</Card>
 
-<Card title="Show, don't tell" accent="teal">A diagram beats a paragraph.</Card>
+<Card title="Show, don't tell" accent="blue-mid">A diagram beats a paragraph.</Card>
 
-<Card title="One focal point" accent="green">One bold lead, one green accent word.</Card>
+<Card title="One focal point" accent="blue">One bold lead, one green accent at most.</Card>
 
 </CardGrid>
 ```
@@ -93,7 +95,7 @@ Compact labelled list for the narrow column next to a diagram. `StepList` sets t
 
 | Component | Prop | Notes |
 |---|---|---|
-| `StepList` | — | wrapper; slot holds the `Step`s |
+| `StepList` | none | wrapper; slot holds the `Step`s |
 | `Step` | `label` (str) | bold label; slot holds the body text |
 
 ```md
@@ -111,11 +113,11 @@ Titled, captioned wrapper around a visual (title above, visual centred, caption 
 | `title` (str) | shown above the visual |
 | `caption` (str) | shown below, same size as `StepList` text (0.8rem); inline `**bold**`/`*italic*`/`` `code` `` |
 | `src` (str) | a public asset (e.g. an `.excalidraw.svg`), resolved base-aware via `BASE_URL`; renders an `<img>` instead of the slot |
-| `alt` (str) | alt text when `src` is used |
+| `alt` (str) | **effectively required with `src`.** A visual that carries content gets a short descriptive alt text (what it shows, not "diagram"); a purely decorative visual gets an explicit empty `alt=""` so screen readers skip it. The prop defaults to `""`, so leaving it off silently marks a content-carrying visual as decorative |
 | `maxHeight` (str) | CSS max-height for the `src` image (default `340px`) |
 | **slot** | inline markup as the visual, used only when `src` is not set |
 
-The visual is normally a chapter Excalidraw diagram via `src` (served from the chapter's `resources/` at `/resources/<chapter>/<file>` — see the `excalidraw` skill). Never a Markdown image for such an asset: Slidev turns `![](/resources/…)` into a build-time import that breaks `npm run build`.
+The visual is normally a chapter Excalidraw diagram via `src` (served from the chapter's `resources/` at `/resources/<chapter>/<file>`, see the `excalidraw` skill). Never a Markdown image for such an asset: Slidev turns `![](/resources/…)` into a build-time import that breaks `npm run build`.
 
 ```md
 <Figure title="Pod" src="resources/01-foundations/pod.excalidraw.svg" alt="A pod" caption="The **smallest** deployable unit."></Figure>
@@ -128,8 +130,8 @@ The branded white card as a standalone container: white background, subtle borde
 | Prop | Values | Default | Notes |
 |---|---|---|---|
 | `padding` | `compact` · `standard` · `generous` | `standard` | inner padding around the nested visual |
-| `height` | CSS length (e.g. `19rem`) | — | fixed frame height; omit to size to the content. Prefer an explicit length over `class="h-full"`/`height="100%"` — a percentage height inside an auto-height `SplitView` column is circular and destabilises the layout |
-| **slot** | the visual to frame | — | a `Figure`, image, or diagram (size it yourself: `Figure`/mermaid do, or set the image `max-height`) |
+| `height` | CSS length (e.g. `19rem`) | none | fixed frame height; omit to size to the content. Prefer an explicit length over `class="h-full"`/`height="100%"`, because a percentage height inside an auto-height `SplitView` column is circular and destabilises the layout |
+| **slot** | the visual to frame | none | a `Figure`, image, or diagram (size it yourself: `Figure`/mermaid do, or set the image `max-height`) |
 
 Like every component it forwards `class`/`style` to its root, so nudge spacing with the sanctioned escape hatch (`class="mt-6"` for air above). Use the `height` prop, not a utility class, to give it more height. Never `class`/`style` for colours or borders.
 
@@ -155,7 +157,7 @@ The two-column "visual + explanation" container: a diagram (or `Figure`) on the 
 | `ratio` (str) | `"a/b"` | `1/1` | visual/text column width, e.g. `1.5/1` for a wider diagram. Always visual/text, independent of `reverse`. |
 | `align` | `center` · `start` · `end` · `stretch` | `center` | vertical alignment of the columns |
 | `gap` (str) | CSS length | `2.5rem` | space between the columns |
-| `reverse` (bool) | — | `false` | put the `#visual` column on the **right**, the text on the left. Purely visual (CSS order); the reading order stays visual-first. |
+| `reverse` (bool) | `true` · `false` | `false` | put the `#visual` column on the **right**, the text on the left. Purely visual (CSS order); the reading order stays visual-first. |
 
 Unlike inline components, `SplitView` is a multi-line container (like `StepList`/`Figure`): the `#visual` template holds the diagram, the default slot holds the markdown body. Keep a blank line before the bullet list so it parses as markdown. The bullet markers still come from the `content` layout; do not restyle the list. (The `bpmn`/`dmn`/`excalidraw`/`mermaid` diagram layouts use this internally for their `side` split mode.)
 
@@ -176,17 +178,17 @@ A titled code "window" in Miragon CI: a white brand card (like `Card`) with a he
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
-| `file` (str) | — | — | filename / path shown left in the header (muted mono) |
-| `lang` (str) | — | — | language badge shown right (blue pill, e.g. `md`, `ts`) |
-| `size` (str) | CSS length | — | font size of the code, e.g. `"0.9rem"` / `"14px"`; omit for the default |
+| `file` (str) | free text | none | filename / path shown left in the header (muted mono) |
+| `lang` (str) | free text | none | language badge shown right (blue pill, e.g. `md`, `ts`) |
+| `size` (str) | CSS length | none | font size of the code, e.g. `"0.9rem"` / `"14px"`; omit for the default |
 | `expandedSize` (str) | CSS length | `1.25rem` | font size of the code in fullscreen (only with `expandable`); omit for the default, which is at least the inline `size` and never below `1.25rem` |
-| `hideHeader` (bool) | — | `false` | hide the filename/language header even when `file`/`lang` are set |
-| `expandable` (bool) | — | `false` | show a subtle expand button (top-right, diagonal arrows, appears on hover) that blows the window up to fullscreen, macOS expand/minify style. Esc or a click on the dimmed backdrop closes it |
-| **slot** | — | — | a single Markdown code fence, on its own lines with blank lines around it |
+| `hideHeader` (bool) | `true` · `false` | `false` | hide the filename/language header even when `file`/`lang` are set |
+| `expandable` (bool) | `true` · `false` | `false` | show a subtle expand button (top-right, diagonal arrows, appears on hover) that blows the window up to fullscreen, macOS expand/minify style. Esc or a click on the dimmed backdrop closes it |
+| **slot** | a code fence | none | a single Markdown code fence, on its own lines with blank lines around it |
 
 Fenced code renders in pure form: Shiki syntax colours on the white card, no background behind the tokens (the layouts' blue inline-code pill is scoped to real inline code, `:not(pre) > code`, so it never leaks onto a fence).
 
-`expandable` changes only the fullscreen view: the header stays pinned and long code scrolls with the mouse. The inline block is unchanged, so it must still fit the canvas (the 18-line limit) — use `size` to shrink a snippet that is slightly too tall. That small inline `size` is not carried into fullscreen: the expanded window reads at a comfortable size (default `1.25rem`, never below the inline `size`); set `expandedSize` to pick a different fullscreen size. Highlighting is language-specific via the fence tag (` ```kotlin `); `lang` only sets the badge.
+`expandable` changes only the fullscreen view: the header stays pinned and long code scrolls with the mouse. The inline block is unchanged, so it must still fit the canvas (the 18-line limit): use `size` to shrink a snippet that is slightly too tall. That small inline `size` is not carried into fullscreen: the expanded window reads at a comfortable size (default `1.25rem`, never below the inline `size`); set `expandedSize` to pick a different fullscreen size. Highlighting is language-specific via the fence tag (` ```kotlin `); `lang` only sets the badge.
 
 The fence must sit on its own lines with a blank line before and after (like the bullet rule in `SplitView`) so it parses as Markdown. Keep to the 18-line code limit.
 
@@ -202,14 +204,14 @@ The fence must sit on its own lines with a blank line before and after (like the
 
 ## Agenda
 
-The clickable chapter stepper: the deck's own table of contents, rendered from the live deck. Unlike every other component it **owns the whole slide**, so its slide uses the built-in `layout: default` (the one sanctioned non-archetype) plus `class: agenda-slide` — a theme archetype's header and padding would fight it. There is one per deck, right after the cover.
+The clickable chapter stepper: the deck's own table of contents, rendered from the live deck. Unlike every other component it **owns the whole slide**, so its slide uses the built-in `layout: default` (the one sanctioned non-archetype) plus `class: agenda-slide`, because a theme archetype's header and padding would fight it. There is one per deck, right after the cover.
 
 Chapters are **discovered automatically**: every `layout: section` slide opens a chapter and the slides up to the next `section` belong to it, so the agenda never goes stale as you add chapters. `layout: subsection` slides deliberately do *not* open a chapter; they are collected onto the enclosing chapter instead.
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
-| `eyebrow` (str) | — | `Agenda` | the kicker above the title |
-| `title` (str) | — | — | the `h2` heading |
+| `eyebrow` (str) | free text | `Agenda` | the kicker above the title |
+| `title` (str) | free text | none | the `h2` heading |
 | `accent` | `blue` · `green` · `mixed` | `mixed` | tints the gradient bar and the active chapter |
 | `preview` | `slides` · `subsections` | `slides` | what the miniatures show: every slide of a chapter, or only its `subsection` dividers (a sparse overview for long chapters; chapters without a subsection fall back to their full slide list) |
 | `gap` (str) | CSS length | `1.4rem` | space between the head and the stepper below it |
@@ -230,13 +232,13 @@ class: agenda-slide
 
 The animated WebGL2 mesh-gradient shader behind the `cover` and `closing` slides. **Takes no props and is never written in a slide**: those two layouts mount it themselves as their bottom layer (`z-index: 0`, `pointer-events: none`), which is the whole reason they are the only animated archetypes. Listed here for completeness, not as something to reach for.
 
-Its colour stops and the DISTORTION / SWIRL / SPEED parameters are a **sacred brand invariant** (see "Sacred invariants" in [`SKILL.md`](../SKILL.md)) — do not change them without brand sign-off. Without WebGL2 it falls back to navy `#0d0d2b`, so the cover never renders white.
+Its colour stops and the DISTORTION / SWIRL / SPEED parameters are a **sacred brand invariant** (see "Sacred invariants" in [`SKILL.md`](../SKILL.md)): do not change them without brand sign-off. Without WebGL2 it falls back to navy `#0D0D2B`, so the cover never renders white.
 
 ---
 
-## Tables (no component — plain Markdown)
+## Tables (no component, plain Markdown)
 
-There is **no table component**, and you don't need one: a native Markdown table already renders in brand CI. The theme styles every `<table>` (in `packages/toolkit/styles/table.css`) as a white card, thin grey border, soft blue brand shadow, rounded corners, with a light-blue header band, a black bold header row over a blue accent rule, subtle zebra striping, and Geist Mono body text (the "Geist Mono for code and tables" rule). This keeps the slide source clean — a Markdown table is markdown, so it passes the no-raw-html check; a hand-rolled `<table>`/`<div>` grid would not.
+There is **no table component**, and you don't need one: a native Markdown table already renders in brand CI. The theme styles every `<table>` (in `packages/toolkit/styles/table.css`) as a white card, thin grey border, soft blue brand shadow, rounded corners, with a light-blue header band, a bold header row in CI black `#1D1D1D` (never `#000000`) over a blue accent rule, subtle zebra striping, and Geist Mono body text (the "Geist Mono for code and tables" rule). This keeps the slide source clean: a Markdown table is markdown, so it passes the no-raw-html check; a hand-rolled `<table>`/`<div>` grid would not.
 
 Write a plain Markdown table. Set column alignment with the divider row (`:---` left, `:--:` centre, `---:` right); right-align numeric columns. Keep it modest so it clears the canvas floor: aim for **<= 6 body rows** and short cells (see the overflow limits in `SKILL.md`). Inline `` `code` ``, `**bold**` and `*italic*` work in cells.
 
@@ -253,23 +255,23 @@ For a table beside a diagram, drop it into a `SplitView`'s default slot like any
 
 ## Spacing / custom classes (the escape hatch)
 
-Every component here has a **single root element** and does not override `inheritAttrs`, so Vue forwards a `class` or `style` you put on the tag straight onto that root (and merges it with the component's own classes). Slidev bundles UnoCSS, so utility classes resolve out of the box. This is the one sanctioned way to break the "no utility classes / no inline CSS" rule — and it is deliberately **open**: any CSS property is reachable.
+Every component here has a **single root element** and does not override `inheritAttrs`, so Vue forwards a `class` or `style` you put on the tag straight onto that root (and merges it with the component's own classes). Slidev bundles UnoCSS, so utility classes resolve out of the box. This is the one sanctioned way to break the "no utility classes / no inline CSS" rule, and it is deliberately **open**: any CSS property is reachable.
 
-Keep it to **spacing and layout nudges** — the gap above/below a component, its width, or how it aligns in a grid cell. Never restyle brand surface through it: no colours, fonts, card backgrounds, borders, or bullet markers (those live in the theme and the components).
+Keep it to **spacing and layout nudges**: the gap above/below a component, its width, or how it aligns in a grid cell. Never restyle brand surface through it: no colours, fonts, card backgrounds, borders, or bullet markers (those live in the theme and the components).
 
 | Want | Write |
 |---|---|
 | More air above a card | `<Card title="…" accent="blue" class="mt-8">…</Card>` |
-| An exact top margin | `<Card title="…" accent="blue" class="mt-[18px]">…</Card>` |
+| An exact top margin | `<Card title="…" accent="blue" class="mt-[24px]">…</Card>` |
 | Same, as inline style | `<Figure src="…" style="margin-top: 2rem"></Figure>` |
 | Nudge a grid cell down | `<Figure src="…" class="self-end"></Figure>` inside a `CardGrid`/`SplitView` |
 
-`class` (UnoCSS: `mt-*`, `mb-*`, `w-*`, `self-*`, `justify-self-*`, arbitrary `mt-[18px]`, …) is preferred over inline `style` because it reads cleaner and stays on the spacing scale, but both work. It passes `npm run verify` — the design-system suite only flags inline `font-family` and per-slide `list-style`, not margins.
+`class` (UnoCSS: `mt-*`, `mb-*`, `w-*`, `self-*`, `justify-self-*`, arbitrary `mt-[24px]`, …) is preferred over inline `style` because it reads cleaner, but both work. **Stay on the brand's 8-point spacing scale** (4 / 8 / 16 / 24 / 32 / 48 / 64 / 96 px): the UnoCSS steps `mt-1`, `mt-2`, `mt-4`, `mt-6`, `mt-8`, `mt-12`, `mt-16`, `mt-24` land exactly on it, and an arbitrary value should too (`mt-[24px]`, not `mt-[18px]`). It passes `npm run verify`, because the design-system suite only flags inline `font-family` and per-slide `list-style`, not margins.
 
 ```md
 <CardGrid cols="2">
 <Card title="Kept close to the heading" accent="blue">Default spacing.</Card>
-<Card title="Pushed down a touch" accent="green" class="mt-6">A nudge, nothing more.</Card>
+<Card title="Pushed down a touch" accent="blue-mid" class="mt-6">A nudge, nothing more.</Card>
 </CardGrid>
 ```
 
@@ -277,6 +279,6 @@ Keep it to **spacing and layout nudges** — the gap above/below a component, it
 
 ## Diagrams
 
-There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">`. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
+There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">` with an `alt` that describes it. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
 
 For a standard graph type that reads as text and wants auto-layout (a flow, a sequence, a state machine), a native Slidev ` ```mermaid ` fence is the alternative, brand-styled globally by `packages/toolkit/setup/mermaid.ts`. The source can be inline or imported from a `.mermaid` file with `<<< @/chapter/<chapter>/resources/<name>.mermaid`. Excalidraw stays the default when placement carries meaning. Full when-to-use-which: the "Diagrams" section in [`SKILL.md`](../SKILL.md).
