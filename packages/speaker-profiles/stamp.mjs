@@ -13,7 +13,7 @@
  * would be forgotten once.
  */
 import { randomBytes } from 'node:crypto'
-import { closeSync, existsSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs'
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { injectPreparserExtensionLoader, load } from '@slidev/parser/fs'
 import { walkMarkdownFiles } from './identity.mjs'
@@ -180,12 +180,24 @@ const LOCK_STALE_MS = 60_000
  * matters the other run has written the ids, and stamping is idempotent anyway.
  */
 function withLock(profilesRoot, fn) {
-  const lock = path.join(profilesRoot, PROFILE_DIR, LOCK_NAME)
+  const dir = path.join(profilesRoot, PROFILE_DIR)
+  const lock = path.join(dir, LOCK_NAME)
+  // The very first stamp of a deck runs before anyone has made a profile, so
+  // the directory the lock lives in may not exist yet. Creating it is not a
+  // side effect: stamping IS the deck opting in, and the profiles land here.
+  try {
+    mkdirSync(dir, { recursive: true })
+  }
+  catch {
+    // read-only, or a file in the way. The open below reports it properly.
+  }
   let handle
   try {
     handle = openSync(lock, 'wx')
   }
-  catch {
+  catch (error) {
+    if (error?.code !== 'EEXIST')
+      return { skipped: true, reason: error?.code ?? 'unknown', stamped: [], total: 0 }
     // A lock left behind by a killed process must not block the deck forever.
     try {
       if (Date.now() - statSync(lock).mtimeMs > LOCK_STALE_MS)
@@ -193,7 +205,7 @@ function withLock(profilesRoot, fn) {
       handle = openSync(lock, 'wx')
     }
     catch {
-      return { skipped: true, stamped: [], total: 0 }
+      return { skipped: true, reason: 'busy', stamped: [], total: 0 }
     }
   }
   try {
