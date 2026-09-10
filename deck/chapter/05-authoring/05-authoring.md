@@ -1,4 +1,5 @@
 ---
+id: s-821bed1a
 layout: section
 index: "05"
 eyebrow: Chapter 05
@@ -10,6 +11,7 @@ accent: blue
 The rules live in skills, so you (and an AI pair) build on-brand by default.
 
 ---
+id: s-c407ea89
 layout: content
 title: Skills carry the rules
 eyebrow: 05 - Author with Claude
@@ -30,6 +32,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-108c44e5
 layout: content
 title: The everyday loop
 eyebrow: 05 - Author with Claude
@@ -48,6 +51,7 @@ accent: blue
 </StepList>
 
 ---
+id: s-5b1738c7
 layout: content
 title: Verify keeps it honest
 eyebrow: 05 - Author with Claude
@@ -69,6 +73,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-0ed37a4c
 layout: goodbad
 title: On-brand or not
 eyebrow: 05 - Author with Claude
@@ -105,6 +110,7 @@ A black heading, as the layout sets it. Let the theme own the colour.
 Headings are **black**; the verify suite flags a blue one.
 
 ---
+id: s-fb5da4d0
 layout: content
 title: Start your own deck
 eyebrow: 05 - Author with Claude

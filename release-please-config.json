@@ -21,6 +21,11 @@
       "component": "slidev-validator",
       "include-component-in-tag": true
     },
+    "packages/speaker-profiles": {
+      "package-name": "@miragon/slidev-speaker-profiles",
+      "component": "slidev-speaker-profiles",
+      "include-component-in-tag": true
+    },
     "miragon-slidev-plugin": {
       "release-type": "simple",
       "package-name": "miragon-slidev-plugin",

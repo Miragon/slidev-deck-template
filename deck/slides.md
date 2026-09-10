@@ -1,4 +1,5 @@
 ---
+id: s-f7bae0f9
 title: Miragon Slidev Deck Template
 theme: '@miragon/slidev-toolkit'
 colorSchema: light
@@ -14,6 +15,9 @@ transition: slide-up
 addons:
   - slidev-addon-bpmn
   - slidev-addon-dmn
+  # Per-speaker slide selection. Inert unless a profile is selected;
+  # see .slidev-profiles/README.md.
+  - '@miragon/slidev-speaker-profiles'
 layout: cover
 eyebrow: Miragon · Onboarding
 # Social/link preview (og:image). Needs an absolute URL, so it points at the
@@ -43,6 +47,7 @@ seoMeta:
 A branded Slidev template
 
 ---
+id: s-576e6150
 layout: default
 title: Agenda
 class: agenda-slide
@@ -85,6 +90,7 @@ src: ./chapter/05-authoring/05-authoring.md
 ---
 
 ---
+id: s-ce073f0c
 layout: closing
 eyebrow: Your turn
 contact: hello@miragon.io

@@ -1,4 +1,5 @@
 ---
+id: s-11f67e16
 layout: section
 index: "01"
 eyebrow: Chapter 01
@@ -10,6 +11,7 @@ accent: blue
 What this repository is.
 
 ---
+id: s-34cb6ce5
 layout: person
 name: Jane Doe
 role: Presenter
@@ -28,6 +30,7 @@ accent: blue
 We maintain this template so a Miragon deck takes minutes, not hours.
 
 ---
+id: s-01b3ea2c
 layout: hero
 eyebrow: 01 - Welcome
 accent: blue
@@ -39,6 +42,7 @@ align: left
 # You write the **content**. The brand is already done.
 
 ---
+id: s-f9e79cf8
 layout: content
 title: What is in this repository
 eyebrow: 01 - Welcome

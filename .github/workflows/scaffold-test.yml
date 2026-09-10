@@ -39,8 +39,11 @@ jobs:
             | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename'; }
           toolkit_tgz="$(pack packages/toolkit)"
           validator_tgz="$(pack packages/validator)"
+          profiles_tgz="$(pack packages/speaker-profiles)"
           CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
           cd "$RUNNER_TEMP/smoke-deck"
-          npm install --no-save "$RUNNER_TEMP/$toolkit_tgz" "$RUNNER_TEMP/$validator_tgz"
+          npm install --no-save "$RUNNER_TEMP/$toolkit_tgz" "$RUNNER_TEMP/$validator_tgz" "$RUNNER_TEMP/$profiles_tgz"
           npm run build
           npm run verify:source
+          # The scaffolded deck ships stamped; prove the guard is wired and green.
+          npm run check:ids

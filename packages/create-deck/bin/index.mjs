@@ -54,6 +54,9 @@ const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 // settings.json (below) that wires the plugin marketplace.
 const SKELETON = [
   'deck',
+  // Seeds the per-speaker slide selection: a README and the .gitignore that
+  // keeps `.current` (which profile THIS machine uses) out of the repo.
+  '.slidev-profiles',
   'CLAUDE.md',
   '.npmrc',
   '.gitignore',
@@ -183,14 +186,28 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion) {
     private: true,
     scripts: {
       dev: 'portless',
+      // Every slide needs a stable `id:` for the speaker profiles, and nobody
+      // has to think about it: the addon stamps the ones that have none when a
+      // dev server starts, whichever script started it. `check:ids` guards
+      // verify and CI; `stamp:ids` is there for the deck that parks files no
+      // entry imports. A build never stamps - it must not mutate its sources.
       'dev:app': 'slidev deck/slides.md --port ${PORT:-3030} --remote --bind 127.0.0.1',
+      'dev:profile': 'SLIDEV_PROFILE_EDIT=1 npm run dev:app',
       build: 'slidev build deck/slides.md --out ../dist',
       export: 'slidev export deck/slides.md',
+      'stamp:ids': 'slide-ids --stamp --entry deck/slides.md',
+      'check:ids': 'slide-ids --check --entry deck/slides.md',
       // The validator ships as its own bin; rendered mode boots Slidev + Chromium
       // (pulled transitively via the validator), source mode is fast and CI-safe.
-      verify: 'slidev-validator --rendered',
-      'verify:ci': 'slidev-validator --rendered',
-      'verify:source': 'slidev-validator',
+      // SLIDEV_PROFILE=none: anything that drives the deck slide by slide must
+      // see the whole deck, or the skip logic navigates away from the slide it
+      // is waiting for.
+      preverify: 'npm run check:ids',
+      verify: 'SLIDEV_PROFILE=none slidev-validator --rendered',
+      'preverify:ci': 'npm run check:ids',
+      'verify:ci': 'SLIDEV_PROFILE=none slidev-validator --rendered',
+      'preverify:source': 'npm run check:ids',
+      'verify:source': 'SLIDEV_PROFILE=none slidev-validator',
     },
     dependencies: { '@miragon/slidev-toolkit': toolkitVersion, ...deckPkg.dependencies },
     devDependencies: { '@miragon/slidev-validator': validatorVersion, portless: portlessVersion },

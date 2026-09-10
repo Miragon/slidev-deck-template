@@ -1,0 +1,52 @@
+{
+  "name": "@miragon/slidev-speaker-profiles",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Per-speaker slide selection for a Slidev deck several people present. Each speaker keeps their own profile file, nobody overwrites anybody, and main never changes. Slides are addressed by a stable id the shipped slide-ids CLI stamps into their frontmatter, so a selection survives retitling, reordering and renumbered chapters.",
+  "keywords": [
+    "slidev",
+    "slidev-addon",
+    "miragon",
+    "speaker",
+    "presentation"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miragon/slidev-deck-template.git",
+    "directory": "packages/speaker-profiles"
+  },
+  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/packages/speaker-profiles#readme",
+  "bugs": "https://github.com/Miragon/slidev-deck-template/issues",
+  "bin": {
+    "slide-ids": "bin/slide-ids.mjs"
+  },
+  "slidev": {},
+  "engines": {
+    "node": ">=20",
+    "slidev": ">=0.48.0"
+  },
+  "dependencies": {
+    "@slidev/parser": "52.19.0"
+  },
+  "devDependencies": {
+    "@slidev/types": "52.19.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "files": [
+    "bin",
+    "setup",
+    "global-top.vue",
+    "slide-top.vue",
+    "state.ts",
+    "stamp.mjs",
+    "identity.mjs",
+    "profiles.mjs"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

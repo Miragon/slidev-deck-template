@@ -39,6 +39,30 @@ The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you 
 | `npm run export` | `slidev-exported.pdf` locally (needs Chromium) |
 | `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
 | `npm run verify:source` | Fast source-only guardrail checks, no browser — the subset CI runs |
+| `npm run dev:profile` | Same preview plus the controls to pick which slides *you* present |
+
+## Several speakers, one deck
+
+If more than one person presents this deck, each of them can keep their own
+selection of slides without touching anybody else's:
+
+```bash
+echo thomas > .slidev-profiles/.current   # once per machine, gitignored
+npm run dev:profile                       # pick the slides you present
+npm run dev                               # present: the rest is stepped over
+```
+
+One JSON file per speaker in `.slidev-profiles/`, committed like any other file,
+so two people editing at once cannot conflict. A plain `npm run build` always
+produces the complete deck; a personal PDF spells the name out
+(`SLIDEV_PROFILE=thomas npm run export`). Nothing is filtered until somebody
+picks a profile.
+
+This is why every slide carries an `id:` in its frontmatter. It is written for
+you when the dev server starts and it is what a selection points at, so
+retitling or reordering slides cannot silently switch off the wrong one. Do not
+edit those ids by hand; `npm run check:ids` (which CI runs) fails if one is
+missing or duplicated. Details: [`@miragon/slidev-speaker-profiles`](https://www.npmjs.com/package/@miragon/slidev-speaker-profiles).
 
 ## Next steps
 

@@ -1,4 +1,5 @@
 ---
+id: s-055e91eb
 layout: section
 index: "04"
 eyebrow: Chapter 04
@@ -10,6 +11,7 @@ accent: blue
 Hand-drawn, modeled, or generated from text, all on-brand.
 
 ---
+id: s-d1a1ecba
 layout: excalidraw
 title: Draw it, drop it in
 eyebrow: 04 - Diagrams
@@ -30,6 +32,7 @@ alt: Client to gateway to service with two pods
 A diagram is one **.excalidraw.svg** with the scene embedded, in the Miragon palette.
 
 ---
+id: s-1dbadd3b
 layout: excalidraw
 title: Or set it beside your points
 eyebrow: 04 - Diagrams
@@ -58,6 +61,7 @@ height: 20rem
 - Vary `side` so the diagram is not always on the left
 
 ---
+id: s-71f939cb
 layout: content
 title: Edit it right in your IDE
 eyebrow: 04 - Diagrams
@@ -86,6 +90,7 @@ accent: blue
 </SplitView>
 
 ---
+id: s-b50cf11e
 layout: content
 title: Always on-brand, always transparent
 eyebrow: 04 - Diagrams
@@ -106,6 +111,7 @@ accent: blue
 </v-clicks>
 
 ---
+id: s-44c74f5d
 layout: subsection
 index: "4.1"
 eyebrow: 04 - Diagrams
@@ -128,6 +134,7 @@ accent: blue
 Standard notations: BPMN, DMN, and Mermaid, each on-brand.
 
 ---
+id: s-1acfed2c
 layout: bpmn
 title: Or a real BPMN process
 eyebrow: 04 - Diagrams
@@ -147,6 +154,7 @@ engine: camunda7
 A real BPMN file, straight from Camunda Modeler or bpmn.io.
 
 ---
+id: s-7a3d8d7d
 layout: bpmn
 title: Put the process beside its rules
 eyebrow: 04 - Diagrams
@@ -175,6 +183,7 @@ height: 320px
 - The column is styled like a normal content slide
 
 ---
+id: s-594d540d
 layout: dmn
 title: And the decisions inside it
 eyebrow: 04 - Diagrams
@@ -200,6 +209,7 @@ fullscreenFontSize: 12px
 A DMN decision, live: feed the inputs in and watch which rule fires.
 
 ---
+id: s-1ebd026a
 layout: mermaid
 title: Or generate one from text with Mermaid
 eyebrow: 04 - Diagrams
@@ -224,6 +234,7 @@ accent: blue
 Generated from **text** in a `.mermaid` file, framed on-brand by the layout.
 
 ---
+id: s-464dfa81
 layout: content
 title: Or write it inline on the slide
 eyebrow: 04 - Diagrams

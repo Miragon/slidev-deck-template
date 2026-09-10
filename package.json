@@ -11,9 +11,14 @@
     "dev:plain": "npm run dev:app -w deck",
     "build": "npm run build -w deck",
     "export": "npm run export -w deck",
-    "verify": "slidev-validator --rendered",
-    "verify:ci": "slidev-validator --rendered",
-    "verify:source": "slidev-validator",
+    "check:ids": "slide-ids --check --entry deck/slides.md",
+    "stamp:ids": "slide-ids --stamp --entry deck/slides.md",
+    "preverify": "npm run check:ids",
+    "verify": "SLIDEV_PROFILE=none slidev-validator --rendered",
+    "preverify:ci": "npm run check:ids",
+    "verify:ci": "SLIDEV_PROFILE=none slidev-validator --rendered",
+    "preverify:source": "npm run check:ids",
+    "verify:source": "SLIDEV_PROFILE=none slidev-validator",
     "shot": "node scripts/shot.mjs"
   }
 }
