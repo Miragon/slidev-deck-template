@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.4.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.3.4...create-slidev-deck-v1.4.0) (2026-09-10)
+
+
+### Features
+
+* **speaker-profiles:** per-speaker slide selection as a package ([#140](https://github.com/Miragon/slidev-deck-template/issues/140)) ([2acbf8e](https://github.com/Miragon/slidev-deck-template/commit/2acbf8ee82e0c0a4feee47bdeae2c049858e3e44))
+
+
+### Bug Fixes
+
+* **speaker-profiles:** let the release bump the addon without breaking npm ci ([#145](https://github.com/Miragon/slidev-deck-template/issues/145)) ([93ac922](https://github.com/Miragon/slidev-deck-template/commit/93ac922c509bf06ae6c84f8207c5aec2211380ca))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-speaker-profiles bumped from 0.1.0 to 0.2.0
+
 ## [1.3.4](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.3.3...create-slidev-deck-v1.3.4) (2026-09-10)
 
 
