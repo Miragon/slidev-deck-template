@@ -12,8 +12,11 @@ accident.
 ## Install
 
 ```bash
-npm i -D @miragon/slidev-speaker-profiles
+npm i @miragon/slidev-speaker-profiles
 ```
+
+A dependency, not a devDependency: Slidev compiles the addon into the deck, so
+a build needs it the same way it needs the theme.
 
 Register it as an addon in your deck's headmatter:
 
