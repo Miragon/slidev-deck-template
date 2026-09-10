@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@slidev/cli": "52.19.0",
-    "@miragon/slidev-speaker-profiles": "0.1.0",
     "slidev-addon-bpmn": "1.10.1",
     "slidev-addon-dmn": "1.7.0",
     "vue": "3.5.41"

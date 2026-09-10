@@ -45,6 +45,7 @@ const SELF = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)
 // and a given create-slidev-deck version emits a byte-identical deck.
 const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
 const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
+const SPEAKER_PROFILES_VERSION = SELF.devDependencies['@miragon/slidev-speaker-profiles']
 
 // Paths copied verbatim from the fetched skeleton into the new deck. Anything not
 // listed (packages/, miragon-slidev-plugin/ [the skills now ship as that plugin],
@@ -175,7 +176,7 @@ function deckNameFrom(dir) {
 }
 
 /** Build the standalone deck package.json from the fetched skeleton's manifests. */
-function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion) {
+function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
   const portlessVersion = deckPkg.devDependencies?.portless
@@ -209,7 +210,11 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion) {
       'preverify:source': 'npm run check:ids',
       'verify:source': 'SLIDEV_PROFILE=none slidev-validator',
     },
-    dependencies: { '@miragon/slidev-toolkit': toolkitVersion, ...deckPkg.dependencies },
+    dependencies: {
+      '@miragon/slidev-toolkit': toolkitVersion,
+      '@miragon/slidev-speaker-profiles': speakerProfilesVersion,
+      ...deckPkg.dependencies,
+    },
     devDependencies: { '@miragon/slidev-validator': validatorVersion, portless: portlessVersion },
   }
   return JSON.stringify(pkg, null, 2) + '\n'
@@ -247,13 +252,13 @@ async function rollback(target, preexisting) {
 }
 
 /** Assemble the deck in `target`: skeleton, prune, then the generated overlay. */
-async function layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, ref, preexisting }) {
+async function layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting }) {
   try {
     await mkdir(target, { recursive: true })
     await copySkeleton(scratch, target, ref)
     for (const rel of PRUNE) await rm(join(target, rel), { force: true })
 
-    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion)
+    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion)
     await writeFile(join(target, 'package.json'), packageJson)
     const portlessJson = JSON.stringify({ name: deckName, script: 'dev:app' }, null, 2) + '\n'
     await writeFile(join(target, 'portless.json'), portlessJson)
@@ -297,6 +302,7 @@ async function main() {
   const ref = opts.ref ?? `create-slidev-deck-v${SELF.version}`
   const toolkitVersion = opts.toolkitVersion ?? TOOLKIT_VERSION
   const validatorVersion = opts.validatorVersion ?? VALIDATOR_VERSION
+  const speakerProfilesVersion = SPEAKER_PROFILES_VERSION
   const deckName = deckNameFrom(target)
 
   const source = process.env.CREATE_DECK_SKELETON ? 'local checkout' : `${REPO}#${ref}`
@@ -304,7 +310,7 @@ async function main() {
 
   const scratch = await fetchSkeleton(ref)
   try {
-    await layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, ref, preexisting })
+    await layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting })
   } finally {
     await rm(scratch, { recursive: true, force: true })
   }
