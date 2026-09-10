@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.2](https://github.com/Miragon/slidev-deck-template/compare/v1.17.1...v1.17.2) (2026-09-10)
+
+
+### Bug Fixes
+
+* **toolkit:** restore vue peer dep to semver range ([#141](https://github.com/Miragon/slidev-deck-template/issues/141)) ([182141b](https://github.com/Miragon/slidev-deck-template/commit/182141bdb9d50805769b0c8bfa87a6bcc7c3ee22))
+
 ## [1.17.1](https://github.com/Miragon/slidev-deck-template/compare/v1.17.0...v1.17.1) (2026-08-18)
 
 
