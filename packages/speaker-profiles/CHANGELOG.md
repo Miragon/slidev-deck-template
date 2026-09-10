@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.2.0...slidev-speaker-profiles-v0.2.1) (2026-09-10)
+
+
+### Bug Fixes
+
+* **speaker-profiles:** install as a dependency, not a devDependency ([#147](https://github.com/Miragon/slidev-deck-template/issues/147)) ([5176bed](https://github.com/Miragon/slidev-deck-template/commit/5176bed363ba5c43b507d4a213568c2a624275d9))
+
 ## [0.2.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.1.0...slidev-speaker-profiles-v0.2.0) (2026-09-10)
 
 
