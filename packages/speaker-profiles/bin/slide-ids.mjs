@@ -104,14 +104,16 @@ const where = row => `${rel(row.file)}:${row.start + 1}`
 const name = row => row.title || '(untitled)'
 
 if (options.mode === 'stamp') {
-  const { stamped, unwritable, total, skipped, files } = await stampSlides({ entry, also })
+  const { stamped, unwritable, total, skipped, reason, files } = await stampSlides({ entry, also })
   if (unwritable.length) {
     for (const row of unwritable)
       console.error(`FAIL: ${where(row)} has no writable frontmatter block (style: ${row.style})`)
     process.exit(1)
   }
   if (skipped) {
-    console.error('slide ids: another stamping run holds the lock, nothing written')
+    console.error(reason === 'busy'
+      ? 'slide ids: another stamping run holds the lock, nothing written'
+      : `slide ids: could not take the stamping lock (${reason}), nothing written`)
     process.exit(1)
   }
   if (!stamped.length) {
