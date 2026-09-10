@@ -118,6 +118,15 @@ export function drift(currentIds: string[]) {
  * So whenever the endpoint answers, its profile wins over the frontmatter.
  */
 export async function loadServerState() {
+  // A built deck has no dev server and therefore no endpoint. Asking anyway
+  // costs every viewer a 404 on every load, and any tool that treats a failed
+  // request as a defect reports it - the BPM training's hub check flagged all
+  // 14 of its decks. The selection is baked into the frontmatter at build time,
+  // which is all a built deck needs.
+  if (!import.meta.env.DEV) {
+    ready.value = true
+    return
+  }
   try {
     const res = await fetch('/@speaker-profiles/state')
     if (!res.ok)
