@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@miragon/slidev-toolkit": "1.17.2",
+    "@miragon/slidev-speaker-profiles": "0.1.0",
     "@miragon/slidev-validator": "0.6.0"
   },
   "files": [
