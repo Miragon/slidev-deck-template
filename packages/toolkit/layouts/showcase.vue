@@ -12,7 +12,7 @@
  *   accent   — "blue" | "green" | "mixed" (default mixed)
  *   items    — array of `{ label, body, icon? }` objects (recommended: 3–4 cards).
  *              `body` is a string (one paragraph) or a string array (bullet list).
- *              `icon` is an optional Iconify class (e.g. "i-carbon-chip") that
+ *              `icon` is an optional Iconify class (e.g. "i-lucide-cpu") that
  *              replaces the card's numbered index; write it literally so UnoCSS
  *              picks it up. It takes the accent colour, like the index.
  *   hint     — navigation footer, hidden by default. `true` for the standard
@@ -50,9 +50,10 @@ const hintText = computed(() =>
       : null,
 )
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-const accentVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-blue)'
 
 const { $clicks, $clicksContext } = useSlideContext()
 const { currentPage, go } = useNav()
@@ -207,10 +208,10 @@ function select(i: number, e: MouseEvent) {
   text-align: left;
   cursor: pointer;
   background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--miragon-border);
   border-radius: 1rem;
   padding: 1.1rem 1.2rem 1.2rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   font: inherit;
   color: inherit;
   display: flex;
@@ -254,7 +255,7 @@ function select(i: number, e: MouseEvent) {
 .showcase-card.is-active {
   transform: translateY(-4px) scale(1.02);
   border-color: var(--sc-accent);
-  box-shadow: 0 16px 36px rgba(51, 93, 229, 0.18);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--miragon-blue) 18%, transparent);
 }
 .showcase-card.is-active .card-index,
 .showcase-card.is-active .card-icon {
@@ -268,10 +269,10 @@ function select(i: number, e: MouseEvent) {
   flex: 1 1 auto;
   min-height: 5rem;
   background: var(--miragon-white);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--miragon-border);
   border-radius: 1rem;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   display: flex;
   align-items: center;
   position: relative;
@@ -350,5 +351,25 @@ function select(i: number, e: MouseEvent) {
   text-transform: uppercase;
   color: var(--miragon-text-muted);
   text-align: center;
+}
+
+/* ---- Bewegung (CI-Regel C3) --------------------------------------------- */
+/* prefers-reduced-motion: Karten heben und schieben sich nicht mehr; Rahmen,
+   Schatten, Farbe und Opazität tragen den Zustand weiterhin vollständig. */
+@media (prefers-reduced-motion: reduce) {
+  .showcase-card {
+    transition:
+      box-shadow 320ms ease,
+      border-color 320ms ease,
+      opacity 320ms ease;
+  }
+  .showcase-card:hover { transform: none; }
+  /* Aktive Karte bleibt durch Rahmenfarbe und Schatten erkennbar. */
+  .showcase-card.is-active { transform: none; }
+  /* Detailwechsel: reine Überblendung statt Hochschieben. */
+  .fade-detail-enter-active,
+  .fade-detail-leave-active { transition: opacity 220ms ease; }
+  .fade-detail-enter-from,
+  .fade-detail-leave-to { transform: none; }
 }
 </style>

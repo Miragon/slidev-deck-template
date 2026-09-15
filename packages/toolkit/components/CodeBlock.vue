@@ -95,7 +95,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
             :title="expanded ? 'Vollbild schließen' : 'Vollbild'"
             @click="toggle"
           >
-            <span class="mg-code__toggle-icon" :class="expanded ? 'i-carbon-minimize' : 'i-carbon-maximize'" aria-hidden="true"></span>
+            <span class="mg-code__toggle-icon" :class="expanded ? 'i-lucide-minimize-2' : 'i-lucide-maximize-2'" aria-hidden="true"></span>
           </button>
         </div>
         <div class="mg-code__body"><slot /></div>
@@ -114,9 +114,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 .mg-code__window {
   position: relative;
   border-radius: 0.6rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   background: var(--miragon-white);
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   overflow: hidden;
 }
 .mg-code__bar {
@@ -124,8 +124,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 0.9rem;
-  background: var(--miragon-gray-light);
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--miragon-gray-bg);
+  border-bottom: 1px solid var(--miragon-border);
 }
 .mg-code__bar-spacer {
   flex: 1 1 auto;
@@ -171,9 +171,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   width: 1.6rem;
   height: 1.6rem;
   padding: 0;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: color-mix(in srgb, var(--miragon-white) 85%, transparent);
   color: var(--miragon-text-muted);
   cursor: pointer;
   opacity: 1;
@@ -183,6 +183,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   color: var(--miragon-blue);
   border-color: var(--miragon-blue-warm);
   background: var(--miragon-white);
+}
+/* Fokus (CI-Regel C3): Der Toggle gab bisher nur beim Hover Rückmeldung. Ein
+   eigener Ring macht ihn auch per Tastatur auffindbar und ist nicht mit dem
+   Hover-Zustand zu verwechseln. Farbe aus dem Token, kein rohes Hex. */
+.mg-code__toggle:focus-visible {
+  outline: 2px solid var(--miragon-blue);
+  outline-offset: 2px;
 }
 .mg-code__toggle-icon {
   display: block;
@@ -198,7 +205,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   align-items: center;
   justify-content: center;
   padding: 4vh 4vw;
-  background: rgba(13, 13, 43, 0.55);
+  background: color-mix(in srgb, var(--miragon-black) 55%, transparent);
   backdrop-filter: blur(2px);
   animation: mg-code-fade 0.16s ease;
 }
@@ -214,7 +221,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   max-height: 88vh;
   overflow: hidden;
   border-radius: 0.9rem;
-  box-shadow: 0 24px 60px rgba(13, 13, 43, 0.45);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--miragon-black) 45%, transparent);
 }
 .mg-code--expanded .mg-code__bar {
   flex: 0 0 auto;
@@ -240,13 +247,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   background: transparent;
 }
 .mg-code--expanded .mg-code__body::-webkit-scrollbar-thumb {
-  background: rgba(51, 93, 229, 0.3);
+  background: color-mix(in srgb, var(--miragon-blue) 30%, transparent);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 .mg-code--expanded .mg-code__body::-webkit-scrollbar-thumb:hover {
-  background: rgba(51, 93, 229, 0.5);
+  background: color-mix(in srgb, var(--miragon-blue) 50%, transparent);
 }
 
 .mg-code--expanded .mg-code__window :deep(.slidev-code) {
@@ -276,5 +283,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 :global(.print) .mg-code__toggle,
 :global(.print-slide-container) .mg-code__toggle {
   display: none;
+}
+
+/* Bewegung (CI-Regel C3): Das Vollbild-Overlay blendet sich ein, der Toggle
+   fadet seine Farben. Beides ist reine Opazität/Farbe (keine Verschiebung),
+   trotzdem bekommt der Overlay-Aufblender den Rücksichts-Block: Wer reduzierte
+   Bewegung wählt, will das Overlay sofort sehen, nicht wachsen sehen. */
+@media (prefers-reduced-motion: reduce) {
+  .mg-code--expanded {
+    animation: none;
+  }
 }
 </style>

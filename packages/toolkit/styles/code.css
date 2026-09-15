@@ -19,9 +19,9 @@
    that the <CodeBlock> component's :deep rules (0,3,0) can still reset it. */
 .shiki.slidev-code {
   background: var(--miragon-white);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   border-radius: 0.6rem;
-  box-shadow: 0 8px 20px rgba(51, 93, 229, 0.06);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
   overflow-x: auto;
   line-height: 1.2 !important;
 }
@@ -45,7 +45,7 @@
   font-size: 0.85em;
   color: var(--miragon-blue-dark);
   background: var(--miragon-blue-light);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--miragon-border);
   border-radius: 0.35rem;
   padding: 0.1em 0.35em;
   overflow-wrap: anywhere;

@@ -34,16 +34,15 @@ const props = withDefaults(
 // Gradient (Balken + Attributions-Strich) je nach Akzent.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // Eyebrow-Solidfarbe: Grün nur beim grünen Akzent (CI: Grün sparsam).
-const eyebrowVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
+// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
+// Grafikakzent, getragen vom Gradient-Token.
+const eyebrowVar = 'var(--miragon-blue)'
 // Solidfarbe für das hervorgehobene Wort (**bold**). BEWUSST kein
 // background-clip:text-Gradient: headless Chromium (PDF-Export via `npm run
 // export`) kann die clip-Schrift unsichtbar rendern. Solide Akzentfarbe ist
 // immer sichtbar und exportsicher; der Gradient lebt im Balken/Strich.
-const emphasisVar = computed(() =>
-  props.accent === 'green' ? 'var(--miragon-green-deep)' : 'var(--miragon-blue)',
-)
+const emphasisVar = 'var(--miragon-blue)'
 </script>
 
 <template>

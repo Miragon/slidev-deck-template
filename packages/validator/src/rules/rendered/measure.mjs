@@ -45,11 +45,21 @@ export function measureSlide(n) {
   const blueHeads = [...layout.querySelectorAll('h1, h2')].filter((h) => isBlue(rgb(getComputedStyle(h).color))).length
 
   // --- Cards stay white: no colored/gradient background, no colored left-accent border ---
-  const badCards = [...layout.querySelectorAll('[class*="rounded-xl"]')].filter((el) => {
+  // `.mg-card` is what Card.vue actually renders. The `rounded-xl` selector is
+  // kept for deck-local card markup built from utility classes, but on its own it
+  // matched NOTHING in the toolkit, which made this required rule vacuously green.
+  // The compare/goodbad panels are deliberately coloured by their layout and carry
+  // their own classes, so they stay out of this selector by construction.
+  const badCards = [...layout.querySelectorAll('.mg-card, [class*="rounded-xl"]')].filter((el) => {
     const s = getComputedStyle(el)
     if (s.backgroundImage && s.backgroundImage !== 'none') return true
     const bg = rgb(s.backgroundColor)
-    if (bg && bg.a > 0.01 && !(bg.r >= 250 && bg.g >= 250 && bg.b >= 250)) return true
+    // "White" has to include the brand's neutral surface: grau is #F9F7F7 =
+    // rgb(249, 247, 247), so a 250 floor would have failed the palette's own
+    // card colour. 247 is that value's lowest channel exactly — one step lower
+    // and nothing else in the palette sneaks in (the next-lightest sanctioned
+    // colour, blau-hell #6B8AFF, is 107 in its red channel).
+    if (bg && bg.a > 0.01 && !(bg.r >= 247 && bg.g >= 247 && bg.b >= 247)) return true
     const lw = parseFloat(s.borderLeftWidth) || 0
     const tw = parseFloat(s.borderTopWidth) || 0
     if (lw >= 3 && lw > tw + 1) {

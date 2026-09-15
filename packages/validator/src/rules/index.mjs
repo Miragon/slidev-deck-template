@@ -19,6 +19,9 @@ import { noInlineFont } from './source/no-inline-font.mjs'
 import { noRestyledBullets } from './source/no-restyled-bullets.mjs'
 import { excalidrawCommittedLight } from './source/excalidraw-committed-light.mjs'
 import { excalidrawBuiltTransparent } from './source/excalidraw-built-transparent.mjs'
+import { brandPalette } from './source/brand-palette.mjs'
+import { brandLogoAsset } from './source/brand-logo-asset.mjs'
+import { brandTokenDefined } from './source/brand-token-defined.mjs'
 
 import { elementOverflow } from './rendered/element-overflow.mjs'
 import { headingBlack } from './rendered/heading-black.mjs'
@@ -38,6 +41,9 @@ export const allRules = [
   noRestyledBullets,
   excalidrawCommittedLight,
   excalidrawBuiltTransparent,
+  brandPalette,
+  brandLogoAsset,
+  brandTokenDefined,
   elementOverflow,
   headingBlack,
   cardWhite,
