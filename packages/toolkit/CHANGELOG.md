@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.3](https://github.com/Miragon/slidev-deck-template/compare/v1.17.2...v1.17.3) (2026-09-15)
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** bring the template back in line with the Miragon CI ([#138](https://github.com/Miragon/slidev-deck-template/issues/138)) ([09f47d1](https://github.com/Miragon/slidev-deck-template/commit/09f47d1e50b781a72a702395ad473a1d88950e3c))
+
 ## [1.17.2](https://github.com/Miragon/slidev-deck-template/compare/v1.17.1...v1.17.2) (2026-09-10)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@miragon/create-slidev-deck",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "type": "module",
   "description": "Scaffold a lean Miragon Slidev deck: only the files a deck needs, with @miragon/slidev-toolkit pulled from npm. Run via `npm create @miragon/slidev-deck`.",
   "keywords": [
@@ -31,9 +31,9 @@
     "giget": "3.3.1"
   },
   "devDependencies": {
-    "@miragon/slidev-toolkit": "1.17.2",
+    "@miragon/slidev-toolkit": "1.17.3",
     "@miragon/slidev-speaker-profiles": "0.2.2",
-    "@miragon/slidev-validator": "0.6.0"
+    "@miragon/slidev-validator": "0.6.1"
   },
   "files": [
     "bin",
