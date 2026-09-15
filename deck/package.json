@@ -11,13 +11,13 @@
     "dev:profile": "SLIDEV_PROFILE_EDIT=1 npm run dev:app"
   },
   "dependencies": {
-    "@slidev/cli": "52.19.0",
+    "@slidev/cli": "52.19.1",
     "slidev-addon-bpmn": "1.10.1",
     "slidev-addon-dmn": "1.7.0",
-    "vue": "3.5.41"
+    "vue": "3.5.42"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.126",
-    "portless": "0.15.5"
+    "@iconify-json/lucide": "1.2.131",
+    "portless": "0.15.6"
   }
 }

@@ -20,14 +20,14 @@
     "slidev": ">=0.48.0"
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.126",
+    "@iconify-json/lucide": "1.2.131",
     "@paper-design/shaders": "0.0.80"
   },
   "devDependencies": {
-    "@slidev/types": "52.19.0"
+    "@slidev/types": "52.19.1"
   },
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "3.5.42"
   },
   "files": [
     "layouts",
