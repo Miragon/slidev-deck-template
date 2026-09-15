@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.6.0...slidev-validator-v0.6.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** bring the template back in line with the Miragon CI ([#138](https://github.com/Miragon/slidev-deck-template/issues/138)) ([09f47d1](https://github.com/Miragon/slidev-deck-template/commit/09f47d1e50b781a72a702395ad473a1d88950e3c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * @miragon/slidev-toolkit bumped from >=1.15.0 <2 to >=1.17.3
+
 ## [0.6.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.5.1...slidev-validator-v0.6.0) (2026-08-14)
 
 
