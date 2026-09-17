@@ -46,6 +46,9 @@ accent: blue
   picks up the same frame globally via code.css. `expandable` adds the macOS-style
   expand button (top-right, on hover) that blows the snippet up to fullscreen —
   hover the window and click it to read the code at full size, Esc to close.
+  Line highlighting is native Shiki, set on the fence, not a CodeBlock prop:
+  `md {3-4}` marks lines statically; `md {3|4|all}` steps through them on click.
+  The theme (styles/code.css) gives marked lines a blue band and left bar.
   Transition: "And one source gives you every output."
 -->
 
@@ -53,7 +56,7 @@ The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>
 
 <CodeBlock file="deck/chapter/02-slidev/02-slidev.md" lang="md" expandable>
 
-```md
+```md {1,4-5}
 # Three habits of great **retros**
 
 - Look back before looking forward
@@ -62,6 +65,8 @@ The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>
 ```
 
 </CodeBlock>
+
+*Highlight lines on the fence: `{1,4-5}` static, `{1|4|5}` per click.*
 
 ---
 id: s-c4821064

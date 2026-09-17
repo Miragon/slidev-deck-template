@@ -160,7 +160,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   padding: 0.1rem 0.45rem;
 }
 .mg-code__body {
-  padding: 0.4rem 0.5rem;
+  padding: 0.4rem 0;
 }
 
 .mg-code__toggle {
