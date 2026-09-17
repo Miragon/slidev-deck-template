@@ -26,6 +26,29 @@
   line-height: 1.2 !important;
 }
 
+/* Line highlighting (`lang {1,3}` static, `lang {1|3|all}` per click): mark the
+   chosen lines with a blue band + left bar instead of dimming the rest. Text
+   inset sits on the lines so the band bleeds to the frame; Slidev pins the fence
+   padding with `!important`, so the horizontal reset needs it too. */
+.shiki.slidev-code {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.shiki.slidev-code code {
+  display: grid;
+}
+.shiki.slidev-code .line {
+  padding-inline: 0.9rem;
+  min-height: 1.2em;
+}
+.shiki.slidev-code .line.dishonored {
+  opacity: 1;
+}
+.shiki.slidev-code .line.highlighted {
+  background: var(--miragon-blue-light);
+  box-shadow: inset 3px 0 0 var(--miragon-blue);
+}
+
 /* A caption line under a fence (a following *italic* line) reads as a muted
    label, not body text. Kept subtle. */
 .shiki.slidev-code + p em:only-child {
