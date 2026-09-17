@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/Miragon/slidev-deck-template/compare/v1.17.3...v1.18.0) (2026-09-17)
+
+
+### Features
+
+* **slidev-toolkit:** highlight fence lines with a blue band instead of dimming ([#155](https://github.com/Miragon/slidev-deck-template/issues/155)) ([14e0024](https://github.com/Miragon/slidev-deck-template/commit/14e002433b50dde42d38392161ecce726dba36f0))
+
 ## [1.17.3](https://github.com/Miragon/slidev-deck-template/compare/v1.17.2...v1.17.3) (2026-09-15)
 
 
