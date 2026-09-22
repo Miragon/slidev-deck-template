@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.2.2...slidev-speaker-profiles-v0.2.3) (2026-09-22)
+
+
+### Bug Fixes
+
+* loosen peer/dependency pinning so npm consumers can dedupe ([#158](https://github.com/Miragon/slidev-deck-template/issues/158)) ([1f17e0d](https://github.com/Miragon/slidev-deck-template/commit/1f17e0d76f77c9348d69ee010d167bb17880911e))
+
 ## [0.2.2](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.2.1...slidev-speaker-profiles-v0.2.2) (2026-09-10)
 
 
