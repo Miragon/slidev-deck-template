@@ -33,12 +33,15 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@slidev/parser": "52.19.1",
     "markdown-it": "15.0.2",
     "playwright-chromium": "1.63.0"
   },
+  "devDependencies": {
+    "@slidev/parser": "52.19.1"
+  },
   "peerDependencies": {
-    "@miragon/slidev-toolkit": ">=1.15.0 <2"
+    "@miragon/slidev-toolkit": ">=1.15.0 <2",
+    "@slidev/parser": "^52.0.0"
   },
   "files": [
     "bin",
