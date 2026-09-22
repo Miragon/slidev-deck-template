@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/Miragon/slidev-deck-template/compare/v1.18.0...v1.18.1) (2026-09-22)
+
+
+### Bug Fixes
+
+* loosen peer/dependency pinning so npm consumers can dedupe ([#158](https://github.com/Miragon/slidev-deck-template/issues/158)) ([1f17e0d](https://github.com/Miragon/slidev-deck-template/commit/1f17e0d76f77c9348d69ee010d167bb17880911e))
+
 ## [1.18.0](https://github.com/Miragon/slidev-deck-template/compare/v1.17.3...v1.18.0) (2026-09-17)
 
 

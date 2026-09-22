@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.2](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.6.1...slidev-validator-v0.6.2) (2026-09-22)
+
+
+### Bug Fixes
+
+* loosen peer/dependency pinning so npm consumers can dedupe ([#158](https://github.com/Miragon/slidev-deck-template/issues/158)) ([1f17e0d](https://github.com/Miragon/slidev-deck-template/commit/1f17e0d76f77c9348d69ee010d167bb17880911e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * @miragon/slidev-toolkit bumped from >=1.15.0 <2 to >=1.18.1
+
 ## [0.6.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.6.0...slidev-validator-v0.6.1) (2026-09-15)
 
 
