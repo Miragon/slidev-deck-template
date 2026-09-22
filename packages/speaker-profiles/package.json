@@ -27,12 +27,12 @@
     "slidev": ">=0.48.0"
   },
   "devDependencies": {
-    "@slidev/parser": "52.19.1",
-    "@slidev/types": "52.19.1"
+    "@slidev/parser": "53.0.0",
+    "@slidev/types": "53.0.0"
   },
   "peerDependencies": {
     "@slidev/parser": "^52.0.0",
-    "vue": "^3.5.0"
+    "vue": "3.5.43"
   },
   "files": [
     "bin",
