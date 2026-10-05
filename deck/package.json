@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "@slidev/cli": "52.19.1",
-    "slidev-addon-bpmn": "1.10.1",
+    "slidev-addon-bpmn": "1.10.2",
     "slidev-addon-dmn": "1.7.0",
-    "vue": "3.5.42"
+    "vue": "3.5.43"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.131",
-    "portless": "0.15.6"
+    "@iconify-json/lucide": "1.2.138",
+    "portless": "0.15.7"
   }
 }
