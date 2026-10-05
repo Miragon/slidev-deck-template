@@ -227,13 +227,16 @@ A row of cards; one active at a time, cross-fading a detail panel. Fully frontma
 | `accent` | blue / green / mixed (default mixed) |
 | `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
 | `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
-| `gap` (str) | CSS length between the card row and the detail panel; default `1rem` (matches the card gap) |
+| `gap` (str) | CSS length between the cards and the detail panel; default `1rem` (matches the card gap) |
+| `cards` | top (default) / left: where the cards sit relative to the detail panel |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 
 A **newline in a string `body`** starts a new line. Together with `**bold**` this gives a statement with its explanation underneath, without a second field: write the body double-quoted with `\n` (`"**Statement**\nExplanation"`). Inline Markdown keeps working on every line. Keep it to one break; a plain multi-line YAML scalar folds into spaces and renders as one paragraph, as before.
 
-`image` (optional, per item) is a served path (`/resources/<chapter>/<file>`, resolved against `BASE_URL`) to a screenshot or diagram that belongs to that item. It sits to the right of the text, directly on the white panel, keeps its aspect ratio, and takes its height from the panel (at most half the panel width), so it never grows the panel. `imageAlt` is its alt text: describe what a content-carrying image shows; it defaults to `""` (decorative). `image` works with a string `body` only and is ignored next to a list `body`. There is no caption, zoom or lightbox, and the card row takes no images.
+`image` (optional, per item) is a served path (`/resources/<chapter>/<file>`, resolved against `BASE_URL`) to a screenshot or diagram that belongs to that item. With the default `cards: top` it sits to the right of the text, directly on the white panel, keeps its aspect ratio, and takes its height from the panel (at most half the panel width), so it never grows the panel. `imageAlt` is its alt text: describe what a content-carrying image shows; it defaults to `""` (decorative). `image` works with a string `body` only and is ignored next to a list `body`. There is no caption, zoom or lightbox, and the card row takes no images.
+
+**`cards: left`** turns the slide round: the cards stack in a column on the left and the detail panel takes the full height on the right. An item's `image` sits directly below its text at the full panel width, and the two are centred vertically in the panel as one group (a tall image shrinks to fit). Use it when the images carry the slide (a screenshot, a BPMN or Excalidraw diagram) and would be too small in the flat panel under a card row; stay with `cards: top` for text-only items.
 
 `icon` (optional, per item) is a **Lucide Iconify UnoCSS class** (`i-lucide-*`). Lucide is the one sanctioned icon set (outline, 24px grid) and ships with the toolkit as `@iconify-json/lucide`; never mix in a second family such as Carbon or Phosphor, even though other collections happen to resolve. When set it **replaces** that card's numbered `01/02/03` index, sits top-left above the label, and takes the accent colour (muted → accent when active) just like the index. Cards without `icon` keep the number, so use all-or-none per slide. Write the class **literally** (e.g. `icon: i-lucide-cpu`) so UnoCSS generates it; no emoji.
 
@@ -255,7 +258,7 @@ items:
     imageAlt: The process in Camunda Operate with an incident on its first task
 ```
 
-**Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items), with at most one line break in a string `body`. One `image` per item, string `body` only; keep the text beside an image to a statement plus one short sentence.
+**Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items), with at most one line break in a string `body`. One `image` per item, string `body` only; keep the text beside (or, with `cards: left`, above) an image to a statement plus one short sentence. With `cards: left` the labels share a narrow column, so keep them to one to three words.
 
 ## closing: animated closing slide
 
