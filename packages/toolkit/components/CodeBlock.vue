@@ -279,9 +279,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   font-size: var(--mg-code-size) !important;
 }
 
-/* Toggle nie im PDF-Export. */
-:global(.print) .mg-code__toggle,
-:global(.print-slide-container) .mg-code__toggle {
+/* Toggle nie im PDF-Export. Der ganze Selektor steckt in :global(): Vue 3.5
+   verwirft bei `:global(.print) .mg-code__toggle` den Teil nach dem :global()
+   und liefert `.print { display: none }`, was im Export die komplette Seite
+   ausblendet (Playwright wartet dann ewig auf einen sichtbaren <body>). */
+:global(.print .mg-code__toggle),
+:global(.print-slide-container .mg-code__toggle) {
   display: none;
 }
 

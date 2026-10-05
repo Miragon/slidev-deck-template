@@ -9,7 +9,12 @@
  * Mono, matching the "Geist Mono for code and tables" CI invariant.
  *
  * Anchor: `#slideshow` is the single container that wraps EVERY slide page
- * (`#slideshow > .slidev-page > <layout root>`), so this reaches tables in every
+ * in the live view (`#slideshow > .slidev-page > <layout root>`). The PDF/PNG
+ * export renders the slides in a different tree (`#print-container >
+ * #print-content`) that has no `#slideshow`, so both ids are anchored via
+ * `:is()`; without `#print-container` an exported table loses all styling and
+ * its columns run together. `:is()` takes the specificity of its most specific
+ * argument (an id), so the cascade result is the same in both trees. This reaches tables in every
  * layout — including the custom ones (`content`, `compare`, …) whose root is NOT
  * `.slidev-layout`. Slidev's own defaults live on `.slidev-layout table`
  * (specificity 0,1,1); anchoring on the `#slideshow` id (1,0,1) wins the cascade
@@ -21,7 +26,7 @@
  * neutrals already used across the toolkit (see code.css).
  */
 
-#slideshow table {
+:is(#slideshow, #print-container) table {
   border-collapse: separate;
   border-spacing: 0;
   width: auto;
@@ -37,15 +42,15 @@
 }
 
 /* Header row: black label, restrained blue accent rule underneath. */
-#slideshow thead th {
+:is(#slideshow, #print-container) thead th {
   color: var(--miragon-text-primary);
   font-weight: 700;
   background: var(--miragon-blue-light);
   border-bottom: 2px solid var(--miragon-blue);
 }
 
-#slideshow th,
-#slideshow td {
+:is(#slideshow, #print-container) th,
+:is(#slideshow, #print-container) td {
   padding: 0.55rem 1.1rem;
   text-align: left;
   color: var(--miragon-text-secondary);
@@ -54,9 +59,9 @@
 }
 
 /* Subtle zebra striping for scannability; last row carries no divider. */
-#slideshow tbody tr:nth-child(even) td {
+:is(#slideshow, #print-container) tbody tr:nth-child(even) td {
   background: var(--miragon-gray-bg);
 }
-#slideshow tbody tr:last-child td {
+:is(#slideshow, #print-container) tbody tr:last-child td {
   border-bottom: none;
 }
