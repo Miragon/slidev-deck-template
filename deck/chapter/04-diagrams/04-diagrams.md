@@ -154,6 +154,36 @@ engine: camunda7
 A real BPMN file, straight from Camunda Modeler or bpmn.io.
 
 ---
+id: s-e5c7b4f0
+layout: bpmn
+title: Pick how much the audience can touch
+eyebrow: 04 - Diagrams
+accent: blue
+diagram: /resources/04-diagrams/recruitment.bpmn
+diagramAlt: "Recruitment: application arrives, HR screens it, the team interviews, an offer goes out"
+mode: static
+side: left
+ratio: "1.2/1"
+height: 320px
+---
+
+<!--
+  bpmn MODES: one .bpmn file, three ways to render it via `mode:`.
+  static  → still image, no controls (this slide). Use when the process is context, not the topic.
+  token   → playable token simulation (default; next slide).
+  modeler → editable canvas with a fullscreen "Edit" view (previous slide).
+  REQUIRED: diagram.  OPTIONAL: mode, diagramAlt, engine, tokenSimulation, transactionBoundaries, side, ratio, height.
+  diagramAlt names the process for screen readers; without it a static diagram stays out of the accessibility tree.
+  Transition: "Switch to token mode and the same model starts to move."
+-->
+
+<StepList>
+<Step label="static">a still image, the process as context</Step>
+<Step label="token">play tokens through the flow, live</Step>
+<Step label="modeler">open the model and edit it on stage</Step>
+</StepList>
+
+---
 id: s-7a3d8d7d
 layout: bpmn
 title: Put the process beside its rules

@@ -107,17 +107,19 @@ items:
       - No restart, no manual refresh
   - label: Vue inside slides
     icon: i-lucide-box
-    body: Drop a Vue component into a slide and it becomes part of the deck, with
-      full reactivity and no detour.
+    body: "**Components are slide content.**\nDrop a Vue component into a slide and
+      it becomes part of the deck, with full reactivity and no detour."
   - label: Click-through
     icon: i-lucide-mouse-pointer-2
     body: Wrap content in `<v-clicks>` to walk the audience through a slide one step
       at a time.
   - label: Code and diagrams
     icon: i-lucide-code
-    body: Highlighted snippets, Mermaid charts, BPMN simulations, all rendered
-      natively. The full list lives in the [Slidev
-      docs](https://sli.dev/features/).
+    body: "**Rendered natively.**\nHighlighted snippets, Mermaid charts and BPMN
+      simulations. The full list lives in the [Slidev
+      docs](https://sli.dev/features/)."
+    image: /resources/02-slidev/build-flow.excalidraw.svg
+    imageAlt: The build flow from one Markdown file to web deck and PDF
 ---
 
 <!--
@@ -125,5 +127,9 @@ showcase: clickable cards, detail panel cross-fades.
   item.body is a string (one paragraph) OR a YAML list of strings (bullet list,
   as on card 01 here). Bodies support inline Markdown: `code`, [links](url),
   **bold**, *italic* (see card 01's bold and card 04's link).
+  A newline in a string body ("...\n...") starts a new line: statement, then
+  explanation (cards 02 and 04). One break per body.
+  OPTIONAL item.image + item.imageAlt: an image right of a string body, sized
+  from the panel height (card 04). Ignored with a list body; no caption.
   Transition: "Now the brand layer."
 -->

@@ -179,6 +179,12 @@ function deckNameFrom(dir) {
 function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
+  // npm `overrides` only take effect in the root manifest, so the template keeps
+  // them in its root package.json and every generated deck inherits them. They
+  // hold back a transitive release that breaks the deck build until upstream
+  // fixes it (e.g. magic-string 1.4.3 misplaces UnoCSS @apply output, and
+  // lightningcss then rejects the CSS). Empty object → no key in the output.
+  const { overrides } = readManifest('package.json')
   const portlessVersion = deckPkg.devDependencies?.portless
   if (!portlessVersion) throw new Error('Reference deck/package.json is missing devDependency portless')
   const pkg = {
@@ -216,6 +222,7 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, s
       ...deckPkg.dependencies,
     },
     devDependencies: { '@miragon/slidev-validator': validatorVersion, portless: portlessVersion },
+    ...(overrides && Object.keys(overrides).length ? { overrides } : {}),
   }
   return JSON.stringify(pkg, null, 2) + '\n'
 }

@@ -23,7 +23,7 @@
  *              of the accessibility tree instead of dictating raw SVG node ids.
  *   height   — CSS height for the BPMN canvas (default "380px")
  *   mode     — render mode (default "token"):
- *                "static"  → <Bpmn>                (still image, no interaction)
+ *                "static"  → <Bpmn> via BpmnStatic  (still image, no interaction)
  *                "token"   → <BpmnTokenSimulation>  (playable token flow, default)
  *                "modeler" → <BpmnModeler>          (editable modeler canvas)
  *   engine   — "camunda7" | "zeebe"  (modeler mode only, optional)
@@ -45,6 +45,8 @@
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
 import SplitView from '../components/SplitView.vue'
+// Nicht <Bpmn> direkt: in bpmn.vue wäre das ein Selbstbezug (siehe BpmnStatic.vue).
+import BpmnStatic from '../components/BpmnStatic.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -122,7 +124,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
           <template v-if="diagram">
             <!-- All three addon components share the same
                  bpmnFilePath / width / height signature. -->
-            <Bpmn v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+            <BpmnStatic v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
             <BpmnModeler
               v-else-if="mode === 'modeler'"
               :bpmnFilePath="diagramSrc"
@@ -145,7 +147,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
         <template #visual>
           <DiagramFrame class="bpmn-canvas bpmn-canvas--split" padding="compact" :height="height" v-bind="diagramA11y">
             <template v-if="diagram">
-              <Bpmn v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+              <BpmnStatic v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
               <BpmnModeler
                 v-else-if="mode === 'modeler'"
                 :bpmnFilePath="diagramSrc"
