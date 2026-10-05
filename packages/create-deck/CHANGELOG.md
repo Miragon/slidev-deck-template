@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.5](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.4...create-slidev-deck-v1.4.5) (2026-10-05)
+
+
+### Bug Fixes
+
+* **create-slidev-deck:** hold back magic-string 1.4.3 so scaffolded decks build ([#165](https://github.com/Miragon/slidev-deck-template/issues/165)) ([009c94f](https://github.com/Miragon/slidev-deck-template/commit/009c94fdc4d6d30a2020933ddf0a34879021f53b))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.18.0 to 1.19.0
+    * @miragon/slidev-speaker-profiles bumped from 0.2.2 to 0.2.3
+    * @miragon/slidev-validator bumped from 0.6.1 to 0.6.2
+
 ## [1.4.4](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.3...create-slidev-deck-v1.4.4) (2026-09-17)
 
 
