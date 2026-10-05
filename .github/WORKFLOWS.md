@@ -6,11 +6,12 @@ The workflows that keep the template building, releasing and secure. All actions
 
 | File | Name | Trigger | Does |
 |---|---|---|---|
-| `ci.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, `slidev build`, then `npm run verify:source`. No browser involved: the PDF export is kept out of `build` and the guardrails are source-only. This is the required CI status; forks inherit it. |
+| `ci.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, `slidev build`, then `npm run verify:source`. No browser involved: the PDF export is kept out of `build` and the guardrails are source-only. A required CI status; forks inherit it. |
 | `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR per target from conventional commits; on merge, cuts the tag/GitHub release and publishes the three npm packages (`@miragon/slidev-toolkit`, `@miragon/create-slidev-deck`, `@miragon/slidev-validator`). The `miragon-slidev` plugin also has a release line (tag + `miragon-slidev-plugin/.claude-plugin/plugin.json` + CHANGELOG bump) but is **not** published to npm — its marketplace serves it straight from git. |
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
 | `scaffold-test.yml` | Scaffold Test | push to `main`, every PR, manual | **Template-only.** Runs the `create-slidev-deck` structural smoke test, then scaffolds a deck and checks it installs, builds and verifies with the toolkit pulled from npm. |
+| `dependabot-automerge.yml` | Dependabot Auto-Merge | every PR (acts on Dependabot's only) | Arms GitHub's native auto-merge (squash) on Dependabot PRs whose highest bump is a patch or a minor. Majors stay manual. It only expresses intent: the required checks on `main` decide when the merge happens. |
 
 ## Template-only workflows
 
@@ -34,7 +35,7 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 ## Dependency updates
 
-`dependabot.yml` opens grouped update PRs; each is gated by Build Deck + Pin Check before merge. Because updates land as PRs, Pin Check keeps their titles and version pins honest.
+`dependabot.yml` opens two grouped PRs per ecosystem: one for minors and patches, one for majors. Every PR is gated by the required checks on `main` (`build`, `pin-check`, `validate-pr-title`, `scaffold-test`). `dependabot-automerge.yml` arms auto-merge on the minor/patch PR, so it lands by itself once those checks are green; the major PR waits for a maintainer. Security updates stay in one bundle per ecosystem, so one containing a major is merged by hand.
 
 ## Deployment
 
