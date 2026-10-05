@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/Miragon/slidev-deck-template/compare/v1.19.0...v1.20.0) (2026-10-05)
+
+
+### Features
+
+* **slidev-toolkit:** add a cards-left variant to the showcase layout ([#170](https://github.com/Miragon/slidev-deck-template/issues/170)) ([942e14e](https://github.com/Miragon/slidev-deck-template/commit/942e14e19b9efb438cbbc90e2f0ee851538beb53))
+
 ## [1.19.0](https://github.com/Miragon/slidev-deck-template/compare/v1.18.0...v1.19.0) (2026-10-05)
 
 
