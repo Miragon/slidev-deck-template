@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.2.1...miragon-slidev-plugin-v1.3.0) (2026-10-05)
+
+
+### Features
+
+* **slidev-toolkit:** support line breaks and an image in showcase items ([#164](https://github.com/Miragon/slidev-deck-template/issues/164)) ([5fe3a18](https://github.com/Miragon/slidev-deck-template/commit/5fe3a1878d1d11546d60cb142ccec68562e3fe76))
+
 ## [1.2.1](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.2.0...miragon-slidev-plugin-v1.2.1) (2026-09-15)
 
 

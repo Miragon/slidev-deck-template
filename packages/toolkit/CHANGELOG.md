@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.0](https://github.com/Miragon/slidev-deck-template/compare/v1.18.0...v1.19.0) (2026-10-05)
+
+
+### Features
+
+* **slidev-toolkit:** support line breaks and an image in showcase items ([#164](https://github.com/Miragon/slidev-deck-template/issues/164)) ([5fe3a18](https://github.com/Miragon/slidev-deck-template/commit/5fe3a1878d1d11546d60cb142ccec68562e3fe76))
+
+
+### Bug Fixes
+
+* loosen peer/dependency pinning so npm consumers can dedupe ([#158](https://github.com/Miragon/slidev-deck-template/issues/158)) ([1f17e0d](https://github.com/Miragon/slidev-deck-template/commit/1f17e0d76f77c9348d69ee010d167bb17880911e))
+* **slidev-toolkit:** render the bpmn layout's static mode instead of an empty frame ([#162](https://github.com/Miragon/slidev-deck-template/issues/162)) ([980297e](https://github.com/Miragon/slidev-deck-template/commit/980297ea4cc42de0e31d58a9404e23461d60827a))
+
 ## [1.18.0](https://github.com/Miragon/slidev-deck-template/compare/v1.17.3...v1.18.0) (2026-09-17)
 
 
