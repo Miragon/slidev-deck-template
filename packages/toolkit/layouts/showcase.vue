@@ -10,8 +10,14 @@
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default mixed)
- *   items    — array of `{ label, body, icon? }` objects (recommended: 3–4 cards).
+ *   items    — array of `{ label, body, icon?, image?, imageAlt? }` objects
+ *              (recommended: 3–4 cards).
  *              `body` is a string (one paragraph) or a string array (bullet list).
+ *              A newline in a string `body` starts a new line.
+ *              `image` is an optional served path (e.g.
+ *              /resources/02-content/team.png) shown to the right of a string
+ *              `body`, sized from the panel height. `imageAlt` is its alt text
+ *              (default "").
  *              `icon` is an optional Iconify class (e.g. "i-lucide-cpu") that
  *              replaces the card's numbered index; write it literally so UnoCSS
  *              picks it up. It takes the accent colour, like the index.
@@ -27,6 +33,8 @@ interface Item {
   label: string
   body: string | string[]
   icon?: string
+  image?: string
+  imageAlt?: string
 }
 
 const props = withDefaults(
@@ -68,6 +76,16 @@ onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
 const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value))
 const activeItem = computed(() => props.items[selected.value])
 
+// Base-Pfad respektieren (GitHub Pages baut unter /<repo>/). Runtime-Strings
+// werden von Vite NICHT umgeschrieben — daher manuell mit BASE_URL auflösen.
+// Gleiche Logik wie in content-image.vue.
+function withBase(path?: string) {
+  if (!path) return path
+  if (/^https?:\/\//.test(path)) return path
+  return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
+}
+const activeImageSrc = computed(() => withBase(activeItem.value?.image))
+
 // A body/label line that YAML mis-parsed. An unquoted colon-space (`Foo: bar`)
 // is read by YAML as a mapping, so the line arrives here as `{ Foo: 'bar' }`
 // instead of the string `'Foo: bar'`. Rebuild the intended string from a
@@ -84,15 +102,16 @@ function toText(value: unknown): string {
 }
 
 // Frontmatter values are plain strings, not compiled by Slidev, so render the
-// allowed inline Markdown ourselves (code, links, bold, italic). HTML-safe:
-// escape first, then mark up (mirrors Figure.vue's caption).
+// allowed inline Markdown ourselves (code, links, bold, italic, line breaks).
+// HTML-safe: escape first, then mark up (mirrors Figure.vue's caption).
 function inline(value: unknown): string {
-  const escaped = toText(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const escaped = toText(value).trimEnd().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   return escaped
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
+    .replace(/\n/g, '<br>')
 }
 
 // Route the card click through Slidev's own nav so mouse and keyboard share one
@@ -133,6 +152,10 @@ function select(i: number, e: MouseEvent) {
           <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
             <li v-for="(line, li) in activeItem.body" :key="li" v-html="inline(line)"></li>
           </ul>
+          <div v-else-if="activeItem?.image" :key="selected" class="detail-media">
+            <p class="detail-body" v-html="inline(activeItem.body)"></p>
+            <img class="detail-image" :src="activeImageSrc" :alt="activeItem.imageAlt ?? ''" />
+          </div>
           <p v-else :key="selected" class="detail-body" v-html="inline(activeItem?.body ?? '')"></p>
         </transition>
       </div>
@@ -282,6 +305,30 @@ function select(i: number, e: MouseEvent) {
   line-height: 1.55;
   color: var(--miragon-text-secondary);
   margin: 0;
+}
+
+.showcase-detail:has(.detail-media) {
+  flex-basis: 0;
+  min-height: 0;
+}
+.detail-media {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+}
+.detail-media .detail-body {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.detail-image {
+  flex: none;
+  height: 100%;
+  width: auto;
+  max-width: 50%;
+  object-fit: contain;
 }
 
 .showcase-detail :deep(strong) {

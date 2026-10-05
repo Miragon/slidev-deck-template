@@ -225,11 +225,15 @@ A row of cards; one active at a time, cross-fading a detail panel. Fully frontma
 |---|---|
 | `title`, `eyebrow` (str) | free text |
 | `accent` | blue / green / mixed (default mixed) |
-| `items` (array) | YAML array of `{ label, body, icon? }` |
+| `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
 | `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
 | `gap` (str) | CSS length between the card row and the detail panel; default `1rem` (matches the card gap) |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
+
+A **newline in a string `body`** starts a new line. Together with `**bold**` this gives a statement with its explanation underneath, without a second field: write the body double-quoted with `\n` (`"**Statement**\nExplanation"`). Inline Markdown keeps working on every line. Keep it to one break; a plain multi-line YAML scalar folds into spaces and renders as one paragraph, as before.
+
+`image` (optional, per item) is a served path (`/resources/<chapter>/<file>`, resolved against `BASE_URL`) to a screenshot or diagram that belongs to that item. It sits to the right of the text, directly on the white panel, keeps its aspect ratio, and takes its height from the panel (at most half the panel width), so it never grows the panel. `imageAlt` is its alt text: describe what a content-carrying image shows; it defaults to `""` (decorative). `image` works with a string `body` only and is ignored next to a list `body`. There is no caption, zoom or lightbox, and the card row takes no images.
 
 `icon` (optional, per item) is a **Lucide Iconify UnoCSS class** (`i-lucide-*`). Lucide is the one sanctioned icon set (outline, 24px grid) and ships with the toolkit as `@iconify-json/lucide`; never mix in a second family such as Carbon or Phosphor, even though other collections happen to resolve. When set it **replaces** that card's numbered `01/02/03` index, sits top-left above the label, and takes the accent colour (muted → accent when active) just like the index. Cards without `icon` keep the number, so use all-or-none per slide. Write the class **literally** (e.g. `icon: i-lucide-cpu`) so UnoCSS generates it; no emoji.
 
@@ -244,9 +248,14 @@ items:
   - label: Operations
     icon: i-lucide-settings
     body: Ein Satz genuegt hier auch weiterhin.
+  - label: The engine says
+    icon: i-lucide-workflow
+    body: "**Instance with incident**\nIt is stuck on its very first task"
+    image: /resources/00-example-process/operate-incident.png
+    imageAlt: The process in Camunda Operate with an incident on its first task
 ```
 
-**Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items).
+**Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items), with at most one line break in a string `body`. One `image` per item, string `body` only; keep the text beside an image to a statement plus one short sentence.
 
 ## closing: animated closing slide
 
