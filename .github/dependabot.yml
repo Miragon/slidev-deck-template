@@ -1,10 +1,10 @@
 # Dependabot configuration for the Miragon Slidev deck template.
 #
-# Goal: minimal PR noise. Every ecosystem gets ONE bundled PR that carries
-# all of its updates — major, minor and patch alike — so the lockfile stays
-# consistent and reviewers touch a single PR per ecosystem per interval.
-#   - npm            : one bundled PR every Monday.
-#   - github-actions : one bundled PR every month.
+# Goal: minimal PR noise. Every ecosystem gets one bundled PR for its minor
+# and patch updates, which dependabot-automerge.yml merges once CI is green,
+# and one bundled PR for its majors, which stays manual.
+#   - npm            : bundled PRs every Monday.
+#   - github-actions : bundled PRs every month.
 #
 # Security updates are grouped the same way and arrive on CVE publication,
 # independent of the schedule below.
@@ -31,16 +31,21 @@ updates:
       - dependencies
       - npm
     groups:
-      # One PR for the whole npm ecosystem: majors, minors and patches
-      # together. Keeps the lockfile coherent and review to a single PR.
+      # Minors and patches together: the PR that auto-merges.
       npm:
         applies-to: version-updates
         patterns:
           - "*"
         update-types:
-          - "major"
           - "minor"
           - "patch"
+      # Majors apart, so a breaking bump never holds the others back.
+      npm-major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
       # Same bundling for security fixes.
       npm-security:
         applies-to: security-updates
@@ -64,15 +69,21 @@ updates:
       - dependencies
       - github-actions
     groups:
-      # One PR for every action update, all version bumps together.
+      # Minors and patches together: the PR that auto-merges.
       github-actions:
         applies-to: version-updates
         patterns:
           - "*"
         update-types:
-          - "major"
           - "minor"
           - "patch"
+      # Majors apart, so a breaking bump never holds the others back.
+      github-actions-major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
       github-actions-security:
         applies-to: security-updates
         patterns:
