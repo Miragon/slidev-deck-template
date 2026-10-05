@@ -23,8 +23,14 @@
  *              picks it up. It takes the accent colour, like the index.
  *   hint     — navigation footer, hidden by default. `true` for the standard
  *              line, or a string for your own.
- *   gap      — CSS length for the space between the card row and the detail
- *              panel below. Default "1rem" (matches the gap between cards).
+ *   gap      — CSS length for the space between the cards and the detail
+ *              panel. Default "1rem" (matches the gap between cards).
+ *   cards    — "top" | "left" (default top). "top" is a card row above a wide
+ *              detail panel. "left" stacks the cards in a column and gives the
+ *              detail panel the full height beside them, with an item's
+ *              `image` below its text instead of next to it, both centred in the
+ *              panel: the variant for
+ *              items whose image needs room.
  */
 import { computed, onUnmounted, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
@@ -44,9 +50,10 @@ const props = withDefaults(
     items?: Item[]
     hint?: boolean | string
     gap?: string
+    cards?: 'top' | 'left'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'mixed', items: () => [], hint: false, gap: '1rem' },
+  { accent: 'mixed', items: () => [], hint: false, gap: '1rem', cards: 'top' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -132,32 +139,34 @@ function select(i: number, e: MouseEvent) {
         <h2 v-if="title" class="showcase-title">{{ title }}</h2>
       </header>
 
-      <div class="showcase-grid" :class="`cols-${items.length}`">
-        <button
-          v-for="(item, i) in items"
-          :key="i"
-          type="button"
-          class="showcase-card"
-          :class="{ 'is-active': i === selected }"
-          @click="select(i, $event)"
-        >
-          <span v-if="item.icon" class="card-icon" :class="item.icon" aria-hidden="true"></span>
-          <span v-else class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
-          <span class="card-label">{{ toText(item.label) }}</span>
-        </button>
-      </div>
+      <div class="showcase-body" :class="`cards-${cards}`">
+        <div class="showcase-grid" :class="`cols-${items.length}`">
+          <button
+            v-for="(item, i) in items"
+            :key="i"
+            type="button"
+            class="showcase-card"
+            :class="{ 'is-active': i === selected }"
+            @click="select(i, $event)"
+          >
+            <span v-if="item.icon" class="card-icon" :class="item.icon" aria-hidden="true"></span>
+            <span v-else class="card-index">{{ String(i + 1).padStart(2, '0') }}</span>
+            <span class="card-label">{{ toText(item.label) }}</span>
+          </button>
+        </div>
 
-      <div class="showcase-detail">
-        <transition name="fade-detail" mode="out-in">
-          <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
-            <li v-for="(line, li) in activeItem.body" :key="li" v-html="inline(line)"></li>
-          </ul>
-          <div v-else-if="activeItem?.image" :key="selected" class="detail-media">
-            <p class="detail-body" v-html="inline(activeItem.body)"></p>
-            <img class="detail-image" :src="activeImageSrc" :alt="activeItem.imageAlt ?? ''" />
-          </div>
-          <p v-else :key="selected" class="detail-body" v-html="inline(activeItem?.body ?? '')"></p>
-        </transition>
+        <div class="showcase-detail">
+          <transition name="fade-detail" mode="out-in">
+            <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
+              <li v-for="(line, li) in activeItem.body" :key="li" v-html="inline(line)"></li>
+            </ul>
+            <div v-else-if="activeItem?.image" :key="selected" class="detail-media">
+              <p class="detail-body" v-html="inline(activeItem.body)"></p>
+              <img class="detail-image" :src="activeImageSrc" :alt="activeItem.imageAlt ?? ''" />
+            </div>
+            <p v-else :key="selected" class="detail-body" v-html="inline(activeItem?.body ?? '')"></p>
+          </transition>
+        </div>
       </div>
 
       <p v-if="hintText" class="showcase-hint" aria-hidden="true">{{ hintText }}</p>
@@ -216,11 +225,18 @@ function select(i: number, e: MouseEvent) {
   margin: 0;
 }
 
+.showcase-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gap);
+}
+
 .showcase-grid {
   flex: 0 0 auto;
   display: grid;
   gap: 1rem;
-  margin-bottom: var(--sc-gap);
 }
 .showcase-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .showcase-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
@@ -378,6 +394,46 @@ function select(i: number, e: MouseEvent) {
   height: 0.62rem;
   border-radius: 0.2rem;
   background: var(--sc-grad);
+}
+
+/* ---- cards: left --------------------------------------------------------- */
+/* Karten als Spalte links, das Panel rechts über die volle Höhe. Text und
+   Bild stehen als Gruppe vertikal mittig, das Bild direkt unter dem Text. */
+.showcase-body.cards-left {
+  flex-direction: row;
+}
+.cards-left .showcase-grid {
+  flex: 0 0 30%;
+  grid-template-columns: 1fr;
+  align-content: start;
+}
+.cards-left .showcase-detail {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+.cards-left .detail-media {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.cards-left .detail-media .detail-body {
+  flex: none;
+}
+.cards-left .detail-image {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  margin-right: 0;
+}
+/* In der schmalen Spalte würde die angehobene, skalierte Karte in Panel und
+   Nachbarkarte ragen: Rahmen und Schatten tragen den Zustand allein. */
+.cards-left .showcase-card:hover,
+.cards-left .showcase-card.is-active {
+  transform: none;
 }
 
 /* Cross-fade for the detail panel content when the user picks another card. */

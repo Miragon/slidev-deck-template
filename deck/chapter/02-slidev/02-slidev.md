@@ -131,5 +131,38 @@ showcase: clickable cards, detail panel cross-fades.
   explanation (cards 02 and 04). One break per body.
   OPTIONAL item.image + item.imageAlt: an image right of a string body, sized
   from the panel height (card 04). Ignored with a list body; no caption.
+  Transition: "The same explorer, with room for the picture."
+-->
+
+---
+id: s-8b354758
+layout: showcase
+title: From source to stage
+eyebrow: 02 - Slidev
+accent: blue
+cards: left
+items:
+  - label: Write
+    icon: i-lucide-pencil-line
+    body: "**Plain Markdown.**\nOne file per chapter, reviewed like any other
+      code change."
+  - label: Build
+    icon: i-lucide-hammer
+    body: "**One command.**\n`npm run build` turns the source into a web deck and
+      a PDF."
+    image: /resources/02-slidev/build-flow.excalidraw.svg
+    imageAlt: The build flow from one Markdown file to web deck and PDF
+  - label: Present
+    icon: i-lucide-presentation
+    body: "**Straight from the browser.**\nPresenter view, speaker notes and click
+      steps come with Slidev."
+---
+
+<!--
+showcase with OPTIONAL cards: left (default top): the cards stack in a column
+  on the left, the detail panel takes the full height on the right.
+  An item.image sits below its text at the full panel width (card 02),
+  so reach for this variant when a screenshot or diagram needs room.
+  LIMIT: 3 to 4 cards, labels of one to three words.
   Transition: "Now the brand layer."
 -->
