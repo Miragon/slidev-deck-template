@@ -119,6 +119,13 @@ test('derives runtime deps from the reference manifest; validator + portless as 
   assert.match(pkg.dependencies['@miragon/slidev-speaker-profiles'], /^\d/, 'speaker profiles must be an exact-pinned dependency')
 })
 
+test('carries the template root overrides into the deck', () => {
+  // npm only honours `overrides` in the root manifest, so a pin that keeps the
+  // template building must reach every generated deck too.
+  const root = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'))
+  assert.deepEqual(pkgOf(out).overrides, root.overrides)
+})
+
 test('--validator-version overrides the pinned default', () => {
   const t = target()
   try {
