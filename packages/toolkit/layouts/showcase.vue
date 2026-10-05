@@ -328,6 +328,7 @@ function select(i: number, e: MouseEvent) {
   height: 100%;
   width: auto;
   max-width: 50%;
+  margin-right: 1rem;
   object-fit: contain;
 }
 
