@@ -24,7 +24,7 @@
     "@paper-design/shaders": "0.0.81"
   },
   "devDependencies": {
-    "@slidev/types": "53.0.0"
+    "@slidev/types": "52.19.1"
   },
   "peerDependencies": {
     "vue": "3.5.43"
