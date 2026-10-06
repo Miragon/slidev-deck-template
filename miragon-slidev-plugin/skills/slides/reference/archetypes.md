@@ -195,6 +195,7 @@ The sibling of `bpmn` / `dmn`, but for a text-generated Mermaid diagram: header 
 | `side` | `left` / `right`, **split mode**: frame the diagram on that side; the `::caption::` slot becomes the content column opposite. Omit for full-width + caption below. |
 | `ratio` (str) | diagram/content column ratio in split mode (default `"1/1"`) |
 | `height` (str) | height of the framed diagram card in split mode (default `"22rem"`; ignored in full mode) |
+| `align` | `center` (default) / `stretch`, split mode only. `stretch` gives the frame and the content column one shared height: `height` becomes the frame's minimum (taller content grows the frame), and a `<CardGrid>` placed directly in the column fills it edge to edge. Text-only columns stay vertically centred. |
 | **default slot** | the ` ```mermaid ` fence (or a `<<<` import), framed in the white card |
 | **`::caption::` slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram. |
 
@@ -213,6 +214,7 @@ The sibling of `bpmn` / `dmn` / `mermaid`, but for a hand-drawn `.excalidraw.svg
 | `side` | `left` / `right`, **split mode**: frame the diagram on that side, the slot becomes the content column opposite. Omit for full-width + caption below. |
 | `ratio` (str) | diagram/content column ratio in split mode (default `"1/1"`) |
 | `height` (str) | height of the framed diagram card in split mode (default `"22rem"`; ignored in full mode) |
+| `align` | `center` (default) / `stretch`, split mode only. `stretch` gives the frame and the content column one shared height: `height` becomes the frame's minimum (taller content grows the frame), and a `<CardGrid>` placed directly in the column fills it edge to edge. Text-only columns stay vertically centred. |
 | **slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram (bullets / `<StepList>` / `<Card>`, styled like a content slide). |
 
 Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use full mode when an Excalidraw diagram should be the framed focal point of a whole slide, and **split mode** (`side`) when it should sit beside its explanation without hand-building a `content` + `SplitView` layout. To frame one *part* of a slide manually reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.

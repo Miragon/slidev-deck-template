@@ -254,7 +254,7 @@ accent: blue
   with the <<< snippet syntax.
   REQUIRED: the ```mermaid fence (or a <<< import) in the body -> the white card.
   OPTIONAL: title, eyebrow, accent; a ::caption:: named slot for the line below.
-  Transition: "Or write it inline, right on the slide."
+  Transition: "Beside cards, the frame can match their height."
 -->
 
 <<< @/chapter/04-diagrams/resources/recruitment-flow.mermaid
@@ -262,6 +262,46 @@ accent: blue
 ::caption::
 
 Generated from **text** in a `.mermaid` file, framed on-brand by the layout.
+
+---
+id: s-c8c056c4
+layout: mermaid
+title: Or line it up with your cards
+eyebrow: 04 - Diagrams
+accent: blue
+side: left
+ratio: "2/1"
+height: 20rem
+align: stretch
+---
+
+<!--
+  mermaid SPLIT mode with `align: stretch`: the framed diagram and the
+  ::caption:: column share one height, so a CardGrid directly in the column
+  starts and ends on the same line as the frame. `height` becomes the frame's
+  minimum: taller cards grow the frame instead of overflowing it. Omit `align`
+  (default `center`) and both columns are centred at their own height.
+  excalidraw takes the same `align` prop in its split mode.
+  REQUIRED: the ```mermaid fence in the body, `side`.
+  OPTIONAL: align, ratio, height, title, eyebrow, accent.
+  LIMIT: 3 short cards, stacked with direction="column".
+  HOW TO USE: put the CardGrid directly in ::caption::, with no text around it.
+  Transition: "Or write it inline, right on the slide."
+-->
+
+<<< @/chapter/04-diagrams/resources/recruitment-flow.mermaid
+
+::caption::
+
+<CardGrid direction="column" gap="compact">
+
+<Card title="Screening" accent="blue">Every application is checked first.</Card>
+
+<Card title="Interview" accent="blue-mid">A pass leads to a conversation.</Card>
+
+<Card title="Decision" accent="blue">A hire ends in an offer.</Card>
+
+</CardGrid>
 
 ---
 id: s-464dfa81
