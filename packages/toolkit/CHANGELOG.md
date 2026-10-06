@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/Miragon/slidev-deck-template/compare/v1.21.0...v1.22.0) (2026-10-06)
+
+
+### Features
+
+* **slidev-toolkit:** add a status prop to Card ([#176](https://github.com/Miragon/slidev-deck-template/issues/176)) ([dd2081d](https://github.com/Miragon/slidev-deck-template/commit/dd2081d5e7b0e0481c8fa6687a02a776e35c3f38))
+
 ## [1.21.0](https://github.com/Miragon/slidev-deck-template/compare/v1.20.0...v1.21.0) (2026-10-06)
 
 
