@@ -290,3 +290,23 @@ Keep it to **spacing and layout nudges**: the gap above/below a component, its w
 There are no coded SVG-primitive components. **The default diagram is a `.excalidraw.svg`** authored in the Miragon style and embedded via `<Figure src="resources/<chapter>/<name>.excalidraw.svg">` with an `alt` that describes it. The full authoring + export workflow (palette, scene format, Node export with embedded scene) lives in the **`excalidraw`** skill. BPMN process diagrams use the `bpmn` archetype instead.
 
 For a standard graph type that reads as text and wants auto-layout (a flow, a sequence, a state machine), a native Slidev ` ```mermaid ` fence is the alternative, brand-styled globally by `packages/toolkit/setup/mermaid.ts`. The source can be inline or imported from a `.mermaid` file with `<<< @/chapter/<chapter>/resources/<name>.mermaid`. Excalidraw stays the default when placement carries meaning. Full when-to-use-which: the "Diagrams" section in [`SKILL.md`](../SKILL.md).
+
+### Team Topologies, Wardley Maps, Event Storming
+
+`slidev-addon-diagram-js` (the addon behind the `bpmn` and `dmn` archetypes) also renders three modeled notations. They have no archetype: use `layout: content` and put the addon component inside a `<DiagramFrame>`, with one caption line below.
+
+| Notation | Static viewer | Modeler (preview + fullscreen "Edit") | File path prop | File |
+|---|---|---|---|---|
+| Team Topologies | `<TeamTopologies>` | `<TeamTopologiesModeler>` | `teamTopologiesFilePath` | `.tt` (JSON) |
+| Wardley Map | `<WardleyMap>` | `<WardleyMapModeler>` | `wardleyMapFilePath` | `.owm` (OWM text) |
+| Event Storming | `<EventStorming>` | `<EventStormingModeler>` | `eventStormingFilePath` | `.storm` |
+
+All take `width` and `height`; a modeler without a file path starts blank. Put the file in the chapter's `resources/` and write the path **without a leading slash** (`resources/<chapter>/<file>`) so it resolves base-aware. The static viewers work in PDF export; modeler edits live in the running presentation only. The notation colours (Event Storming stickies, team types) are the notation's own semantics, like the shapes of a BPMN model, not a licence to use them elsewhere.
+
+```md
+<DiagramFrame padding="compact" class="mb-4">
+<WardleyMap wardleyMapFilePath="resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMap>
+</DiagramFrame>
+```
+
+Demo: the three slides after the `dmn` demo in `deck/chapter/04-diagrams/04-diagrams.md`.

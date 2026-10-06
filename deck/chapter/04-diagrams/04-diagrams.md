@@ -131,7 +131,7 @@ accent: blue
 
 # Or a **modeled** diagram
 
-Standard notations: BPMN, DMN, and Mermaid, each on-brand.
+Standard notations, from BPMN and DMN to Event Storming and Mermaid.
 
 ---
 id: s-1acfed2c
@@ -147,7 +147,7 @@ engine: camunda7
 ---
 
 <!--
-  bpmn archetype: renders a .bpmn file via slidev-addon-bpmn.
+  bpmn archetype: renders a .bpmn file via slidev-addon-diagram-js.
   File lives in this chapter's resources/.
 -->
 
@@ -226,17 +226,94 @@ fullscreenFontSize: 12px
 ---
 
 <!--
-  dmn archetype: renders a .dmn decision (slidev-addon-dmn), the sibling of the
+  dmn archetype: renders a .dmn decision (slidev-addon-diagram-js), the sibling of the
   bpmn archetype. BPMN models the process, DMN models the decisions inside it.
   The mode prop mirrors bpmn: "table" (default) / "simulate" / "drd" / "modeler".
   "simulate" is DMN's answer to the bpmn token flow: pick inputs, hit Simulate,
   watch the firing rule light up. The Fullscreen button next to the form blows the
   table up to the full viewport (fullscreenFontSize sizes it for the back of the
   room). File lives in this chapter's resources/.
-  Transition: "Slidev can also draw from text: Mermaid."
+  Transition: "The same addon draws three more notations."
 -->
 
 A DMN decision, live: feed the inputs in and watch which rule fires.
+
+---
+id: s-86912c6f
+layout: content
+title: Or the teams behind the process
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  Team Topologies: slidev-addon-diagram-js also renders the Miragon modeler
+  notations. They have no archetype of their own: use `content` and put the addon
+  component inside a <DiagramFrame>, the same white card the diagram layouts use.
+  <TeamTopologiesModeler> shows a preview in the slide and an "Edit" button that
+  opens the full modeler fullscreen (palette, context pad, undo/redo). Edits live
+  in the running presentation only, they are not written back to the file.
+  <TeamTopologies> is the static sibling: a still image without the button.
+  REQUIRED: none (omit teamTopologiesFilePath for a blank canvas).
+  OPTIONAL: teamTopologiesFilePath (a .tt file in the chapter's resources/,
+  written without a leading slash so it resolves base-aware), width, height.
+  LIMIT: one diagram per slide, one caption line.
+  Transition: "From who builds it to what is worth building."
+-->
+
+<DiagramFrame padding="compact" class="mb-4">
+<TeamTopologiesModeler teamTopologiesFilePath="resources/04-diagrams/recruitment.tt" height="17rem"></TeamTopologiesModeler>
+</DiagramFrame>
+
+A **Team Topologies** diagram: hit Edit and reshape the teams on stage.
+
+---
+id: s-caaa55c3
+layout: content
+title: Or the strategy as a Wardley Map
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  Wardley Map: a .owm file in OWM text syntax, so the map is diffable like
+  Mermaid. <WardleyMapModeler> previews it with the fullscreen "Edit" view;
+  <WardleyMap> is the static sibling.
+  REQUIRED: none (omit wardleyMapFilePath for a blank map).
+  OPTIONAL: wardleyMapFilePath (a .owm file in the chapter's resources/), width, height.
+  LIMIT: one map per slide, one caption line.
+  Transition: "And when the room models together: Event Storming."
+-->
+
+<DiagramFrame padding="compact" class="mb-4">
+<WardleyMapModeler wardleyMapFilePath="resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMapModeler>
+</DiagramFrame>
+
+A **Wardley Map** written as text: hit Edit and move a component as the debate shifts.
+
+---
+id: s-6980c116
+layout: content
+title: Or an Event Storming board, live
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  Event Storming: a .storm board, again as the modeler: a preview in the slide
+  and the fullscreen "Edit" view. <EventStorming> is the static sibling. The sticky colours are the notation's own semantics, not brand
+  colours, exactly like the shapes of a BPMN model.
+  REQUIRED: none (omit eventStormingFilePath for a blank board).
+  OPTIONAL: eventStormingFilePath, width, height.
+  LIMIT: one board per slide, one caption line.
+  Transition: "Slidev can also draw from text: Mermaid."
+-->
+
+<DiagramFrame padding="compact" class="mb-4">
+<EventStormingModeler eventStormingFilePath="resources/04-diagrams/recruitment.storm" height="17rem"></EventStormingModeler>
+</DiagramFrame>
+
+An **Event Storming** board: hit Edit and keep modeling with the room.
 
 ---
 id: s-1ebd026a
@@ -319,7 +396,7 @@ accent: blue
 
 Or write the source inline on the slide, here as a sequence diagram.
 
-```mermaid {scale: 0.72}
+```mermaid {scale: 0.68}
 sequenceDiagram
   participant C as Candidate
   participant R as Recruiter

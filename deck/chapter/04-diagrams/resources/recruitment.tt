@@ -1,0 +1,156 @@
+{
+  "version": 3,
+  "title": "Recruitment: team topology",
+  "nodes": [
+    {
+      "id": "team_hiring",
+      "type": "stream-aligned",
+      "label": "Hiring Workflow",
+      "position": {
+        "x": 560,
+        "y": 202
+      },
+      "size": {
+        "width": 240,
+        "height": 96
+      },
+      "description": "Owns screening, interviews and offers end-to-end."
+    },
+    {
+      "id": "team_candidate",
+      "type": "stream-aligned",
+      "label": "Candidate Experience",
+      "position": {
+        "x": 240,
+        "y": 202
+      },
+      "size": {
+        "width": 240,
+        "height": 96
+      },
+      "description": "Owns the careers page and the application journey end-to-end."
+    },
+    {
+      "id": "team_matching",
+      "type": "complicated-subsystem",
+      "label": "CV Matching",
+      "position": {
+        "x": 870,
+        "y": 175
+      },
+      "size": {
+        "width": 170,
+        "height": 150
+      },
+      "description": "Specialists for the model that matches applications to roles."
+    },
+    {
+      "id": "team_platform",
+      "type": "platform",
+      "label": "Process Platform",
+      "position": {
+        "x": 240,
+        "y": 352
+      },
+      "size": {
+        "width": 560,
+        "height": 110
+      },
+      "description": "Self-service process engine, runtime and observability for all teams."
+    },
+    {
+      "id": "team_modeling",
+      "type": "enabling",
+      "label": "Process Modeling",
+      "position": {
+        "x": 60,
+        "y": 150
+      },
+      "size": {
+        "width": 120,
+        "height": 200
+      },
+      "description": "Coaches stream-aligned teams in BPMN and DMN, then steps back."
+    }
+  ],
+  "interactions": [
+    {
+      "id": "int_hiring_matching",
+      "mode": "collaboration",
+      "position": {
+        "x": 779,
+        "y": 214
+      },
+      "size": {
+        "width": 112,
+        "height": 72
+      },
+      "label": "matching rules"
+    },
+    {
+      "id": "int_platform_hiring",
+      "mode": "x-as-a-service",
+      "position": {
+        "x": 636,
+        "y": 286
+      },
+      "size": {
+        "width": 88,
+        "height": 78
+      }
+    },
+    {
+      "id": "int_platform_candidate",
+      "mode": "x-as-a-service",
+      "position": {
+        "x": 316,
+        "y": 286
+      },
+      "size": {
+        "width": 88,
+        "height": 78
+      }
+    },
+    {
+      "id": "int_modeling_candidate",
+      "mode": "facilitating",
+      "position": {
+        "x": 168,
+        "y": 208
+      },
+      "size": {
+        "width": 84,
+        "height": 84
+      }
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow_main",
+      "position": {
+        "x": 60,
+        "y": 60
+      },
+      "size": {
+        "width": 980,
+        "height": 56
+      },
+      "label": "Flow of change"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "ann_matching_handover",
+      "text": "Collaboration until the matching rules are stable, then X-as-a-Service",
+      "position": {
+        "x": 830,
+        "y": 350
+      },
+      "size": {
+        "width": 200,
+        "height": 64
+      },
+      "attachedTo": "int_hiring_matching"
+    }
+  ]
+}

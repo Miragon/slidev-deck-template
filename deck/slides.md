@@ -13,8 +13,7 @@ transition: slide-up
 # (e.g. Netlify) and fails `npm run build` there. Export the PDF locally with
 # `npm run export` instead. See README → "Presenting and exporting".
 addons:
-  - slidev-addon-bpmn
-  - slidev-addon-dmn
+  - slidev-addon-diagram-js
   # Per-speaker slide selection. Inert unless a profile is selected;
   # see .slidev-profiles/README.md.
   - '@miragon/slidev-speaker-profiles'

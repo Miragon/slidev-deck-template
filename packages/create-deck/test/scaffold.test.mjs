@@ -101,7 +101,7 @@ test('generates a clean standalone package.json', () => {
 test('derives runtime deps from the reference manifest; validator + portless as devDeps', () => {
   const pkg = pkgOf(out)
   // Slidev runtime comes from the reference deck/package.json …
-  for (const dep of ['@slidev/cli', 'slidev-addon-bpmn', 'slidev-addon-dmn', 'vue']) {
+  for (const dep of ['@slidev/cli', 'slidev-addon-diagram-js', 'vue']) {
     assert.match(pkg.dependencies[dep], /^\d/, `missing runtime dep ${dep}`)
   }
   // … the validator is an exact-pinned devDependency (its bin backs the verify scripts,
