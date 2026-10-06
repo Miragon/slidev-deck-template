@@ -255,14 +255,13 @@ accent: blue
   in the running presentation only, they are not written back to the file.
   <TeamTopologies> is the static sibling: a still image without the button.
   REQUIRED: none (omit teamTopologiesFilePath for a blank canvas).
-  OPTIONAL: teamTopologiesFilePath (a .tt file in the chapter's resources/,
-  written without a leading slash so it resolves base-aware), width, height.
+  OPTIONAL: teamTopologiesFilePath (a .tt file in the chapter's resources/), width, height.
   LIMIT: one diagram per slide, one caption line.
   Transition: "From who builds it to what is worth building."
 -->
 
 <DiagramFrame padding="compact" class="mb-4">
-<TeamTopologiesModeler teamTopologiesFilePath="resources/04-diagrams/recruitment.tt" height="17rem"></TeamTopologiesModeler>
+<TeamTopologiesModeler teamTopologiesFilePath="/resources/04-diagrams/recruitment.tt" height="17rem"></TeamTopologiesModeler>
 </DiagramFrame>
 
 A **Team Topologies** diagram: hit Edit and reshape the teams on stage.
@@ -286,7 +285,7 @@ accent: blue
 -->
 
 <DiagramFrame padding="compact" class="mb-4">
-<WardleyMapModeler wardleyMapFilePath="resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMapModeler>
+<WardleyMapModeler wardleyMapFilePath="/resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMapModeler>
 </DiagramFrame>
 
 A **Wardley Map** written as text: hit Edit and move a component as the debate shifts.
@@ -310,7 +309,7 @@ accent: blue
 -->
 
 <DiagramFrame padding="compact" class="mb-4">
-<EventStormingModeler eventStormingFilePath="resources/04-diagrams/recruitment.storm" height="17rem"></EventStormingModeler>
+<EventStormingModeler eventStormingFilePath="/resources/04-diagrams/recruitment.storm" height="17rem"></EventStormingModeler>
 </DiagramFrame>
 
 An **Event Storming** board: hit Edit and keep modeling with the room.

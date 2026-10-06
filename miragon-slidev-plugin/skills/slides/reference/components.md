@@ -301,11 +301,11 @@ For a standard graph type that reads as text and wants auto-layout (a flow, a se
 | Wardley Map | `<WardleyMap>` | `<WardleyMapModeler>` | `wardleyMapFilePath` | `.owm` (OWM text) |
 | Event Storming | `<EventStorming>` | `<EventStormingModeler>` | `eventStormingFilePath` | `.storm` |
 
-All take `width` and `height`; a modeler without a file path starts blank. Put the file in the chapter's `resources/` and write the path **without a leading slash** (`resources/<chapter>/<file>`) so it resolves base-aware. The static viewers work in PDF export; modeler edits live in the running presentation only. The notation colours (Event Storming stickies, team types) are the notation's own semantics, like the shapes of a BPMN model, not a licence to use them elsewhere.
+All take `width` and `height`; a modeler without a file path starts blank. Put the file in the chapter's `resources/` and point at it as `/resources/<chapter>/<file>`, like the `diagram:` of `bpmn` and `dmn`; the addon resolves it inside the deck's base path. The static viewers work in PDF export; modeler edits live in the running presentation only. The notation colours (Event Storming stickies, team types) are the notation's own semantics, like the shapes of a BPMN model, not a licence to use them elsewhere.
 
 ```md
 <DiagramFrame padding="compact" class="mb-4">
-<WardleyMap wardleyMapFilePath="resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMap>
+<WardleyMap wardleyMapFilePath="/resources/04-diagrams/recruitment.owm" height="17rem"></WardleyMap>
 </DiagramFrame>
 ```
 
