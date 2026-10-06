@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -7,16 +8,20 @@ const props = withDefaults(
        The remaining values are deprecated leftovers of the old blue → teal →
        green ramp; they still resolve, but to "blue-mid". */
     accent?: 'blue' | 'blue-mid' | 'teal' | 'green-deep' | 'green-mid' | 'green'
+    /* A verdict the card delivers. Wins over `accent`. */
+    status?: 'success' | 'warning' | 'danger'
     padding?: 'compact' | 'standard' | 'generous'
     icon?: string
     align?: 'left' | 'center' | 'right'
   }>(),
   { accent: 'blue', padding: 'standard', align: 'left' },
 )
+
+const toneClass = computed(() => (props.status ? `mg-card--status-${props.status}` : `mg-card--accent-${props.accent}`))
 </script>
 
 <template>
-  <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`, `mg-card--accent-${props.accent}`]">
+  <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`, toneClass]">
     <span v-if="icon" class="mg-card__icon" :class="icon" aria-hidden="true"></span>
     <h3 v-if="title" class="mg-card__title">{{ title }}</h3>
     <div class="mg-card__body"><slot /></div>
@@ -52,6 +57,11 @@ const props = withDefaults(
 .mg-card--accent-green-deep,
 .mg-card--accent-green-mid,
 .mg-card--accent-green { --mg-card-accent: var(--miragon-card-accent-blue-mid); }
+/* Status replaces the accent when a card delivers a verdict. The three status
+   tokens are all AA as text on white (5.3:1 and up). */
+.mg-card--status-success { --mg-card-accent: var(--miragon-success); }
+.mg-card--status-warning { --mg-card-accent: var(--miragon-warning); }
+.mg-card--status-danger { --mg-card-accent: var(--miragon-danger); }
 
 .mg-card__icon {
   display: block;

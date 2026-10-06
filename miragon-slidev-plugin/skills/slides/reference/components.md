@@ -36,6 +36,7 @@ The canonical white card (white background always, accent on the title only). Fo
 |---|---|---|---|
 | `title` (str) | free text | none | card title (gets the accent colour) |
 | `accent` | `blue` · `blue-mid` | `blue` | the two sanctioned stops (`#335DE5` / `#2B50D4`, both AA on white). `teal` · `green-deep` · `green-mid` · `green` are **deprecated aliases** that render as `blue-mid`; accepted so older decks keep working, never written in new slides |
+| `status` | `success` · `warning` · `danger` | none | optional verdict: colours the title and the icon with the status token (`--miragon-success` / `--miragon-warning` / `--miragon-danger`, all AA on white) and **wins over `accent`**. The card stays white. See "Status" below |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
 | `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-grid-3x3`, `i-lucide-box` | none | optional icon shown above the title in the accent colour; omit for a plain text card |
 | `align` | `left` · `center` · `right` | `left` | horizontal alignment of icon, title, and body |
@@ -44,6 +45,13 @@ The canonical white card (white background always, accent on the title only). Fo
 Accent by card count, alternating the two stops left → right: **2** → blue, blue-mid · **3** → blue, blue-mid, blue · **4** → blue, blue-mid, blue, blue-mid · **6** → the same alternation continued.
 
 **Why there is no green stop.** A card title is text on a white card. Miragon green `#00E676` sits at 1.67:1 on white and fails WCAG AA, so it is never a title colour; green stays on surfaces and graphics (the gradient accent bar, the bullet markers, one node in a diagram). Even a hero's `**bold**` word renders in brand blue for the same reason. Teal is not part of the Miragon palette at all. Both survive only as the deprecated aliases above. The stops resolve to the `--miragon-card-accent-*` tokens in `theme.css`, which mirror `tokens.json`.
+
+**Status: a verdict, not a variety.** Leave `status` off by default; blue is the card colour. Set it only where a slide delivers a judgement the audience should read at a glance: `success` (works, solved, recommended), `warning` (works with a caveat), `danger` (does not work, avoid, a bad practice). The brand keeps status colours strictly for states, so never use them to make a grid more colourful, and do not mix status cards with decorative accents on the same verdict. **Colour never carries the state alone:** name it with a word in the body ("Solved.", "Avoid.") or with an icon that says the same thing (`i-lucide-circle-check`, `i-lucide-triangle-alert`, `i-lucide-circle-x`). Only the title and the icon take the status colour; the card, its border, and the body markers stay as they are.
+
+```md
+<Card title="Timing" status="success" icon="i-lucide-timer">Solved. The engine never runs ahead of our data.</Card>
+<Card title="Delivery" status="danger" icon="i-lucide-send">Not guaranteed. A failed call loses the message.</Card>
+```
 
 `icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass a **Lucide Iconify class** (`i-lucide-*`), never an emoji. **Lucide is the one sanctioned icon set** (outline, 24px grid); it ships with the toolkit as `@iconify-json/lucide`, and mixing in a second family (Carbon, Phosphor, Material, …) breaks the brand's one-set rule even though other collections happen to resolve. Write the **full class literally** in the slide (e.g. `icon="i-lucide-grid-3x3"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
 
