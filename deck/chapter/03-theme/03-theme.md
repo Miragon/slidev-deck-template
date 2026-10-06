@@ -130,6 +130,35 @@ A diagram beside its explanation.
 </CardGrid>
 
 ---
+id: s-b8eb68a1
+layout: content
+title: A card can carry a verdict
+eyebrow: 03 - The Miragon theme
+accent: blue
+---
+
+<!--
+  Card `status`: for a slide that delivers a verdict, never for variety.
+  OPTIONAL: `status` is `success`, `warning` or `danger`. It colours the
+  title and the icon with the status token and wins over `accent`. The card
+  itself stays white.
+  LIMIT: colour never carries the state alone. Name it with a word in the
+  body or with an icon that says the same thing.
+  HOW TO USE: leave `status` off for every ordinary card; blue is the default.
+  Transition: "And when the content is a table?"
+-->
+
+<CardGrid cols="3">
+
+<Card title="Components" status="success" icon="i-lucide-circle-check">Recommended. The theme carries every brand rule for you.</Card>
+
+<Card title="Spacing nudge" status="warning" icon="i-lucide-triangle-alert">Works with a caveat. Spacing only, and on the 8-point scale.</Card>
+
+<Card title="Raw HTML and hex" status="danger" icon="i-lucide-circle-x">Avoid. The slide drifts off brand and verify fails it.</Card>
+
+</CardGrid>
+
+---
 id: s-89805ad0
 layout: content
 title: Tabular data, on-brand
