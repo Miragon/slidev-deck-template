@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "@miragon/slidev-toolkit": ">=1.15.0 <2",
-    "@slidev/parser": "^52.0.0 || ^53.0.0"
+    "@slidev/parser": "^53.0.0"
   },
   "files": [
     "bin",
