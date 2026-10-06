@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.23.0](https://github.com/Miragon/slidev-deck-template/compare/v1.22.0...v1.23.0) (2026-10-06)
+
+
+### Features
+
+* **deps:** update Slidev to 53.0.0 ([#180](https://github.com/Miragon/slidev-deck-template/issues/180)) ([c65ceaa](https://github.com/Miragon/slidev-deck-template/commit/c65ceaa07969fe233cc1d52cdc7b56783b90d795))
+* **slidev-toolkit:** move to slidev-addon-diagram-js ([#178](https://github.com/Miragon/slidev-deck-template/issues/178)) ([592ca10](https://github.com/Miragon/slidev-deck-template/commit/592ca10fba2c4d7c7f9045ae87d3e04b844b8d91))
+
 ## [1.22.0](https://github.com/Miragon/slidev-deck-template/compare/v1.21.0...v1.22.0) (2026-10-06)
 
 

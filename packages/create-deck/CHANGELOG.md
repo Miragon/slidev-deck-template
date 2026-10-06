@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.5.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.8...create-slidev-deck-v1.5.0) (2026-10-06)
+
+
+### Features
+
+* **slidev-toolkit:** move to slidev-addon-diagram-js ([#178](https://github.com/Miragon/slidev-deck-template/issues/178)) ([592ca10](https://github.com/Miragon/slidev-deck-template/commit/592ca10fba2c4d7c7f9045ae87d3e04b844b8d91))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.22.0 to 1.23.0
+    * @miragon/slidev-speaker-profiles bumped from 0.2.3 to 0.3.0
+    * @miragon/slidev-validator bumped from 0.6.2 to 0.7.0
+
 ## [1.4.8](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.4.7...create-slidev-deck-v1.4.8) (2026-10-06)
 
 

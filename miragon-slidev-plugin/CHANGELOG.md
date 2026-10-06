@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.6.0...miragon-slidev-plugin-v1.7.0) (2026-10-06)
+
+
+### Features
+
+* **slidev-toolkit:** move to slidev-addon-diagram-js ([#178](https://github.com/Miragon/slidev-deck-template/issues/178)) ([592ca10](https://github.com/Miragon/slidev-deck-template/commit/592ca10fba2c4d7c7f9045ae87d3e04b844b8d91))
+
+
+### Bug Fixes
+
+* **deps:** update slidev-addon-diagram-js to 2.1.1 ([#182](https://github.com/Miragon/slidev-deck-template/issues/182)) ([ad24b26](https://github.com/Miragon/slidev-deck-template/commit/ad24b263472cd83936f5a87625656c0f81e2b36c))
+
 ## [1.6.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.5.0...miragon-slidev-plugin-v1.6.0) (2026-10-06)
 
 
