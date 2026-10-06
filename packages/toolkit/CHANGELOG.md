@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/Miragon/slidev-deck-template/compare/v1.20.0...v1.21.0) (2026-10-06)
+
+
+### Features
+
+* **slidev-toolkit:** add align: stretch to the mermaid and excalidraw split mode ([#175](https://github.com/Miragon/slidev-deck-template/issues/175)) ([3bc7bf0](https://github.com/Miragon/slidev-deck-template/commit/3bc7bf0a91bbea800cdcbd23b818888a61c165dc))
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** make the PDF export work and style tables in it ([#169](https://github.com/Miragon/slidev-deck-template/issues/169)) ([d2b7183](https://github.com/Miragon/slidev-deck-template/commit/d2b71833b53c542c5cd2d7e40321bfa1da07c4d2))
+
 ## [1.20.0](https://github.com/Miragon/slidev-deck-template/compare/v1.19.0...v1.20.0) (2026-10-05)
 
 
