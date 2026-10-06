@@ -2,11 +2,11 @@
 /**
  * bpmn — Slide centered on a BPMN diagram (STATIC world, no Mesh shader).
  *
- * Renders a .bpmn file from `slidev-addon-bpmn` in one of three modes,
+ * Renders a .bpmn file from `slidev-addon-diagram-js` in one of three modes,
  * with an optional title/eyebrow header above and an optional caption below.
  * The diagram is the focal point.
  *
- * Requires: `slidev-addon-bpmn` must be listed in the slides.md frontmatter
+ * Requires: `slidev-addon-diagram-js` must be listed in the slides.md frontmatter
  * `addons:` block. The addon auto-registers all three components used here.
  *
  * Frontmatter props:

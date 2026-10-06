@@ -1,0 +1,18 @@
+title Recruitment
+anchor Candidate [0.95, 0.52]
+anchor Hiring Manager [0.95, 0.74]
+component Hiring Decision [0.8, 0.6]
+component Interview [0.66, 0.78]
+component Screening [0.64, 0.34]
+component Decision Rules [0.48, 0.44]
+component Process Engine [0.34, 0.68]
+component Cloud Runtime [0.1, 0.86] (outsource)
+evolve Screening 0.58
+Candidate -> Hiring Decision
+Hiring Manager -> Hiring Decision
+Hiring Decision -> Interview
+Hiring Decision -> Screening
+Screening -> Decision Rules
+Screening -> Process Engine
+Interview -> Process Engine
+Process Engine -> Cloud Runtime

@@ -1,0 +1,24 @@
+title Recruitment
+
+actor Candidate [80, 300]
+command Submit Application [240, 300]
+aggregate Application [420, 290] (id agg_application)
+event Application Received [620, 300]
+policy When received, screen it [800, 300]
+command Screen Application [980, 300]
+aggregate Application [1160, 290] (id agg_application_2)
+event Application Screened [1340, 300]
+readmodel Candidate Pipeline [620, 120]
+external Job Portal [420, 520]
+hotspot Duplicate application? [620, 520]
+note Design-level session: recruitment flow [80, 80]
+
+Candidate -> Submit Application
+Submit Application -> #agg_application
+Submit Application -> Job Portal
+#agg_application -> Application Received
+Application Received -> Candidate Pipeline
+Application Received -> When received, screen it
+When received, screen it -> Screen Application
+Screen Application -> #agg_application_2
+#agg_application_2 -> Application Screened

@@ -57,8 +57,8 @@ If you do nothing else, respect these:
 - **Keep content clear of the global chrome.** The template paints a page/chapter display bottom-left and a progress bar on top of every content slide; author content must not overlap or crowd them. The verify suite reserves a toolkit-owned safe area (`packages/toolkit/global/safe-areas.json`) around each and flags collisions. Deliberate exceptions are per-slide, justified, and never silent (`safeAreaExceptions` in frontmatter). See the `slides` skill.
 - **`deck/slides.md`** is the entry; each chapter is a folder `deck/chapter/NN-name/` with `NN-name.md` + a `resources/` subfolder, imported via `src:`. Every chapter begins with a `section` archetype slide.
 - **Vary `leftIsGood` across `goodbad` slides** so "Recommended" doesn't always land on the same side.
-- **The `bpmn` archetype requires `slidev-addon-bpmn`**, already in `package.json` and registered in `deck/slides.md` frontmatter. Put `.bpmn` files in the chapter's `resources/` folder and set `diagram: /resources/<chapter>/<file>`.
-- **The `dmn` archetype requires `slidev-addon-dmn`** (the sibling of `bpmn`: a decision table instead of a process), already in `package.json` and registered in `deck/slides.md` frontmatter. Put `.dmn` files in the chapter's `resources/` folder and set `diagram: /resources/<chapter>/<file>`.
+- **The `bpmn` and `dmn` archetypes require `slidev-addon-diagram-js`** (one addon for both: `bpmn` renders a process, `dmn` the decisions inside it), already in `package.json` and registered in `deck/slides.md` frontmatter. Put `.bpmn` / `.dmn` files in the chapter's `resources/` folder and set `diagram: /resources/<chapter>/<file>`.
+- **Team Topologies, Wardley Maps and Event Storming come from the same addon**, as components rather than archetypes: `<TeamTopologies>`, `<WardleyMap>`, `<EventStorming>` (or the matching `…Modeler`) inside a `<DiagramFrame>` on a `content` slide, pointing at a `.tt` / `.owm` / `.storm` file in the chapter's `resources/`. See the `slides` skill (`reference/components.md`, "Diagrams").
 
 Everything above is expanded in the `slides` skill.
 

@@ -44,22 +44,23 @@ Set `layout:` per slide to one of the twelve archetypes:
 
 ### BPMN and DMN need an addon
 
-The `bpmn` and `dmn` layouts render real diagrams via community addons, which are **not** dependencies of this toolkit. Add whichever you use to your deck:
+The `bpmn` and `dmn` layouts render real diagrams via the `slidev-addon-diagram-js` community addon, which is **not** a dependency of this toolkit. Add it to your deck:
 
 ```bash
-npm i slidev-addon-bpmn slidev-addon-dmn
+npm i slidev-addon-diagram-js
 ```
 
 ```yaml
 ---
 theme: '@miragon/slidev-toolkit'
 addons:
-  - slidev-addon-bpmn   # for layout: bpmn
-  - slidev-addon-dmn    # for layout: dmn
+  - slidev-addon-diagram-js   # for layout: bpmn and layout: dmn
 ---
 ```
 
 Then reference the file: `diagram: /resources/<path>/<file>.bpmn` (or `.dmn`).
+
+The same addon also renders Team Topologies (`.tt`), Wardley Maps (`.owm`) and Event Storming boards (`.storm`). They have no layout of their own: put `<TeamTopologies>`, `<WardleyMap>` or `<EventStorming>` (or the matching `…Modeler`) inside a `<DiagramFrame>` on a `content` slide.
 
 ## Assets and diagrams
 

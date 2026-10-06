@@ -20,7 +20,7 @@
     "slidev": ">=0.48.0"
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.138",
+    "@iconify-json/lucide": "1.2.140",
     "@paper-design/shaders": "0.0.81"
   },
   "devDependencies": {

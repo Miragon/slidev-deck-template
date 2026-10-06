@@ -139,7 +139,7 @@ Two neutral panels `Model A` / `Model B`, then a one-click reveal of the verdict
 
 ## bpmn: BPMN diagram (static / token simulation / modeler)
 
-A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
+A `.bpmn` file rendered via `slidev-addon-diagram-js`. The diagram is the focal point.
 
 | Frontmatter | Values |
 |---|---|
@@ -157,11 +157,11 @@ A `.bpmn` file rendered via `slidev-addon-bpmn`. The diagram is the focal point.
 
 **Split mode** (`side`) puts the framed diagram on one side and your points on the other, without the `content` + `SplitView` scaffolding. Vary `side` across slides so the diagram is not always on the same edge, and keep the content column short (~4 bullets) so it clears the bottom-left page chrome (verify flags collisions).
 
-**Dependency:** `slidev-addon-bpmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
+**Dependency:** `slidev-addon-diagram-js` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
 ## dmn: DMN decision (table / live simulation / DRD / modeler)
 
-A `.dmn` file rendered via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN models the process, DMN the decisions inside it. Like `bpmn`, the `mode` prop dynamically controls which addon component is rendered. The decision is the focal point.
+A `.dmn` file rendered via `slidev-addon-diagram-js`. The sibling of `bpmn`: BPMN models the process, DMN the decisions inside it. Like `bpmn`, the `mode` prop dynamically controls which addon component is rendered. The decision is the focal point.
 
 | Frontmatter | Values |
 |---|---|
@@ -182,7 +182,7 @@ A `.dmn` file rendered via `slidev-addon-dmn`. The sibling of `bpmn`: BPMN model
 
 **Split mode** works exactly like `bpmn`'s (`side` + `ratio`); keep the content column short so it clears the bottom-left page chrome.
 
-**Dependency:** `slidev-addon-dmn` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
+**Dependency:** `slidev-addon-diagram-js` (the same addon as `bpmn`) must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
 ## mermaid: Mermaid diagram framed on-brand (static)
 

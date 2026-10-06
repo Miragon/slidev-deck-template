@@ -2,13 +2,13 @@
 /**
  * dmn — Slide centered on a DMN decision (STATIC world, no Mesh shader).
  *
- * Renders a .dmn file from `slidev-addon-dmn` in one of four modes, with an
+ * Renders a .dmn file from `slidev-addon-diagram-js` in one of four modes, with an
  * optional title/eyebrow header above and an optional caption below. The
  * decision is the focal point. The sibling of the `bpmn` archetype: BPMN models
  * the process, DMN models the decisions inside it — and like `bpmn`, the `mode`
  * prop dynamically controls which addon component is rendered.
  *
- * Requires: `slidev-addon-dmn` must be listed in the slides.md frontmatter
+ * Requires: `slidev-addon-diagram-js` must be listed in the slides.md frontmatter
  * `addons:` block. The addon auto-registers all four components used here.
  *
  * Frontmatter props:
