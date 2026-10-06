@@ -396,7 +396,7 @@ accent: blue
 
 Or write the source inline on the slide, here as a sequence diagram.
 
-```mermaid {scale: 0.72}
+```mermaid {scale: 0.68}
 sequenceDiagram
   participant C as Candidate
   participant R as Recruiter
