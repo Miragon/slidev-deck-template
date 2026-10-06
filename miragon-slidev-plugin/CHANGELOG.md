@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.4.0...miragon-slidev-plugin-v1.5.0) (2026-10-06)
+
+
+### Features
+
+* **slidev-toolkit:** add align: stretch to the mermaid and excalidraw split mode ([#175](https://github.com/Miragon/slidev-deck-template/issues/175)) ([3bc7bf0](https://github.com/Miragon/slidev-deck-template/commit/3bc7bf0a91bbea800cdcbd23b818888a61c165dc))
+
 ## [1.4.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.3.0...miragon-slidev-plugin-v1.4.0) (2026-10-05)
 
 
