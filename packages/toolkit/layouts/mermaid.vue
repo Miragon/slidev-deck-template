@@ -18,6 +18,10 @@
  *   ratio    — diagram/content column ratio in split mode (default "1/1")
  *   height   — CSS height for the framed diagram card in split mode (default
  *              "22rem"; ignored in full mode, where the card fills the slide)
+ *   align    — vertical alignment of the two columns in split mode: "center"
+ *              (default) | "stretch". With "stretch" the frame and the
+ *              ::caption:: column share one height, `height` becomes the frame's
+ *              minimum, and a <CardGrid> directly in the column fills it.
  * Slots:
  *   default    — the ```mermaid fence (framed in the white card)
  *   ::caption:: — full mode: caption below. split mode: the content column.
@@ -33,9 +37,10 @@ const props = withDefaults(
     side?: 'left' | 'right'
     ratio?: string
     height?: string
+    align?: 'center' | 'stretch'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', ratio: '1/1', height: '22rem' },
+  { accent: 'blue', ratio: '1/1', height: '22rem', align: 'center' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -44,6 +49,10 @@ const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
 // Grafikakzent, getragen vom Gradient-Token.
 const accentVar = 'var(--miragon-blue)'
+
+const stretched = computed(() => props.align === 'stretch')
+const frameHeight = computed(() => (stretched.value ? undefined : props.height))
+const frameMinHeight = computed(() => (stretched.value ? { minHeight: props.height } : undefined))
 </script>
 
 <template>
@@ -65,9 +74,9 @@ const accentVar = 'var(--miragon-blue)'
         </div>
       </template>
 
-      <SplitView v-else class="mermaid-split" :ratio="ratio" :reverse="side === 'right'" align="center">
+      <SplitView v-else class="mermaid-split" :class="{ 'mg-diagram-split--stretch': stretched }" :ratio="ratio" :reverse="side === 'right'" :align="align">
         <template #visual>
-          <DiagramFrame class="mermaid-canvas mermaid-canvas--split" :height="height">
+          <DiagramFrame class="mermaid-canvas mermaid-canvas--split" :height="frameHeight" :style="frameMinHeight">
             <slot />
           </DiagramFrame>
         </template>

@@ -22,6 +22,10 @@
  *   ratio    — diagram/content column ratio in split mode (default "1/1")
  *   height   — CSS height for the framed diagram card in split mode (default
  *              "22rem"; ignored in full mode, where the card fills the slide)
+ *   align    — vertical alignment of the two columns in split mode: "center"
+ *              (default) | "stretch". With "stretch" the frame and the
+ *              content column share one height, `height` becomes the frame's
+ *              minimum, and a <CardGrid> directly in the column fills it.
  * Slot:
  *   default  — full mode: optional caption below the diagram.
  *              split mode: the content column beside the diagram (bullets,
@@ -40,9 +44,10 @@ const props = withDefaults(
     side?: 'left' | 'right'
     ratio?: string
     height?: string
+    align?: 'center' | 'stretch'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', ratio: '1/1', height: '22rem', alt: '' },
+  { accent: 'blue', ratio: '1/1', height: '22rem', align: 'center', alt: '' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -51,6 +56,10 @@ const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
 // Grafikakzent, getragen vom Gradient-Token.
 const accentVar = 'var(--miragon-blue)'
+
+const stretched = computed(() => props.align === 'stretch')
+const frameHeight = computed(() => (stretched.value ? undefined : props.height))
+const frameMinHeight = computed(() => (stretched.value ? { minHeight: props.height } : undefined))
 
 function withBase(path?: string) {
   if (!path) return path
@@ -79,9 +88,9 @@ const imageSrc = computed(() => withBase(props.diagram))
         </div>
       </template>
 
-      <SplitView v-else class="excalidraw-split" :ratio="ratio" :reverse="side === 'right'" align="center">
+      <SplitView v-else class="excalidraw-split" :class="{ 'mg-diagram-split--stretch': stretched }" :ratio="ratio" :reverse="side === 'right'" :align="align">
         <template #visual>
-          <DiagramFrame class="excalidraw-canvas excalidraw-canvas--split" padding="generous" :height="height">
+          <DiagramFrame class="excalidraw-canvas excalidraw-canvas--split" padding="generous" :height="frameHeight" :style="frameMinHeight">
             <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
           </DiagramFrame>
         </template>

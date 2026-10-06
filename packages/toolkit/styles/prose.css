@@ -80,3 +80,26 @@
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }
+
+/* align: stretch im Split-Modus (excalidraw / mermaid): Rahmen und Content-
+   Spalte teilen sich die Zeilenhöhe. Der Rahmen trägt nur seine min-height zur
+   Zeile bei (flex-basis 0) und füllt sie dann; ein CardGrid direkt in der
+   Spalte füllt sie ohne eigenen Außenabstand, reiner Text bleibt zentriert. */
+.mg-diagram-split--stretch > .mg-split__visual,
+.mg-diagram-split--stretch > .mg-split__body {
+  display: flex;
+  flex-direction: column;
+}
+.mg-diagram-split--stretch > .mg-split__visual > .mg-frame {
+  flex: 1 1 0;
+}
+.mg-diagram-split--stretch > .mg-split__body > .mg-diagram-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.mg-diagram-split--stretch .mg-diagram-body > .mg-card-grid {
+  flex: 1 1 auto;
+  margin: 0;
+}
