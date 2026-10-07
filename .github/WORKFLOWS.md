@@ -32,6 +32,7 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 - Publishing is **idempotent** — a job skips if that package's current version is already on npm.
 - `@miragon/slidev-validator` is newer: its **first** publish must be done once by a maintainer (Trusted Publishing cannot create a brand-new package name); afterwards `publish-validator` takes over.
 - `workflow_dispatch` inputs allow a dry-run (all packages) or a manual `publish_current` recovery republish.
+- A manual run with `beta_package` and `beta_version` publishes **one package from the selected branch** as a beta (`x.y.z-beta.N`, dist-tag `beta`) via the `publish-beta` job. The version is set in the runner only: nothing is committed, tagged or released, `latest` does not move, and release-please keeps counting from the last stable version. Add `dry_run` to rehearse it. npm refuses a prerelease version without `--tag`, which is why `publish_current` cannot do this.
 
 ## Dependency updates
 

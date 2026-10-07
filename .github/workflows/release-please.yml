@@ -27,6 +27,12 @@ name: Release
 #      empty, so this job must NOT declare `environment:` — an environment claim
 #      the config doesn't expect makes the exchange 404. Keep them in sync: to
 #      re-add an environment, set the same name in the npm config first.
+#
+# BETA: a manual run with `beta_package` + `beta_version` publishes ONE package
+# from the SELECTED BRANCH (e.g. 0.4.0-beta.0) under the `beta` dist-tag, so a
+# change can be tried in a real deck before it is released. The version is set
+# in the runner only: nothing is committed, tagged or released, `latest` does
+# not move, and release-please keeps counting from the last stable version.
 on:
   push:
     branches: [main]
@@ -40,6 +46,20 @@ on:
         description: 'Publish the current package versions now (idempotent recovery lever; all packages)'
         type: boolean
         default: false
+      beta_package:
+        description: 'Publish a beta of this package from the selected branch (dist-tag beta)'
+        type: choice
+        default: none
+        options:
+          - none
+          - toolkit
+          - speaker-profiles
+          - validator
+          - create-deck
+      beta_version:
+        description: 'The beta version to publish, e.g. 0.4.0-beta.0'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -51,7 +71,7 @@ jobs:
     # push to main does not fail the workflow before the credentials exist.
     if: >-
       github.repository == 'Miragon/slidev-deck-template' &&
-      (github.event_name != 'workflow_dispatch' || !inputs.dry_run) &&
+      (github.event_name != 'workflow_dispatch' || (!inputs.dry_run && inputs.beta_package == 'none')) &&
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
     outputs:
@@ -195,12 +215,45 @@ jobs:
             npm publish -w packages/create-deck --provenance --access public
           fi
 
+  # Manual beta of ONE package from the selected branch (see the note at the top
+  # of this file). Inline for the same OIDC reason as the publish jobs above.
+  # With dry_run = true it rehearses the publish instead.
+  publish-beta:
+    if: >-
+      github.repository == 'Miragon/slidev-deck-template' &&
+      github.event_name == 'workflow_dispatch' && inputs.beta_package != 'none'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PACKAGE_DIR: packages/${{ inputs.beta_package }}
+      BETA_VERSION: ${{ inputs.beta_version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - name: Refuse a version that is not a beta
+        run: |
+          if ! [[ "$BETA_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            echo "::error::'$BETA_VERSION' is not a beta version, expected e.g. 0.4.0-beta.0"
+            exit 1
+          fi
+      - name: Publish the beta
+        run: |
+          npm pkg set version="$BETA_VERSION" -w "$PACKAGE_DIR"
+          npm publish -w "$PACKAGE_DIR" --provenance --access public --tag beta ${{ inputs.dry_run && '--dry-run' || '' }}
+
   # Manual sanity check: `Run workflow` with dry_run = true builds and runs
   # `npm publish --dry-run` without releasing or publishing anything.
   dry-run:
     if: >-
       github.repository == 'Miragon/slidev-deck-template' &&
-      github.event_name == 'workflow_dispatch' && inputs.dry_run
+      github.event_name == 'workflow_dispatch' && inputs.dry_run && inputs.beta_package == 'none'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
