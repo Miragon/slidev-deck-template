@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.4](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.5.3...create-slidev-deck-v1.5.4) (2026-10-07)
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** keep the mesh, showcase cards and code tabs in the PDF export ([#196](https://github.com/Miragon/slidev-deck-template/issues/196)) ([f7bd77c](https://github.com/Miragon/slidev-deck-template/commit/f7bd77cf52f52b3531e4d0f8f81b9923acf10568))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.26.0 to 1.26.1
+
 ## [1.5.3](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.5.2...create-slidev-deck-v1.5.3) (2026-10-07)
 
 
