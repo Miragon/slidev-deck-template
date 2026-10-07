@@ -22,6 +22,7 @@
     "shot": "node scripts/shot.mjs"
   },
   "overrides": {
-    "magic-string@1.4.3": "1.4.2"
+    "magic-string@1.4.3": "1.4.2",
+    "@codemirror/language@6.13.0": "6.12.4"
   }
 }
