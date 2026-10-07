@@ -49,6 +49,10 @@ On every push to `main`, release-please maintains a Release PR per target (versi
 
 A brand-new package's very first publish needs a one-time manual publish (OIDC can't configure a trusted publisher for a package that does not exist yet); every later release is tokenless. Full detail — the App-token auth, the OIDC constraints, and the template-only guards — is in [.github/WORKFLOWS.md](.github/WORKFLOWS.md).
 
+### Betas
+
+To try a change in a real deck before it is released, publish a beta: run the **Release** workflow manually on the branch, pick the package under `beta_package` and give a `beta_version` such as `0.4.0-beta.0` (the version the change will be released as, plus `-beta.N`). It lands on npm under the `beta` dist-tag with provenance. Nothing is committed, tagged or released, and `latest` stays where it is. A published version can never be overwritten or reused, so the next one is `-beta.1`. A deck pins the exact version (`npm i @miragon/slidev-speaker-profiles@0.4.0-beta.0`); the Pin Check does not accept the `beta` tag in a `package.json`.
+
 ## Hosting
 
 The template's own reference deck is served by Netlify via [`netlify.toml`](netlify.toml). A repo created from the template gets no site until someone connects it in the Netlify UI.
