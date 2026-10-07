@@ -115,7 +115,7 @@ items:
       - Wrap content in `<v-clicks>`
       - Each click reveals **one step**
       - The details live in the [Slidev docs](https://sli.dev/guide/animations)
-  - label: Code and diagrams
+  - label: Highlighted code
     icon: i-lucide-code
 ---
 
@@ -143,11 +143,10 @@ showcase: clickable cards, detail panel cross-fades.
   explanation (card 02). One break per body.
   OPTIONAL item.image + item.imageAlt: an image with a string body (shown on
   the next slide). Ignored with a list body; no caption.
-  OPTIONAL per-item slot `::item-N::` (1-based) in the slide body: compiled
-  Markdown instead of that item's body / image, here a CodeBlock with native
-  Shiki highlighting and line marks (card 04). The slot drops the white panel
-  card, so the component's own frame sits directly below the cards.
-  LIMIT: one framed component per slot; code stays within the 18-line limit.
+  EXCEPTION, code only: a per-item slot `::item-N::` (1-based) in the slide
+  body holds one CodeBlock with native Shiki highlighting and line marks
+  (card 04). It replaces that item's body / image and the white panel card.
+  LIMIT: one CodeBlock per slot, nothing else; code stays within 18 lines.
   Transition: "The same explorer, with room for the picture."
 -->
 

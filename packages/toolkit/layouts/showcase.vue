@@ -33,11 +33,10 @@
  *              items whose image needs room.
  *
  * Slots:
- *   item-N   — optional compiled Markdown for the N-th item (1-based), written
- *              in the slide body under a `::item-N::` marker. It replaces that
- *              item's `body` / `image` and the panel's white card, so a
- *              component that brings its own frame (a `<CodeBlock>`) sits
- *              directly below the cards. Items without a slot keep their `body`.
+ *   item-N   — optional, code only: one `<CodeBlock>` for the N-th item
+ *              (1-based), written in the slide body under a `::item-N::`
+ *              marker. Replaces that item's `body` / `image` and the panel's
+ *              white card. Items without a slot keep their `body`.
  */
 import { computed, onUnmounted, useSlots, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
