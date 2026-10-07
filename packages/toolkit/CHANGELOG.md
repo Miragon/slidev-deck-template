@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.0](https://github.com/Miragon/slidev-deck-template/compare/v1.23.0...v1.24.0) (2026-10-07)
+
+
+### Features
+
+* **slidev-toolkit:** stretch showcase cards to the panel height in cards: left ([#183](https://github.com/Miragon/slidev-deck-template/issues/183)) ([cfbd502](https://github.com/Miragon/slidev-deck-template/commit/cfbd5022ff8c1b5b5aab957d5e92d1fdd663f820))
+
 ## [1.23.0](https://github.com/Miragon/slidev-deck-template/compare/v1.22.0...v1.23.0) (2026-10-06)
 
 
