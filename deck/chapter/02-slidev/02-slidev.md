@@ -111,42 +111,26 @@ items:
       it becomes part of the deck, with full reactivity and no detour."
   - label: Click-through
     icon: i-lucide-mouse-pointer-2
-    body:
-      - Wrap content in `<v-clicks>`
-      - Each click reveals **one step**
-      - The details live in the [Slidev docs](https://sli.dev/guide/animations)
-  - label: Highlighted code
+    body: Wrap content in `<v-clicks>` to walk the audience through a slide one step
+      at a time.
+  - label: Code and diagrams
     icon: i-lucide-code
+    body: "**Rendered natively.**\nHighlighted snippets, Mermaid charts and BPMN
+      simulations. The full list lives in the [Slidev
+      docs](https://sli.dev/features/)."
+    image: /resources/02-slidev/build-flow.excalidraw.svg
+    imageAlt: The build flow from one Markdown file to web deck and PDF
 ---
-
-::item-4::
-
-<CodeBlock file="packages/toolkit/setup/mermaid.ts" lang="ts" expandable>
-
-```ts {3-5}
-export default defineMermaidSetup(() => ({
-  theme: 'base',
-  themeVariables: {
-    fontFamily: 'Geist',
-  },
-}))
-```
-
-</CodeBlock>
 
 <!--
 showcase: clickable cards, detail panel cross-fades.
   item.body is a string (one paragraph) OR a YAML list of strings (bullet list,
-  as on cards 01 and 03 here). Bodies support inline Markdown: `code`,
-  [links](url), **bold**, *italic* (see card 01's bold and card 03's link).
+  as on card 01 here). Bodies support inline Markdown: `code`, [links](url),
+  **bold**, *italic* (see card 01's bold and card 04's link).
   A newline in a string body ("...\n...") starts a new line: statement, then
-  explanation (card 02). One break per body.
-  OPTIONAL item.image + item.imageAlt: an image with a string body (shown on
-  the next slide). Ignored with a list body; no caption.
-  EXCEPTION, code only: a per-item slot `::item-N::` (1-based) in the slide
-  body holds one CodeBlock with native Shiki highlighting and line marks
-  (card 04). It replaces that item's body / image and the white panel card.
-  LIMIT: one CodeBlock per slot, nothing else; code stays within 18 lines.
+  explanation (cards 02 and 04). One break per body.
+  OPTIONAL item.image + item.imageAlt: an image right of a string body, sized
+  from the panel height (card 04). Ignored with a list body; no caption.
   Transition: "The same explorer, with room for the picture."
 -->
 

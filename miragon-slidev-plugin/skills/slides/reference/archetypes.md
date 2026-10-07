@@ -221,17 +221,16 @@ Internally it frames the diagram with the `DiagramFrame` component (see `referen
 
 ## showcase: interactive feature explorer (static, interactive)
 
-A row of cards; one active at a time, cross-fading a detail panel. Frontmatter-driven; the slide body is only read for per-item code slots, an exception (see below). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
+A row of cards; one active at a time, cross-fading a detail panel. Fully frontmatter-driven (no body slot). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | free text |
 | `accent` | blue / green / mixed (default mixed) |
-| `items` (array) | YAML array of `{ label, body?, icon?, image?, imageAlt? }` |
+| `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
 | `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
 | `gap` (str) | CSS length between the cards and the detail panel; default `1rem` (matches the card gap) |
 | `cards` | top (default) / left: where the cards sit relative to the detail panel |
-| **slot** `item-N` | exception, code only: one `<CodeBlock>` for the N-th item (1-based). Replaces its `body` / `image` and the white panel, see "Per-item slots" |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 
@@ -260,41 +259,6 @@ items:
     image: /resources/00-example-process/operate-incident.png
     imageAlt: The process in Camunda Operate with an incident on its first task
 ```
-
-**Per-item slots (`::item-N::`): the exception, for code only.** `body` and `image` are the default way to fill an item, and almost every showcase needs nothing else. A slot exists for one case: an item that shows code needing Shiki highlighting, which a frontmatter string cannot carry. Write exactly one `<CodeBlock>` (filename, language badge, `expandable`, line marks on the fence) under a `::item-N::` marker in the slide body (1-based, matching the item's position). Items without a slot keep their frontmatter `body`, so the two can be mixed on one slide.
-
-A slot costs the item everything the panel does for it:
-
-- **No white panel.** The content sits directly on the grey slide; only a `<CodeBlock>` brings a frame of its own.
-- **No `body`, no `image`.** Both are replaced, so the item has no explaining sentence. The label has to carry it.
-- **No managed height.** The panel neither sizes nor scrolls the content. Keep code within the 18-line limit.
-
-**Not for diagrams or text.** A diagram that exists as a file (an `.excalidraw.svg`, an exported BPMN) goes into the item's `image`, with `cards: left` when it needs room. A Mermaid, BPMN or DMN diagram that renders live gets its own slide with the `mermaid`, `bpmn`, `dmn` or `excalidraw` layout. Text stays in `body`. If you are wrapping slot content in a `<Card>`, setting a height class, or writing a sentence above a component, the content does not belong in a slot.
-
-````md
----
-layout: showcase
-title: One annotation covers both writes
-items:
-  - label: The service
-    icon: i-lucide-code
-  - label: The adapter
-    icon: i-lucide-plug
-    body: A plain sentence still works here.
----
-
-::item-1::
-
-<CodeBlock file="RegisterMembershipService.kt" lang="kotlin" expandable>
-
-```kotlin {2}
-@Service
-@Transactional
-class RegisterMembershipService
-```
-
-</CodeBlock>
-````
 
 **Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items), with at most one line break in a string `body`. One `image` per item, string `body` only; keep the text beside (or, with `cards: left`, above) an image to a statement plus one short sentence. With `cards: left` the labels share a narrow column, so keep them to one to three words.
 

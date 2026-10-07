@@ -10,7 +10,7 @@
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default mixed)
- *   items    — array of `{ label, body?, icon?, image?, imageAlt? }` objects
+ *   items    — array of `{ label, body, icon?, image?, imageAlt? }` objects
  *              (recommended: 3–4 cards).
  *              `body` is a string (one paragraph) or a string array (bullet list).
  *              A newline in a string `body` starts a new line.
@@ -31,19 +31,13 @@
  *              `image` below its text instead of next to it, both centred in the
  *              panel: the variant for
  *              items whose image needs room.
- *
- * Slots:
- *   item-N   — optional, code only: one `<CodeBlock>` for the N-th item
- *              (1-based), written in the slide body under a `::item-N::`
- *              marker. Replaces that item's `body` / `image` and the panel's
- *              white card. Items without a slot keep their `body`.
  */
-import { computed, onUnmounted, useSlots, watch } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
 
 interface Item {
   label: string
-  body?: string | string[]
+  body: string | string[]
   icon?: string
   image?: string
   imageAlt?: string
@@ -88,10 +82,6 @@ onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
 
 const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value))
 const activeItem = computed(() => props.items[selected.value])
-
-const slots = useSlots()
-const activeSlotName = computed(() => `item-${selected.value + 1}`)
-const activeItemHasSlot = computed(() => Boolean(slots[activeSlotName.value]))
 
 // Base-Pfad respektieren (GitHub Pages baut unter /<repo>/). Runtime-Strings
 // werden von Vite NICHT umgeschrieben — daher manuell mit BASE_URL auflösen.
@@ -165,12 +155,9 @@ function select(i: number, e: MouseEvent) {
           </button>
         </div>
 
-        <div class="showcase-detail" :class="{ 'is-bare': activeItemHasSlot }">
+        <div class="showcase-detail">
           <transition name="fade-detail" mode="out-in">
-            <div v-if="activeItemHasSlot" :key="`slot-${selected}`" class="detail-slot">
-              <slot :name="activeSlotName" />
-            </div>
-            <ul v-else-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
+            <ul v-if="Array.isArray(activeItem?.body)" :key="selected" class="detail-list">
               <li v-for="(line, li) in activeItem.body" :key="li" v-html="inline(line)"></li>
             </ul>
             <div v-else-if="activeItem?.image" :key="selected" class="detail-media">
@@ -359,22 +346,6 @@ function select(i: number, e: MouseEvent) {
   max-width: 50%;
   margin-right: 1rem;
   object-fit: contain;
-}
-
-/* Slot-Inhalt bringt seinen eigenen Rahmen mit (z. B. <CodeBlock>): das Panel
-   legt seine Karte ab, damit keine Karte in einer Karte sitzt. */
-.showcase-detail.is-bare {
-  flex-basis: 0;
-  min-height: 0;
-  align-items: flex-start;
-  padding: 0;
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
-}
-.detail-slot {
-  width: 100%;
-  min-width: 0;
 }
 
 .showcase-detail :deep(strong) {
