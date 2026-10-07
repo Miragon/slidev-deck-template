@@ -49,7 +49,7 @@ accent: blue
   Line highlighting is native Shiki, set on the fence, not a CodeBlock prop:
   `md {3-4}` marks lines statically; `md {3|4|all}` steps through them on click.
   The theme (styles/code.css) gives marked lines a blue band and left bar.
-  Transition: "And one source gives you every output."
+  Transition: "When the code is the slide, it gets a layout of its own."
 -->
 
 The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>` or `<Figure>` when text alone is not enough.
@@ -67,6 +67,54 @@ The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>
 </CodeBlock>
 
 *Highlight lines on the fence: `{1,4-5}` static, `{1|4|5}` per click.*
+
+---
+id: s-51f101ac
+layout: code
+title: Code gets its own window
+eyebrow: 02 - Slidev
+accent: blue
+files:
+  - setup/mermaid.ts
+  - setup/transformers.ts
+lang: ts
+---
+
+<!--
+  code: one code window as the focal point of the slide. Each fence in the
+  slide body is one tab; a tab click and advancing the slide are the same
+  action, so the slide walks through its files before it moves on.
+  REQUIRED: at least one code fence in the default slot.
+  OPTIONAL: files (tab labels, one per fence in source order), lang (badge),
+  ::lead:: (text above the window), ::caption:: (line below it), accent.
+  Line highlighting is native Shiki, set on each fence (`ts {3-5}`).
+  LIMIT: two to four tabs, each within the 18-line code limit; one sentence
+  in the lead, one line in the caption.
+  Transition: "And one source gives you every output."
+-->
+
+```ts {3-5}
+export default defineMermaidSetup(() => ({
+  theme: 'base',
+  themeVariables: {
+    fontFamily: 'Geist',
+  },
+}))
+```
+
+```ts {2}
+export default defineTransformersSetup(() => ({
+  pre: [wrapComponentBody],
+}))
+```
+
+::lead::
+
+The toolkit configures Slidev in two small setup files, so a deck never has to.
+
+::caption::
+
+*Each fence is a tab: click one, or just advance the slide.*
 
 ---
 id: s-c4821064

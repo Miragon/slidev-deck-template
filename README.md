@@ -33,7 +33,7 @@ You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `
 3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
 4. Or open the repo with Claude Code and let it draft the first pass from your outline.
 
-## The 15 archetypes
+## The 16 archetypes
 
 Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapter/`.
 
@@ -52,6 +52,7 @@ Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapte
 | `dmn` | A DMN decision table (needs `slidev-addon-diagram-js`) | 1 table |
 | `mermaid` | A Mermaid fence framed as the slide's focal point | 1 diagram, short caption |
 | `excalidraw` | An `.excalidraw.svg` framed as the slide's focal point | 1 diagram, short caption |
+| `code` | One code window as the slide's focal point; several fences become file tabs | 2–4 tabs, ≤ 18 lines each |
 | `showcase` | Interactive feature explorer: clickable cards + detail panel | 3–4 items |
 | `closing` | Animated closing slide | 1 CTA |
 

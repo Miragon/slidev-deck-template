@@ -1,6 +1,6 @@
 # Layout archetypes: full reference
 
-The theme ships **15 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block; match it.
+The theme ships **16 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block; match it.
 
 `accent` is `blue` (default) · `green` · `mixed` unless noted. It tints the **gradient accent bar and the bullet markers**, never the type: the text accent (eyebrow, bold word) is always the brand blue `#335DE5`, because green `#00E676` reaches 1.67:1 on a light ground and fails WCAG AA. So `accent: green` buys a green bar, not green words. The one text tone that is not brand blue is the `compare` right panel title, which takes the success status colour `#0B7A55` when `accent` is `mixed` or `green` (see that archetype).
 
@@ -218,6 +218,58 @@ The sibling of `bpmn` / `dmn` / `mermaid`, but for a hand-drawn `.excalidraw.svg
 | **slot** | full mode: optional caption below the diagram. **split mode**: the content column beside the diagram (bullets / `<StepList>` / `<Card>`, styled like a content slide). |
 
 Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use full mode when an Excalidraw diagram should be the framed focal point of a whole slide, and **split mode** (`side`) when it should sit beside its explanation without hand-building a `content` + `SplitView` layout. To frame one *part* of a slide manually reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.
+
+## code: one code window as the focal point (static, interactive)
+
+The slide for code that carries the message: header above, optional lead text, one white code window, optional caption below. The window holds the code fences from the **default slot**. One fence is a plain window with the file name in its header; several fences become **file tabs**, one active at a time. The active tab advances **either by clicking a tab OR by advancing the slide**, and both drive the same Slidev click counter. The layout registers the click steps itself, so you do **not** add a `clicks:` frontmatter; the last tab is the slide's final click.
+
+| Frontmatter | Values |
+|---|---|
+| `title`, `eyebrow` (str) | free text |
+| `accent` | blue (default) / green / mixed |
+| `files` (array) | file names, one per fence in source order: the tab labels (several fences) or the header label (one fence). Without it the tabs are numbered |
+| `lang` (str) | language badge on the right of the window header, e.g. `kotlin`. Highlighting itself follows each fence's language tag |
+| **default slot** | one or several code fences (or `<<<` imports); each fence is one tab |
+| **`::lead::` slot** | optional text above the window |
+| **`::caption::` slot** | optional caption below the window, written in `*italics*` like the diagram layouts |
+
+The window fills the height between lead and caption and keeps that size on every tab, so nothing jumps when the tab changes. Highlighting is native Shiki: mark lines on each fence (` ```kotlin {2,10-11} `), statically or per click. The text never sits inside the window: what the audience should take away goes into `::lead::`, a side remark into `::caption::`; both belong to the whole slide, not to a single tab.
+
+Use `code` when the code is the focal point or the slide compares several files. For a snippet that only supports the text of a `content` slide, a `<CodeBlock>` or a bare fence is enough.
+
+````md
+---
+layout: code
+title: One annotation covers both writes
+files:
+  - RegisterMembershipService.kt
+  - MembershipProcessAdapter.kt
+lang: kotlin
+---
+
+```kotlin {2}
+@Service
+@Transactional
+class RegisterMembershipService
+```
+
+```kotlin {3}
+@Component
+class MembershipProcessAdapter {
+  fun submitRegistration(id: MembershipId) {}
+}
+```
+
+::lead::
+
+The database write and the process start commit together.
+
+::caption::
+
+*The adapter joins the transaction the service opened.*
+````
+
+**Limit:** two to four tabs (short file names, they share one header row), each fence within the 18-line code limit. One sentence in the lead, one line in the caption.
 
 ## showcase: interactive feature explorer (static, interactive)
 
