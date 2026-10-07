@@ -221,17 +221,16 @@ Internally it frames the diagram with the `DiagramFrame` component (see `referen
 
 ## showcase: interactive feature explorer (static, interactive)
 
-A row of cards; one active at a time, cross-fading a detail panel. Frontmatter-driven; the slide body is only read for the optional per-item slots (see below). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
+A row of cards; one active at a time, cross-fading a detail panel. Fully frontmatter-driven (no body slot). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | free text |
 | `accent` | blue / green / mixed (default mixed) |
-| `items` (array) | YAML array of `{ label, body?, icon?, image?, imageAlt? }` |
+| `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
 | `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
 | `gap` (str) | CSS length between the cards and the detail panel; default `1rem` (matches the card gap) |
 | `cards` | top (default) / left: where the cards sit relative to the detail panel |
-| **slot** `item-N` | optional compiled Markdown for the N-th item (1-based), replacing its `body` / `image` |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 
@@ -260,33 +259,6 @@ items:
     image: /resources/00-example-process/operate-incident.png
     imageAlt: The process in Camunda Operate with an incident on its first task
 ```
-
-**Per-item slots (`::item-N::`).** A frontmatter `body` is a plain string, so it cannot carry a code fence with Shiki highlighting or any component. For that, write the item's content in the slide body under a `::item-N::` marker (1-based, matching the item's position). The slot replaces that item's `body` and `image`, and the detail panel drops its white card, because the slot's component brings its own frame: reach for a `<CodeBlock>` (filename, language badge, `expandable`, line marks on the fence) or another single framed component. Items without a slot keep their frontmatter `body`, so the two can be mixed on one slide. Keep code within the 18-line limit; the panel does not scroll.
-
-````md
----
-layout: showcase
-title: One annotation covers both writes
-items:
-  - label: The service
-    icon: i-lucide-code
-  - label: The adapter
-    icon: i-lucide-plug
-    body: A plain sentence still works here.
----
-
-::item-1::
-
-<CodeBlock file="RegisterMembershipService.kt" lang="kotlin" expandable>
-
-```kotlin {2}
-@Service
-@Transactional
-class RegisterMembershipService
-```
-
-</CodeBlock>
-````
 
 **Limit:** 3–4 cards. Keep `label` to one to three words; `body` is a single sentence or a short bullet list (3–4 items), with at most one line break in a string `body`. One `image` per item, string `body` only; keep the text beside (or, with `cards: left`, above) an image to a statement plus one short sentence. With `cards: left` the labels share a narrow column, so keep them to one to three words.
 
