@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.8.0...miragon-slidev-plugin-v1.9.0) (2026-10-07)
+
+
+### Features
+
+* **slidev-toolkit:** add a code layout with one window and file tabs ([#188](https://github.com/Miragon/slidev-deck-template/issues/188)) ([c31de25](https://github.com/Miragon/slidev-deck-template/commit/c31de2570fbc5694192477d83e581f436dce689e))
+
+
+### Reverts
+
+* **slidev-toolkit:** remove per-item slots from the showcase layout ([#187](https://github.com/Miragon/slidev-deck-template/issues/187)) ([9e7a49b](https://github.com/Miragon/slidev-deck-template/commit/9e7a49b01d1502a283ca31ee1015471d555bad6d))
+
 ## [1.8.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.7.0...miragon-slidev-plugin-v1.8.0) (2026-10-07)
 
 
