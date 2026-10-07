@@ -10,6 +10,7 @@
  * Fallback-Navy #0d0d2b für den ersten Frame / kein WebGL.
  */
 import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { useNav } from '@slidev/client'
 import {
   ShaderMount,
   meshGradientFragmentShader,
@@ -27,6 +28,7 @@ const SPEED = 0.6         // Animationsgeschwindigkeit
 
 const host = ref<HTMLDivElement | null>(null)
 let mount: ShaderMount | null = null
+const { isPrintMode } = useNav()
 
 onMounted(() => {
   if (!host.value) return
@@ -66,7 +68,7 @@ onMounted(() => {
       host.value,
       meshGradientFragmentShader,
       uniforms,
-      undefined,
+      isPrintMode.value ? { preserveDrawingBuffer: true } : undefined,
       reduceMotion ? 0 : SPEED,
       0,
       MIN_PIXEL_RATIO,

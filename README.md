@@ -84,7 +84,7 @@ Run these in your deck:
 |---|---|
 | `npm run dev` | Live preview at `https://<deck>.localhost` (portless); press `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere (Mesh animation included, no Node at runtime) |
-| `npm run export` | `slidev-exported.pdf` locally (needs Chromium; kept out of `build` so CI stays green) |
+| `npm run export` | `slidev-exported.pdf` locally, one page per click step so every `showcase` card and `code` tab is in the hand-out (needs Chromium; kept out of `build` so CI stays green) |
 | `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
 | `npm run verify:source` | Fast source-only guardrail checks, no browser; the subset CI runs |
 
