@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.7.0...miragon-slidev-plugin-v1.8.0) (2026-10-07)
+
+
+### Features
+
+* **slidev-toolkit:** add per-item slots to the showcase layout ([#185](https://github.com/Miragon/slidev-deck-template/issues/185)) ([d1ed4c8](https://github.com/Miragon/slidev-deck-template/commit/d1ed4c8d33b125681af9a79a531bb95721abb2f1))
+
 ## [1.7.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.6.0...miragon-slidev-plugin-v1.7.0) (2026-10-06)
 
 
