@@ -35,7 +35,7 @@ Set `layout:` per slide to one of the twelve archetypes:
 | Group | Layouts |
 |---|---|
 | Openers | `cover`, `hero`, `person`, `section` |
-| Content | `content`, `content-image` |
+| Content | `content`, `content-image`, `code` |
 | Decisions | `compare`, `goodbad` |
 | Process and rules | `bpmn`, `dmn` |
 | Explore and close | `showcase`, `closing` |

@@ -50,7 +50,7 @@ accent: blue
 
 - **Open and close:** `cover`, `hero`, `person`, `closing`
 - **Dividers:** `section`, `subsection`
-- **Content:** `content`, `content-image`, `showcase`
+- **Content:** `content`, `content-image`, `code`, `showcase`
 - **Decisions:** `compare`, `goodbad`
 - **Diagrams:** `bpmn`, `dmn`, `mermaid`, `excalidraw`
 
