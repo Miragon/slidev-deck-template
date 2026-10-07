@@ -19,6 +19,13 @@
   "engines": {
     "slidev": ">=0.48.0"
   },
+  "slidev": {
+    "defaults": {
+      "export": {
+        "withClicks": true
+      }
+    }
+  },
   "dependencies": {
     "@iconify-json/lucide": "1.2.140",
     "@paper-design/shaders": "0.0.81"

@@ -36,7 +36,7 @@ The deck consumes the toolkit by name (`theme: '@miragon/slidev-toolkit'`); you 
 |---|---|
 | `npm run dev` | Live preview at `https://<this-deck>.localhost` (portless); `p` for presenter mode, `o` for overview |
 | `npm run build` | Static `dist/` you can host anywhere |
-| `npm run export` | `slidev-exported.pdf` locally (needs Chromium) |
+| `npm run export` | `slidev-exported.pdf` locally, one page per click step (needs Chromium) |
 | `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
 | `npm run verify:source` | Fast source-only guardrail checks, no browser — the subset CI runs |
 | `npm run dev:profile` | Same preview plus the controls to pick which slides *you* present |

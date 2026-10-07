@@ -45,8 +45,9 @@
   opacity: 1;
 }
 .shiki.slidev-code .line.highlighted {
-  background: var(--miragon-blue-light);
-  box-shadow: inset 3px 0 0 var(--miragon-blue);
+  background:
+    linear-gradient(var(--miragon-blue), var(--miragon-blue)) left / 3px 100% no-repeat,
+    var(--miragon-blue-light);
 }
 
 /* A caption line under a fence (a following *italic* line) reads as a muted
