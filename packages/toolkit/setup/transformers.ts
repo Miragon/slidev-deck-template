@@ -25,7 +25,7 @@ import { defineTransformersSetup, defineMarkdownTransformer } from '@slidev/type
  *
  *   </Step>
  *
- * Paired with the `.step__body > p` rule in StepList.vue (which renders the
+ * Paired with the `.step__text > p` rule in StepList.vue (which renders the
  * resulting <p> inline) the step still reads as "Label: body" on one line.
  *
  * Scope is deliberately narrow: only the components whose default slot is a

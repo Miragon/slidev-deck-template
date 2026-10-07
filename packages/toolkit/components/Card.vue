@@ -24,7 +24,7 @@ const toneClass = computed(() => (props.status ? `mg-card--status-${props.status
   <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`, toneClass]">
     <span v-if="icon" class="mg-card__icon" :class="icon" aria-hidden="true"></span>
     <h3 v-if="title" class="mg-card__title">{{ title }}</h3>
-    <div class="mg-card__body"><slot /></div>
+    <div class="mg-card__body" :data-detail="title ? '' : undefined"><slot /></div>
   </div>
 </template>
 

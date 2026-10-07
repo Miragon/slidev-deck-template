@@ -63,7 +63,7 @@ const captionHtml = computed(() => {
       <img v-if="resolvedSrc" :src="resolvedSrc" :alt="alt" :style="{ maxHeight }" />
       <slot v-else />
     </div>
-    <div v-if="caption" class="mg-figure__caption" v-html="captionHtml"></div>
+    <div v-if="caption" class="mg-figure__caption" data-detail v-html="captionHtml"></div>
   </div>
 </template>
 
