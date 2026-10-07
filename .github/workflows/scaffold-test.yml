@@ -29,6 +29,7 @@ jobs:
       # Fast structural smoke tests: generated layout + the validator's own units.
       - run: npm test -w packages/create-deck
       - run: npm test -w packages/validator
+      - run: npm test -w packages/speaker-profiles
 
       # Scaffold a deck and prove it installs, builds and passes the source guardrails.
       - name: Scaffold a deck and verify it builds

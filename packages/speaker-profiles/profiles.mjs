@@ -91,12 +91,13 @@ export function isValidName(name) {
 export function readProfile(root, speaker) {
   const file = profilePath(root, speaker)
   if (!existsSync(file))
-    return { schemaVersion: SCHEMA_VERSION, speaker, hidden: [], order: null, knownIds: [] }
+    return { schemaVersion: SCHEMA_VERSION, speaker, hidden: [], reduced: [], order: null, knownIds: [] }
   const raw = JSON.parse(readFileSync(file, 'utf-8'))
   return {
     schemaVersion: raw.schemaVersion ?? SCHEMA_VERSION,
     speaker,
     hidden: Array.isArray(raw.hidden) ? raw.hidden : [],
+    reduced: Array.isArray(raw.reduced) ? raw.reduced : [],
     order: raw.order ?? null,
     knownIds: Array.isArray(raw.knownIds) ? raw.knownIds : [],
   }
@@ -110,6 +111,7 @@ export function writeProfile(root, speaker, profile) {
     schemaVersion: SCHEMA_VERSION,
     speaker,
     hidden: [...new Set(profile.hidden ?? [])].sort(),
+    reduced: [...new Set(profile.reduced ?? [])].sort(),
     order: profile.order ?? null,
     knownIds: [...new Set(profile.knownIds ?? [])].sort(),
   }

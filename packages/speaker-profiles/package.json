@@ -21,6 +21,9 @@
   "bin": {
     "slide-ids": "bin/slide-ids.mjs"
   },
+  "scripts": {
+    "test": "node --test"
+  },
   "slidev": {},
   "engines": {
     "node": ">=20",

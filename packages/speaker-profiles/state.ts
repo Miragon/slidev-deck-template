@@ -10,6 +10,7 @@ import type { SlideRoute } from '@slidev/types'
 import { computed, ref } from 'vue'
 
 export const hiddenIds = ref<Set<string>>(new Set())
+export const reducedIds = ref<Set<string>>(new Set())
 export const knownIds = ref<string[]>([])
 export const speaker = ref<string | null>(null)
 export const editable = ref(false)
@@ -62,12 +63,17 @@ export function initFromSlides(slides: SlideRoute[]) {
     return
   initialised = true
   const off = new Set<string>()
+  const reduced = new Set<string>()
   for (const route of slides) {
     const id = slideId(route)
-    if (id && (route.meta?.slide?.frontmatter as any)?.['data-profile-off'])
+    const frontmatter = route.meta?.slide?.frontmatter as any
+    if (id && frontmatter?.['data-profile-off'])
       off.add(id)
+    if (id && frontmatter?.['data-profile-reduced'])
+      reduced.add(id)
   }
   hiddenIds.value = off
+  reducedIds.value = reduced
   dirty.value = false
 }
 
@@ -86,6 +92,18 @@ export function toggle(id: string) {
   else
     next.add(id)
   hiddenIds.value = next
+  dirty.value = true
+}
+
+export function isReduced(id: string | undefined) {
+  return !!id && reducedIds.value.has(id)
+}
+
+export function toggleReduced(id: string) {
+  const next = new Set(reducedIds.value)
+  if (!next.delete(id))
+    next.add(id)
+  reducedIds.value = next
   dirty.value = true
 }
 
@@ -137,6 +155,7 @@ export async function loadServerState() {
     knownIds.value = data.profile?.knownIds ?? []
     if (data.profile) {
       hiddenIds.value = new Set<string>(data.profile.hidden ?? [])
+      reducedIds.value = new Set<string>(data.profile.reduced ?? [])
       dirty.value = false
     }
   }
@@ -173,6 +192,7 @@ export async function save(currentIds: string[]) {
       body: JSON.stringify({
         speaker: speaker.value,
         hidden: [...hiddenIds.value],
+        reduced: [...reducedIds.value],
         order: null,
         // Additive, never a replacement. Saving from a single-chapter run must
         // not shrink what this profile has already seen, or every slide of the

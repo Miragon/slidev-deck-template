@@ -94,6 +94,43 @@ SLIDEV_PROFILE=thomas npm run build
 
 Here the switched-off slides are really removed, not just skipped.
 
+## Keeping a slide, with less on it
+
+Sometimes the slide should stay and only its detail should go: three cards in a
+lightning talk, titles only, while the published deck keeps the text because
+nobody is there to say it.
+
+In `dev:profile`, **Reduce this slide** sits next to **Hide this slide**. One
+click, saved immediately, and the slide renders the way the room will see it.
+On a slide with nothing to reduce the button says so and changes nothing.
+
+What counts as detail is decided once, by the theme, per component. With
+`@miragon/slidev-toolkit` that is the body of a titled `Card`, the text after a
+`Step` label and a `Figure` caption. Everything marked on a slide goes together.
+
+A reduced slide is reduced wherever the profile applies: presenting, the
+presenter view, the overview, and a build or export that names the profile.
+Without a profile nothing is reduced.
+
+A profile is a named cut, so it does not have to be a person:
+`SLIDEV_PROFILE=lightning` is as valid as `SLIDEV_PROFILE=thomas`.
+
+**This is presentation, not redaction.** The detail is not displayed, so it is
+not in the PDF either, but it still ships inside a built deck. To keep content
+out of a build, hide the slide.
+
+### For theme authors
+
+Put `data-detail` on any element a slide still works without:
+
+```vue
+<div class="card-body" data-detail><slot /></div>
+```
+
+That is the whole contract. The addon hides those elements on a reduced slide;
+the theme ships no CSS for it and never imports the addon. A theme that marks
+nothing has nothing to reduce.
+
 ## When the deck moves on
 
 **New slides are on by default**, so a slide somebody adds shows up rather than
@@ -166,6 +203,7 @@ slide-ids --stamp --also 'chapter/*/*.md'
   "schemaVersion": 1,
   "speaker": "thomas",
   "hidden": ["s-4b81f0ac", "s-9d2e77c1"],
+  "reduced": ["s-4e0c2290"],
   "order": null,
   "knownIds": ["s-29076475", "..."]
 }
@@ -181,6 +219,9 @@ two machines" into a conflict carrying no information.
 time they saved, which is how "new since your last change" is computed. **Unknown
 means visible.** Ids that vanished are reported but never dropped from `hidden`,
 because the slide may come back on another branch.
+
+`reduced` is what the speaker kept, without its detail. A file written before
+that existed has no such key and reads as an empty list.
 
 `order` is reserved for reordering and is always `null` today.
 
