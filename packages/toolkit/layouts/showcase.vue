@@ -403,9 +403,12 @@ function select(i: number, e: MouseEvent) {
   flex-direction: row;
 }
 .cards-left .showcase-grid {
-  flex: 0 0 30%;
+  flex: 0 0 25%;
   grid-template-columns: 1fr;
-  align-content: start;
+  grid-auto-rows: 1fr;
+}
+.cards-left .showcase-card {
+  justify-content: center;
 }
 .cards-left .showcase-detail {
   flex: 1 1 0;
