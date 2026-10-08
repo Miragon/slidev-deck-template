@@ -411,8 +411,7 @@ function select(i: number, e: MouseEvent) {
 .cards-left .showcase-card {
   justify-content: center;
   min-height: 0;
-  padding-block: 0.4rem;
-  gap: 0.3rem;
+  padding-block: 0.3rem 0.4rem;
 }
 .cards-left .showcase-detail {
   flex: 1 1 0;
