@@ -204,6 +204,10 @@ items:
     icon: i-lucide-presentation
     body: "**Straight from the browser.**\nPresenter view, speaker notes and click
       steps come with Slidev."
+  - label: Hand out
+    icon: i-lucide-file-down
+    body: "**A PDF from the same source.**\n`npm run export` writes the deck to a
+      file you can send."
 ---
 
 <!--
