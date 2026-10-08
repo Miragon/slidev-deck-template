@@ -405,10 +405,13 @@ function select(i: number, e: MouseEvent) {
 .cards-left .showcase-grid {
   flex: 0 0 25%;
   grid-template-columns: 1fr;
-  grid-auto-rows: 1fr;
+  grid-auto-rows: minmax(0, 1fr);
+  min-height: 0;
 }
 .cards-left .showcase-card {
   justify-content: center;
+  min-height: 0;
+  padding-block: 0.3rem 0.4rem;
 }
 .cards-left .showcase-detail {
   flex: 1 1 0;
