@@ -169,6 +169,11 @@ Do them once, in this order.
 Netlify → Add new project → Import from Git → pick this repository. The build
 settings come from \`netlify.toml\`. Do **not** deploy yet.
 
+Netlify may fill in **Base directory** with \`site\`, because it finds a package
+there. **Clear it and leave it empty**: with a base of \`site\` the build runs in
+the wrong folder and fails with "Deploy directory 'site/site/docs/.vitepress/dist'
+does not exist". Check it under Site configuration → Build & deploy → Build settings.
+
 ## 2. Environment variables
 
 Site configuration → Environment variables → Add a variable:
@@ -179,8 +184,15 @@ Site configuration → Environment variables → Add a variable:
 | \`SESSION_SECRET\` | A long random value, generate it with \`openssl rand -base64 48\` | **yes, as soon as \`SITE_PASSWORD\` is set** |
 | \`SITE_USER\` | User name, default \`${config.siteUser}\` | no |
 
+The sign-in asks for a user name and a password. Unless you set \`SITE_USER\`, the
+user name is \`${config.siteUser}\`; tell the participants.
+
 For both secrets tick **Contains secret values**. Netlify then switches the scope
 to "Specific scopes": keep **Builds**, **Functions** and **Runtime** ticked.
+
+A secret cannot be read again after saving. To change it: Environment variables →
+the variable → Edit → enter the new value → save, **then deploy again**; Functions
+and the edge gate only see the new value after a new deploy.
 
 Without \`SESSION_SECRET\` the site refuses to start sessions: the sign-in answers
 500 and every page 503. That is on purpose, a signing key made of the credentials
@@ -191,7 +203,7 @@ alone could be cracked offline from a participant's own cookie.
 Deploy, then in a private window:
 
 1. Open the site. You land on \`/login\`, not on a 503 page.
-2. Sign in with the user and password. The start page opens.
+2. Sign in with the user (\`${config.siteUser}\` unless \`SITE_USER\` is set) and the password. The start page opens.
 3. Open \`/login/?to=/%5Cevil.com\` and sign in. You must land on the start page, not on evil.com.
 4. Fail more than 10 sign-ins within a minute. The next one is answered with 429.
 
@@ -318,10 +330,12 @@ export default ${JSON.stringify({ slug: config.slug, title: config.title, locale
 export function nextStepsText(config) {
     return `
 Training hub: still to do in Netlify (details in NETLIFY.md)
-  1. Netlify → Add new project → import this repository (do not deploy yet)
+  1. Netlify → Add new project → import this repository (do not deploy yet).
+     Leave "Base directory" EMPTY (Netlify may pre-fill "site": clear it)
   2. Environment variables, both with "Contains secret values" ticked:
        SITE_PASSWORD   the password you share with participants
        SESSION_SECRET  openssl rand -base64 48   (REQUIRED: without it the site answers 503)
-  3. Deploy, then test the sign-in in a private window (checklist in NETLIFY.md)
+  3. Deploy, then test the sign-in in a private window (checklist in NETLIFY.md).
+     User name: ${config.siteUser} (unless you set SITE_USER)
   4. Keep the sign-in code current: npm update @miragon/hub-template && npm run hub:sync`;
 }

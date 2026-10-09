@@ -51,11 +51,12 @@ Ask before creating anything remote: organisation, repository name, visibility. 
 
 Walk through it one step at a time and wait for the answer; the person clicks, you explain.
 
-1. Netlify → Add new project → Import from Git → the repository. The build settings come from `netlify.toml`. **Do not deploy yet.**
+1. Netlify → Add new project → Import from Git → the repository. The build settings come from `netlify.toml`. **Do not deploy yet.** Netlify often pre-fills **Base directory** with `site` because it finds a package there. Have the person clear it (Site configuration → Build & deploy → Build settings); with `site` the build fails with "Deploy directory 'site/site/docs/.vitepress/dist' does not exist".
 2. Environment variables (Site configuration → Environment variables → Add a variable). For both, tick **Contains secret values**; Netlify then switches to "Specific scopes": keep **Builds**, **Functions** and **Runtime** ticked.
    - `SITE_PASSWORD`: the password shared with participants. Suggest generating a strong one.
    - `SESSION_SECRET`: **required**, a long random value. Have the person generate it in their own terminal with `openssl rand -base64 48` and paste it into Netlify. Do not generate it in the chat, do not write it to a file.
-   - `SITE_USER`: optional, default `training`.
+   - `SITE_USER`: optional, default `training`. The sign-in page asks for a user name, so tell the person the user name (the default, unless they set `SITE_USER`) and that participants need it too.
+   - A secret cannot be read again after saving. To change one: the variable → Edit → new value → save, then **deploy again**; without a new deploy the old value stays active.
 3. Deploy (Deploys → Trigger deploy).
 
 If `SESSION_SECRET` is missing the site answers **503** and the sign-in 500. That is on purpose (a key made of the credentials alone can be cracked offline from a participant's cookie), not a bug: set the variable and redeploy.
@@ -65,7 +66,7 @@ If `SESSION_SECRET` is missing the site answers **503** and the sign-in 500. Tha
 Ask for the site URL, then check. The person can do it in a private window; these are the checks:
 
 1. The start page redirects to `/login` (not a 503 page): `curl -sI https://<site>/ | head -3` shows a 302 to `/login/?to=%2F`.
-2. Signing in with the user and password lands on the start page.
+2. Signing in with the user name (`training` unless `SITE_USER` is set) and the password lands on the start page.
 3. Open redirect is closed: `https://<site>/login/?to=/%5Cevil.com`, sign in, you must land on the start page, never on evil.com.
 4. Rate limit: more than 10 wrong sign-ins within a minute, the next answer is **429**. `for i in $(seq 1 12); do curl -s -o /dev/null -w "%{http_code}\n" -X POST -d "user=x&password=wrong" https://<site>/api/login; done` shows 303 and then 429. Run it only against the person's own site, and say so before you do.
 
