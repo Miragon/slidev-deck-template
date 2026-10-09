@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.9.0...miragon-slidev-plugin-v1.10.0) (2026-10-09)
+
+
+### Features
+
+* **slidev-toolkit:** add a caption slot to the showcase layout ([#204](https://github.com/Miragon/slidev-deck-template/issues/204)) ([fbfbb02](https://github.com/Miragon/slidev-deck-template/commit/fbfbb02976cb99893d61d20ceae8914438148d7b))
+
 ## [1.9.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.8.0...miragon-slidev-plugin-v1.9.0) (2026-10-07)
 
 
