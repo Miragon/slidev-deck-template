@@ -21,8 +21,6 @@
  *              `icon` is an optional Iconify class (e.g. "i-lucide-cpu") that
  *              replaces the card's numbered index; write it literally so UnoCSS
  *              picks it up. It takes the accent colour, like the index.
- *   hint     — navigation footer, hidden by default. `true` for the standard
- *              line, or a string for your own.
  *   gap      — CSS length for the space between the cards and the detail
  *              panel. Default "1rem" (matches the gap between cards).
  *   cards    — "top" | "left" (default top). "top" is a card row above a wide
@@ -31,6 +29,8 @@
  *              `image` below its text instead of next to it, both centred in the
  *              panel: the variant for
  *              items whose image needs room.
+ * Slots:
+ *   ::caption:: — optional caption below the cards and the detail panel
  */
 import { computed, onUnmounted, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
@@ -48,22 +48,14 @@ const props = withDefaults(
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
     items?: Item[]
-    hint?: boolean | string
     gap?: string
     cards?: 'top' | 'left'
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'mixed', items: () => [], hint: false, gap: '1rem', cards: 'top' },
+  { accent: 'mixed', items: () => [], gap: '1rem', cards: 'top' },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
-const hintText = computed(() =>
-  props.hint === true
-    ? 'Click a card or press the arrow keys to switch.'
-    : typeof props.hint === 'string' && props.hint.trim()
-      ? props.hint
-      : null,
-)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
 // AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
@@ -169,7 +161,9 @@ function select(i: number, e: MouseEvent) {
         </div>
       </div>
 
-      <p v-if="hintText" class="showcase-hint" aria-hidden="true">{{ hintText }}</p>
+      <div v-if="$slots.caption" class="showcase-caption">
+        <slot name="caption" />
+      </div>
     </div>
   </div>
 </template>
@@ -453,14 +447,29 @@ function select(i: number, e: MouseEvent) {
   transform: translateY(6px);
 }
 
-.showcase-hint {
+.showcase-caption {
   flex: 0 0 auto;
-  margin: 0.9rem 0 0;
-  font-size: 0.74rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  margin-top: 1rem;
+  font-size: 0.95rem;
   color: var(--miragon-text-muted);
   text-align: center;
+}
+.showcase-caption :deep(p) {
+  margin: 0;
+  line-height: 1.5;
+}
+.showcase-caption :deep(a) {
+  color: var(--sc-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+.showcase-caption :deep(code) {
+  font-family: var(--miragon-font-mono);
+  font-size: 0.9em;
+  background: var(--miragon-blue-light);
+  color: var(--miragon-blue-darker);
+  padding: 0.1em 0.4em;
+  border-radius: 0.35rem;
 }
 
 /* ---- Bewegung (CI-Regel C3) --------------------------------------------- */

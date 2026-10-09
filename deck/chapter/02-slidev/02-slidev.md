@@ -170,6 +170,10 @@ items:
     imageAlt: The build flow from one Markdown file to web deck and PDF
 ---
 
+::caption::
+
+*Click a card, or just advance the slide.*
+
 <!--
 showcase: clickable cards, detail panel cross-fades.
   item.body is a string (one paragraph) OR a YAML list of strings (bullet list,
@@ -178,7 +182,8 @@ showcase: clickable cards, detail panel cross-fades.
   A newline in a string body ("...\n...") starts a new line: statement, then
   explanation (cards 02 and 04). One break per body.
   OPTIONAL item.image + item.imageAlt: an image right of a string body, sized
-  from the panel height (card 04). Ignored with a list body; no caption.
+  from the panel height (card 04). Ignored with a list body.
+  OPTIONAL ::caption:: (one line below the panel, for the whole slide).
   Transition: "The same explorer, with room for the picture."
 -->
 

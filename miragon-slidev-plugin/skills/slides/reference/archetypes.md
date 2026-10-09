@@ -273,22 +273,22 @@ The database write and the process start commit together.
 
 ## showcase: interactive feature explorer (static, interactive)
 
-A row of cards; one active at a time, cross-fading a detail panel. Fully frontmatter-driven (no body slot). The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
+A row of cards; one active at a time, cross-fading a detail panel. Cards and panel are frontmatter-driven; the only slot is an optional `::caption::` below them. The active card advances **either by clicking a card OR by advancing the slide** (arrow keys / space / v-click), and both drive the same Slidev click counter, so mouse and keyboard stay in sync. The layout registers `items.length - 1` click steps itself, so you do **not** add a `clicks:` frontmatter; walking to the last card is the slide's final click before Slidev moves on.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | free text |
 | `accent` | blue / green / mixed (default mixed) |
 | `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
-| `hint` (bool/str) | navigation footer, hidden by default; `true` shows the standard "Click a card or press the arrow keys" line, a string shows custom text |
 | `gap` (str) | CSS length between the cards and the detail panel; default `1rem` (matches the card gap) |
 | `cards` | top (default) / left: where the cards sit relative to the detail panel |
+| **`::caption::` slot** | optional caption below the cards and the detail panel, written in `*italics*` like the `code` and diagram layouts; one line, it belongs to the whole slide, not to a single card |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 
 A **newline in a string `body`** starts a new line. Together with `**bold**` this gives a statement with its explanation underneath, without a second field: write the body double-quoted with `\n` (`"**Statement**\nExplanation"`). Inline Markdown keeps working on every line. Keep it to one break; a plain multi-line YAML scalar folds into spaces and renders as one paragraph, as before.
 
-`image` (optional, per item) is a served path (`/resources/<chapter>/<file>`, resolved against `BASE_URL`) to a screenshot or diagram that belongs to that item. With the default `cards: top` it sits to the right of the text, directly on the white panel, keeps its aspect ratio, and takes its height from the panel (at most half the panel width), so it never grows the panel. `imageAlt` is its alt text: describe what a content-carrying image shows; it defaults to `""` (decorative). `image` works with a string `body` only and is ignored next to a list `body`. There is no caption, zoom or lightbox, and the card row takes no images.
+`image` (optional, per item) is a served path (`/resources/<chapter>/<file>`, resolved against `BASE_URL`) to a screenshot or diagram that belongs to that item. With the default `cards: top` it sits to the right of the text, directly on the white panel, keeps its aspect ratio, and takes its height from the panel (at most half the panel width), so it never grows the panel. `imageAlt` is its alt text: describe what a content-carrying image shows; it defaults to `""` (decorative). `image` works with a string `body` only and is ignored next to a list `body`. The image has no caption of its own, no zoom and no lightbox, and the card row takes no images.
 
 **`cards: left`** turns the slide round: the cards stack in a column on the left and the detail panel takes the full height on the right. An item's `image` sits directly below its text at the full panel width, and the two are centred vertically in the panel as one group (a tall image shrinks to fit). Use it when the images carry the slide (a screenshot, a BPMN or Excalidraw diagram) and would be too small in the flat panel under a card row; stay with `cards: top` for text-only items.
 
