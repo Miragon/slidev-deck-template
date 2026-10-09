@@ -12,7 +12,7 @@ defineProps<{ label?: string }>()
 <template>
   <div class="step">
     <span class="step__marker" aria-hidden="true"></span>
-    <span class="step__body"><strong v-if="label" class="step__label">{{ label }}:</strong> <slot /></span>
+    <span class="step__body"><strong v-if="label" class="step__label">{{ label }}<span data-detail>:</span></strong> <span class="step__text" :data-detail="label ? '' : undefined"><slot /></span></span>
   </div>
 </template>
 

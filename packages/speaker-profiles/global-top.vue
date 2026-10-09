@@ -26,6 +26,7 @@ import {
   hiddenIds,
   initFromSlides,
   isHidden,
+  isReduced,
   isSlideOff,
   ensureLoaded,
   ready,
@@ -37,6 +38,7 @@ import {
   slideTitle,
   speaker,
   toggle,
+  toggleReduced,
 } from './state'
 
 const nav = useNav()
@@ -96,8 +98,33 @@ async function toggleCurrent() {
   await save(currentIds.value)
 }
 
+const currentIsReduced = computed(() => isReduced(currentId.value))
+const nothingToReduce = ref(false)
+
+function currentSlideHasDetail() {
+  return !!document.querySelector(`[data-slidev-no="${nav.currentSlideNo.value}"] [data-detail]`)
+}
+
+async function toggleReducedCurrent() {
+  if (!currentId.value)
+    return
+  if (!currentIsReduced.value && !currentSlideHasDetail()) {
+    nothingToReduce.value = true
+    setTimeout(() => { nothingToReduce.value = false }, 2000)
+    return
+  }
+  toggleReduced(currentId.value)
+  await save(currentIds.value)
+}
+
+const reduceLabel = computed(() => {
+  if (nothingToReduce.value)
+    return 'Nothing to reduce here'
+  return currentIsReduced.value ? 'Show full slide' : 'Reduce this slide'
+})
+
 const chapters = computed(() => {
-  const groups: { name: string, slides: { no: number, id: string, title: string, off: boolean }[] }[] = []
+  const groups: { name: string, slides: { no: number, id: string, title: string, off: boolean, reduced: boolean }[] }[] = []
   for (const route of nav.slides.value) {
     const id = slideId(route)
     if (!id)
@@ -108,7 +135,7 @@ const chapters = computed(() => {
       group = { name, slides: [] }
       groups.push(group)
     }
-    group.slides.push({ no: route.no, id, title: slideTitle(route), off: isHidden(id) })
+    group.slides.push({ no: route.no, id, title: slideTitle(route), off: isHidden(id), reduced: isReduced(id) })
   }
   return groups
 })
@@ -206,6 +233,15 @@ function goTo(no: number) {
         <span class="sp-chip-dot" />
         {{ currentIsOff ? 'Show this slide' : 'Hide this slide' }}
       </button>
+      <button
+        class="sp-chip"
+        :disabled="!currentId || saveState === 'saving'"
+        :title="currentIsReduced ? 'Show the detail on this slide again' : 'Keep this slide, without its detail'"
+        data-testid="speaker-profiles-toggle-reduced"
+        @click="toggleReducedCurrent"
+      >
+        {{ reduceLabel }}
+      </button>
       <button class="sp-chip sp-chip-quiet" title="Speaker profile" @click="editorOpen = true">
         {{ speaker }} · {{ onCount }}/{{ nav.slides.value.length }}
       </button>
@@ -270,6 +306,7 @@ function goTo(no: number) {
             <input type="checkbox" :checked="!slide.off" @change="toggle(slide.id)">
             <span class="sp-no" @click.prevent="goTo(slide.no)">{{ slide.no }}</span>
             <span class="sp-title">{{ slide.title }}</span>
+            <span v-if="slide.reduced" class="sp-tag">reduced</span>
           </label>
         </section>
       </div>
@@ -494,4 +531,5 @@ function goTo(no: number) {
 .sp-row-current { background: rgba(51, 93, 229, 0.22); border-radius: 0.25rem; }
 .sp-no { min-width: 2.1rem; font-variant-numeric: tabular-nums; opacity: 0.5; text-align: right; }
 .sp-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-tag { flex: 0 0 auto; padding: 0 0.4rem; font-size: 0.68rem; opacity: 0.7; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 999px; }
 </style>

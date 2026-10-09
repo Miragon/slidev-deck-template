@@ -261,6 +261,16 @@ For a table beside a diagram, drop it into a `SplitView`'s default slot like any
 
 ---
 
+## Detail a speaker can leave out
+
+Three components mark their supporting text as **detail**: the body of a `Card` that has a `title`, the text after a `Step` that has a `label`, and a `Figure` `caption`. A speaker profile can list a slide as *reduced* (the **Reduce this slide** control of `npm run dev:profile`), and that slide then renders without its detail: card titles and icons, step labels, figures without captions. Everything marked on the slide goes together.
+
+There is nothing to write in the slide: no prop, no wrapper, no class. The mark is a `data-detail` attribute inside the component, and `@miragon/slidev-speaker-profiles` does the hiding. Without a profile (a plain `npm run build`, the PDF, `npm run verify`) every slide is complete.
+
+What it means while authoring: put what the slide cannot do without into the `title` and the `label`, and what a speaker would otherwise say out loud into the body. A `Card` without a `title` and a `Step` without a `label` have nothing to fall back to, so they are never reduced.
+
+---
+
 ## Spacing / custom classes (the escape hatch)
 
 Every component here has a **single root element** and does not override `inheritAttrs`, so Vue forwards a `class` or `style` you put on the tag straight onto that root (and merges it with the component's own classes). Slidev bundles UnoCSS, so utility classes resolve out of the box. This is the one sanctioned way to break the "no utility classes / no inline CSS" rule, and it is deliberately **open**: any CSS property is reachable.

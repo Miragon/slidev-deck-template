@@ -44,9 +44,10 @@ export default function ({ filepath, mode }: { filepath: string, headmatter: Rec
 
   const profile = speaker ? readProfile(profilesRoot, speaker) : undefined
   const hidden = new Set<string>(profile?.hidden ?? [])
+  const reduced = new Set<string>(profile?.reduced ?? [])
 
   if (speaker)
-    console.log(`[speaker-profiles] profile "${speaker}": ${hidden.size} slide(s) off, ${shouldHide ? 'removed from this build' : 'skipped at runtime'}`)
+    console.log(`[speaker-profiles] profile "${speaker}": ${hidden.size} slide(s) off, ${shouldHide ? 'removed from this build' : 'skipped at runtime'}, ${reduced.size} reduced`)
   else
     console.log(`[speaker-profiles] no profile selected (${isDev ? 'set SLIDEV_PROFILE or .slidev-profiles/.current' : 'set SLIDEV_PROFILE'}) - showing the full deck`)
 
@@ -82,6 +83,8 @@ export default function ({ filepath, mode }: { filepath: string, headmatter: Rec
         else
           frontmatter['data-profile-off'] = true
       }
+      if (reduced.has(id))
+        frontmatter['data-profile-reduced'] = true
       return undefined
     },
   }]

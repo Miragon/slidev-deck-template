@@ -84,6 +84,7 @@ export default function (options: any) {
   const userRoot = options.userRoot as string
   const profilesRoot = findProfilesRoot(userRoot)
   const editable = process.env.SLIDEV_PROFILE_EDIT === '1'
+  const sameSpeakerAsThePreparser = { allowCurrentFile: options.mode === 'dev' }
 
   return {
     name: 'speaker-profiles:server',
@@ -94,7 +95,7 @@ export default function (options: any) {
       void stampOnce(options.entry as string, profilesRoot)
 
       server.middlewares.use(`${BASE}/state`, (_req: any, res: any) => {
-        const speaker = resolveSpeaker(profilesRoot)
+        const speaker = resolveSpeaker(profilesRoot, sameSpeakerAsThePreparser)
         json(res, 200, {
           editable,
           speaker: speaker ?? null,
@@ -115,10 +116,11 @@ export default function (options: any) {
             return json(res, 400, { error: `invalid profile name "${speaker}"` })
           const written = writeProfile(profilesRoot, speaker, {
             hidden: payload.hidden ?? [],
+            reduced: payload.reduced ?? [],
             order: payload.order ?? null,
             knownIds: payload.knownIds ?? [],
           })
-          console.log(`[speaker-profiles] saved ${speaker}.json (${written.hidden.length} off)`)
+          console.log(`[speaker-profiles] saved ${speaker}.json (${written.hidden.length} off, ${written.reduced.length} reduced)`)
           return json(res, 200, { ok: true, profile: written })
         }
         catch (error: any) {

@@ -12,11 +12,11 @@ not walk into them again.
 
 | File | Runs | Job |
 |---|---|---|
-| `setup/preparser.ts` | parse time, every mode | Reads each slide's id, injects `data-profile-off` in dev, sets `hide: true` for build and export |
+| `setup/preparser.ts` | parse time, every mode | Reads each slide's id, injects `data-profile-off` in dev, sets `hide: true` for build and export, injects `data-profile-reduced` in every mode |
 | `setup/vite-plugins.ts` | dev server only | `GET /@speaker-profiles/state`, `POST /@speaker-profiles/save` |
 | `setup/shortcuts.ts` | client | Arrow keys, space and PageDown step over switched-off slides |
 | `global-top.vue` | client | Watcher fallback, the cover, the editor overlay |
-| `slide-top.vue` | client | Greys out switched-off slides in Slidev's own overview |
+| `slide-top.vue` | client | Greys out switched-off slides in Slidev's own overview, marks reduced slides in every render context |
 
 One state, two uses: the overlay writes the profile, the runtime reads it for
 presenting, the preparser reads the same profile for build and export. Runtime
@@ -139,6 +139,52 @@ through onto its root element, which is why the injected keys are named
 `data-*`. The stamped `id:` is read and then deleted for the same reason - it
 must never land in the DOM, where it would collide with the element ids Slidev
 and the layouts use.
+
+## Reducing a slide
+
+A reduced slide stays in the deck and loses its detail. The profile lists it in
+`reduced`, the theme marks detail with `data-detail`, and one rule in
+`slide-top.vue` hides the marked elements.
+
+**No dev/build split.** `hide` needs one because a hidden slide is gone after
+parsing. A reduced slide is still there, so the preparser injects
+`data-profile-reduced` in every mode and the client seeds `reducedIds` from it.
+In dev the state endpoint then replaces that seed, for the same reason as with
+`hidden`: the profile file is the truth, the frontmatter is a snapshot.
+
+**The switch is a marker element, not the attribute on the layout.**
+`data-profile-reduced` does fall through onto the layout's root, and it is
+tempting to hang the CSS on it. Three things speak against it: in dev it is the
+stale snapshot, so a toggle would not show until the next parse; a layout with
+more than one root drops fall-through attributes without a word; and it would be
+a second place deciding the same thing. `slide-top.vue` is rendered inside every
+slide wrapper (play, presenter, overview, print), reads the live state and
+renders `.speaker-profiles-reduced`; the rule is
+`:has(> .speaker-profiles-reduced) [data-detail]`.
+
+**The rule needs `!important`.** A component is free to set `display` on its
+detail element in a scoped style (the toolkit's compact card body is a flex
+container), and a scoped selector outranks ours.
+
+**`slide-top.vue` seeds the state itself.** `/overview/` has no GlobalTop, and
+in a built deck there is no endpoint to ask, so without `initFromSlides` there
+the overview of a personal build would show every slide in full.
+
+**The state endpoint resolves the speaker the way the preparser does.**
+`slidev export` is a served mode, so the endpoint exists there. If it honoured
+`.slidev-profiles/.current` while the preparser ignores it outside dev, an
+export without `SLIDEV_PROFILE` would parse the complete deck and then reduce it
+in the client: a PDF with text missing that nobody asked for. `.current` counts
+in dev and nowhere else, on both sides.
+
+**The editor checks for detail on click, not on navigation.** Slide content is
+loaded lazily, so right after a slide change its `[data-detail]` elements may
+not be in the DOM yet. By the time somebody clicks, they are.
+
+**The addon never learns what a component is.** It knows `data-detail` and
+nothing else. What is detail is the theme's call, one attribute per element, and
+either package works without the other: a theme that marks nothing has nothing
+to reduce, and marks without the addon are inert attributes.
 
 ## Not implemented
 

@@ -11,13 +11,14 @@
  * Interaction is not possible here: the overview wraps each card in
  * `pointer-events: none` and puts its own click handler on the parent.
  */
-import { useSlideContext } from '@slidev/client'
+import { useNav, useSlideContext } from '@slidev/client'
 import { computed } from 'vue'
-import { ensureLoaded, isHidden } from './state'
+import { ensureLoaded, initFromSlides, isHidden, isReduced } from './state'
 
 const { $renderContext, $frontmatter } = useSlideContext()
 
 // the standalone /overview/ page renders these without a GlobalTop above them
+initFromSlides(useNav().slides.value)
 ensureLoaded()
 
 const id = computed(() => ($frontmatter as any)?.['data-profile-id'] as string | undefined)
@@ -25,9 +26,11 @@ const show = computed(() =>
   (['overview', 'previewNext'].includes($renderContext.value))
   && isHidden(id.value),
 )
+const reduced = computed(() => isReduced(id.value))
 </script>
 
 <template>
+  <i v-if="reduced" class="speaker-profiles-reduced" data-testid="speaker-profiles-reduced" hidden />
   <div v-if="show" class="speaker-profiles-dim" data-testid="speaker-profiles-dim">
     <div class="speaker-profiles-dim-label">
       OFF
@@ -36,6 +39,10 @@ const show = computed(() =>
 </template>
 
 <style>
+:has(> .speaker-profiles-reduced) [data-detail] {
+  display: none !important;
+}
+
 .speaker-profiles-dim {
   position: absolute;
   inset: 0;

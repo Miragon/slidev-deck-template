@@ -17,6 +17,8 @@ npm run dev:profile
 
 - **Hide this slide** switches off the slide you are looking at, right there.
   One click, saved immediately.
+- **Reduce this slide** keeps the slide but drops its detail: card text, step
+  text and captions go, titles and labels stay. One click, saved immediately.
 - **The chip next to it** opens the full list, grouped by chapter, with
   **all on / all off** per chapter. Bulk edits there need **Save profile**.
 

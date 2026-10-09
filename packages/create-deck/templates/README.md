@@ -56,7 +56,9 @@ One JSON file per speaker in `.slidev-profiles/`, committed like any other file,
 so two people editing at once cannot conflict. A plain `npm run build` always
 produces the complete deck; a personal PDF spells the name out
 (`SLIDEV_PROFILE=thomas npm run export`). Nothing is filtered until somebody
-picks a profile.
+picks a profile. A slide can also stay with less on it: **Reduce this slide**
+in `dev:profile` drops its card text, step text and captions, for that profile
+only.
 
 This is why every slide carries an `id:` in its frontmatter. It is written for
 you when the dev server starts and it is what a selection points at, so
