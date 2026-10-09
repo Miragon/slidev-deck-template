@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.27.0](https://github.com/Miragon/slidev-deck-template/compare/v1.26.1...v1.27.0) (2026-10-09)
+
+
+### Features
+
+* **slidev-toolkit:** add a caption slot to the showcase layout ([#204](https://github.com/Miragon/slidev-deck-template/issues/204)) ([fbfbb02](https://github.com/Miragon/slidev-deck-template/commit/fbfbb02976cb99893d61d20ceae8914438148d7b))
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** fit four showcase cards with cards: left ([#200](https://github.com/Miragon/slidev-deck-template/issues/200)) ([ffe1674](https://github.com/Miragon/slidev-deck-template/commit/ffe16742f415c8229580b96ac7fb2a6a2c41e4cc))
+
 ## [1.26.1](https://github.com/Miragon/slidev-deck-template/compare/v1.26.0...v1.26.1) (2026-10-07)
 
 
