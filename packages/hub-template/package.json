@@ -1,0 +1,45 @@
+{
+  "name": "@miragon/hub-template",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sign-in gate for Miragon training hubs on Netlify: signed session cookie, login/logout functions, edge gate, rate limit and the login pages. Scaffolded by `npm create @miragon/slidev-deck -- --hub`; `hub-template sync` updates the managed files.",
+  "keywords": [
+    "miragon",
+    "netlify",
+    "training",
+    "hub",
+    "login"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miragon/slidev-deck-template.git",
+    "directory": "packages/hub-template"
+  },
+  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/packages/hub-template#readme",
+  "bugs": "https://github.com/Miragon/slidev-deck-template/issues",
+  "bin": {
+    "hub-template": "bin/hub-template.mjs"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "templates",
+    "scaffold.mjs"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    "./scaffold": "./scaffold.mjs",
+    "./config": "./lib/hub/config.mjs",
+    "./package.json": "./package.json"
+  }
+}

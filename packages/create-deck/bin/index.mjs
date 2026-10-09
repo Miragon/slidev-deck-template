@@ -33,8 +33,10 @@ import { cp, mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createInterface } from 'node:readline/promises'
 import { parseArgs } from 'node:util'
 import { downloadTemplate } from 'giget'
+import { HUB_SCRIPTS, nextStepsText, writeHub } from '@miragon/hub-template/scaffold'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = 'Miragon/slidev-deck-template'
@@ -46,6 +48,7 @@ const SELF = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)
 const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
 const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 const SPEAKER_PROFILES_VERSION = SELF.devDependencies['@miragon/slidev-speaker-profiles']
+const HUB_TEMPLATE_VERSION = SELF.dependencies['@miragon/hub-template']
 
 // Paths copied verbatim from the fetched skeleton into the new deck. Anything not
 // listed (packages/, miragon-slidev-plugin/ [the skills now ship as that plugin],
@@ -113,6 +116,10 @@ function parseCliArgs(argv) {
       ref: { type: 'string' },
       'toolkit-version': { type: 'string' },
       'validator-version': { type: 'string' },
+      hub: { type: 'boolean' },
+      'no-hub': { type: 'boolean' },
+      title: { type: 'string' },
+      locale: { type: 'string' },
       version: { type: 'boolean', short: 'v' },
       help: { type: 'boolean', short: 'h' },
     },
@@ -123,6 +130,9 @@ function parseCliArgs(argv) {
     ref: values.ref,
     toolkitVersion: values['toolkit-version'],
     validatorVersion: values['validator-version'],
+    hub: values.hub ? true : values['no-hub'] ? false : undefined,
+    title: values.title,
+    locale: values.locale,
     version: values.version,
     help: values.help,
   }
@@ -136,6 +146,11 @@ Options:
   --ref <tag|sha|branch>   skeleton source ref (default: this version's release tag)
   --toolkit-version <x>    pin @miragon/slidev-toolkit to <x> (default: ${TOOLKIT_VERSION})
   --validator-version <x>  pin @miragon/slidev-validator to <x> (default: ${VALIDATOR_VERSION})
+  --hub                    also scaffold the training hub: a VitePress site with the sign-in
+                           page, Netlify functions and edge gate (see @miragon/hub-template)
+  --no-hub                 deck only, do not ask
+  --title <text>           hub title (default: derived from <dir>)
+  --locale <de|en>         language of the hub root (default: de)
   -v, --version            print the create-slidev-deck version
   -h, --help               show this help
 
@@ -176,7 +191,7 @@ function deckNameFrom(dir) {
 }
 
 /** Build the standalone deck package.json from the fetched skeleton's manifests. */
-function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion) {
+function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, hub = false) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
   const deckPkg = readManifest('deck/package.json')
   // npm `overrides` only take effect in the root manifest, so the template keeps
@@ -221,8 +236,19 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, s
       '@miragon/slidev-speaker-profiles': speakerProfilesVersion,
       ...deckPkg.dependencies,
     },
-    devDependencies: { '@miragon/slidev-validator': validatorVersion, portless: portlessVersion },
+    devDependencies: {
+      '@miragon/slidev-validator': validatorVersion,
+      portless: portlessVersion,
+      ...(hub ? { '@miragon/hub-template': HUB_TEMPLATE_VERSION } : {}),
+    },
     ...(overrides && Object.keys(overrides).length ? { overrides } : {}),
+  }
+  if (hub) {
+    // The hub builds the deck as part of the site: `build` is the whole hub,
+    // the plain deck build keeps a name of its own. `site/` is a workspace so
+    // its VitePress dependencies stay out of the deck's.
+    pkg.workspaces = ['site']
+    pkg.scripts = { ...pkg.scripts, ...HUB_SCRIPTS }
   }
   return JSON.stringify(pkg, null, 2) + '\n'
 }
@@ -259,13 +285,13 @@ async function rollback(target, preexisting) {
 }
 
 /** Assemble the deck in `target`: skeleton, prune, then the generated overlay. */
-async function layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting }) {
+async function layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting, hub }) {
   try {
     await mkdir(target, { recursive: true })
     await copySkeleton(scratch, target, ref)
     for (const rel of PRUNE) await rm(join(target, rel), { force: true })
 
-    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion)
+    const packageJson = buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, Boolean(hub))
     await writeFile(join(target, 'package.json'), packageJson)
     const portlessJson = JSON.stringify({ name: deckName, script: 'dev:app' }, null, 2) + '\n'
     await writeFile(join(target, 'portless.json'), portlessJson)
@@ -273,13 +299,40 @@ async function layDownDeck({ scratch, target, deckName, toolkitVersion, validato
     await mkdir(join(target, '.claude'), { recursive: true })
     await writeFile(join(target, '.claude', 'settings.json'), CLAUDE_SETTINGS)
     await cp(join(HERE, '..', 'templates', 'README.md'), join(target, 'README.md'))
+    if (hub) {
+      await writeHub(target, hub)
+      // The hub's own checks live in .github/workflows/hub.yml; the deck's ci.yml
+      // keeps running next to it. .gitignore: generated sign-in pages and the built deck.
+      const ignore = join(target, '.gitignore')
+      const current = existsSync(ignore) ? readFileSync(ignore, 'utf8') : ''
+      await writeFile(
+        ignore,
+        `${current.replace(/\n*$/, '\n')}\n# training hub: build output and generated files\nsite/docs/.vitepress/dist/\nsite/docs/.vitepress/cache/\nsite/docs/public/slides/\nsite/docs/public/login/\nsite/docs/public/*/login/\n.netlify/\n`,
+      )
+    }
   } catch (err) {
     await rollback(target, preexisting)
     throw err
   }
 }
 
-function printNextSteps(dir) {
+function titleFrom(dir) {
+  return basename(dir).replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()).trim() || 'Training'
+}
+
+/** Ask whether to scaffold the hub too. Non-interactive runs get the deck only. */
+async function askHub() {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) return false
+  const rl = createInterface({ input: process.stdin, output: process.stdout })
+  try {
+    const answer = await rl.question('Also scaffold a training hub (Netlify site with sign-in page)? [y/N] ')
+    return /^y(es)?$/i.test(answer.trim())
+  } finally {
+    rl.close()
+  }
+}
+
+function printNextSteps(dir, hub) {
   const pm = packageManager()
   console.log(`
 Done. Your deck is ready in ${dir}
@@ -290,7 +343,8 @@ Next steps:
   npx portless service install   # one-time per machine: HTTPS proxy for the .localhost dev URL
   ${pm} run dev                  # serves at https://${deckNameFrom(dir)}.localhost
 
-Build with '${pm} run build', check brand guardrails with '${pm} run verify'.`)
+Build with '${pm} run ${hub ? 'build:deck' : 'build'}', check brand guardrails with '${pm} run verify'.`)
+  if (hub) console.log(nextStepsText(hub))
 }
 
 async function main() {
@@ -305,6 +359,10 @@ async function main() {
   }
 
   const target = resolve(opts.target)
+  const withHub = opts.hub ?? (await askHub())
+  const hub = withHub
+    ? { slug: deckNameFrom(target), title: opts.title ?? titleFrom(target), locale: opts.locale ?? 'de' }
+    : undefined
   const preexisting = await ensureEmptyTarget(target)
   const ref = opts.ref ?? `create-slidev-deck-v${SELF.version}`
   const toolkitVersion = opts.toolkitVersion ?? TOOLKIT_VERSION
@@ -317,12 +375,12 @@ async function main() {
 
   const scratch = await fetchSkeleton(ref)
   try {
-    await layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting })
+    await layDownDeck({ scratch, target, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, ref, preexisting, hub })
   } finally {
     await rm(scratch, { recursive: true, force: true })
   }
 
-  printNextSteps(opts.target)
+  printNextSteps(opts.target, hub)
 }
 
 main().catch((err) => {

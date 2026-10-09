@@ -181,3 +181,82 @@ test('refuses a non-empty target directory', () => {
     rmSync(busy, { recursive: true, force: true })
   }
 })
+
+// ---- the training hub (--hub) -------------------------------------------------
+
+test('without --hub (and no terminal) the scaffold is deck only', () => {
+  assert.ok(!existsSync(join(out, 'netlify')), 'no netlify/ in a plain deck')
+  assert.ok(!existsSync(join(out, 'site')), 'no site/ in a plain deck')
+  assert.equal(pkgOf(out).workspaces, undefined)
+  assert.equal(pkgOf(out).devDependencies['@miragon/hub-template'], undefined)
+})
+
+test('--hub adds the sign-in hub next to the deck', () => {
+  const t = target('demo-training')
+  try {
+    const log = run([t.dir, '--hub', '--title', 'Demo Training', '--locale', 'de'])
+    for (const f of [
+      'deck/slides.md',
+      'hub.config.mjs',
+      'netlify.toml',
+      'NETLIFY.md',
+      'netlify/functions/login.mjs',
+      'netlify/functions/logout.mjs',
+      'netlify/edge-functions/auth.js',
+      'netlify/lib/hub/session.mjs',
+      'netlify/lib/hub/VERSION',
+      'scripts/build-login-pages.mjs',
+      'scripts/build-slides.mjs',
+      'site/package.json',
+      'site/docs/.vitepress/config.mts',
+      'site/docs/index.md',
+      'site/docs/en/index.md',
+      '.github/workflows/hub.yml',
+      '.github/workflows/ci.yml',
+    ]) {
+      assert.ok(existsSync(join(t.dir, f)), `missing ${f}`)
+    }
+
+    const pkg = pkgOf(t.dir)
+    assert.deepEqual(pkg.workspaces, ['site'])
+    assert.equal(pkg.devDependencies['@miragon/hub-template'], SELF.dependencies['@miragon/hub-template'])
+    assert.equal(pkg.scripts.build, 'npm run build:site')
+    assert.equal(pkg.scripts['build:deck'], 'slidev build deck/slides.md --out ../dist')
+    assert.ok(pkg.scripts['hub:check'])
+
+    const hub = readFileSync(join(t.dir, 'hub.config.mjs'), 'utf8')
+    assert.match(hub, /"slug": "demo-training"/)
+    assert.match(hub, /"title": "Demo Training"/)
+    assert.match(readFileSync(join(t.dir, '.gitignore'), 'utf8'), /site\/docs\/public\/slides\//)
+
+    // What is left to do in Netlify is spelled out at the end of the run.
+    assert.match(log, /SESSION_SECRET/)
+    assert.match(log, /SITE_PASSWORD/)
+    assert.match(log, /NETLIFY\.md/)
+  } finally {
+    t.cleanup()
+  }
+})
+
+test('--hub derives the title from the directory, --no-hub stays deck only', () => {
+  const a = target('my-new-training')
+  const b = target('plain')
+  try {
+    run([a.dir, '--hub'])
+    assert.match(readFileSync(join(a.dir, 'hub.config.mjs'), 'utf8'), /"title": "My New Training"/)
+    run([b.dir, '--no-hub'])
+    assert.ok(!existsSync(join(b.dir, 'site')))
+  } finally {
+    a.cleanup()
+    b.cleanup()
+  }
+})
+
+test('--hub refuses a bad locale', () => {
+  const t = target('x')
+  try {
+    assert.throws(() => run([t.dir, '--hub', '--locale', 'fr']), /locale/)
+  } finally {
+    t.cleanup()
+  }
+})
