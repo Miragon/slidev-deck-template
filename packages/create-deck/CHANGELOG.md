@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.5.5...create-slidev-deck-v1.6.0) (2026-10-09)
+
+
+### Features
+
+* **hub-template:** scaffold a training hub with sign-in via create-deck --hub ([#203](https://github.com/Miragon/slidev-deck-template/issues/203)) ([de3c99c](https://github.com/Miragon/slidev-deck-template/commit/de3c99c000cba53fff0e6c3182cde3d84d14bc5d))
+
 ## [1.5.5](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.5.4...create-slidev-deck-v1.5.5) (2026-10-09)
 
 
