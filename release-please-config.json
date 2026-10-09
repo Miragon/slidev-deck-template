@@ -39,6 +39,12 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "packages/hub-template": {
+      "package-name": "@miragon/hub-template",
+      "component": "hub-template",
+      "include-component-in-tag": true,
+      "initial-version": "0.1.0"
     }
   }
 }
