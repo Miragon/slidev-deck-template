@@ -10,8 +10,9 @@ stay up to date automatically instead of carrying a frozen copy of the skills.
 |---|---|---|
 | `slides` | `/miragon-slidev:slides` | Authoring guide for the Miragon-branded deck: layout archetypes, the reusable components, brand colours/typography, editorial rules. |
 | `excalidraw` | `/miragon-slidev:excalidraw` | Author and repair Miragon-branded Excalidraw `.excalidraw.svg` diagrams. |
+| `create-training-hub` | `/miragon-slidev:create-training-hub` | Start a new training from zero (deck, or deck plus Netlify hub with sign-in) and walk through the Netlify setup, the sign-in tests and the password rotation. |
 
-Both skills are also **model-invoked**: Claude selects them automatically from their
+All skills are also **model-invoked**: Claude selects them automatically from their
 `description` when you work under `deck/`, so you rarely type the namespaced command.
 
 ## Install
