@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.1...miragon-slidev-plugin-v1.11.2) (2026-10-12)
+
+
+### Bug Fixes
+
+* **miragon-slidev:** state plainly that the Netlify base directory stays empty ([#211](https://github.com/Miragon/slidev-deck-template/issues/211)) ([9b4493b](https://github.com/Miragon/slidev-deck-template/commit/9b4493b25f6f6c57af3df203dd1df64b322665fc))
+
 ## [1.11.1](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.0...miragon-slidev-plugin-v1.11.1) (2026-10-12)
 
 

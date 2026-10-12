@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.2](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.1...create-slidev-deck-v1.6.2) (2026-10-12)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.1.1 to 0.2.0
+
 ## [1.6.1](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.0...create-slidev-deck-v1.6.1) (2026-10-12)
 
 

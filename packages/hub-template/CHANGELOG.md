@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/Miragon/slidev-deck-template/compare/hub-template-v0.1.1...hub-template-v0.2.0) (2026-10-12)
+
+
+### Features
+
+* **hub-template:** show the Slidev deck on the Slides page of the hub ([#212](https://github.com/Miragon/slidev-deck-template/issues/212)) ([d5a2cac](https://github.com/Miragon/slidev-deck-template/commit/d5a2cacfd5d359ef465066b0f53e3ade198217f3))
+
 ## [0.1.1](https://github.com/Miragon/slidev-deck-template/compare/hub-template-v0.1.0...hub-template-v0.1.1) (2026-10-12)
 
 
