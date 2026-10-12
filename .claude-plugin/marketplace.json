@@ -11,7 +11,7 @@
     {
       "name": "miragon-slidev",
       "source": "./miragon-slidev-plugin",
-      "description": "Miragon Slidev authoring skills: the `slides` design-system guide and the `excalidraw` diagram author/repair skill."
+      "description": "Miragon Slidev authoring skills: the `slides` design-system guide, the `excalidraw` diagram author/repair skill and the `create-training-hub` skill (a new training: deck, or deck plus Netlify hub with sign-in)."
     }
   ]
 }
