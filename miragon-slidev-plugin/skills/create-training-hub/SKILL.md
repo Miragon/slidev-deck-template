@@ -38,7 +38,7 @@ Always pass `--hub` or `--no-hub`, otherwise the command asks interactively. The
 ```bash
 cd <dir> && npm install
 npm run hub:check        # the managed sign-in code is unedited
-npm run build            # deck into /slides/, sign-in pages, site
+npm run build            # deck into /deck/, sign-in pages, site
 ```
 
 `npm run dev` serves the deck, `npm run dev:site` the hub. Content goes into `deck/` (use the `slides` skill) and `site/docs/` (plain Markdown, German and English).

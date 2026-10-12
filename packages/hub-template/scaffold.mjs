@@ -27,10 +27,12 @@ export const HUB_SCRIPTS = {
     "hub:check": "hub-template check",
 };
 
-// The deck is built into public/slides/ (scripts/build-slides.mjs); the Slides page
-// shows it in place and links to the fullscreen version.
+// The deck is built into public/deck/ (scripts/build-slides.mjs); the Slides page
+// shows it in place and links to the fullscreen version. It must NOT live at
+// /slides/: the hub page slides.md is served at /slides too, and on Netlify that
+// name clash serves the hub page instead of the deck.
 const slidesBody = (frameTitle, openLabel) =>
-    `<iframe class="hub-slides" src="/slides/" title="${frameTitle}" allowfullscreen></iframe>\n\n[${openLabel}](/slides/){target="_blank"}`;
+    `<iframe class="hub-slides" src="/deck/" title="${frameTitle}" allowfullscreen></iframe>\n\n[${openLabel}](/deck/){target="_blank"}`;
 
 const PAGES = {
     de: {
@@ -91,8 +93,8 @@ export default defineConfig({
     head: [["link", { rel: "icon", type: "image/svg+xml", href: "/komet.svg" }]],
     cleanUrls: true,
     vite: { server: { allowedHosts: [".localhost"] } },
-    // /slides/ is the Slidev deck, built into public/ by scripts/build-slides.mjs.
-    ignoreDeadLinks: [/^\\/slides\\//, /^https?:\\/\\/localhost/],
+    // /deck/ is the Slidev deck, built into public/ by scripts/build-slides.mjs.
+    ignoreDeadLinks: [/^\\/deck\\//, /^https?:\\/\\/localhost/],
     themeConfig: {
         logo: "/komet.svg",
         siteTitle: hub.title,
@@ -138,7 +140,7 @@ export default DefaultTheme;
 function netlifyToml() {
     return `# Netlify deployment configuration.
 #
-# \`npm run build\` builds the Slidev deck into site/docs/public/slides and then
+# \`npm run build\` builds the Slidev deck into site/docs/public/deck and then
 # the VitePress hub, and publishes the hub. The whole site is gated by
 # netlify/edge-functions/auth.js: set SITE_PASSWORD and SESSION_SECRET in
 # Netlify (see NETLIFY.md). Without SITE_PASSWORD the site is public; with it but
@@ -166,8 +168,8 @@ function netlifyToml() {
 # Deep-link fallback for the embedded Slidev deck: a reload at slide 7 must serve
 # the deck's index.html, not the site's.
 [[redirects]]
-  from = "/slides/*"
-  to = "/slides/index.html"
+  from = "/deck/*"
+  to = "/deck/index.html"
   status = 200
 
 [[redirects]]
