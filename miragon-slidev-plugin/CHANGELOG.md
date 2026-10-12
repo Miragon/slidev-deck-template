@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.0...miragon-slidev-plugin-v1.11.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* **hub-template:** tell about the Netlify base directory, the default user and secret changes ([#207](https://github.com/Miragon/slidev-deck-template/issues/207)) ([72a5f2d](https://github.com/Miragon/slidev-deck-template/commit/72a5f2de528334e84d682d97628ee35b281ccc85))
+
 ## [1.11.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.10.0...miragon-slidev-plugin-v1.11.0) (2026-10-09)
 
 

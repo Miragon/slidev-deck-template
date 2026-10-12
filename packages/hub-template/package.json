@@ -1,6 +1,6 @@
 {
   "name": "@miragon/hub-template",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Sign-in gate for Miragon training hubs on Netlify: signed session cookie, login/logout functions, edge gate, rate limit and the login pages. Scaffolded by `npm create @miragon/slidev-deck -- --hub`; `hub-template sync` updates the managed files.",
   "keywords": [
