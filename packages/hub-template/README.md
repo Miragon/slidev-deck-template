@@ -20,7 +20,7 @@ Without `--hub` you get the deck only. In a terminal, the scaffold asks.
 | `netlify/edge-functions/auth.js` | the gate for every path |
 | `netlify/lib/hub/` | the managed sign-in code (session, login, logout, gate, login pages). **Do not edit** |
 | `scripts/build-login-pages.mjs` | writes the two sign-in pages from the config at build time |
-| `scripts/build-slides.mjs` | builds `deck/` into `site/docs/public/slides/` |
+| `scripts/build-slides.mjs` | builds `deck/` into `site/docs/public/deck/` |
 | `site/` | VitePress hub, German and English |
 | `NETLIFY.md` | the steps that cannot be scaffolded: variables, deploy, tests |
 | `.github/workflows/hub.yml` | `hub:check` plus the full build |

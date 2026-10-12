@@ -307,7 +307,7 @@ async function layDownDeck({ scratch, target, deckName, toolkitVersion, validato
       const current = existsSync(ignore) ? readFileSync(ignore, 'utf8') : ''
       await writeFile(
         ignore,
-        `${current.replace(/\n*$/, '\n')}\n# training hub: build output and generated files\nsite/docs/.vitepress/dist/\nsite/docs/.vitepress/cache/\nsite/docs/public/slides/\nsite/docs/public/login/\nsite/docs/public/*/login/\n.netlify/\n`,
+        `${current.replace(/\n*$/, '\n')}\n# training hub: build output and generated files\nsite/docs/.vitepress/dist/\nsite/docs/.vitepress/cache/\nsite/docs/public/deck/\nsite/docs/public/login/\nsite/docs/public/*/login/\n.netlify/\n`,
       )
     }
   } catch (err) {

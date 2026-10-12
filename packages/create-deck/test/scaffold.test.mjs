@@ -227,7 +227,7 @@ test('--hub adds the sign-in hub next to the deck', () => {
     const hub = readFileSync(join(t.dir, 'hub.config.mjs'), 'utf8')
     assert.match(hub, /"slug": "demo-training"/)
     assert.match(hub, /"title": "Demo Training"/)
-    assert.match(readFileSync(join(t.dir, '.gitignore'), 'utf8'), /site\/docs\/public\/slides\//)
+    assert.match(readFileSync(join(t.dir, '.gitignore'), 'utf8'), /site\/docs\/public\/deck\//)
 
     // What is left to do in Netlify is spelled out at the end of the run.
     assert.match(log, /SESSION_SECRET/)
