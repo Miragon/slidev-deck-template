@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.3](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.2...miragon-slidev-plugin-v1.11.3) (2026-10-12)
+
+
+### Bug Fixes
+
+* **hub-template:** serve the deck at /deck/ so it does not clash with the Slides page ([#214](https://github.com/Miragon/slidev-deck-template/issues/214)) ([b5d6a17](https://github.com/Miragon/slidev-deck-template/commit/b5d6a1799461a94c42664ca961d9708062e1012c))
+
 ## [1.11.2](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.1...miragon-slidev-plugin-v1.11.2) (2026-10-12)
 
 
