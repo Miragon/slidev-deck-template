@@ -51,7 +51,9 @@ Ask before creating anything remote: organisation, repository name, visibility. 
 
 Walk through it one step at a time and wait for the answer; the person clicks, you explain.
 
-1. Netlify → Add new project → Import from Git → the repository. The build settings come from `netlify.toml`. **Do not deploy yet.** Netlify often pre-fills **Base directory** with `site` because it finds a package there. Have the person clear it (Site configuration → Build & deploy → Build settings); with `site` the build fails with "Deploy directory 'site/site/docs/.vitepress/dist' does not exist".
+1. Netlify → Add new project → Import from Git → the repository. The build settings come from `netlify.toml`. **Do not deploy yet.**
+   - Tell the person plainly: **leave Base directory empty**, and if it contains anything (Netlify often fills in `site`), delete the content. It is under Site configuration → Build & deploy → Build settings → Base directory. Do not hedge or say "may". A wrong value breaks the build with "Deploy directory 'site/site/docs/.vitepress/dist' does not exist".
+   - Ask the person to confirm the field is empty before the next step.
 2. Environment variables (Site configuration → Environment variables → Add a variable). For both, tick **Contains secret values**; Netlify then switches to "Specific scopes": keep **Builds**, **Functions** and **Runtime** ticked.
    - `SITE_PASSWORD`: the password shared with participants. Suggest generating a strong one.
    - `SESSION_SECRET`: **required**, a long random value. Have the person generate it in their own terminal with `openssl rand -base64 48` and paste it into Netlify. Do not generate it in the chat, do not write it to a file.
