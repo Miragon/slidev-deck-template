@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.3](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.2...create-slidev-deck-v1.6.3) (2026-10-12)
+
+
+### Bug Fixes
+
+* **hub-template:** serve the deck at /deck/ so it does not clash with the Slides page ([#214](https://github.com/Miragon/slidev-deck-template/issues/214)) ([b5d6a17](https://github.com/Miragon/slidev-deck-template/commit/b5d6a1799461a94c42664ca961d9708062e1012c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.2.0 to 0.2.1
+
 ## [1.6.2](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.1...create-slidev-deck-v1.6.2) (2026-10-12)
 
 
