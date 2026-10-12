@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.3...miragon-slidev-plugin-v1.12.0) (2026-10-12)
+
+
+### Features
+
+* **miragon-slidev:** make create-training-hub a checklist playbook ([#216](https://github.com/Miragon/slidev-deck-template/issues/216)) ([0c9b35d](https://github.com/Miragon/slidev-deck-template/commit/0c9b35dc6c39ac46a60d6d20ae370fdd36ea8b45))
+
 ## [1.11.3](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.2...miragon-slidev-plugin-v1.11.3) (2026-10-12)
 
 
