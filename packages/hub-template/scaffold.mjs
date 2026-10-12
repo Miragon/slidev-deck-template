@@ -27,6 +27,11 @@ export const HUB_SCRIPTS = {
     "hub:check": "hub-template check",
 };
 
+// The deck is built into public/slides/ (scripts/build-slides.mjs); the Slides page
+// shows it in place and links to the fullscreen version.
+const slidesBody = (frameTitle, openLabel) =>
+    `<iframe class="hub-slides" src="/slides/" title="${frameTitle}" allowfullscreen></iframe>\n\n[${openLabel}](/slides/){target="_blank"}`;
+
 const PAGES = {
     de: {
         nav: ["Start", "Setup", "Agenda", "Übungen", "Folien", "Ressourcen"],
@@ -39,7 +44,7 @@ const PAGES = {
             exercises: ["Übungen", "Die Aufgaben des Trainings."],
             resources: ["Ressourcen", "Downloads und weiterführende Links."],
         },
-        slides: "Die Präsentation öffnet im Vollbild in einem neuen Tab.\n\n[Folien öffnen](/slides/){target=\"_blank\"}",
+        slides: slidesBody("Folien des Trainings", "Im Vollbild öffnen"),
     },
     en: {
         nav: ["Start", "Setup", "Agenda", "Exercises", "Slides", "Resources"],
@@ -52,7 +57,7 @@ const PAGES = {
             exercises: ["Exercises", "The tasks of the training."],
             resources: ["Resources", "Downloads and further links."],
         },
-        slides: "The presentation opens fullscreen in a new tab.\n\n[Open the slides](/slides/){target=\"_blank\"}",
+        slides: slidesBody("Slides of the training", "Open fullscreen"),
     },
 };
 
@@ -107,6 +112,20 @@ const CUSTOM_CSS = `/* Brand accent for the hub. Replace with the full Miragon l
   --vp-c-brand-2: #335de5;
   --vp-c-brand-3: #335de5;
   --vp-c-brand-soft: rgba(51, 93, 229, 0.14);
+}
+
+/* The Slides page shows the Slidev deck in place: use the full content width. */
+.hub-slides-page .container,
+.hub-slides-page .content-container {
+  max-width: 100% !important;
+}
+.hub-slides {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin: 16px 0;
 }
 `;
 
@@ -169,10 +188,10 @@ Do them once, in this order.
 Netlify → Add new project → Import from Git → pick this repository. The build
 settings come from \`netlify.toml\`. Do **not** deploy yet.
 
-Netlify may fill in **Base directory** with \`site\`, because it finds a package
-there. **Clear it and leave it empty**: with a base of \`site\` the build runs in
-the wrong folder and fails with "Deploy directory 'site/site/docs/.vitepress/dist'
-does not exist". Check it under Site configuration → Build & deploy → Build settings.
+**Leave Base directory empty.** If it contains anything (Netlify often fills in
+\`site\`), delete the content. With a base of \`site\` the build runs in the wrong
+folder and fails with "Deploy directory 'site/site/docs/.vitepress/dist' does not
+exist". You find it under Site configuration → Build & deploy → Build settings.
 
 ## 2. Environment variables
 
@@ -316,7 +335,10 @@ export default ${JSON.stringify({ slug: config.slug, title: config.title, locale
         await put(`${dir}/index.md`, p.index(config.title));
         for (const page of PAGE_ORDER) {
             if (page === "slides") {
-                await put(`${dir}/slides.md`, `# ${p.nav[PAGE_ORDER.indexOf("slides") + 1]}\n\n${p.slides}\n`);
+                await put(
+                    `${dir}/slides.md`,
+                    `---\npageClass: hub-slides-page\n---\n\n# ${p.nav[PAGE_ORDER.indexOf("slides") + 1]}\n\n${p.slides}\n`,
+                );
             } else {
                 const [title, body] = p.pages[page];
                 await put(`${dir}/${page}.md`, `# ${title}\n\n${body}\n`);
@@ -331,7 +353,7 @@ export function nextStepsText(config) {
     return `
 Training hub: still to do in Netlify (details in NETLIFY.md)
   1. Netlify → Add new project → import this repository (do not deploy yet).
-     Leave "Base directory" EMPTY (Netlify may pre-fill "site": clear it)
+     Leave "Base directory" EMPTY; if it contains anything (often "site"), delete it
   2. Environment variables, both with "Contains secret values" ticked:
        SITE_PASSWORD   the password you share with participants
        SESSION_SECRET  openssl rand -base64 48   (REQUIRED: without it the site answers 503)
