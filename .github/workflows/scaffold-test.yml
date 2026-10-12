@@ -66,4 +66,7 @@ jobs:
           npm run build
           test -f site/docs/.vitepress/dist/login/index.html
           test -f site/docs/.vitepress/dist/en/login/index.html
-          test -f site/docs/.vitepress/dist/slides/index.html
+          test -f site/docs/.vitepress/dist/deck/index.html
+          test -f site/docs/.vitepress/dist/slides.html
+          # The deck must not share its name with the Slides page (Netlify serves the page then).
+          test ! -e site/docs/.vitepress/dist/slides
