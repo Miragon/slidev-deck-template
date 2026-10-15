@@ -1,0 +1,60 @@
+{
+  "scenarios": [
+    {
+      "id": "hired",
+      "name": "Strong candidate, hired",
+      "description": "Screening scores 84, the interview ends with a yes, so the offer goes out.",
+      "variables": {
+        "minimumScore": 70
+      },
+      "taskResults": {
+        "Task_Screen": {
+          "score": 84
+        },
+        "Task_Conduct": {
+          "decision": true
+        }
+      }
+    },
+    {
+      "id": "rejected-early",
+      "name": "Rejected after screening",
+      "description": "Screening scores 55, below the minimum of 70, so the default flow rejects before any interview.",
+      "variables": {
+        "minimumScore": 70
+      },
+      "taskResults": {
+        "Task_Screen": {
+          "score": 55
+        }
+      }
+    },
+    {
+      "id": "rejected-late",
+      "name": "Rejected after interview",
+      "description": "Screening passes with 78, the interview ends with a no.",
+      "variables": {
+        "minimumScore": 70
+      },
+      "taskResults": {
+        "Task_Screen": {
+          "score": 78
+        },
+        "Task_Conduct": {
+          "decision": false
+        }
+      }
+    },
+    {
+      "id": "score-missing",
+      "name": "Screening score missing",
+      "description": "Screening completes without a score, so the condition is not a boolean and the token stops red at Qualifies?. Set screeningScore under Instance, then press ▶ on the gateway.",
+      "variables": {
+        "minimumScore": 70
+      },
+      "taskResults": {
+        "Task_Screen": {}
+      }
+    }
+  ]
+}

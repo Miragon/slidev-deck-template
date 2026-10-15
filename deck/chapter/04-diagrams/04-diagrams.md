@@ -170,9 +170,10 @@ height: 320px
 <!--
   bpmn MODES: one .bpmn file, three ways to render it via `mode:`.
   static  → still image, no controls (this slide). Use when the process is context, not the topic.
-  token   → playable token simulation (default; next slide).
+  token   → playable token simulation (default; next slide). Add `engine` + `scenarios`
+            and it runs with data: gateways evaluate their conditions (two slides on).
   modeler → editable canvas with a fullscreen "Edit" view (previous slide).
-  REQUIRED: diagram.  OPTIONAL: mode, diagramAlt, engine, tokenSimulation, transactionBoundaries, side, ratio, height.
+  REQUIRED: diagram.  OPTIONAL: mode, diagramAlt, engine, scenarios, tokenSimulation, transactionBoundaries, side, ratio, height.
   diagramAlt names the process for screen readers; without it a static diagram stays out of the accessibility tree.
   Transition: "Switch to token mode and the same model starts to move."
 -->
@@ -204,13 +205,46 @@ height: 320px
   full-width slides where it has room to breathe. dmn and mermaid split the same.
   REQUIRED: diagram.  OPTIONAL: side, ratio, height, mode, engine, title, eyebrow, accent.
   LIMIT: ~4 bullets / a short StepList so the column does not crowd the diagram.
-  Transition: "The decisions inside it split the same way."
+  Transition: "Give the tokens real data and the gateways decide on their own."
 -->
 
 - Read the **model** and the **narrative** in one glance
 - No `content` + `SplitView` scaffolding, just `side`
 - The framed white card sits only on the diagram side
 - The column is styled like a normal content slide
+
+---
+id: s-35414f8a
+layout: bpmn
+title: Let the data pick the path
+eyebrow: 04 - Diagrams
+accent: blue
+diagram: /resources/04-diagrams/recruitment.zeebe.bpmn
+diagramAlt: "Recruitment with data: the screening score and the interview decision route each candidate to an offer or a rejection"
+mode: token
+engine: zeebe
+scenarios: /resources/04-diagrams/recruitment.scenarios.json
+height: 360px
+---
+
+<!--
+  bpmn DATA SIMULATION: token mode plus `engine` and `scenarios` runs the
+  process with data (bpmn-js-data-simulation, bundled in slidev-addon-diagram-js).
+  REQUIRED: diagram, mode: token, engine (zeebe = FEEL, camunda7 = JUEL), scenarios.
+  OPTIONAL: height, diagramAlt, side, ratio, title, eyebrow, accent.
+  HOW TO USE: the .bpmn carries the engine's io mappings and gateway conditions
+  (here zeebe:ioMapping + FEEL); the scenarios JSON next to it holds named start
+  variables and mocked task results, keyed by element id. On stage: switch on the
+  token simulation, press play on the start event, pick a scenario. Hover a
+  gateway to see why it chose its flow. "Screening score missing" stops the token
+  red at Qualifies?: set screeningScore under Instance and press play on the gateway.
+  Without `scenarios` the slide stays a plain click-through token simulation.
+  LIMIT: keep it full width. The start dialog and the gateway cards need the room,
+  a split column leaves the start event under the simulation palette.
+  Transition: "The decisions inside it split the same way."
+-->
+
+Start from a **scenario**: the gateways evaluate their FEEL conditions, and missing data stops the token like an incident.
 
 ---
 id: s-594d540d
