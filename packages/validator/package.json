@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "markdown-it": "15.0.2",
-    "playwright-chromium": "1.63.0"
+    "playwright-chromium": "1.64.0"
   },
   "devDependencies": {
     "@slidev/parser": "53.0.0"
