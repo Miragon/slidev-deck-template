@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.0](https://github.com/Miragon/slidev-deck-template/compare/v1.27.0...v1.28.0) (2026-10-15)
+
+
+### Features
+
+* **slidev-toolkit:** show Slidev's goto dialog again ([#220](https://github.com/Miragon/slidev-deck-template/issues/220)) ([1c2765e](https://github.com/Miragon/slidev-deck-template/commit/1c2765e1493f9bb14d2e5cd8acf5abf5fa6c35a1))
+
 ## [1.27.0](https://github.com/Miragon/slidev-deck-template/compare/v1.26.1...v1.27.0) (2026-10-09)
 
 
