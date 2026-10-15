@@ -148,7 +148,8 @@ A `.bpmn` file rendered via `slidev-addon-diagram-js`. The diagram is the focal 
 | `diagram` (str) | the `.bpmn` in the chapter's `resources/`, e.g. `/resources/05-diagrams/x.bpmn` |
 | `height` (str) | canvas height (default `"380px"`) |
 | `mode` | `static` (still image) / `token` (playable token flow, **default**) / `modeler` (editable canvas) |
-| `engine` | `camunda7` / `zeebe`, `modeler` mode only. Mounts an engine-specific properties panel in the modeler's fullscreen "Edit" view. Omit for a panel-less modeler. |
+| `engine` | `camunda7` / `zeebe`. `modeler` mode: mounts an engine-specific properties panel in the modeler's fullscreen "Edit" view (omit for a panel-less modeler). `token` mode: the expression language of the data simulation (FEEL for `zeebe`, JUEL for `camunda7`), only together with `scenarios`. |
+| `scenarios` (str) | `token` mode, requires `engine`: a scenarios JSON in the chapter's `resources/`, e.g. `/resources/04-diagrams/x.scenarios.json`. Switches on the **data simulation**: play on the start event opens a dialog prefilled from a scenario, gateways evaluate their conditions instead of waiting for a click, hovering one shows why, and missing data stops the token red like an incident. |
 | `tokenSimulation` (bool) | run the token simulation inside the modeler (`modeler` mode, default `false`) |
 | `transactionBoundaries` (bool) | overlay Camunda 7 transaction boundaries in the modeler's fullscreen "Edit" view (`modeler` mode, requires `engine: camunda7`, default `false`) |
 | `side` | `left` / `right`, **split mode**: frame the diagram on that side, the slot becomes the content column opposite. Omit for full-width + caption below. |
@@ -157,7 +158,9 @@ A `.bpmn` file rendered via `slidev-addon-diagram-js`. The diagram is the focal 
 
 **Split mode** (`side`) puts the framed diagram on one side and your points on the other, without the `content` + `SplitView` scaffolding. Vary `side` across slides so the diagram is not always on the same edge, and keep the content column short (~4 bullets) so it clears the bottom-left page chrome (verify flags collisions).
 
-**Dependency:** `slidev-addon-diagram-js` must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
+**Data simulation** (`mode: token` + `engine` + `scenarios`) runs the process with data, via [bpmn-js-data-simulation](https://github.com/emaarco/bpmn-js-data-simulation) (bundled in the addon). The `.bpmn` must carry the engine's io mappings and gateway conditions (`zeebe:ioMapping` + FEEL, or `camunda:inputOutput` + JUEL). The scenarios file holds named start variables and mocked task results keyed by element id (`{ "scenarios": [{ "id", "name", "description", "variables", "taskResults" }] }`, format in the upstream [scenarios doc](https://github.com/emaarco/bpmn-js-data-simulation/blob/main/docs/scenarios.md)). Demo: the "Let the data pick the path" slide in `deck/chapter/04-diagrams/` with `recruitment.zeebe.bpmn` + `recruitment.scenarios.json`.
+
+**Dependency:** `slidev-addon-diagram-js` (>= 2.2.0 for the data simulation) must be in `package.json` (pre-installed) **and** in deck/slides.md's top-level `addons:` block. Files go in the chapter's `resources/` folder.
 
 ## dmn: DMN decision (table / live simulation / DRD / modeler)
 

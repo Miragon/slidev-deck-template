@@ -26,9 +26,15 @@
  *                "static"  → <Bpmn> via BpmnStatic  (still image, no interaction)
  *                "token"   → <BpmnTokenSimulation>  (playable token flow, default)
  *                "modeler" → <BpmnModeler>          (editable modeler canvas)
- *   engine   — "camunda7" | "zeebe"  (modeler mode only, optional)
- *              Mounts an engine-specific properties panel in the modeler's
- *              fullscreen "Edit" view. Omit for a panel-less modeler.
+ *   engine   — "camunda7" | "zeebe"  (modeler and token mode, optional)
+ *              modeler: mounts an engine-specific properties panel in the
+ *              modeler's fullscreen "Edit" view. Omit for a panel-less modeler.
+ *              token: the expression language the data simulation evaluates
+ *              (FEEL for zeebe, JUEL for camunda7); needs `scenarios`.
+ *   scenarios — served URL path to a scenarios JSON next to the .bpmn
+ *              (token mode, requires `engine`). Switches on the data
+ *              simulation: ▶ opens a start dialog prefilled from a scenario,
+ *              gateways evaluate their conditions instead of waiting for a click.
  *   tokenSimulation — run the token simulation inside the modeler (modeler mode)
  *   transactionBoundaries — overlay Camunda 7 transaction boundaries in the
  *              modeler's fullscreen "Edit" view (modeler mode, requires
@@ -57,6 +63,7 @@ const props = withDefaults(
     height?: string
     mode?: 'static' | 'token' | 'modeler'
     engine?: 'camunda7' | 'zeebe'
+    scenarios?: string
     tokenSimulation?: boolean
     transactionBoundaries?: boolean
     side?: 'left' | 'right'
@@ -89,6 +96,7 @@ function withBase(path?: string) {
   return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
 }
 const diagramSrc = computed(() => withBase(props.diagram))
+const scenariosSrc = computed(() => withBase(props.scenarios))
 
 // Barrierefreier Name für den Diagramm-Container (CI-Regel C4).
 //   mit `diagramAlt`  → der Container wird ein benanntes Objekt.
@@ -134,7 +142,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
               width="100%"
               :height="height"
             />
-            <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+            <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
           </template>
         </DiagramFrame>
 
@@ -157,7 +165,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
                 width="100%"
                 :height="height"
               />
-              <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+              <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
             </template>
           </DiagramFrame>
         </template>
