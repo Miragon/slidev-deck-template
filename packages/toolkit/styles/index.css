@@ -36,11 +36,3 @@ body,
   /* Slidev's own code blocks read this variable (see code.css). */
   --slidev-code-font-family: var(--miragon-font-mono);
 }
-
-/* Hide Slidev's built-in Goto dialog (triggered by the "g" key,
-   easy to press by accident, obstructs slide content when open).
-   DOM id is stable across Slidev versions. The Overview (key "o",
-   #slidev-overview) stays available. */
-#slidev-goto-dialog {
-  display: none !important;
-}
