@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.12.0...miragon-slidev-plugin-v1.13.0) (2026-10-16)
+
+
+### Features
+
+* **slidev-toolkit:** add an interactive layout and a Chip component ([#224](https://github.com/Miragon/slidev-deck-template/issues/224)) ([e4323f4](https://github.com/Miragon/slidev-deck-template/commit/e4323f46fb37c679c3e0ce65afd75d2bc22dfff4))
+* **slidev-toolkit:** support bpmn data simulation via scenarios ([#222](https://github.com/Miragon/slidev-deck-template/issues/222)) ([5cb98ce](https://github.com/Miragon/slidev-deck-template/commit/5cb98ce9b851fc0339d97bbe4911e3f75b725bd1))
+
 ## [1.12.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.11.3...miragon-slidev-plugin-v1.12.0) (2026-10-12)
 
 

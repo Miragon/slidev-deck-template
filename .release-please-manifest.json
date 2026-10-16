@@ -1,8 +1,8 @@
 {
-  "packages/toolkit": "1.28.0",
-  "packages/create-deck": "1.6.4",
+  "packages/toolkit": "1.29.0",
+  "packages/create-deck": "1.6.5",
   "packages/validator": "0.7.0",
   "packages/speaker-profiles": "0.3.0",
-  "miragon-slidev-plugin": "1.12.0",
+  "miragon-slidev-plugin": "1.13.0",
   "packages/hub-template": "0.2.1"
 }
