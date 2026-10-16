@@ -19,7 +19,7 @@ accent: blue
 ---
 
 <!--
-  CLAUDE.md + the two skills. Transition: "So the everyday loop is short."
+  CLAUDE.md + the two skills. Transition: "Before the loop, a quick question to the room."
 -->
 
 <v-clicks>
@@ -30,6 +30,35 @@ accent: blue
 - Ask in plain language; Claude fills the right archetype for you
 
 </v-clicks>
+
+---
+id: s-d6164899
+layout: interactive
+kicker: Over to you · 1 min
+---
+
+<!--
+  interactive: hands the room to the audience. Unlike hero, whose question the
+  next slides answer, here the audience answers; the kicker carries the timer.
+  REQUIRED: h1 (the question or task).
+  OPTIONAL: icon (Lucide class, default i-lucide-message-square-text), kicker,
+  one <p> subline, ::content:: below the question (a <Chip> row of answers or
+  materials, or another component such as a small CardGrid).
+  LIMIT: one question, one-line subline, up to eight short chips, Lucide icons only.
+  HOW TO USE: put the format and the time in the kicker ("Over to you · 1 min").
+  Transition: "So the everyday loop is short."
+-->
+
+# Which archetype would open your next talk?
+
+Name one, and say why it fits your audience.
+
+::content::
+
+<Chip icon="i-lucide-presentation">cover</Chip>
+<Chip icon="i-lucide-quote">hero</Chip>
+<Chip icon="i-lucide-user">person</Chip>
+<Chip icon="i-lucide-bookmark">section</Chip>
 
 ---
 id: s-108c44e5
@@ -108,6 +137,35 @@ A black heading, as the layout sets it. Let the theme own the colour.
 ::legend::
 
 Headings are **black**; the verify suite flags a blue one.
+
+---
+id: s-8a89e308
+layout: interactive
+icon: i-lucide-pencil-ruler
+kicker: Exercise · 10 min
+---
+
+<!--
+  interactive as an exercise: a task instead of a question, a matching icon,
+  the materials as chips.
+  REQUIRED: h1 (the question or task).
+  OPTIONAL: icon (Lucide class, default i-lucide-message-square-text), kicker,
+  one <p> subline, ::content:: below the question (a <Chip> row of answers or
+  materials, or another component such as a small CardGrid).
+  LIMIT: one task, one-line subline, up to eight short chips, Lucide icons only.
+  HOW TO USE: pick an icon that names the activity; the time goes in the kicker.
+  Transition: "Then take it home and start your own deck."
+-->
+
+# Build a hero slide that asks one question
+
+Work in pairs, then run verify until it is green.
+
+::content::
+
+<Chip icon="i-lucide-users">Pairs</Chip>
+<Chip icon="i-lucide-terminal">npm run dev</Chip>
+<Chip icon="i-lucide-shield-check">npm run verify</Chip>
 
 ---
 id: s-fb5da4d0

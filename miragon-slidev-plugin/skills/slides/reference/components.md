@@ -210,6 +210,22 @@ The fence must sit on its own lines with a blank line before and after (like the
 </CodeBlock>
 ````
 
+## Chip
+
+A white pill with an optional Lucide icon and a short label, for the possible answers or required materials on an `interactive` slide. Write the chips one per line in that layout's `::content::` slot; the layout centres them and wraps them into rows.
+
+| Prop | Values | Default | Notes |
+|---|---|---|---|
+| `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-git-branch` | none | shown left of the label in brand blue; write it literally so UnoCSS generates it. Lucide only: tool logos (`i-simple-icons-*`) are a second icon family and off-brand, so pick the closest Lucide glyph (`git` → `i-lucide-git-branch`, `docker` → `i-lucide-container`) |
+| **slot** | plain text | none | the label, one to three words |
+
+The pill is always white with the black label; only the icon takes the accent. Every chip carries its own small left and right margin (`0.2rem`), so chips keep their distance in any layout, not only in `interactive`. Keep to eight chips per slide.
+
+```md
+<Chip icon="i-lucide-git-branch">git</Chip>
+<Chip icon="i-lucide-container">docker</Chip>
+```
+
 ## Agenda
 
 The clickable chapter stepper: the deck's own table of contents, rendered from the live deck. Unlike every other component it **owns the whole slide**, so its slide uses the built-in `layout: default` (the one sanctioned non-archetype) plus `class: agenda-slide`, because a theme archetype's header and padding would fight it. There is one per deck, right after the cover.
