@@ -1,6 +1,6 @@
 ---
 name: slides
-description: Authoring guide for the Miragon-branded Slidev deck in this repo: deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, DiagramFrame, SplitView, CodeBlock, Agenda), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
+description: Authoring guide for the Miragon-branded Slidev deck in this repo: deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, DiagramFrame, SplitView, CodeBlock, Chip, Agenda), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
 ---
 
 # Miragon Slidev Deck
@@ -12,14 +12,14 @@ How to build the Miragon-branded Slidev deck in this repo: where things live, wh
 1. **Rendering truth (code), what actually ships:**
    - `packages/toolkit/styles/theme.css`: the brand colour tokens as CSS variables, mirrored from the brand's `tokens.json`.
    - `packages/toolkit/layouts/*.vue`: the layout archetypes (`layout:` in frontmatter).
-   - `packages/toolkit/components/*.vue`: the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<DiagramFrame>`, `<SplitView>`, `<CodeBlock>`, `<Agenda>`, `<BrandMeshBackground>`).
+   - `packages/toolkit/components/*.vue`: the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<DiagramFrame>`, `<SplitView>`, `<CodeBlock>`, `<Chip>`, `<Agenda>`, `<BrandMeshBackground>`).
 2. **System truth (this skill)**: how to compose the deck from that code and the editorial rules code can't enforce.
 
 **Colours are not owned here.** The source of truth is `tokens.json` in the `miragon-brand` plugin's `corporate-design` skill (`skills/corporate-design/assets/tokens.json`); `theme.css` only mirrors it. So if a value disagrees, **`tokens.json` wins for colours** and a differing `theme.css` is the bug; the layout/component `.vue` wins for its prop signature; and this skill wins for editorial/composition rules.
 
 The sanctioned palette in full: `#335DE5` blue (primary, leads) · `#00E676` green (accent, surfaces and graphics only, **never text on white**, where it reaches 1.67:1) · `#F9F7F7` grey · `#1D1D1D` black (CI black, never `#000000`) · `#FFFFFF` white. Derived: `#2B50D4` link blue (6.56:1 on white, for accent text and links) and `#6B8AFF` light blue for dark grounds. Status colours `#0B7A55` success, `#92610A` warning, `#C92A2A` danger, for states only, never as a design colour. The mesh stops `#1A1A4E`, `#0D0D2B`, `#00C853` belong to the `BrandMeshBackground` shader and nowhere else. No orange, no teal, no other primaries.
 
-Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 16 layouts) and [`reference/components.md`](reference/components.md) (the components).
+Full prop tables: [`reference/archetypes.md`](reference/archetypes.md) (the 17 layouts) and [`reference/components.md`](reference/components.md) (the components).
 
 ---
 
@@ -30,9 +30,9 @@ A **single deck**. The design system is the **`@miragon/slidev-toolkit`** packag
 ```
 packages/toolkit/          the design system (fixed, brand-controlled)
   styles/theme.css         colour tokens
-  layouts/*.vue            the 16 archetypes
+  layouts/*.vue            the 17 archetypes
   components/*.vue         Card, CardGrid, StepList, Step, Figure, DiagramFrame,
-                           SplitView, CodeBlock, Agenda, BrandMeshBackground
+                           SplitView, CodeBlock, Chip, Agenda, BrandMeshBackground
   assets/                  official logo vectors + Geist fonts, bundled with the theme
 deck/
   slides.md                entry: headmatter + cover + src imports + closing
@@ -74,11 +74,11 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 
 ## The non-negotiables (one screen)
 
-- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 16 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
+- **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 17 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
 - **One language per deck, applied consistently** across all slide content (titles, bullets, labels, diagram text). The deck's language is a choice: English by default, but German or another language is equally valid; pick one and keep the whole deck in it, with no mixing per slide. Code, brand names, and standard technical terms stay as-is regardless of language. Speaker notes (`<!-- … -->`) may be in another language if requested.
 - **Cards are always white.** Use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**, and only `accent="blue"` or `accent="blue-mid"`: a card title is text on white, where green fails AA. The one exception is the opt-in `status` prop (`success` / `warning` / `danger`) for a card that delivers a verdict, never for variety.
 - **Headings are BLACK (`#1D1D1D`, the CI black), never blue and never `#000000`.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour, so don't override it.
-- **Content headings stay on one line.** The `title:` of a content layout (`content`, `content-image`, `compare`, `showcase`, `goodbad`, `code`, and the diagram layouts) renders as a single-line heading; a second line eats the content area. Keep it short (a few words), and never force a break with `<br>`, a literal newline, or a trailing `\`. `verify` enforces this (`content-heading` rule); the rare deliberate exception is `allowMultilineHeading: true` on that slide. Only `hero`/`section`/`subsection` headings (markdown `#`) are meant to be expressive and may wrap.
+- **Content headings stay on one line.** The `title:` of a content layout (`content`, `content-image`, `compare`, `showcase`, `goodbad`, `code`, and the diagram layouts) renders as a single-line heading; a second line eats the content area. Keep it short (a few words), and never force a break with `<br>`, a literal newline, or a trailing `\`. `verify` enforces this (`content-heading` rule); the rare deliberate exception is `allowMultilineHeading: true` on that slide. Only `hero`/`interactive`/`section`/`subsection` headings (markdown `#`) are meant to be expressive and may wrap.
 - **No em-dashes** (`—`). Use commas, colons, parentheses. Compound hyphens (Open-Source, BPMN-Training) are fine. **No emoji**: use inline SVG or a **Lucide** Iconify class (`i-lucide-*`), outline, on the 24px grid, never mixed with another icon set.
 - **Bullets are plain `<ul><li>`.** The layout provides the marker. Never override list styling per slide.
 - **Never reduce font size to fit.** Reduce content, split the slide, or use `<v-clicks>`.
@@ -95,6 +95,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 |---|---|
 | Open the deck | `cover` (animated) |
 | Pose a key thesis / transition | `hero` (`# **bold** question?`) |
+| Hand the room to the audience (plenum question, exercise) | `interactive` (timer in the `kicker`, answers as `<Chip>`s) |
 | Introduce a speaker or duo | `person` |
 | Mark a new chapter | `section` (with `index: "01"`) |
 | Divide a chapter internally (not a new chapter) | `subsection` (skipped by the Agenda rail) |

@@ -35,7 +35,7 @@ accent: blue
 ---
 id: s-990db564
 layout: content
-title: Fifteen layouts for fifteen jobs
+title: Seventeen layouts for seventeen jobs
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
@@ -50,7 +50,7 @@ accent: blue
 
 - **Open and close:** `cover`, `hero`, `person`, `closing`
 - **Dividers:** `section`, `subsection`
-- **Content:** `content`, `content-image`, `code`, `showcase`
+- **Content:** `content`, `content-image`, `code`, `showcase`, `interactive`
 - **Decisions:** `compare`, `goodbad`
 - **Diagrams:** `bpmn`, `dmn`, `mermaid`, `excalidraw`
 
@@ -59,7 +59,7 @@ accent: blue
 ---
 id: s-474aa93d
 layout: content
-title: Ten components keep markdown clean
+title: Eleven components keep markdown clean
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
@@ -74,7 +74,7 @@ accent: blue
 - **Card / CardGrid**: white cards in a row, accent on the title only
 - **StepList / Step**: a labelled, ordered sequence
 - **Figure / DiagramFrame**: a captioned visual, and the white card around it
-- **SplitView / CodeBlock**: a visual beside its text, a labelled code window
+- **SplitView / CodeBlock / Chip**: a visual beside its text, a labelled code window, an answer pill
 - **Agenda / BrandMeshBackground**: the chapter stepper, the brand shader
 
 </v-clicks>

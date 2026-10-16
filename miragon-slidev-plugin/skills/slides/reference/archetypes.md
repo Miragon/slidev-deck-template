@@ -1,6 +1,6 @@
 # Layout archetypes: full reference
 
-The theme ships **16 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block; match it.
+The theme ships **17 layouts**, each with one clear purpose. Selected per slide via `layout:` in the frontmatter. The `.vue` file in `packages/toolkit/layouts/` is the truth for each prop signature; this is a summary. Every demo slide in `deck/chapter/*/*.md` carries a `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE` comment block; match it.
 
 `accent` is `blue` (default) · `green` · `mixed` unless noted. It tints the **gradient accent bar and the bullet markers**, never the type: the text accent (eyebrow, bold word) is always the brand blue `#335DE5`, because green `#00E676` reaches 1.67:1 on a light ground and fails WCAG AA. So `accent: green` buys a green bar, not green words. The one text tone that is not brand blue is the `compare` right panel title, which takes the success status colour `#0B7A55` when `accent` is `mixed` or `green` (see that archetype).
 
@@ -30,6 +30,40 @@ Key theses, motivation, transitions. The "active hero" poses a question the next
 | **slot** | h1 statement + optional `<p>` attribution; `**bold**` becomes the accent word (always brand blue, export-safe) |
 
 **Limit:** 1 statement, no bullets.
+
+## interactive: hand the room to the audience (static)
+
+A plenum question ("Which CLIs do you use every day?") or a short exercise ("Model the process in 10 min"). Centred: a round blue icon badge, a blue uppercase kicker, the question or task as a large black heading, an optional subline and optional supporting content below, typically a row of `<Chip>`s with possible answers or required materials. The global chrome stays visible.
+
+**Not a `hero`.** A hero poses a question the **following slides** answer; `interactive` hands the room over and the **audience** answers. The kicker carries the format and the timer, the icon names the activity.
+
+| Frontmatter | Values |
+|---|---|
+| `icon` (str) | a **Lucide** Iconify class for the badge, written literally; default `i-lucide-message-square-text`. Lucide only, no second icon set (no `i-simple-icons-*` tool logos either) |
+| `kicker` (str) | uppercase kicker, e.g. `Over to you · 1 min`, `Exercise · 10 min` |
+| **default slot** | h1 question or task + optional `<p>` subline |
+| **`::content::` slot** | optional content below the question. `<Chip>` tags, one per line, form a centred row that wraps; any other component (e.g. a small `CardGrid`) renders at full width |
+
+Blue appears only in the badge and the kicker; the heading is CI black, so do not mark a `**bold**` word here.
+
+```md
+---
+layout: interactive
+icon: i-lucide-pencil-ruler
+kicker: Exercise · 10 min
+---
+
+# Model the onboarding process as BPMN
+
+Work in pairs, one start and one end event.
+
+::content::
+
+<Chip icon="i-lucide-users">Pairs</Chip>
+<Chip icon="i-lucide-file">onboarding.bpmn</Chip>
+```
+
+**Limit:** one question or task, a one-line subline, up to eight short chips (two rows) or one compact component.
 
 ## person: introduce one or two people (static)
 

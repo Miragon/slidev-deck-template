@@ -33,7 +33,7 @@ You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `
 3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
 4. Or open the repo with Claude Code and let it draft the first pass from your outline.
 
-## The 16 archetypes
+## The 17 archetypes
 
 Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapter/`.
 
@@ -41,6 +41,7 @@ Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapte
 |---|---|---|
 | `cover` | Animated title slide | 1 statement |
 | `hero` | One big statement, ideally a question the next slides answer | 1 idea, no bullets |
+| `interactive` | Hands the room to the audience: a plenum question or an exercise, with optional answer chips | 1 question, ≤ 8 chips |
 | `person` | Introduce one or two speakers (solo / duo) | bio ≤ 3 lines |
 | `section` | Chapter divider with ghost index; opens a chapter in the Agenda | terse subtitle |
 | `subsection` | Divides a chapter internally; skipped by the Agenda rail | terse subtitle |
