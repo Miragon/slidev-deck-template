@@ -28,6 +28,10 @@ Decks scaffolded with `npm create @miragon/slidev-deck` register this marketplac
 their `.claude/settings.json` with `autoUpdate` enabled, so opening the deck prompts a
 one-time install and later versions arrive in the background.
 
+The central `Miragon/skills` marketplace lists this plugin too, as `miragon-slidev@miragon-agent-skills`. Prefer
+`miragon-slidev@miragon-slidev` (above) for a user-wide install: decks enable that id, so a second copy from the
+central marketplace would load the same skills twice.
+
 ## Versioning
 
 The plugin version lives in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)

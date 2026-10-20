@@ -46,4 +46,4 @@ From the repo root: `npm run dev` (preview), `npm run build` (static `dist/`), `
 
 - **Cover/closing render white.** WebGL2 is unavailable and the `linear-gradient` fallback is blocked too. Update or switch browsers.
 - **`npm run export` gives an almost-empty PDF.** Vite re-optimized mid-export. Run `npm run build` once (warms the pre-bundle in `vite.config.ts`), then export.
-- **Brand colours look wrong.** The palette is owned by the `miragon-brand` plugin's `corporate-design` skill (`assets/tokens.json`); `../packages/toolkit/styles/theme.css` only mirrors it as CSS variables, loaded unscoped by `index.css`. Don't move or rename either file, and never "correct" a colour in `theme.css` without changing `tokens.json` first.
+- **Brand colours look wrong.** The palette is owned by the `miragon-brand` plugin's `corporate-design` skill (`assets/tokens.json`, Miragon-internal); `../packages/toolkit/styles/theme.css` only mirrors it as CSS variables, loaded unscoped by `index.css`. Don't move or rename either file, and never "correct" a colour in `theme.css` without changing `tokens.json` first.

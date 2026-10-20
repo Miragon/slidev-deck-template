@@ -94,6 +94,19 @@ To manage it by hand — or if the prompt does not appear:
 The skills are then invoked as `miragon-slidev:slides` and `miragon-slidev:excalidraw` (Claude also selects them
 automatically when you work under `deck/`).
 
+**Miragon-internal brand skills.** The `miragon-brand` skills (`corporate-design`, `brand-tone`, `brand-review`)
+that `CLAUDE.md` mentions live in the private `Miragon/skills` marketplace. They are deliberately not wired into
+this repo, so the deck works for external contributors without them. Miragon colleagues install them once per machine:
+
+```
+/plugin marketplace add Miragon/skills
+/plugin install miragon-brand@miragon-agent-skills
+```
+
+Do not install `miragon-slidev@miragon-agent-skills` as well: this repo already enables `miragon-slidev@miragon-slidev`,
+and the two would load the same skills twice. To have the slide skills outside a deck too, install
+`miragon-slidev@miragon-slidev` user-wide with the commands above; it is the same plugin id, so nothing doubles.
+
 **Dependencies.** Your npm dependencies (`@miragon/slidev-toolkit`, `@slidev/cli`, the addons) are exact-pinned so installs stay
 reproducible. For a deck you keep around, enable [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates)
 so it opens PRs when new versions ship — you get the latest toolkit and Slidev without hunting for updates,
