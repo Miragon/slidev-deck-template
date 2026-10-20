@@ -39,6 +39,8 @@ The canonical white card (white background always, accent on the title only). Fo
 | `status` | `success` · `warning` · `danger` | none | optional verdict: colours the title and the icon with the status token (`--miragon-success` / `--miragon-warning` / `--miragon-danger`, all AA on white) and **wins over `accent`**. The card stays white. See "Status" below |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
 | `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-grid-3x3`, `i-lucide-box` | none | optional icon shown above the title in the accent colour; omit for a plain text card |
+| `image` (str) | path to a portrait or logo, e.g. `/resources/<chapter>/fowler.jpg` | none | optional picture above the title **instead of** `icon` (wins when both are set), `2.5rem` circle. See "Image" below |
+| `imageAlt` (str) | descriptive text | `''` | alt text for `image`; describe who or what it shows |
 | `align` | `left` · `center` · `right` | `left` | horizontal alignment of icon, title, and body |
 | **slot** | free markdown | none | body text (wrap in blank lines if it contains inline Markdown, see "Markdown inside a component body") |
 
@@ -54,6 +56,13 @@ Accent by card count, alternating the two stops left → right: **2** → blue, 
 ```
 
 `icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass a **Lucide Iconify class** (`i-lucide-*`), never an emoji. **Lucide is the one sanctioned icon set** (outline, 24px grid); it ships with the toolkit as `@iconify-json/lucide`, and mixing in a second family (Carbon, Phosphor, Material, …) breaks the brand's one-set rule even though other collections happen to resolve. Write the **full class literally** in the slide (e.g. `icon="i-lucide-grid-3x3"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
+
+**Image: who said it.** When a card quotes a person, a team or a tool, `image` shows their portrait or logo in place of the icon, so the audience recognises the source. Put the file in the chapter's `resources/` and always set a descriptive `imageAlt`. Every image renders round, portraits and logos alike, so a grid keeps one look; pick a tight headshot and a logo with breathing room so the circle does not cut into it. Third-party logos and photos stay unaltered (no recolouring, no effects) and need a source you are allowed to use, such as an official press kit. Use `icon` or `image` per card, not both, and keep a grid consistent: all pictures or all icons.
+
+```md
+<Card title="Martin Fowler" image="/resources/03-ai/fowler.jpg" imageAlt="Portrait of Martin Fowler">Without human steering, quality sinks.</Card>
+<Card title="Cursor" image="/resources/03-ai/cursor.svg" imageAlt="Cursor logo">Thousands of agents built a browser.</Card>
+```
 
 `align` is optional and defaults to `left` (the previous behaviour). Set `center` or `right` to align the icon, title, and body together; it only touches horizontal alignment and leaves the white background, accent logic, and everything else untouched.
 

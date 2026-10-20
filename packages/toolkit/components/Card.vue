@@ -12,9 +12,11 @@ const props = withDefaults(
     status?: 'success' | 'warning' | 'danger'
     padding?: 'compact' | 'standard' | 'generous'
     icon?: string
+    image?: string
+    imageAlt?: string
     align?: 'left' | 'center' | 'right'
   }>(),
-  { accent: 'blue', padding: 'standard', align: 'left' },
+  { accent: 'blue', padding: 'standard', align: 'left', imageAlt: '' },
 )
 
 const toneClass = computed(() => (props.status ? `mg-card--status-${props.status}` : `mg-card--accent-${props.accent}`))
@@ -22,7 +24,8 @@ const toneClass = computed(() => (props.status ? `mg-card--status-${props.status
 
 <template>
   <div class="mg-card" :class="[`mg-card--${props.padding}`, `mg-card--align-${props.align}`, toneClass]">
-    <span v-if="icon" class="mg-card__icon" :class="icon" aria-hidden="true"></span>
+    <img v-if="image" class="mg-card__image" :src="image" :alt="imageAlt" />
+    <span v-else-if="icon" class="mg-card__icon" :class="icon" aria-hidden="true"></span>
     <h3 v-if="title" class="mg-card__title">{{ title }}</h3>
     <div class="mg-card__body"><slot /></div>
   </div>
@@ -42,6 +45,8 @@ const toneClass = computed(() => (props.status ? `mg-card--status-${props.status
 .mg-card--align-right { text-align: right; }
 .mg-card--align-center .mg-card__icon { margin-left: auto; margin-right: auto; }
 .mg-card--align-right .mg-card__icon { margin-left: auto; }
+.mg-card--align-center .mg-card__image { margin-left: auto; margin-right: auto; }
+.mg-card--align-right .mg-card__image { margin-left: auto; }
 
 /* Accent applied to the title + icon only. A card title is TEXT ON WHITE, so
    the CI leaves exactly two colours available: the brand blue and the derived
@@ -68,6 +73,14 @@ const toneClass = computed(() => (props.status ? `mg-card--status-${props.status
   font-size: 1.6rem;
   margin-bottom: 0.6rem;
   color: var(--mg-card-accent);
+}
+.mg-card__image {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.6rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .mg-card__title {
   margin: 0;

@@ -130,6 +130,33 @@ A diagram beside its explanation.
 </CardGrid>
 
 ---
+id: s-2695cb14
+layout: content
+title: A card can show who said it
+eyebrow: 03 - The Miragon theme
+accent: blue
+---
+
+<!--
+  Card `image`: a portrait or a logo in place of the icon.
+  OPTIONAL: `image` is a path to a file in the chapter's resources/, with a
+  descriptive `imageAlt`. Portraits and logos alike render round, so a grid
+  of mixed sources keeps one look.
+  LIMIT: `icon` or `image`, never both. Third-party logos stay unaltered.
+  Transition: "Sometimes a card delivers a verdict."
+-->
+
+<CardGrid cols="3">
+
+<Card title="A tool" image="/resources/03-theme/logo-placeholder.svg" imageAlt="Placeholder logo of a tool">Thousands of agents built a browser over weeks.</Card>
+
+<Card title="An author" image="/resources/03-theme/portrait-placeholder.svg" imageAlt="Placeholder portrait of an author">As autonomous as possible, the quality sinks.</Card>
+
+<Card title="A practitioner" image="/resources/03-theme/portrait-placeholder.svg" imageAlt="Placeholder portrait of a practitioner">Untangling costs more than writing.</Card>
+
+</CardGrid>
+
+---
 id: s-b8eb68a1
 layout: content
 title: A card can carry a verdict
