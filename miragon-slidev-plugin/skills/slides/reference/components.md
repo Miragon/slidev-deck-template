@@ -2,7 +2,7 @@
 
 Reusable building blocks in `packages/toolkit/components/` (auto-imported into every deck). Diagrams are not components: they are `.excalidraw.svg` files embedded via `<Figure src>` (see the `excalidraw` skill). Write all components on a single line in markdown with explicit closing tags, **except when the body contains inline Markdown** (see below).
 
-All colours come from `packages/toolkit/styles/theme.css`, which mirrors `tokens.json` in the `miragon-brand` plugin's `corporate-design` skill (the actual source of truth). Never pass raw hex from a slide.
+All colours come from `packages/toolkit/styles/theme.css`, which mirrors `tokens.json` in the `miragon-brand` plugin's `corporate-design` skill (the actual source of truth, Miragon-internal). Never pass raw hex from a slide.
 
 ---
 

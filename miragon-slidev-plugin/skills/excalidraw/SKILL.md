@@ -66,8 +66,8 @@ the label's explicit coordinates, because binding without coordinates collapses 
 
 ## Palette: the only colours
 
-The Miragon palette, nothing else. The source of truth is `tokens.json` in the `miragon-brand` plugin's
-`corporate-design` skill, mirrored by `packages/toolkit/styles/theme.css`. **Do not invent colours**, and
+The Miragon palette, nothing else. The source of truth is `tokens.json` in the (Miragon-internal) `miragon-brand`
+plugin's `corporate-design` skill, mirrored by `packages/toolkit/styles/theme.css`. **Do not invent colours**, and
 never reach for an Excalidraw default swatch: its orange/yellow/red/slate presets are off-brand.
 Four values carry every diagram:
 

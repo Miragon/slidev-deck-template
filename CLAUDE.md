@@ -15,21 +15,21 @@ The entry **`deck/slides.md`** holds only the cover and the closing; the body is
 
 1. **The `slides` skill** (the `miragon-slidev` plugin; `miragon-slidev:slides`). The authoring guide for everything visual and editorial: repo structure and workflow, the 17 layout archetypes (`cover`, `hero`, `interactive`, `person`, `section`, `subsection`, `content`, `content-image`, `compare`, `goodbad`, `bpmn`, `dmn`, `mermaid`, `excalidraw`, `code`, `showcase`, `closing`), the reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `DiagramFrame`, `SplitView`, `CodeBlock`, `Chip`, `Agenda`), the white-card rule, content rules (one consistent deck language, no em-dashes, no emoji, focal point, hero = active question), scenario discipline, overflow, and verification. Full prop tables are under its `reference/`.
 2. **`deck/`**, the reference implementation. Every archetype has a demo slide with a comment block listing `REQUIRED` / `OPTIONAL` / `LIMIT` / `HOW TO USE`. Open the relevant `deck/chapter/<chapter>/<chapter>.md` alongside the skill when in doubt.
-3. **The `miragon-brand` skills**, whenever a task touches brand substance rather than deck mechanics:
+3. **The `miragon-brand` skills**, whenever a task touches brand substance rather than deck mechanics. They are Miragon-internal (private `Miragon/skills` marketplace, see the README) and may be missing; without them, the palette below and `theme.css` are the reference:
    - `miragon-brand:corporate-design` for anything visual (colour, logo, typography, icons, imagery). Its `assets/tokens.json` is the machine-readable source of truth for the palette; `assets/design-manual.md` is the prose behind it.
    - `miragon-brand:brand-tone` for wording, claims, and tonality.
    - `miragon-brand:brand-review` for the rule catalogue (A text / B visual / C code) and a PASS/FAIL check before finishing.
 
 **Slides carry a machine-owned `id:`.** `@miragon/slidev-speaker-profiles` (`packages/speaker-profiles/`) lets each speaker keep their own selection of slides in `.slidev-profiles/<name>.json`, and it addresses slides by that id. Never write, change, copy or delete one. New slides get theirs from `npm run dev`; `npm run check:ids` (in verify and CI) refuses a deck with an unstamped slide. Anything that drives the deck slide by slide needs `SLIDEV_PROFILE=none`, which the `verify*` scripts already set.
 
-Do not duplicate rules across files (this one, the skill, project memory). Brand values come from `tokens.json`, the rendering truth lives in `packages/toolkit/`, and the `slides` skill covers everything else.
+Do not duplicate rules across files (this one, the skill, project memory). Brand values come from `tokens.json` (mirrored in `theme.css`), the rendering truth lives in `packages/toolkit/`, and the `slides` skill covers everything else.
 
 ---
 
 ## Sacred invariants (DO NOT change without brand sign-off)
 
 - **BrandMeshBackground animation** (`packages/toolkit/components/BrandMeshBackground.vue`): colour stops `#335DE5, #1A1A4E, #00E676, #335DE5, #0D0D2B, #00C853`; DISTORTION 1, SWIRL 0.5, SPEED 0.6. Corporate identity. The three off-palette stops (`#1A1A4E`, `#0D0D2B`, `#00C853`) are `gradient.mesh-hero` from `tokens.json` and belong to this shader only, never to a slide, a card, or a diagram.
-- **Brand colours come from `tokens.json`** in the `miragon-brand` plugin's `corporate-design` skill (`skills/corporate-design/assets/tokens.json`). `packages/toolkit/styles/theme.css` only **mirrors** them as CSS variables; if the two ever disagree, `tokens.json` wins and `theme.css` is the bug. The whole sanctioned palette:
+- **Brand colours come from `tokens.json`** in the `miragon-brand` plugin's `corporate-design` skill (`skills/corporate-design/assets/tokens.json`, Miragon-internal). `packages/toolkit/styles/theme.css` only **mirrors** them as CSS variables; if the two ever disagree, `tokens.json` wins and `theme.css` is the bug. The whole sanctioned palette:
   - `#335DE5` blue (primary, leads) · `#00E676` green (accent: surface and graphics only, **never text on white**, 1.67:1) · `#F9F7F7` grey · `#1D1D1D` black (CI black, **never** `#000000`) · `#FFFFFF` white
   - derived: `#2B50D4` link blue (6.56:1 on white, for accent text and links) · `#6B8AFF` light blue (on dark grounds)
   - status colours `#0B7A55` success, `#92610A` warning, `#C92A2A` danger, strictly for states, never as a design colour
