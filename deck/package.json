@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@slidev/cli": "53.0.0",
-    "slidev-addon-diagram-js": "2.2.0",
+    "slidev-addon-diagram-js": "2.2.2",
     "vue": "3.5.44"
   },
   "devDependencies": {
