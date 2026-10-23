@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.0](https://github.com/Miragon/slidev-deck-template/compare/v1.29.0...v1.30.0) (2026-10-23)
+
+
+### Features
+
+* **slidev-toolkit:** let a card show a portrait or logo instead of an icon ([#227](https://github.com/Miragon/slidev-deck-template/issues/227)) ([ca56baf](https://github.com/Miragon/slidev-deck-template/commit/ca56baf3d7dbf8f3567a5193ac55b673e439cfc7))
+
 ## [1.29.0](https://github.com/Miragon/slidev-deck-template/compare/v1.28.0...v1.29.0) (2026-10-16)
 
 
