@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.14.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.13.0...miragon-slidev-plugin-v1.14.0) (2026-10-23)
+
+
+### Features
+
+* **slidev-toolkit:** let a card show a portrait or logo instead of an icon ([#227](https://github.com/Miragon/slidev-deck-template/issues/227)) ([ca56baf](https://github.com/Miragon/slidev-deck-template/commit/ca56baf3d7dbf8f3567a5193ac55b673e439cfc7))
+
+
+### Bug Fixes
+
+* **miragon-slidev:** mark the miragon-brand skills as Miragon-internal ([#229](https://github.com/Miragon/slidev-deck-template/issues/229)) ([15a0c20](https://github.com/Miragon/slidev-deck-template/commit/15a0c2047fa0726bfa621e3f7d5afe7d1af1e04c))
+
 ## [1.13.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.12.0...miragon-slidev-plugin-v1.13.0) (2026-10-16)
 
 

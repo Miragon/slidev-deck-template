@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.6](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.5...create-slidev-deck-v1.6.6) (2026-10-23)
+
+
+### Bug Fixes
+
+* **miragon-slidev:** mark the miragon-brand skills as Miragon-internal ([#229](https://github.com/Miragon/slidev-deck-template/issues/229)) ([15a0c20](https://github.com/Miragon/slidev-deck-template/commit/15a0c2047fa0726bfa621e3f7d5afe7d1af1e04c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.29.0 to 1.30.0
+
 ## [1.6.5](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.4...create-slidev-deck-v1.6.5) (2026-10-16)
 
 
