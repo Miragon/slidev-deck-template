@@ -16,7 +16,7 @@
     "vue": "3.5.44"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.144",
-    "portless": "0.15.8"
+    "@iconify-json/lucide": "1.2.147",
+    "portless": "0.15.9"
   }
 }

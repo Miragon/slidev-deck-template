@@ -27,8 +27,8 @@
     }
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.144",
-    "@paper-design/shaders": "0.0.81"
+    "@iconify-json/lucide": "1.2.147",
+    "@paper-design/shaders": "0.0.82"
   },
   "devDependencies": {
     "@slidev/types": "53.0.0"
