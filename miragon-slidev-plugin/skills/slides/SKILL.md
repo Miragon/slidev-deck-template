@@ -1,6 +1,6 @@
 ---
 name: slides
-description: Authoring guide for the Miragon-branded Slidev deck in this repo: deck structure and workflow, the layout archetypes, the reusable components (Card, CardGrid, StepList, Figure, DiagramFrame, SplitView, CodeBlock, Chip, Agenda), brand colours/typography, and the editorial rules. Diagrams are Excalidraw .excalidraw.svg by default (see the excalidraw skill), with brand-styled Mermaid as the text-generated alternative. Use whenever creating or editing slides under deck/, or applying Miragon brand and design conventions.
+description: Authoring guide for the Miragon-branded Slidev deck: layouts, components, brand rules and editorial conventions. Use whenever creating or editing slides under deck/.
 ---
 
 # Miragon Slidev Deck

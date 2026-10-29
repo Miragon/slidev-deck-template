@@ -1,6 +1,6 @@
 ---
 name: excalidraw
-description: Author AND repair Miragon-branded Excalidraw diagrams as a single .excalidraw.svg with the scene embedded (the SVG is the editable source, reopen it in excalidraw.com). Node-only, no Python. Every diagram in the deck is an Excalidraw .excalidraw.svg embedded via <Figure src>, there are no coded SVG-diagram components. Colours are the Miragon palette from the brand tokens.json, mirrored in packages/toolkit/styles/theme.css. The one rule that makes a diagram correct is containment binding: every label lives inside the element it belongs to (containerId + bidirectional boundElements), never floating text or manual groups.
+description: Authors and repairs Miragon-branded Excalidraw diagrams as a single .excalidraw.svg with the scene embedded. Use whenever creating, editing or fixing a diagram for the deck.
 allowed-tools: Bash, Read, Edit, Write, Grep, Glob
 metadata: {"version":"1.2.0"}
 ---
