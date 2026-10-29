@@ -1,5 +1,6 @@
 ---
 name: create-training-hub
+disable-model-invocation: true
 description: Start a new Miragon training from zero, either a Slidev deck only or a deck plus a Netlify training hub with a sign-in page, as a checklist playbook that shows what is done, what is next and who acts (Claude or the person): scaffold, GitHub, Netlify project, SITE_PASSWORD, SESSION_SECRET, deploy, sign-in tests, rotating the password after the training. Use whenever someone wants to create a new training, a new training hub, a quickcheck site, a new deck repo with a login, or asks how to set up the Netlify site, the sign-in or the environment variables of a training repo.
 ---
 
