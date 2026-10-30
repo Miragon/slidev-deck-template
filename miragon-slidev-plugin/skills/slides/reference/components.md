@@ -35,7 +35,7 @@ The canonical white card (white background always, accent on the title only). Fo
 | Prop | Values | Default | Notes |
 |---|---|---|---|
 | `title` (str) | free text | none | card title (gets the accent colour) |
-| `accent` | `blue` · `blue-mid` | `blue` | the two sanctioned stops (`#335DE5` / `#2B50D4`, both AA on white). `teal` · `green-deep` · `green-mid` · `green` are **deprecated aliases** that render as `blue-mid`; accepted so older decks keep working, never written in new slides |
+| `accent` | `blue` · `blue-mid` | `blue` (or the group tone, see below) | the two sanctioned stops (`#335DE5` / `#2B50D4`, both AA on white). `teal` · `green-deep` · `green-mid` · `green` are **deprecated aliases** that render as `blue-mid`; accepted so older decks keep working, never written in new slides |
 | `status` | `success` · `warning` · `danger` | none | optional verdict: colours the title and the icon with the status token (`--miragon-success` / `--miragon-warning` / `--miragon-danger`, all AA on white) and **wins over `accent`**. The card stays white. See "Status" below |
 | `padding` | `compact` · `standard` · `generous` | `standard` | 16 / 20 / 24 px |
 | `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-grid-3x3`, `i-lucide-box` | none | optional icon shown above the title in the accent colour; omit for a plain text card |
@@ -47,6 +47,8 @@ The canonical white card (white background always, accent on the title only). Fo
 Accent by card count, alternating the two stops left → right: **2** → blue, blue-mid · **3** → blue, blue-mid, blue · **4** → blue, blue-mid, blue, blue-mid · **6** → the same alternation continued.
 
 **Why there is no green stop.** A card title is text on a white card. Miragon green `#00E676` sits at 1.67:1 on white and fails WCAG AA, so it is never a title colour; green stays on surfaces and graphics (the gradient accent bar, the bullet markers, one node in a diagram). Even a hero's `**bold**` word renders in brand blue for the same reason. Teal is not part of the Miragon palette at all. Both survive only as the deprecated aliases above. The stops resolve to the `--miragon-card-accent-*` tokens in `theme.css`, which mirror `tokens.json`.
+
+**Inside a group: the group's tone.** A card that sets neither `accent` nor `status` takes the tone of the group it sits in, read from `--mg-group-tone`. Today the only group is a `compare` column with `variant: groups` (see the archetype), so a card there colours its title and icon like its group heading. Everywhere else the variable is unset and the card stays blue. An explicit `accent` or `status` still wins; never reach for `status` to make cards match a group.
 
 **Status: a verdict, not a variety.** Leave `status` off by default; blue is the card colour. Set it only where a slide delivers a judgement the audience should read at a glance: `success` (works, solved, recommended), `warning` (works with a caveat), `danger` (does not work, avoid, a bad practice). The brand keeps status colours strictly for states, so never use them to make a grid more colourful, and do not mix status cards with decorative accents on the same verdict. **Colour never carries the state alone:** name it with a word in the body ("Solved.", "Avoid.") or with an icon that says the same thing (`i-lucide-circle-check`, `i-lucide-triangle-alert`, `i-lucide-circle-x`). Only the title and the icon take the status colour; the card, its border, and the body markers stay as they are.
 

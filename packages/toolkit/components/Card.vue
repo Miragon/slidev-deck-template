@@ -16,10 +16,13 @@ const props = withDefaults(
     imageAlt?: string
     align?: 'left' | 'center' | 'right'
   }>(),
-  { accent: 'blue', padding: 'standard', align: 'left', imageAlt: '' },
+  { padding: 'standard', align: 'left', imageAlt: '' },
 )
 
-const toneClass = computed(() => (props.status ? `mg-card--status-${props.status}` : `mg-card--accent-${props.accent}`))
+const toneClass = computed(() => {
+  if (props.status) return `mg-card--status-${props.status}`
+  return props.accent ? `mg-card--accent-${props.accent}` : 'mg-card--accent-group'
+})
 </script>
 
 <template>
@@ -54,6 +57,9 @@ const toneClass = computed(() => (props.status ? `mg-card--status-${props.status
    belongs on surfaces and graphics, not in text.
    The stops live in theme.css as --miragon-card-accent-* tokens, so a deck can
    remap them from its own stylesheet without shadowing this component. */
+/* Without an explicit accent a card takes the tone of the group it sits in
+   (e.g. a compare group sets --mg-group-tone); outside a group, blue. */
+.mg-card--accent-group { --mg-card-accent: var(--mg-group-tone, var(--miragon-card-accent-blue)); }
 .mg-card--accent-blue { --mg-card-accent: var(--miragon-card-accent-blue); }
 .mg-card--accent-blue-mid { --mg-card-accent: var(--miragon-card-accent-blue-mid); }
 /* Deprecated ramp values from the old blue → teal → green progression. Kept so

@@ -193,7 +193,7 @@ accent: blue
 ---
 
 <!--
-  compare: two panels. Transition: "Diagrams get the same treatment."
+  compare: two panels. Transition: "The same layout also holds two groups of cards."
 -->
 
 Same content, two ways to get there.
@@ -213,3 +213,37 @@ Same content, two ways to get there.
 ::legend::
 
 A system trades a little freedom for a lot of consistency.
+
+---
+id: s-4184f12f
+layout: compare
+variant: groups
+title: Two groups, equal weight
+leftTitle: Throughput
+rightTitle: Stability
+accent: mixed
+---
+
+<!--
+  compare, variant: groups: two equal-weight groups of cards instead of two bullet panels.
+  REQUIRED: variant: groups, leftTitle, rightTitle, a <CardGrid cols="1"> of <Card>s in ::left:: and ::right::
+  OPTIONAL: title, eyebrow, accent (mixed = blue left, green right; blue / green = one tone for both)
+  LIMIT: 2 cards per group, short bodies
+  HOW TO USE: leave accent and status off the cards; they take the tone of their group.
+  Never use status="success" to colour a group: status is a verdict, not a group colour.
+  Transition: "Diagrams get the same treatment."
+-->
+
+::left::
+
+<CardGrid cols="1">
+<Card icon="i-lucide-rocket" title="Deployment frequency">How often a change reaches production.</Card>
+<Card icon="i-lucide-timer" title="Lead time for changes">From commit to running in production.</Card>
+</CardGrid>
+
+::right::
+
+<CardGrid cols="1">
+<Card icon="i-lucide-shield-alert" title="Change failure rate">Share of deployments that need a fix.</Card>
+<Card icon="i-lucide-life-buoy" title="Time to restore">From incident to service back to normal.</Card>
+</CardGrid>
