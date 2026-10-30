@@ -2,6 +2,12 @@
 
 This repo is the monorepo behind the Miragon Slidev template. Most people never need it — they just run `npm create @miragon/slidev-deck` (see the [README](README.md)). This guide is for working on the template itself: the design system, the scaffolder, or the verification suite.
 
+## External contributions
+
+We're currently not accepting pull requests from outside the team. We don't have the resources to fully review and validate external contributions, so we can't guarantee that a merged change keeps the project free of bugs, free of security vulnerabilities or malicious code, and consistent with requirements that make sense for it. Pull requests opened by external contributors will be closed.
+
+If you've found a bug or have an idea, please [open an issue](https://github.com/Miragon/slidev-deck-template/issues/new) instead. We read every one, and it's the best way to get something onto our radar.
+
 ## Repository layout
 
 An npm workspace with the sub-projects below, each with its own README, plus the `miragon-slidev` Claude Code plugin:
