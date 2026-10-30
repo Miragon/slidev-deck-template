@@ -20,6 +20,9 @@
  *   leftTitle   — Kopf des linken Panels (default "Before")
  *   rightTitle  — Kopf des rechten Panels (default "After")
  *   accent      — "blue" | "green" | "mixed" — Balken-/Eyebrow-Akzent (default blue)
+ *   variant     — "panels" | "groups" (default panels). "groups" verzichtet auf
+ *                 das weiße Panel, damit <Card>s im Slot nicht weiß auf weiß
+ *                 liegen; Cards ohne accent übernehmen den Ton ihrer Gruppe.
  */
 import { computed } from 'vue'
 
@@ -29,10 +32,11 @@ const props = withDefaults(
     leftTitle?: string
     rightTitle?: string
     accent?: 'blue' | 'green' | 'mixed'
+    variant?: 'panels' | 'groups'
     // Slidev reicht das volle Frontmatter-Objekt als `frontmatter`-Prop durch.
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', leftTitle: 'Before', rightTitle: 'After' },
+  { accent: 'blue', variant: 'panels', leftTitle: 'Before', rightTitle: 'After' },
 )
 
 // `title` ist ein RESERVIERTES Slidev-Frontmatter-Feld (TOC/Nav) und wird NICHT
@@ -69,6 +73,7 @@ const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'v
 <template>
   <div
     class="compare-layout"
+    :class="`compare-layout--${variant}`"
     :style="{ '--cmp-grad': gradientVar, '--cmp-accent': accentVar, '--cmp-left': leftTone, '--cmp-right': rightTone, '--cmp-left-mark': leftMark, '--cmp-right-mark': rightMark }"
   >
     <div class="compare-inner">
@@ -175,6 +180,28 @@ const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'v
   letter-spacing: -0.01em;
   margin: 0 0 1.25rem;
 }
+/* Gruppen-Variante: kein Panel, die Spalte ist eine transparente Gruppe aus
+   Marker-Balken + Titel, darunter die Cards des Slots in Gruppenfarbe. */
+.compare-layout--groups .compare-panel {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+.compare-layout--groups .panel-left { --mg-group-tone: var(--cmp-left); }
+.compare-layout--groups .panel-right { --mg-group-tone: var(--cmp-right); }
+.compare-layout--groups .panel-title::before {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 0.3rem;
+  border-radius: 999px;
+  margin-bottom: 0.75rem;
+}
+.compare-layout--groups .panel-left .panel-title::before { background: var(--cmp-left-mark); }
+.compare-layout--groups .panel-right .panel-title::before { background: var(--cmp-right-mark); }
+
 /* Titel-Farbe trägt die semantische Unterscheidung links=Problem / rechts=Lösung
    (bei accent "mixed"); bei accent "blue"/"green" sind beide Seiten einfarbig. */
 .panel-left  .panel-title { color: var(--cmp-left); }

@@ -152,11 +152,38 @@ Use **`accent: mixed`** when the slide really is problem-versus-solution: that i
 | `leftTitle` (str) | "Before" |
 | `rightTitle` (str) | "After" |
 | `accent` | blue / green / mixed (default blue; `mixed` for problem vs. solution) |
+| `variant` | `panels` (default) / `groups` |
 | **`::left::` slot** | left panel content |
 | **`::right::` slot** | right panel content |
 | **default slot** | optional lead paragraph |
 
 **Limit:** max 4 bullets per panel.
+
+**`variant: groups`: two equal-weight groups of cards.** When each side is a group of several cards rather than a list of bullets (e.g. throughput vs. stability metrics), set `variant: groups`. The white panel disappears, so the cards do not sit white on white; each column becomes a marker bar plus a group heading in the side's tone (same tones as the table above), and every `<Card>` inside the slot that sets neither `accent` nor `status` takes that tone on its title and icon. Put the cards in a `<CardGrid cols="1">`, at most 2 per group, and leave out the eyebrow if the slide runs tight. **Never use `status` to colour a group:** status marks a verdict, not membership. Demo: "Two groups, equal weight" in `deck/chapter/03-theme/03-theme.md`.
+
+```md
+---
+layout: compare
+variant: groups
+accent: mixed
+leftTitle: Throughput
+rightTitle: Stability
+---
+
+::left::
+
+<CardGrid cols="1">
+<Card icon="i-lucide-rocket" title="Deployment frequency">How often a change reaches production.</Card>
+<Card icon="i-lucide-timer" title="Lead time for changes">From commit to running in production.</Card>
+</CardGrid>
+
+::right::
+
+<CardGrid cols="1">
+<Card icon="i-lucide-shield-alert" title="Change failure rate">Share of deployments that need a fix.</Card>
+<Card icon="i-lucide-life-buoy" title="Time to restore">From incident to service back to normal.</Card>
+</CardGrid>
+```
 
 ## goodbad: "which model is right, and why?" (static, interactive)
 
