@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.14.0...miragon-slidev-plugin-v1.15.0) (2026-10-30)
+
+
+### Features
+
+* **slidev-toolkit:** compare two equal-weight groups of cards ([#236](https://github.com/Miragon/slidev-deck-template/issues/236)) ([25cccbc](https://github.com/Miragon/slidev-deck-template/commit/25cccbc275f3866d3645105532ec306080c06231))
+
 ## [1.14.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.13.0...miragon-slidev-plugin-v1.14.0) (2026-10-23)
 
 
