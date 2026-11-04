@@ -70,6 +70,15 @@ test('wires the miragon-slidev plugin marketplace instead of copying skills', ()
   assert.equal(settings.enabledPlugins['miragon-slidev@miragon-slidev'], true)
 })
 
+test('enables the official Slidev plugin from its own marketplace', () => {
+  const settings = JSON.parse(readFileSync(join(out, '.claude/settings.json'), 'utf8'))
+  assert.deepEqual(settings.extraKnownMarketplaces['slidev-plugins'].source, {
+    source: 'github',
+    repo: 'slidevjs/slidev',
+  })
+  assert.equal(settings.enabledPlugins['slidev@slidev-plugins'], true)
+})
+
 test('omits the template-only files', () => {
   const forbidden = [
     'packages',

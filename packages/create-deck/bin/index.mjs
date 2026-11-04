@@ -92,6 +92,8 @@ export default {
 // as a Claude Code plugin marketplace and enables the `miragon-slidev` plugin (the
 // `slides` + `excalidraw` authoring skills). autoUpdate keeps them current in the
 // background; trusting the deck folder in Claude Code prompts the one-time install.
+// It also registers Slidev's own `slidev-plugins` marketplace and enables the official
+// `slidev` plugin (generic Slidev syntax, layouts, animations, export), straight from upstream.
 // Checked in so it is versionable and a consultant can pin or disable it per project.
 const CLAUDE_SETTINGS = JSON.stringify(
   {
@@ -100,8 +102,14 @@ const CLAUDE_SETTINGS = JSON.stringify(
         source: { source: 'github', repo: 'Miragon/slidev-deck-template' },
         autoUpdate: true,
       },
+      'slidev-plugins': {
+        source: { source: 'github', repo: 'slidevjs/slidev' },
+      },
     },
-    enabledPlugins: { 'miragon-slidev@miragon-slidev': true },
+    enabledPlugins: {
+      'miragon-slidev@miragon-slidev': true,
+      'slidev@slidev-plugins': true,
+    },
   },
   null,
   2,

@@ -94,6 +94,15 @@ To manage it by hand — or if the prompt does not appear:
 The skills are then invoked as `miragon-slidev:slides` and `miragon-slidev:excalidraw` (Claude also selects them
 automatically when you work under `deck/`).
 
+**Generic Slidev skill.** `.claude/settings.json` also enables Slidev's official `slidev` plugin from its own
+`slidev-plugins` marketplace (`slidevjs/slidev`), covering Slidev syntax, layouts, animations, code and export.
+It comes straight from upstream, so nothing is vendored here. To add it by hand:
+
+```
+/plugin marketplace add slidevjs/slidev
+/plugin install slidev@slidev-plugins
+```
+
 **Miragon-internal brand skills.** The `miragon-brand` skills (`corporate-design`, `brand-tone`, `brand-review`)
 that `CLAUDE.md` mentions live in the private `Miragon/skills` marketplace. They are deliberately not wired into
 this repo, so the deck works for external contributors without them. Miragon colleagues install them once per machine:
