@@ -93,7 +93,7 @@ Every push and PR to your deck runs **Build Deck** (the static build plus `npm r
 
 ## Working with Claude
 
-The scaffold ships `CLAUDE.md` and wires the `miragon-slidev` Claude Code plugin (the `slides` + `excalidraw` skills), so a Claude Code session knows the design system on the first prompt and the skills stay up to date instead of freezing at scaffold time. It respects the white-card, no-em-dash, heading-colour and `leftIsGood` rules automatically. Starter prompts:
+The scaffold ships `CLAUDE.md` and wires the `miragon-slidev` Claude Code plugin (the `slides` + `excalidraw` skills), so a Claude Code session knows the design system on the first prompt and the skills stay up to date instead of freezing at scaffold time. It also enables Slidev's official `slidev` plugin from its `slidev-plugins` marketplace for generic Slidev syntax, animations and export. It respects the white-card, no-em-dash, heading-colour and `leftIsGood` rules automatically. Starter prompts:
 
 > Outline a 30-minute talk on [topic] using `cover`, three `section` chapters with two `content` slides each, then `closing`. Split into chapter files under `deck/chapter/`.
 
