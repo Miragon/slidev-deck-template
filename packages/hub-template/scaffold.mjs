@@ -145,10 +145,18 @@ function netlifyToml() {
 # netlify/edge-functions/auth.js: set SITE_PASSWORD and SESSION_SECRET in
 # Netlify (see NETLIFY.md). Without SITE_PASSWORD the site is public; with it but
 # without SESSION_SECRET the site answers 503 on purpose.
+#
+# Production only changes on a release: the release workflow
+# (.github/workflows/release-please.yml) builds the release commit and deploys
+# it with the Netlify CLI. Netlify's own production builds of main are skipped
+# by the ignore command below; every PR still gets a deploy preview.
 
 [build]
   command = "npm run build"
   publish = "site/docs/.vitepress/dist"
+
+[context.production]
+  ignore = "exit 0"
 
 [functions]
   directory = "netlify/functions"
@@ -188,7 +196,9 @@ Do them once, in this order.
 ## 1. Create the site
 
 Netlify → Add new project → Import from Git → pick this repository. The build
-settings come from \`netlify.toml\`. Do **not** deploy yet.
+settings come from \`netlify.toml\`. Do **not** deploy yet. If Netlify starts a
+production build anyway, it shows up as canceled: production only comes from a
+release (section 3).
 
 **Leave Base directory empty.** If it contains anything (Netlify often fills in
 \`site\`), delete the content. With a base of \`site\` the build runs in the wrong
@@ -212,34 +222,197 @@ For both secrets tick **Contains secret values**. Netlify then switches the scop
 to "Specific scopes": keep **Builds**, **Functions** and **Runtime** ticked.
 
 A secret cannot be read again after saving. To change it: Environment variables →
-the variable → Edit → enter the new value → save, **then deploy again**; Functions
-and the edge gate only see the new value after a new deploy.
+the variable → Edit → enter the new value → save, **then deploy again** (section
+3); Functions and the edge gate only see the new value after a new deploy.
 
 Without \`SESSION_SECRET\` the site refuses to start sessions: the sign-in answers
 500 and every page 503. That is on purpose, a signing key made of the credentials
 alone could be cracked offline from a participant's own cookie.
 
-## 3. Deploy and test
+## 3. Production only on release
 
-Deploy, then in a private window:
+A push to \`main\` never goes live. Release Please keeps a Release PR open; merging
+it creates the tag, and the job \`deploy-hub\` in \`.github/workflows/release-please.yml\`
+builds that commit and deploys it to production with the Netlify CLI. Pull
+requests still get deploy previews from Netlify.
+
+Once per repository:
+
+1. **Release Please App:** the Miragon Release Please App must have access to this
+   repository (GitHub → Miragon → Settings → GitHub Apps → Release Please →
+   Repository access).
+2. **\`NETLIFY_AUTH_TOKEN\`:** a Netlify personal access token as a GitHub secret. In
+   the Miragon organisation it already exists as an organisation secret.
+3. **\`NETLIFY_SITE_ID\`:** the Project ID from Project configuration → General, as a
+   repository variable: \`gh variable set NETLIFY_SITE_ID --body <project-id>\`.
+4. **Netlify branches:** keep the defaults under Project configuration → Build &
+   deploy → Branches and deploy contexts: production branch \`main\`, branch deploys
+   only for the production branch, deploy previews for any pull request.
+
+Day to day:
+
+- **Deploy again** (after changing a variable): re-run the job \`deploy-hub\` of the
+  latest release run in GitHub Actions. "Trigger deploy" in Netlify does not build
+  production; \`netlify.toml\` skips it.
+- **Roll back:** Netlify → Deploys → the deploy named after the older tag → Publish
+  deploy, or re-run \`deploy-hub\` of that release's run.
+- A fresh Release PR can fail its deploy preview with "git ref pull/<n>/head does
+  not exist": Netlify was faster than GitHub. Retry that deploy in Netlify.
+
+## 4. First release and test
+
+The Release PR opens after the first \`feat:\` or \`fix:\` commit on \`main\`. Merge it
+once sections 1 to 3 are done; \`deploy-hub\` deploys the hub. Then in a private
+window:
 
 1. Open the site. You land on \`/login\`, not on a 503 page.
 2. Sign in with the user (\`${config.siteUser}\` unless \`SITE_USER\` is set) and the password. The start page opens.
 3. Open \`/login/?to=/%5Cevil.com\` and sign in. You must land on the start page, not on evil.com.
 4. Fail more than 10 sign-ins within a minute. The next one is answered with 429.
 
-## 4. Keeping the sign-in code current
+## 5. Keeping the sign-in code current
 
 The shared sign-in code lives in \`netlify/lib/hub/\` and is managed by
 \`@miragon/hub-template\`. Do not edit it by hand: \`npm run hub:sync\` updates it
 (after \`npm update @miragon/hub-template\`), and CI fails when it differs
 (\`npm run hub:check\`).
 
-## 5. After the training
+## 6. After the training
 
-Rotate \`SITE_PASSWORD\` and redeploy. Changing the password ends every open session.
+Rotate \`SITE_PASSWORD\` and deploy again (section 3). Changing the password ends every open session.
 A new \`SESSION_SECRET\` does the same.
 `;
+}
+
+// The version a new hub starts at. Never released, so the first `feat:` makes 0.1.0.
+// create-deck writes it into the root package.json, the manifest below repeats it.
+export const HUB_INITIAL_VERSION = "0.0.0";
+
+const NETLIFY_CLI_VERSION = "27.16.3";
+
+const RELEASE_WORKFLOW = `name: Release
+
+# On every push to main, release-please maintains a "Release PR" that bumps the
+# version and updates CHANGELOG.md. Merging that Release PR creates the GitHub
+# release/tag, and deploy-hub then builds the release commit and deploys it to
+# Netlify production with the Netlify CLI. Netlify's own production builds are
+# switched off in netlify.toml, so main can carry work in progress; pull
+# requests still get deploy previews from the Netlify Git integration.
+#
+# The GitHub App token (not the default GITHUB_TOKEN) is required so the bot's
+# commits and tags trigger downstream workflows.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: \${{ steps.release_please.outputs.release_created }}
+      tag_name: \${{ steps.release_please.outputs.tag_name }}
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          client-id: \${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}
+          private-key: \${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
+      - id: release_please
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: \${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # Re-running this job of an older release run deploys that release again, see
+  # "Production only on release" in NETLIFY.md.
+  deploy-hub:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # Inside the repo the CLI sees the npm workspace site/ and deploys from
+      # there instead of the root, so the built hub, the functions, the config
+      # they import and netlify.toml are deployed from a copy outside of it.
+      - name: Deploy \${{ needs.release-please.outputs.tag_name }} to production
+        env:
+          TAG_NAME: \${{ needs.release-please.outputs.tag_name }}
+          HUB_STAGE: \${{ runner.temp }}/hub
+          NETLIFY_AUTH_TOKEN: \${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: \${{ vars.NETLIFY_SITE_ID }}
+        run: |
+          mkdir -p "$HUB_STAGE/site/docs/.vitepress"
+          cp -R netlify netlify.toml hub.config.mjs "$HUB_STAGE/"
+          cp -R site/docs/.vitepress/dist "$HUB_STAGE/site/docs/.vitepress/"
+          cd "$HUB_STAGE"
+          npx --yes netlify-cli@${NETLIFY_CLI_VERSION} deploy --no-build --prod --message "$TAG_NAME"
+`;
+
+const PR_TITLE_WORKFLOW = `name: PR Title
+
+# release-please parses conventional commits to decide version bumps. Because PRs
+# are squash-merged, the PR title becomes the commit message on main, so it must
+# be a valid conventional-commit subject (feat:, fix:, chore:, ...).
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: pr-title-\${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        with:
+          validateSingleCommit: true
+          types: |
+            feat
+            fix
+            chore
+            docs
+            refactor
+            ci
+            build
+            test
+            revert
+`;
+
+function releasePleaseConfig(config) {
+    const releaseConfig = {
+        $schema: "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+        "release-type": "node",
+        "bump-minor-pre-major": true,
+        "include-component-in-tag": false,
+        packages: { ".": { "package-name": config.slug, "changelog-path": "CHANGELOG.md" } },
+    };
+    return JSON.stringify(releaseConfig, null, 2) + "\n";
 }
 
 const HUB_CI = `name: hub
@@ -304,6 +477,10 @@ export default ${JSON.stringify({ slug: config.slug, title: config.title, locale
     await put("netlify.toml", netlifyToml());
     await put("NETLIFY.md", netlifyMd(config));
     await put(".github/workflows/hub.yml", HUB_CI);
+    await put(".github/workflows/release-please.yml", RELEASE_WORKFLOW);
+    await put(".github/workflows/pr-title.yml", PR_TITLE_WORKFLOW);
+    await put("release-please-config.json", releasePleaseConfig(config));
+    await put(".release-please-manifest.json", JSON.stringify({ ".": HUB_INITIAL_VERSION }, null, 2) + "\n");
 
     await put(
         "site/package.json",
@@ -359,7 +536,10 @@ Training hub: still to do in Netlify (details in NETLIFY.md)
   2. Environment variables, both with "Contains secret values" ticked:
        SITE_PASSWORD   the password you share with participants
        SESSION_SECRET  openssl rand -base64 48   (REQUIRED: without it the site answers 503)
-  3. Deploy, then test the sign-in in a private window (checklist in NETLIFY.md).
+  3. Production only on release: give the Release Please App access to the repo,
+     set the repo variable NETLIFY_SITE_ID (Project ID); NETLIFY_AUTH_TOKEN is an
+     org secret in Miragon
+  4. Merge the first Release PR, then test the sign-in in a private window (checklist in NETLIFY.md).
      User name: ${config.siteUser} (unless you set SITE_USER)
-  4. Keep the sign-in code current: npm update @miragon/hub-template && npm run hub:sync`;
+  5. Keep the sign-in code current: npm update @miragon/hub-template && npm run hub:sync`;
 }

@@ -27,13 +27,15 @@ Phase 1  Vorbereiten
 
 Phase 2  GitHub
   [ ] 2.1  Privates Repo anlegen und pushen                            Claude, nach Rückfrage
+  [ ] 2.2  Miragon Release Please App für das Repo freischalten        Du (nur Hub)
 
 Phase 3  Netlify (nur Hub)
   [ ] 3.1  Projekt aus dem Repo importieren, NOCH NICHT deployen       Du
   [ ] 3.2  Base directory leer lassen                                  Du
   [ ] 3.3  SITE_PASSWORD setzen (Secret)                               Du
   [ ] 3.4  SESSION_SECRET setzen (Secret)                              Du
-  [ ] 3.5  Deployen                                                    Du
+  [ ] 3.5  NETLIFY_SITE_ID als Repo-Variable setzen                    Claude, mit Project ID von dir
+  [ ] 3.6  Erstes Release: Release-PR mergen                           Du
 
 Phase 4  Testen (nur Hub)
   [ ] 4.1  Startseite leitet auf /login um                             Claude
@@ -44,12 +46,17 @@ Phase 4  Testen (nur Hub)
 
 Phase 5  Danach
   [ ] 5.1  Deck und Seiten mit Inhalt füllen (slides skill)            Du + Claude
-  [ ] 5.2  Nach dem Training: neues Passwort, neu deployen             Du
+  [ ] 5.2  Nach dem Training: neues Passwort, deploy-hub neu starten   Du
 ```
 
 ## Step 0: is this the right skill?
 
 - The repo already has `hub.config.mjs` and `netlify/lib/hub/`: it is an existing hub. Do not scaffold again. For a new sign-in version run `npm update @miragon/hub-template && npm run hub:sync`; for Netlify questions go to phase 3 and 4.
+- **Retrofit an existing hub** that still deploys every push to `main` (no `.github/workflows/release-please.yml`), the way `Miragon/cibseven-developer-training` did it:
+  1. Scaffold a throwaway hub (`npm create @miragon/slidev-deck@latest <scratch>/hub -- --hub`) and copy `release-please.yml`, `pr-title.yml`, `release-please-config.json`, `.release-please-manifest.json` and the `[context.production] ignore` block of `netlify.toml` from it.
+  2. Adapt them to the repo: `package-name` and the manifest version from its `package.json` (add a `version` if it has none), the Node version of its build, and the deploy copy in `deploy-hub` (the build output, `netlify/`, `netlify.toml` and every file the functions import from outside `netlify/`).
+  3. The repo has history, so set `"bootstrap-sha"` in `release-please-config.json` to the current `main`, or the first Release PR lists every earlier commit. Open an issue to remove it again once the first release exists.
+  4. Then 2.2 and 3.5. Check the Netlify project with `netlify api getSite`: production branch `main`, no extra branch deploys, `prevent_non_git_prod_deploys: false`. Then 3.6 and phase 4.
 - A deck only, no site: `--no-hub`, then phases 1 and 2, and 5.1.
 
 ## Phase 1: Vorbereiten
@@ -83,7 +90,9 @@ npm run build            # deck into /deck/, sign-in pages, site
 
 ## Phase 2: GitHub
 
-**2.1** Ask before creating anything remote: organisation or account, repository name, visibility. Training material usually belongs in a **private** repository. Then `git init`, commit, `gh repo create`, push. Never commit a password or the session secret.
+**2.1** Ask before creating anything remote: organisation or account, repository name, visibility. Training material usually belongs in a **private** repository. Then `git init`, commit, `gh repo create`, push. Never commit a password or the session secret. For a hub, make the first commit a `feat:` (e.g. `feat: scaffold the <title> training`): the first Release PR (0.1.0) opens from it.
+
+**2.2** (hub only) The person gives the **Miragon Release Please App** access to the new repository (GitHub → Miragon → Settings → GitHub Apps → Release Please → Repository access), unless it already has access to all repositories. If the `Release` workflow of the first push failed for lack of access, re-run it afterwards.
 
 ## Phase 3: Netlify (the person clicks, you explain)
 
@@ -100,9 +109,11 @@ Go through it one item at a time and wait for the answer.
 - `SITE_USER`: optional, default `training`. The sign-in page asks for a user name, so tell the person the user name (the default, unless they set `SITE_USER`) and that participants need it too.
 - A secret cannot be read again after saving. To change one: the variable → Edit → new value → save, then **deploy again**; without a new deploy the old value stays active.
 
-**3.5** Deploy (Deploys → Trigger deploy).
+**3.5** Production only changes on a release: `deploy-hub` in `.github/workflows/release-please.yml` deploys with the Netlify CLI, and `netlify.toml` skips Netlify's own production builds. Ask the person for the **Project ID** (Project configuration → General) and set it: `gh variable set NETLIFY_SITE_ID --repo <owner>/<repo> --body <project-id>`. `NETLIFY_AUTH_TOKEN` is an organisation secret in Miragon (`gh secret list --org Miragon`); outside Miragon the person creates a Netlify personal access token and stores it as that secret. The branch settings stay at Netlify's defaults: production branch `main`, branch deploys only for it, deploy previews for any pull request.
 
-If `SESSION_SECRET` is missing the site answers **503** and the sign-in 500. That is on purpose (a key made of the credentials alone can be cracked offline from a participant's cookie), not a bug: set the variable and redeploy.
+**3.6** The person merges the Release PR. `deploy-hub` deploys the hub; check that the job is green and that Netlify shows a production deploy named after the tag. A deploy preview of a fresh Release PR can fail with "git ref pull/<n>/head does not exist" (Netlify was faster than GitHub): retry it in Netlify, it does not block the merge.
+
+If `SESSION_SECRET` is missing the site answers **503** and the sign-in 500. That is on purpose (a key made of the credentials alone can be cracked offline from a participant's cookie), not a bug: set the variable and deploy again by re-running `deploy-hub` of the latest release.
 
 ## Phase 4: Test the deployed site
 
@@ -118,9 +129,9 @@ If a check fails, report what the response was and go back to phase 3; do not we
 
 ## Phase 5: Danach
 
-- **5.1** Fill `deck/` (use the `slides` skill) and `site/docs/` (plain Markdown, German and English). Commit and push; Netlify deploys on its own.
+- **5.1** Fill `deck/` (use the `slides` skill) and `site/docs/` (plain Markdown, German and English). Commit and push. A push to `main` only updates the Release PR; production changes when the person merges it.
 - During the training: share the user name and password out of band (calendar entry, start of the training), not in the repo.
-- **5.2** After the training: set a new `SITE_PASSWORD` in Netlify and redeploy. A new password ends every open session; so does a new `SESSION_SECRET`. A deploy always ends all sessions, so do not deploy in the middle of an exercise.
+- **5.2** After the training: set a new `SITE_PASSWORD` in Netlify and deploy again: re-run the job `deploy-hub` of the latest release run ("Trigger deploy" in Netlify does not build production). A new password ends every open session; so does a new `SESSION_SECRET`. A deploy always ends all sessions, so do not deploy in the middle of an exercise.
 - Keeping the sign-in code current: `npm update @miragon/hub-template && npm run hub:sync`. CI (`hub:check`) fails when `netlify/lib/hub/` was edited by hand or is stale.
 
 ## Definition of done
@@ -134,3 +145,5 @@ Show the final checklist. The hub is ready when 1.1 to 4.5 are `[x]`: the site a
 - Putting the deck at `/slides/`: the hub page `slides` lives there. The deck is served at `/deck/`.
 - Roles (a trainer who releases solutions) are not part of the template. The BPM training has them; a plain hub has one credential pair.
 - The sign-in pages in `site/docs/public/login/` are generated and git-ignored: change the texts in `@miragon/hub-template`, not in the output.
+- Deploying production by hand. Production comes from `deploy-hub` only; the one manual step is a rollback (Netlify → Deploys → the older release → Publish deploy).
+- "Simplifying" the deploy copy in `deploy-hub`. Inside the repo the Netlify CLI sees the npm workspace `site/` and deploys from there, or refuses with "Projects detected"; it has to run from the copy, and the copy needs everything the functions import (`hub.config.mjs`).

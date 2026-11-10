@@ -222,11 +222,17 @@ test('--hub adds the sign-in hub next to the deck', () => {
       'site/docs/en/index.md',
       '.github/workflows/hub.yml',
       '.github/workflows/ci.yml',
+      '.github/workflows/release-please.yml',
+      '.github/workflows/pr-title.yml',
+      'release-please-config.json',
+      '.release-please-manifest.json',
     ]) {
       assert.ok(existsSync(join(t.dir, f)), `missing ${f}`)
     }
 
     const pkg = pkgOf(t.dir)
+    const manifest = JSON.parse(readFileSync(join(t.dir, '.release-please-manifest.json'), 'utf8'))
+    assert.equal(pkg.version, manifest['.'], 'release-please starts from the version in package.json')
     assert.deepEqual(pkg.workspaces, ['site'])
     assert.equal(pkg.devDependencies['@miragon/hub-template'], SELF.dependencies['@miragon/hub-template'])
     assert.equal(pkg.scripts.build, 'npm run build:site')
