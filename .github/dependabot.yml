@@ -22,9 +22,6 @@ updates:
       time: "06:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 5
-    # Exact pins still get bumped; the published packages' peer ranges are
-    # left alone unless a new version falls outside them, so decks can move
-    # vue, playwright-chromium and @paper-design/shaders on their own.
     versioning-strategy: increase-if-necessary
     commit-message:
       prefix: "chore"
