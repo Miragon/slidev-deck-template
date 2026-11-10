@@ -22,8 +22,10 @@ Without `--hub` you get the deck only. In a terminal, the scaffold asks.
 | `scripts/build-login-pages.mjs` | writes the two sign-in pages from the config at build time |
 | `scripts/build-slides.mjs` | builds `deck/` into `site/docs/public/deck/` |
 | `site/` | VitePress hub, German and English |
-| `NETLIFY.md` | the steps that cannot be scaffolded: variables, deploy, tests |
+| `NETLIFY.md` | the steps that cannot be scaffolded: variables, release setup, tests |
 | `.github/workflows/hub.yml` | `hub:check` plus the full build |
+| `.github/workflows/release-please.yml`, `release-please-config.json`, `.release-please-manifest.json` | production only on release: merging the Release PR deploys the release commit with the Netlify CLI (`deploy-hub`); `netlify.toml` skips Netlify's own production builds |
+| `.github/workflows/pr-title.yml` | PR titles must be conventional commits, since they become the squashed commit release-please reads |
 
 ## What the sign-in guarantees
 

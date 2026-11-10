@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url'
 import { createInterface } from 'node:readline/promises'
 import { parseArgs } from 'node:util'
 import { downloadTemplate } from 'giget'
-import { HUB_SCRIPTS, nextStepsText, writeHub } from '@miragon/hub-template/scaffold'
+import { HUB_INITIAL_VERSION, HUB_SCRIPTS, nextStepsText, writeHub } from '@miragon/hub-template/scaffold'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = 'Miragon/slidev-deck-template'
@@ -212,6 +212,8 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, s
   if (!portlessVersion) throw new Error('Reference deck/package.json is missing devDependency portless')
   const pkg = {
     name: deckName,
+    // A hub is released with release-please, which bumps this version.
+    ...(hub ? { version: HUB_INITIAL_VERSION } : {}),
     type: 'module',
     private: true,
     scripts: {
