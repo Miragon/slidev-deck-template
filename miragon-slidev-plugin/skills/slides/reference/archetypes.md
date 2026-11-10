@@ -128,9 +128,13 @@ Two columns: image one side, content the other.
 | `image` (str) | served from the chapter's `resources/` (e.g. `/resources/02-content/team.jpg`) |
 | `imageAlt` (str) | alt text. **Fill it in whenever the image carries content** (say what it shows, not "image"); leave the default `""` only for a purely decorative photo, so screen readers skip it |
 | `side` | left (default) / right: which column carries the image |
+| `ratio` (str) | image/content column ratio, same convention as the diagram layouts (default `"1/1.1"`). Always image/content, whatever the `side`: `"1/2"` gives the image a third of the width |
+| `imageFrame` (bool) | `true` (default) frames the image as a photo: white background, rounded corners, shadow, cropped to fill. `false` shows it bare and uncropped (`object-fit: contain`) |
 | **slot** | free markdown body |
 
 **Limit:** max 4 bullets. Images: the chapter's `resources/` folder, referenced as `/resources/<chapter>/<file>`. Flip `side` so the visual doesn't always land on the same column.
+
+Keep the frame for photos. Set `imageFrame: false` for a graphic with its own shape (a QR code, a logo, a diagram with a transparent background), where the white frame would read as a stray card, and pair it with a smaller `ratio` such as `"1/2"` so the graphic does not fill half the slide. Use these props instead of a slide-scoped `<style>` that targets the layout's internal classes.
 
 ## compare: two-panel before/after (static)
 

@@ -14,6 +14,15 @@
  *   image      — served URL path to the image (e.g. /resources/02-content/team.jpg)
  *   imageAlt   — alt text for accessibility (default "")
  *   side       — "left" | "right" (default "left") — which side the image is on
+ *   ratio      — image/content column ratio as "a/b", the same convention as
+ *                SplitView and the diagram layouts (default "1/1.1"; e.g.
+ *                "1/2" gives the image a third of the width). Always
+ *                image/content, independent of `side`.
+ *   imageFrame — true (default) frames the image as a photo: white
+ *                background, rounded corners, shadow, cropped to fill.
+ *                false shows it bare and uncropped (object-fit: contain),
+ *                for graphics with their own shape such as a QR code, a logo
+ *                or a transparent diagram.
  * Slot:
  *   default    — free Markdown body (lead, bullets, numbered steps, …)
  */
@@ -26,9 +35,11 @@ const props = withDefaults(
     image?: string
     imageAlt?: string
     side?: 'left' | 'right'
+    ratio?: string
+    imageFrame?: boolean
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', side: 'left', imageAlt: '' },
+  { accent: 'blue', side: 'left', imageAlt: '', ratio: '1/1.1', imageFrame: true },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -47,15 +58,20 @@ function withBase(path?: string) {
   return import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + path.replace(/^\//, '')
 }
 const imageSrc = computed(() => withBase(props.image))
+
+const columns = computed(() => {
+  const [image = '1', content = '1'] = props.ratio.split('/').map((part) => part.trim() || '1')
+  return props.side === 'right' ? `${content}fr ${image}fr` : `${image}fr ${content}fr`
+})
 </script>
 
 <template>
   <div
     class="ci-layout"
-    :class="[`image-${side}`]"
+    :class="[`image-${side}`, { 'image-bare': !imageFrame }]"
     :style="{ '--ci-grad': gradientVar, '--ci-accent': accentVar }"
   >
-    <div class="ci-inner">
+    <div class="ci-inner" :style="{ gridTemplateColumns: columns }">
       <div class="ci-image">
         <img v-if="image" :src="imageSrc" :alt="imageAlt" />
       </div>
@@ -90,12 +106,8 @@ const imageSrc = computed(() => withBase(props.image))
   margin: 0 auto;
   padding: 3rem 4rem;
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
   gap: 3rem;
   align-items: center;
-}
-.image-right .ci-inner {
-  grid-template-columns: 1.1fr 1fr;
 }
 .image-right .ci-image {
   order: 2;
@@ -116,6 +128,12 @@ const imageSrc = computed(() => withBase(props.image))
   border-radius: 1.1rem;
   box-shadow: 0 12px 30px color-mix(in srgb, var(--miragon-blue) 18%, transparent);
   background: var(--miragon-white);
+}
+.image-bare .ci-image img {
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
 }
 
 .ci-content {
