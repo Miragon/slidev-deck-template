@@ -27,7 +27,7 @@
     }
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.151"
+    "@iconify-json/lucide": "1.2.152"
   },
   "devDependencies": {
     "@slidev/types": "53.1.0",
