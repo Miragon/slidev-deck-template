@@ -110,7 +110,7 @@ Use `direction="column"` to stack cards vertically (e.g. two labelled cards fill
 
 ## StepList / Step
 
-Compact labelled list for the narrow column next to a diagram. `StepList` sets the font context and spacing; each `Step` is a bold label + muted body.
+Compact labelled list for the narrow column next to a diagram. `StepList` sets the font context and spacing; each `Step` is a number in a rounded blue square (the shape of the Miragon app icon) + bold label + muted body.
 
 | Component | Prop | Notes |
 |---|---|---|

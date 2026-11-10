@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Numbered step sequence beside a diagram. Wrap <Step> items; styling lives here.
+// Numbered step sequence beside a diagram; each number sits in a rounded blue square. Wrap <Step> items; styling lives here.
 //   <StepList><Step label="Client">calls …</Step></StepList>
 </script>
 

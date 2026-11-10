@@ -156,7 +156,7 @@ Boot the module and confirm `newsletter.bpmn` **auto-deploys**.
 
 ### `StepList` / `Step`: compact labelled list beside a diagram
 
-Replaces hand-styled side-note `<div>`s. The label is bold; the body is muted. Use in the narrow column next to a diagram.
+Replaces hand-styled side-note `<div>`s. Each step is numbered in a rounded blue square, like the Miragon app icon. The label is bold; the body is muted. Use in the narrow column next to a diagram.
 
 ```md
 <StepList>
