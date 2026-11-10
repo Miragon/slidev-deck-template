@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.7.0](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.6...create-slidev-deck-v1.7.0) (2026-11-10)
+
+
+### Features
+
+* **create-deck:** enable the official Slidev plugin in scaffolded decks ([#242](https://github.com/Miragon/slidev-deck-template/issues/242)) ([4e0004e](https://github.com/Miragon/slidev-deck-template/commit/4e0004ee960868a971c4028e5fab2d023297cb92))
+* **hub-template:** deploy the hub to production only on releases ([#246](https://github.com/Miragon/slidev-deck-template/issues/246)) ([92b306e](https://github.com/Miragon/slidev-deck-template/commit/92b306e91af6a8263322cdea457a50719901fd0a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.2.1 to 0.3.0
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.30.0 to 1.31.0
+
 ## [1.6.6](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.6.5...create-slidev-deck-v1.6.6) (2026-10-23)
 
 
