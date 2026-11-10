@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /**
- * Step — eine Zeile in einer <StepList>: nummeriertes Badge + fett gesetztes
+ * Step — eine Zeile in einer <StepList>: Nummer in einem abgerundeten blauen
+ * Quadrat (wie das Miragon-App-Icon) + fett gesetztes
  * Label + Fließtext. Die Nummer kommt aus einem CSS-Counter, den die StepList
  * zurücksetzt und jeder Step erhöht (kein index-Prop nötig).
  * Das Label nutzt die primäre Textfarbe, der Body erbt die Farbe der StepList.
@@ -26,14 +27,14 @@ defineProps<{ label?: string }>()
 .step__marker {
   flex: 0 0 auto;
   align-self: flex-start;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.4rem;
   background: var(--miragon-blue);
   color: var(--miragon-white);
   font-size: 0.75rem;
   font-weight: 700;
-  line-height: 1.5rem;
+  line-height: 1.75rem;
   text-align: center;
 }
 .step__marker::before {
