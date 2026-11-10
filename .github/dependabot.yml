@@ -22,7 +22,7 @@ updates:
       time: "06:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 5
-    versioning-strategy: increase
+    versioning-strategy: increase-if-necessary
     commit-message:
       prefix: "chore"
       prefix-development: "chore"
