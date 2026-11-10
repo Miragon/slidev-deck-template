@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/Miragon/slidev-deck-template/compare/hub-template-v0.2.1...hub-template-v0.3.0) (2026-11-10)
+
+
+### Features
+
+* **hub-template:** deploy the hub to production only on releases ([#246](https://github.com/Miragon/slidev-deck-template/issues/246)) ([92b306e](https://github.com/Miragon/slidev-deck-template/commit/92b306e91af6a8263322cdea457a50719901fd0a))
+
 ## [0.2.1](https://github.com/Miragon/slidev-deck-template/compare/hub-template-v0.2.0...hub-template-v0.2.1) (2026-10-12)
 
 
