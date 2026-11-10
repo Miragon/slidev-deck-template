@@ -27,14 +27,15 @@
     }
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.151",
-    "@paper-design/shaders": "0.0.82"
+    "@iconify-json/lucide": "1.2.151"
   },
   "devDependencies": {
-    "@slidev/types": "53.1.0"
+    "@slidev/types": "53.1.0",
+    "@paper-design/shaders": "0.0.82"
   },
   "peerDependencies": {
-    "vue": "3.5.45"
+    "@paper-design/shaders": ">=0.0.82 <0.1.0",
+    "vue": "^3.5.0"
   },
   "files": [
     "layouts",
