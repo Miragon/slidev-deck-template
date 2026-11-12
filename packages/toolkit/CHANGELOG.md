@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.33.0](https://github.com/Miragon/slidev-deck-template/compare/v1.32.0...v1.33.0) (2026-11-12)
+
+
+### Features
+
+* **slidev-toolkit:** show only the agenda flow with preview="none" ([#256](https://github.com/Miragon/slidev-deck-template/issues/256)) ([b438a18](https://github.com/Miragon/slidev-deck-template/commit/b438a18c5cebe3de4fe9d66631ee2b2724f78d83))
+
 ## [1.32.0](https://github.com/Miragon/slidev-deck-template/compare/v1.31.0...v1.32.0) (2026-11-12)
 
 
