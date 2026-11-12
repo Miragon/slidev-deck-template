@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.3.0...slidev-speaker-profiles-v0.3.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **deps:** accept version ranges for peers shared with decks ([#252](https://github.com/Miragon/slidev-deck-template/issues/252)) ([8caa62f](https://github.com/Miragon/slidev-deck-template/commit/8caa62fec179f333d532fbc8d0bb4af15d8c04de))
+
 ## [0.3.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-speaker-profiles-v0.2.3...slidev-speaker-profiles-v0.3.0) (2026-10-06)
 
 
