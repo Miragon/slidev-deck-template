@@ -11,15 +11,16 @@ The workflows that keep the template building, releasing and secure. All actions
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
 | `scaffold-test.yml` | Scaffold Test | push to `main`, every PR, manual | **Template-only.** Runs the `create-slidev-deck` structural smoke test, then scaffolds a deck and checks it installs, builds and verifies with the toolkit pulled from npm. |
-| `dependabot-automerge.yml` | Dependabot Auto-Merge | every PR (acts on Dependabot's only) | Arms GitHub's native auto-merge (squash) on Dependabot PRs whose highest bump is a patch or a minor. Majors stay manual. It only expresses intent: the required checks on `main` decide when the merge happens. |
+| `dependabot-automerge-eligibility.yml` | Dependabot auto-merge eligibility | every PR (acts on Dependabot's only) | Labels Dependabot PRs whose highest bump is a patch or a minor `auto-merge`. Majors stay manual. |
+| `dependabot-automerge.yml` | Dependabot auto-merge | after Dependabot auto-merge eligibility | Arms GitHub's native auto-merge (squash) on a labelled PR. It only expresses intent: the required checks on `main` decide when the merge happens. In this repo it arms it with the release-please App's token, so the merge is the App's and its push starts `release-please.yml`; a merge made with `GITHUB_TOKEN` starts no workflow, and runtime bumps (`fix(deps)`) would wait for the next manual merge to be released. A derived repo has no release and falls back to `GITHUB_TOKEN`. |
 
 ## Template-only workflows
 
-Forking this repo copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`:
+Forking this repo copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/slidev-deck-template'`, and so is the App-token step of **Dependabot auto-merge**:
 
 - Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason, and it would pointlessly test a scaffolder it does not own.
 - In a derived repo these workflows run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
-- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all seven occurrences** (five jobs in `release-please.yml`, plus `pr-title.yml` and `scaffold-test.yml`), otherwise releases stop silently.
+- The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all occurrences** (the jobs in `release-please.yml`, plus `pr-title.yml`, `scaffold-test.yml` and the App-token step in `dependabot-automerge.yml`), otherwise releases stop silently.
 
 Build Deck and Pin Check are deliberately *not* guarded — every deck repo wants them.
 

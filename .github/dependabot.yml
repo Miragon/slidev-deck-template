@@ -24,7 +24,7 @@ updates:
     open-pull-requests-limit: 5
     versioning-strategy: increase-if-necessary
     commit-message:
-      prefix: "chore"
+      prefix: "fix"
       prefix-development: "chore"
       include: scope
     labels:
