@@ -7,6 +7,8 @@
  * rail is one row with each chapter's slides as live miniature previews below.
  * Past six the rail WRAPS into balanced rows and drops the previews, becoming a
  * top-aligned overview whose dots still jump straight to each chapter's slide.
+ * `preview="none"` asks for that overview at any chapter count: just the flow,
+ * no previews, labels wrapping inside their column instead of overlapping.
  *
  * `layout: subsection` slides do NOT open a chapter (they divide a chapter
  * internally); they are collected onto the enclosing chapter's `subsections`.
@@ -15,7 +17,7 @@
  * Chapters without any subsection fall back to their full slide list.
  *
  * Props: eyebrow (kicker, default "Agenda"), title (h2), accent (blue|green|mixed),
- * preview ("slides" | "subsections", default "slides"), gap (CSS length for the
+ * preview ("slides" | "subsections" | "none", default "slides"), gap (CSS length for the
  * space between the head and the stepper below, default "1.4rem").
  */
 import { computed, ref, watch } from 'vue'
@@ -35,7 +37,7 @@ const props = withDefaults(
     eyebrow?: string
     title?: string
     accent?: 'blue' | 'green' | 'mixed'
-    preview?: 'slides' | 'subsections'
+    preview?: 'slides' | 'subsections' | 'none'
     gap?: string
   }>(),
   { eyebrow: 'Agenda', accent: 'mixed', preview: 'slides', gap: '1.4rem' },
@@ -122,9 +124,10 @@ const alternate = computed(() => chapters.value.length > 5)
 
 // Past six chapters the labels no longer fit one row: wrap the dots into balanced
 // rows (max five each) and drop the previews for a static, top-aligned overview.
+// `preview="none"` opts into that overview at any chapter count.
 const WRAP_THRESHOLD = 6
 const MAX_PER_ROW = 5
-const wrap = computed(() => chapters.value.length > WRAP_THRESHOLD)
+const wrap = computed(() => props.preview === 'none' || chapters.value.length > WRAP_THRESHOLD)
 
 interface StepRow { items: Chapter[]; start: number; cols: number }
 // Balanced rows sharing one column count so dots align into a grid: 8->4+4, 7->4+3.
@@ -208,7 +211,7 @@ function openSlide(no: number, ev: MouseEvent) {
         <h2 v-if="title" class="agenda-title">{{ title }}</h2>
       </header>
 
-      <!-- Many chapters: wrapped rows, top-aligned, static (no previews to navigate). -->
+      <!-- Many chapters or preview="none": wrapped rows, top-aligned, static (no previews to navigate). -->
       <nav v-if="wrap" class="agenda-stepper is-wrap" aria-label="Chapters">
         <div v-for="(row, r) in rows" :key="r" class="stepper-row" :style="{ '--cols': row.cols }">
           <div class="track" aria-hidden="true">
@@ -477,7 +480,7 @@ function openSlide(no: number, ev: MouseEvent) {
   bottom: auto;
 }
 
-/* ---- Wrapping rail (above six chapters, no previews) -------------------- */
+/* ---- Wrapping rail (above six chapters or preview="none", no previews) -- */
 /* Each row is its own grid with its own thread, so the line never bridges a wrap.
    Top-aligned to hug the head instead of floating in whitespace. */
 .agenda-stepper.is-wrap {

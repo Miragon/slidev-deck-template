@@ -248,10 +248,10 @@ Chapters are **discovered automatically**: every `layout: section` slide opens a
 | `eyebrow` (str) | free text | `Agenda` | the kicker above the title |
 | `title` (str) | free text | none | the `h2` heading |
 | `accent` | `blue` · `green` · `mixed` | `mixed` | tints the gradient bar and the active chapter |
-| `preview` | `slides` · `subsections` | `slides` | what the miniatures show: every slide of a chapter, or only its `subsection` dividers (a sparse overview for long chapters; chapters without a subsection fall back to their full slide list) |
+| `preview` | `slides` · `subsections` · `none` | `slides` | what the miniatures show: every slide of a chapter, or only its `subsection` dividers (a sparse overview for long chapters; chapters without a subsection fall back to their full slide list); `none` drops the miniatures and shows only the flow, at any chapter count |
 | `gap` (str) | CSS length | `1.4rem` | space between the head and the stepper below it |
 
-Layout adapts to the chapter count: **up to six** chapters the rail is one clickable row driving live miniature previews below; **past six** it wraps into balanced rows and drops the previews, becoming a static top-aligned overview. Click a chapter to preview it, click a miniature to jump there.
+Layout adapts to the chapter count: **up to six** chapters the rail is one clickable row driving live miniature previews below; **past six** it wraps into balanced rows and drops the previews, becoming a static top-aligned overview. Click a chapter to preview it, click a miniature to jump there. `preview="none"` gives that static overview at any chapter count, for decks that want only the flow: labels wrap inside their column, so long chapter titles never overlap, and a click on a dot jumps to the chapter.
 
 ```md
 ---
