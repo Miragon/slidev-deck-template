@@ -17,6 +17,6 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "1.2.152",
-    "portless": "0.16.0"
+    "portless": "0.17.0"
   }
 }
