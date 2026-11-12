@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.7.0...slidev-validator-v0.7.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **deps:** accept version ranges for peers shared with decks ([#252](https://github.com/Miragon/slidev-deck-template/issues/252)) ([8caa62f](https://github.com/Miragon/slidev-deck-template/commit/8caa62fec179f333d532fbc8d0bb4af15d8c04de))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * @miragon/slidev-toolkit bumped from >=1.15.0 <2 to >=1.32.0
+
 ## [0.7.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.6.2...slidev-validator-v0.7.0) (2026-10-06)
 
 

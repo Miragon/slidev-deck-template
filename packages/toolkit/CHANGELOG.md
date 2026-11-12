@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.32.0](https://github.com/Miragon/slidev-deck-template/compare/v1.31.0...v1.32.0) (2026-11-12)
+
+
+### Features
+
+* **slidev-toolkit:** draw the StepList marker as a rounded square ([#251](https://github.com/Miragon/slidev-deck-template/issues/251)) ([baf11ec](https://github.com/Miragon/slidev-deck-template/commit/baf11ec9bab72dfc57950921de27bb684b57b7aa))
+* **slidev-toolkit:** let content-image control the column ratio and drop the image frame ([#249](https://github.com/Miragon/slidev-deck-template/issues/249)) ([82aacf1](https://github.com/Miragon/slidev-deck-template/commit/82aacf1af6ff46c55e3ddda0089045529b10309d))
+
+
+### Bug Fixes
+
+* **deps:** accept version ranges for peers shared with decks ([#252](https://github.com/Miragon/slidev-deck-template/issues/252)) ([8caa62f](https://github.com/Miragon/slidev-deck-template/commit/8caa62fec179f333d532fbc8d0bb4af15d8c04de))
+
 ## [1.31.0](https://github.com/Miragon/slidev-deck-template/compare/v1.30.0...v1.31.0) (2026-11-10)
 
 
