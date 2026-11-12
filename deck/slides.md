@@ -62,7 +62,8 @@ class: agenda-slide
   Past six chapters the rail wraps into rows and drops the previews, becoming a
   static top-aligned overview.
   `layout: subsection` slides divide a chapter without opening a new one; add
-  `preview="subsections"` to preview those dividers instead of every slide.
+  `preview="subsections"` to preview those dividers instead of every slide, or
+  `preview="none"` to show only the flow at any chapter count, without previews.
   Tune the space between the head and the stepper with `gap` (a CSS length,
   default "1.4rem"), e.g. `<Agenda gap="2.5rem">`.
   Transition: "Here is the path we will take."
