@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.17.0...miragon-slidev-plugin-v1.18.0) (2026-11-13)
+
+
+### Features
+
+* **slidev-toolkit:** reveal the parts of an SVG figure step by step on clicks ([#261](https://github.com/Miragon/slidev-deck-template/issues/261)) ([5ef4de8](https://github.com/Miragon/slidev-deck-template/commit/5ef4de89c3951cea3fd6bb72fdf656e55a807fa1)), closes [#260](https://github.com/Miragon/slidev-deck-template/issues/260)
+
 ## [1.17.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.16.0...miragon-slidev-plugin-v1.17.0) (2026-11-12)
 
 
