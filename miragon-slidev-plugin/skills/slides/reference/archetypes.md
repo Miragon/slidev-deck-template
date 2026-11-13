@@ -297,7 +297,8 @@ The slide for code that carries the message: header above, optional lead text, o
 | `accent` | blue (default) / green / mixed |
 | `files` (array) | file names, one per fence in source order: the tab labels (several fences) or the header label (one fence). Without it the tabs are numbered |
 | `lang` (str) | language badge on the right of the window header, e.g. `kotlin`. Highlighting itself follows each fence's language tag |
-| **default slot** | one or several code fences (or `<<<` imports); each fence is one tab |
+| `tabIcon` (str / `false`) | Lucide class before every file name, overriding the default (`i-lucide-file-code` for a fence, `i-lucide-file-image` for a figure tab); `false` shows no icon |
+| **default slot** | one or several code fences (or `<<<` imports); each fence is one tab. A `<Figure src="….excalidraw.svg">` is a tab too, centred in the window, so a diagram can sit next to the code it explains, or a slide can tab through several diagrams (one idea over a few sibling pictures, each legible at full width) |
 | **`::lead::` slot** | optional text above the window |
 | **`::caption::` slot** | optional caption below the window, written in `*italics*` like the diagram layouts |
 

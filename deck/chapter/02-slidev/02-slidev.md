@@ -90,7 +90,7 @@ lang: ts
   Line highlighting is native Shiki, set on each fence (`ts {3-5}`).
   LIMIT: two to four tabs, each within the 18-line code limit; one sentence
   in the lead, one line in the caption.
-  Transition: "And one source gives you every output."
+  Transition: "And a tab can hold a diagram instead of code."
 -->
 
 ```ts {3-5}
@@ -115,6 +115,86 @@ The toolkit configures Slidev in two small setup files, so a deck never has to.
 ::caption::
 
 *Each fence is a tab: click one, or just advance the slide.*
+
+---
+id: s-d5a8f995
+layout: code
+title: Or tab through a set of diagrams
+eyebrow: 02 - Slidev
+accent: blue
+files:
+  - reference
+  - object storage
+  - history-level
+---
+
+<!--
+  code layout with diagrams only: a <Figure> in the body is a tab like a code
+  fence, centred in the window and marked with a diagram icon. Use it when one
+  idea unfolds over a few sibling diagrams (here: one row of a before/after
+  each), so every diagram stays legible at full width.
+  REQUIRED: one <Figure src alt> per tab.  OPTIONAL: files (tab labels),
+  tabIcon (Lucide class, overrides the default icons), ::lead::, ::caption::.
+  LIMIT: two to four tabs; diagrams of a similar shape so nothing jumps.
+  Transition: "And code and diagram fit in one window, too."
+-->
+
+<Figure src="resources/02-slidev/lean-reference.excalidraw.svg" alt="The full application record becomes an applicationId reference"></Figure>
+
+<Figure src="resources/02-slidev/lean-object-storage.excalidraw.svg" alt="The CV bytes move to object storage, the instance keeps cvUrl"></Figure>
+
+<Figure src="resources/02-slidev/lean-history.excalidraw.svg" alt="Step flags are dropped, the audit comes from the history level"></Figure>
+
+::lead::
+
+Three ways to keep a process instance lean, one diagram each.
+
+::caption::
+
+*Each diagram is a tab: click one, or just advance the slide.*
+
+---
+id: s-645e657e
+layout: code
+title: From the idea to the code
+eyebrow: 02 - Slidev
+accent: blue
+files:
+  - lean-reference.excalidraw.svg
+  - StartRecruitmentService.kt
+---
+
+<!--
+  code layout, mixed: fences and <Figure>s share one window, in source order.
+  Each tab gets its own icon (file-code for a fence, file-image for a figure).
+  Here the principle comes first as a picture, the code that applies it second.
+  LIMIT: two to four tabs, each fence within the 18-line code limit.
+  Transition: "And one source gives you every output."
+-->
+
+<Figure src="resources/02-slidev/lean-reference.excalidraw.svg" alt="The full application record becomes an applicationId reference"></Figure>
+
+```kotlin {8}
+@Service
+class StartRecruitmentService(
+  private val recruitmentProcess: RecruitmentProcessPort,
+) {
+  fun start(application: Application) {
+    recruitmentProcess.start(
+      businessKey = application.id.value,
+      variables = mapOf("applicationId" to application.id.value),
+    )
+  }
+}
+```
+
+::lead::
+
+The process keeps a reference, not the record: first the idea, then the code.
+
+::caption::
+
+*Fences and figures mix freely: every one is a tab.*
 
 ---
 id: s-c4821064

@@ -14,8 +14,14 @@
  *   files    — array of file names, one per fence in source order. They label
  *              the tabs (several fences) or the header (one fence).
  *   lang     — language badge on the right of the window header (e.g. "kotlin")
+ *   tabIcon  — Lucide Iconify class shown before every file name, or false
+ *              for no icon. Default:
+ *              i-lucide-file-code for a code fence, i-lucide-file-image for a
+ *              <Figure> tab.
  * Slots:
- *   default     — the code fence(s), each one a tab of the window
+ *   default     — the code fence(s), each one a tab of the window. A
+ *                 <Figure src="….excalidraw.svg"> becomes a tab as well,
+ *                 centred in the window.
  *   ::lead::    — optional text above the window
  *   ::caption:: — optional caption below the window
  */
@@ -27,9 +33,10 @@ const props = withDefaults(
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
     files?: string[]
+    tabIcon?: string | false
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', files: () => [] },
+  { accent: 'blue', files: () => [], tabIcon: undefined },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -50,6 +57,14 @@ function componentVNodes(nodes: VNode[]): VNode[] {
 }
 const fences = computed(() => componentVNodes(slots.default?.() ?? []))
 const hasTabs = computed(() => fences.value.length > 1)
+
+function isVisual(node: VNode) {
+  return (node.type as { __name?: string }).__name === 'Figure'
+}
+function iconFor(node: VNode) {
+  if (props.tabIcon === false) return undefined
+  return props.tabIcon ?? (isVisual(node) ? 'i-lucide-file-image' : 'i-lucide-file-code')
+}
 
 const { $clicks, $clicksContext } = useSlideContext()
 const { currentPage, go } = useNav()
@@ -95,10 +110,14 @@ function select(i: number, e: MouseEvent) {
               :class="{ 'is-active': i === selected }"
               @click="select(i, $event)"
             >
+              <span v-if="iconFor(fences[i])" class="code-tab-icon" :class="iconFor(fences[i])" aria-hidden="true"></span>
               {{ files[i] ?? i + 1 }}
             </button>
           </template>
-          <span v-else-if="files.length" class="code-file">{{ files[0] }}</span>
+          <span v-else-if="files.length" class="code-file">
+            <span v-if="iconFor(fences[0])" class="code-tab-icon" :class="iconFor(fences[0])" aria-hidden="true"></span>
+            {{ files[0] }}
+          </span>
           <span class="code-window-spacer" aria-hidden="true"></span>
           <span v-if="lang" class="code-lang">{{ lang }}</span>
         </div>
@@ -107,7 +126,7 @@ function select(i: number, e: MouseEvent) {
             v-for="(fence, i) in fences"
             :key="i"
             class="code-pane"
-            :class="{ 'is-active': i === selected }"
+            :class="{ 'is-active': i === selected, 'is-visual': isVisual(fence) }"
             :aria-hidden="i !== selected"
           >
             <component :is="fence" />
@@ -204,7 +223,7 @@ function select(i: number, e: MouseEvent) {
   display: flex;
   align-items: stretch;
   gap: 0.25rem;
-  padding: 0 0.9rem 0 0.4rem;
+  padding: 0 0.9rem 0 0;
   background: var(--miragon-gray-bg);
   border-bottom: 1px solid var(--miragon-border);
 }
@@ -217,6 +236,17 @@ function select(i: number, e: MouseEvent) {
   font-size: 0.78rem;
   color: var(--miragon-text-muted);
   padding: 0.6rem 0.7rem;
+}
+.code-tab,
+.code-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.code-tab-icon {
+  flex: 0 0 auto;
+  width: 0.95rem;
+  height: 0.95rem;
 }
 .code-tab {
   background: transparent;
@@ -264,6 +294,12 @@ function select(i: number, e: MouseEvent) {
 }
 .code-pane.is-active {
   visibility: visible;
+}
+.code-pane.is-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
 }
 /* Shiki-Fence: Rahmen aus code.css zurücksetzen, das Fenster besitzt ihn. */
 .code-pane :deep(.slidev-code) {
