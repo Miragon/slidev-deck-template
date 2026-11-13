@@ -72,7 +72,7 @@ accent: blue
   KEY POINT: .excalidraw.svg files open and edit in the IDE via the Excalidraw plugin.
   SplitView: diagram left, explanation right. The <DiagramFrame> gives the diagram
   the same white card as the diagram layouts, for framing PART of a slide where a
-  text Card is not the right fit. Transition: "Need a process? Use BPMN."
+  text Card is not the right fit. Transition: "And when a diagram should build up step by step?"
 -->
 
 <SplitView ratio="1/1">
@@ -86,6 +86,37 @@ accent: blue
 - Open the `.excalidraw.svg`, edit it visually, save; the slide reloads
 - The scene stays embedded, so the file is both image and source
 - No photoshop, no separate tool, no export dance
+
+</SplitView>
+
+---
+id: s-8bca0aa6
+layout: content
+title: Build a diagram up on clicks
+eyebrow: 04 - Diagrams
+accent: blue
+---
+
+<!--
+  KEY POINT: one SVG, revealed part by part. In the SVG, a group carries data-step="n";
+  <Figure steps="n"> inlines it, hides each group until click n and registers n clicks,
+  so v-click="1" … v-click="n" on the StepList runs in sync. Unmarked parts stay visible.
+  Add data-step after the last Excalidraw export: the editor rewrites the markup on save.
+  Transition: "Need a process? Use BPMN."
+-->
+
+<SplitView ratio="1/1">
+<template #visual>
+<DiagramFrame height="19rem">
+<Figure src="resources/04-diagrams/service-steps.svg" alt="A service routing to two pods, revealed one pod per click" max-height="220px" steps="2"></Figure>
+</DiagramFrame>
+</template>
+
+<StepList>
+<Step label="Service">is always visible</Step>
+<Step label="Pod A" v-click="1">appears on the first click</Step>
+<Step label="Pod B" v-click="2">appears on the second click</Step>
+</StepList>
 
 </SplitView>
 
