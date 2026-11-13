@@ -298,10 +298,54 @@ fullscreenFontSize: 12px
   watch the firing rule light up. The Fullscreen button next to the form blows the
   table up to the full viewport (fullscreenFontSize sizes it for the back of the
   room). File lives in this chapter's resources/.
-  Transition: "The same addon draws three more notations."
+  Transition: "And all three fit into one window."
 -->
 
 A DMN decision, live: feed the inputs in and watch which rule fires.
+
+---
+id: s-915b5c32
+layout: code
+title: Process, rule and code in one window
+eyebrow: 04 - Diagrams
+accent: blue
+files:
+  - recruitment.bpmn
+  - hiring.dmn
+  - SendOfferWorker.kt
+---
+
+<!--
+  code layout with diagrams from slidev-addon-diagram-js: every component in the
+  body is a tab, in source order. Diagrams are centred and get an icon by
+  notation (workflow for BPMN, table for DMN, users / map / sticky-note for
+  Team Topologies, Wardley Maps, Event Storming); a fence keeps file-code.
+  Static viewers (<Bpmn>, <DmnTable>, <DmnDrd>, <TeamTopologies>, ...) suit a
+  tab best; interactive ones (token simulation, modelers) work too.
+  OPTIONAL: files (tab labels), icons (one Lucide class per tab, overrides the
+  default), tabIcon (one icon for all tabs, or false), ::lead::, ::caption::.
+  LIMIT: two to four tabs.
+  Transition: "The same addon draws three more notations."
+-->
+
+<Bpmn bpmnFilePath="/resources/04-diagrams/recruitment.bpmn"></Bpmn>
+
+<DmnTable dmnFilePath="/resources/04-diagrams/hiring.dmn" fontSize="10px"></DmnTable>
+
+```kotlin {4-6}
+@Component
+class SendOfferWorker(private val offers: OfferService) {
+
+  @JobWorker(type = "send-offer")
+  fun sendOffer(@Variable applicationId: String) {
+    offers.send(ApplicationId(applicationId))
+  }
+}
+```
+
+::caption::
+
+*The process, the rule behind its gateway, and the code behind one of its tasks.*
 
 ---
 id: s-86912c6f

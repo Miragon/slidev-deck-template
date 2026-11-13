@@ -355,4 +355,6 @@ All take `width` and `height`; a modeler without a file path starts blank. Put t
 </DiagramFrame>
 ```
 
-Demo: the three slides after the `dmn` demo in `deck/chapter/04-diagrams/04-diagrams.md`.
+Demo: the Team Topologies, Wardley Map and Event Storming slides in `deck/chapter/04-diagrams/04-diagrams.md`.
+
+All of these components, and the BPMN / DMN ones, can also be a tab of the `code` layout, next to other diagrams or the code behind them (see `reference/archetypes.md`, `code`). Demo: "Process, rule and code in one window" in the same chapter.
