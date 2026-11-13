@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.5](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.7.4...create-slidev-deck-v1.7.5) (2026-11-13)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 1.35.0 to 1.36.0
+
 ## [1.7.4](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.7.3...create-slidev-deck-v1.7.4) (2026-11-13)
 
 
