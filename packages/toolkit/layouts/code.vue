@@ -15,17 +15,18 @@
  *              the tabs (several fences) or the header (one fence).
  *   lang     — language badge on the right of the window header (e.g. "kotlin")
  *   tabIcon  — Lucide Iconify class shown before every file name, or false
- *              for no icon. Default:
- *              i-lucide-file-code for a code fence, i-lucide-file-image for a
- *              <Figure> tab.
+ *              for no icon. Default: by tab kind, see TAB_ICONS.
+ *   icons    — array of Lucide classes, one per tab in source order; an entry
+ *              overrides tabIcon and the default for that tab.
  * Slots:
- *   default     — the code fence(s), each one a tab of the window. A
- *                 <Figure src="….excalidraw.svg"> becomes a tab as well,
- *                 centred in the window.
+ *   default     — the code fence(s), each one a tab of the window. Any other
+ *                 component becomes a tab as well and is centred as a
+ *                 visual: <Figure>, a mermaid fence, or a diagram from
+ *                 slidev-addon-diagram-js (<Bpmn>, <DmnTable>, ...).
  *   ::lead::    — optional text above the window
  *   ::caption:: — optional caption below the window
  */
-import { Fragment, computed, onUnmounted, useSlots, watch, type VNode } from 'vue'
+import { Fragment, cloneVNode, computed, onUnmounted, useSlots, watch, type VNode } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
 
 const props = withDefaults(
@@ -34,9 +35,10 @@ const props = withDefaults(
     accent?: 'blue' | 'green' | 'mixed'
     files?: string[]
     tabIcon?: string | false
+    icons?: string[]
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', files: () => [], tabIcon: undefined },
+  { accent: 'blue', files: () => [], tabIcon: undefined, icons: () => [] },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
@@ -58,12 +60,42 @@ function componentVNodes(nodes: VNode[]): VNode[] {
 const fences = computed(() => componentVNodes(slots.default?.() ?? []))
 const hasTabs = computed(() => fences.value.length > 1)
 
-function isVisual(node: VNode) {
-  return (node.type as { __name?: string }).__name === 'Figure'
+const CODE_COMPONENTS = ['CodeBlockWrapper', 'ShikiMagicMove']
+// Matched by component-name prefix, so the viewer, simulation and modeler of
+// one notation share an icon. Names are slidev-addon-diagram-js' public API.
+const TAB_ICONS: [prefix: string, icon: string][] = [
+  ['Bpmn', 'i-lucide-workflow'],
+  ['Dmn', 'i-lucide-table'],
+  ['TeamTopologies', 'i-lucide-users'],
+  ['WardleyMap', 'i-lucide-map'],
+  ['EventStorming', 'i-lucide-sticky-note'],
+]
+
+function componentName(node: VNode) {
+  const type = node.type as { __name?: string; name?: string }
+  return type.__name ?? type.name ?? ''
 }
-function iconFor(node: VNode) {
+function isVisual(node: VNode) {
+  return !CODE_COMPONENTS.includes(componentName(node))
+}
+function defaultIcon(node: VNode) {
+  if (!isVisual(node)) return 'i-lucide-file-code'
+  const name = componentName(node)
+  return TAB_ICONS.find(([prefix]) => name.startsWith(prefix))?.[1] ?? 'i-lucide-file-image'
+}
+// A diagram whose height defaults to "auto" (the slidev-addon-diagram-js
+// viewers) would grow past the window, so it fills the window instead, unless
+// the author set a height. One with a fixed default, such as <DmnSimulate>,
+// keeps it; a <Figure> sizes itself.
+function fitted(node: VNode) {
+  const heightProp = (node.type as { props?: { height?: { default?: unknown } } }).props?.height
+  const growsUnbounded = heightProp?.default === 'auto' && node.props?.height == null
+  return isVisual(node) && growsUnbounded ? cloneVNode(node, { height: '100%' }) : node
+}
+
+function iconFor(node: VNode, i: number) {
   if (props.tabIcon === false) return undefined
-  return props.tabIcon ?? (isVisual(node) ? 'i-lucide-file-image' : 'i-lucide-file-code')
+  return props.icons[i] ?? props.tabIcon ?? defaultIcon(node)
 }
 
 const { $clicks, $clicksContext } = useSlideContext()
@@ -110,12 +142,12 @@ function select(i: number, e: MouseEvent) {
               :class="{ 'is-active': i === selected }"
               @click="select(i, $event)"
             >
-              <span v-if="iconFor(fences[i])" class="code-tab-icon" :class="iconFor(fences[i])" aria-hidden="true"></span>
+              <span v-if="iconFor(fences[i], i)" class="code-tab-icon" :class="iconFor(fences[i], i)" aria-hidden="true"></span>
               {{ files[i] ?? i + 1 }}
             </button>
           </template>
           <span v-else-if="files.length" class="code-file">
-            <span v-if="iconFor(fences[0])" class="code-tab-icon" :class="iconFor(fences[0])" aria-hidden="true"></span>
+            <span v-if="iconFor(fences[0], 0)" class="code-tab-icon" :class="iconFor(fences[0], 0)" aria-hidden="true"></span>
             {{ files[0] }}
           </span>
           <span class="code-window-spacer" aria-hidden="true"></span>
@@ -129,7 +161,7 @@ function select(i: number, e: MouseEvent) {
             :class="{ 'is-active': i === selected, 'is-visual': isVisual(fence) }"
             :aria-hidden="i !== selected"
           >
-            <component :is="fence" />
+            <component :is="fitted(fence)" />
           </div>
         </div>
       </div>
@@ -285,6 +317,7 @@ function select(i: number, e: MouseEvent) {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   padding: 0.4rem 0;
 }
 .code-pane {
@@ -295,10 +328,14 @@ function select(i: number, e: MouseEvent) {
 .code-pane.is-active {
   visibility: visible;
 }
+/* A visual taller than the window overflows downwards and is clipped there,
+   never over the tab bar. */
 .code-pane.is-visual {
   display: flex;
-  align-items: center;
+  align-items: safe center;
   justify-content: center;
+  min-height: 0;
+  overflow: hidden;
   padding: 1rem 2rem;
 }
 /* Shiki-Fence: Rahmen aus code.css zurücksetzen, das Fenster besitzt ihn. */

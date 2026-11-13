@@ -107,7 +107,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 | A DMN decision table (the rules behind a step) | `dmn` (needs `slidev-addon-diagram-js`) |
 | A Mermaid diagram framed as the focal point | `mermaid` (fence in the body, white card) |
 | An Excalidraw diagram framed as the focal point | `excalidraw` (`diagram:` path, white card) |
-| Several diagrams, one per tab | `code` with one `<Figure>` per tab |
+| Several diagrams, one per tab (or next to code) | `code` with one `<Figure>`, mermaid fence or addon diagram (`<Bpmn>`, `<DmnTable>`, …) per tab |
 | Code as the focal point, one or several files | `code` (fences in the body, one window, file tabs) |
 | Click-through feature explorer / mini-quiz | `showcase` |
 | Close the deck | `closing` (animated) |
