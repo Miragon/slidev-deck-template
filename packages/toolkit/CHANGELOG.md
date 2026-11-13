@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.0](https://github.com/Miragon/slidev-deck-template/compare/v1.34.0...v1.35.0) (2026-11-13)
+
+
+### Features
+
+* **slidev-toolkit:** show diagrams as tabs in the code layout ([#264](https://github.com/Miragon/slidev-deck-template/issues/264)) ([c690b83](https://github.com/Miragon/slidev-deck-template/commit/c690b838942407e0aee587966c0260e4504dd9b8))
+
 ## [1.34.0](https://github.com/Miragon/slidev-deck-template/compare/v1.33.0...v1.34.0) (2026-11-13)
 
 
