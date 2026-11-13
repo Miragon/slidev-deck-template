@@ -134,6 +134,7 @@ Titled, captioned wrapper around a visual (title above, visual centred, caption 
 | `src` (str) | a public asset (e.g. an `.excalidraw.svg`), resolved base-aware via `BASE_URL`; renders an `<img>` instead of the slot |
 | `alt` (str) | **effectively required with `src`.** A visual that carries content gets a short descriptive alt text (what it shows, not "diagram"); a purely decorative visual gets an explicit empty `alt=""` so screen readers skip it. The prop defaults to `""`, so leaving it off silently marks a content-carrying visual as decorative |
 | `maxHeight` (str) | CSS max-height for the `src` image (default `340px`) |
+| `steps` (number) | reveal marked parts of an SVG `src` on clicks: registers that many clicks on the slide and inlines the SVG instead of rendering an `<img>`. Omit it and nothing changes. See "Build a figure up on clicks" below |
 | **slot** | inline markup as the visual, used only when `src` is not set |
 
 The visual is normally a chapter Excalidraw diagram via `src` (served from the chapter's `resources/` at `/resources/<chapter>/<file>`, see the `excalidraw` skill). Never a Markdown image for such an asset: Slidev turns `![](/resources/…)` into a build-time import that breaks `npm run build`.
@@ -141,6 +142,24 @@ The visual is normally a chapter Excalidraw diagram via `src` (served from the c
 ```md
 <Figure title="Pod" src="resources/01-foundations/pod.excalidraw.svg" alt="A pod" caption="The **smallest** deployable unit."></Figure>
 ```
+
+### Build a figure up on clicks
+
+To reveal a diagram layer by layer, mark the parts in the SVG with `data-step="n"` (on an element or a `<g>` group) and set `steps` to the highest step. A marked part stays hidden until click `n` of the slide; unmarked parts are always visible. Hidden means the same as `v-click` (opacity 0, no layout shift), so the diagram does not jump while it builds up, and the PDF export shows the fully built figure.
+
+Because `steps` registers its clicks on the slide, `v-click="1"` … `v-click="n"` on other elements (typically the `Step`s of a `StepList`) reveal in sync with the figure:
+
+```md
+<Figure src="resources/04-diagrams/service-steps.svg" alt="A service routing to two pods" steps="2"></Figure>
+
+<StepList>
+<Step label="Service">is always visible</Step>
+<Step label="Pod A" v-click="1">appears on the first click</Step>
+<Step label="Pod B" v-click="2">appears on the second click</Step>
+</StepList>
+```
+
+`data-step` lives in the SVG markup, and the Excalidraw editor rewrites that markup on every save. So keep the stepped diagram as a separate plain `.svg` (export from Excalidraw, then group and mark the parts by hand), and redo the marking after a re-export. Demo: the "Build a diagram up on clicks" slide in `deck/chapter/04-diagrams/04-diagrams.md`.
 
 ## DiagramFrame
 

@@ -178,6 +178,8 @@ Pass a diagram via `src` (a chapter `.excalidraw.svg`), or inline markup in the 
 
 `alt` is not a nice-to-have: a visual that carries content needs a short descriptive alt text (what it shows, not "diagram"), and a purely decorative visual needs an explicit empty `alt=""` so screen readers skip it. `Figure` defaults `alt` to `""`, so leaving it off silently marks a content-carrying diagram as decorative. That is the failure mode to avoid.
 
+To build a diagram up on clicks, mark its parts in the SVG with `data-step="n"` and set `steps` on the `Figure`: each part appears on click `n`, unmarked parts stay visible, and `v-click="n"` on a `StepList` runs in sync. Details in [`reference/components.md`](reference/components.md), "Build a figure up on clicks".
+
 ### `DiagramFrame`: the white card as a nestable surface
 
 The one source of that white card: the diagram layouts (`bpmn`/`dmn`/`mermaid`/`excalidraw`) all frame their diagram with this component internally, and it is also exposed so you can frame **part** of a slide instead of a whole one (e.g. one `SplitView` column). Use it when a visual needs that white surface but a `Card` is the wrong tool: a `Card` is for text (it has a title and a title-accent), `DiagramFrame` just frames a nested visual. Nest a `Figure`, an image, or a ` ```mermaid ` fence inside. Give it more height with the `height` prop (an explicit CSS length like `19rem`); do not use `class="h-full"`/`height="100%"` in a `SplitView` column (a percentage height there is circular and destabilises the layout).
