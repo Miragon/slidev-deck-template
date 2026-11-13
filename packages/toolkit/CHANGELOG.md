@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.36.0](https://github.com/Miragon/slidev-deck-template/compare/v1.35.0...v1.36.0) (2026-11-13)
+
+
+### Features
+
+* **slidev-toolkit:** show BPMN, DMN and other addon diagrams as tabs in the code layout ([#266](https://github.com/Miragon/slidev-deck-template/issues/266)) ([541dc9b](https://github.com/Miragon/slidev-deck-template/commit/541dc9bafabef6d45a05f28e6cb88adc2bfed5e7))
+
 ## [1.35.0](https://github.com/Miragon/slidev-deck-template/compare/v1.34.0...v1.35.0) (2026-11-13)
 
 
