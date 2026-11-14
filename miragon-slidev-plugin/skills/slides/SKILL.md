@@ -78,7 +78,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 - **One language per deck, applied consistently** across all slide content (titles, bullets, labels, diagram text). The deck's language is a choice: English by default, but German or another language is equally valid; pick one and keep the whole deck in it, with no mixing per slide. Code, brand names, and standard technical terms stay as-is regardless of language. Speaker notes (`<!-- … -->`) may be in another language if requested.
 - **Cards are always white.** Use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**, and only `accent="blue"` or `accent="blue-mid"`: a card title is text on white, where green fails AA. The one exception is the opt-in `status` prop (`success` / `warning` / `danger`) for a card that delivers a verdict, never for variety.
 - **Headings are BLACK (`#1D1D1D`, the CI black), never blue and never `#000000`.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour, so don't override it.
-- **Content headings stay on one line.** The `title:` of a content layout (`content`, `content-image`, `compare`, `showcase`, `goodbad`, `code`, and the diagram layouts) renders as a single-line heading; a second line eats the content area. Keep it short (a few words), and never force a break with `<br>`, a literal newline, or a trailing `\`. `verify` enforces this (`content-heading` rule); the rare deliberate exception is `allowMultilineHeading: true` on that slide. Only `hero`/`interactive`/`section`/`subsection` headings (markdown `#`) are meant to be expressive and may wrap.
+- **Content headings stay on one line.** The `title:` of a content layout (`content`, `content-image`, `compare`, `showcase`, `goodbad`, `window`, and the diagram layouts) renders as a single-line heading; a second line eats the content area. Keep it short (a few words), and never force a break with `<br>`, a literal newline, or a trailing `\`. `verify` enforces this (`content-heading` rule); the rare deliberate exception is `allowMultilineHeading: true` on that slide. Only `hero`/`interactive`/`section`/`subsection` headings (markdown `#`) are meant to be expressive and may wrap.
 - **No em-dashes** (`—`). Use commas, colons, parentheses. Compound hyphens (Open-Source, BPMN-Training) are fine. **No emoji**: use inline SVG or a **Lucide** Iconify class (`i-lucide-*`), outline, on the 24px grid, never mixed with another icon set.
 - **Bullets are plain `<ul><li>`.** The layout provides the marker. Never override list styling per slide.
 - **Never reduce font size to fit.** Reduce content, split the slide, or use `<v-clicks>`.
@@ -107,8 +107,8 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 | A DMN decision table (the rules behind a step) | `dmn` (needs `slidev-addon-diagram-js`) |
 | A Mermaid diagram framed as the focal point | `mermaid` (fence in the body, white card) |
 | An Excalidraw diagram framed as the focal point | `excalidraw` (`diagram:` path, white card) |
-| Several diagrams, one per tab (or next to code) | `code` with one `<Figure>`, mermaid fence or addon diagram (`<Bpmn>`, `<DmnTable>`, …) per tab |
-| Code as the focal point, one or several files | `code` (fences in the body, one window, file tabs) |
+| Several diagrams, one per tab (or next to code) | `window` with one `<Figure>`, mermaid fence or addon diagram (`<Bpmn>`, `<DmnTable>`, …) per tab |
+| Code as the focal point, one or several files | `window` (fences in the body, one window, tabs with a caption each) |
 | Click-through feature explorer / mini-quiz | `showcase` |
 | Close the deck | `closing` (animated) |
 | One memorable number / stat | `hero` with the number as the bold word |
@@ -208,7 +208,7 @@ The standard diagram-left / text-right slide body. The visual goes in the `#visu
 
 ### `CodeBlock`: a code snippet in brand CI
 
-Every Markdown ` ```lang ` fence already renders as a white brand card (frame + soft blue shadow, Geist Mono) via `styles/code.css`, with Shiki syntax colours on a clean background, so no component is needed for a bare snippet. Reach for `CodeBlock` only when the snippet wants a **filename or language label**: it adds a header (filename left, blue language badge right) around the fence. When the code is the point of the slide, or the slide walks through several files, use the **`code` archetype** instead. Optional props: `size` (a CSS length for the code font, default unchanged) and `hideHeader` (drop the header even with `file`/`lang` set). Put the fence on its own lines with a blank line before and after, like the `SplitView` bullet rule.
+Every Markdown ` ```lang ` fence already renders as a white brand card (frame + soft blue shadow, Geist Mono) via `styles/code.css`, with Shiki syntax colours on a clean background, so no component is needed for a bare snippet. Reach for `CodeBlock` only when the snippet wants a **filename or language label**: it adds a header (filename left, blue language badge right) around the fence. When the code is the point of the slide, or the slide walks through several files, use the **`window` archetype** instead. Optional props: `size` (a CSS length for the code font, default unchanged) and `hideHeader` (drop the header even with `file`/`lang` set). Put the fence on its own lines with a blank line before and after, like the `SplitView` bullet rule.
 
 ````md
 <CodeBlock file="deck/slides.md" lang="md">
