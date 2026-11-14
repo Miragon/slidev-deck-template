@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.8.0...slidev-validator-v0.8.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* **validator:** require toolkit 2 as peer, since window-tabs rejects the 1.x code layout ([#275](https://github.com/Miragon/slidev-deck-template/issues/275)) ([da6eb26](https://github.com/Miragon/slidev-deck-template/commit/da6eb26f1de23e71993c8beed20ab9ad58a3280a))
+
 ## [0.8.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.7.1...slidev-validator-v0.8.0) (2026-11-14)
 
 
