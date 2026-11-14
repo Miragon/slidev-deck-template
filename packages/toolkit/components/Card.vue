@@ -120,6 +120,7 @@ const toneClass = computed(() => {
 /* Small breath between a lead paragraph and the list it introduces. */
 .mg-card .mg-card__body :deep(p + ul),
 .mg-card .mg-card__body :deep(p + ol) { margin-top: 0.3em; }
+.mg-card .mg-card__body :deep(* + .mg-figure) { padding-top: 1.5rem; }
 .mg-card .mg-card__body :deep(ul),
 .mg-card .mg-card__body :deep(ol) {
   list-style: none;

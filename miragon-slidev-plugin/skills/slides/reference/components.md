@@ -57,6 +57,18 @@ Accent by card count, alternating the two stops left → right: **2** → blue, 
 <Card title="Delivery" status="danger" icon="i-lucide-send">Not guaranteed. A failed call loses the message.</Card>
 ```
 
+**A mini diagram under the text.** Put a `<Figure>` after the text in the card body; the card leaves a `1.5rem` gap above it, so no `class="mt-6"` is needed. A figure that opens the body gets no extra gap. In a `compact` card the figure sits at the bottom, and the gap stays as its minimum distance to the text.
+
+```md
+<Card title="One service" accent="blue">
+
+The service routes each request to a pod.
+
+<Figure src="resources/04-diagrams/service.excalidraw.svg" alt="A service routing to two pods" max-height="120px"></Figure>
+
+</Card>
+```
+
 `icon` is optional. When set it renders above the title, sized `1.6rem`, tinted with the card's accent colour; leave it off and the card stays purely textual as before. Use it to make card-only slides less flat and to set cards apart thematically. It obeys the brand no-emoji rule: pass a **Lucide Iconify class** (`i-lucide-*`), never an emoji. **Lucide is the one sanctioned icon set** (outline, 24px grid); it ships with the toolkit as `@iconify-json/lucide`, and mixing in a second family (Carbon, Phosphor, Material, …) breaks the brand's one-set rule even though other collections happen to resolve. Write the **full class literally** in the slide (e.g. `icon="i-lucide-grid-3x3"`) so UnoCSS finds it in its static scan and generates the CSS; a name assembled at runtime would not render.
 
 **Image: who said it.** When a card quotes a person, a team or a tool, `image` shows their portrait or logo in place of the icon, so the audience recognises the source. Put the file in the chapter's `resources/` and always set a descriptive `imageAlt`. Every image renders round, portraits and logos alike, so a grid keeps one look; pick a tight headshot and a logo with breathing room so the circle does not cut into it. Third-party logos and photos stay unaltered (no recolouring, no effects) and need a source you are allowed to use, such as an official press kit. Use `icon` or `image` per card, not both, and keep a grid consistent: all pictures or all icons.
