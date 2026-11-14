@@ -82,8 +82,10 @@ export async function slideSourceFiles() {
   return [...files]
 }
 
+const NON_SOURCE_DIRS = new Set(['node_modules', '.git', 'dist', '.slidev', '.vite', 'coverage'])
+
 /**
- * Every committed Excalidraw diagram source in the deck. Recurses all of `deck/`
+ * Every committed Excalidraw diagram source in the deck. Recurses `deck/`, skipping build output and tool caches,
  * for `*.excalidraw.svg` (under any `resources/` folder, at any nesting depth), so
  * diagrams in a nested deck are found the same as in the flat reference deck.
  */
@@ -92,7 +94,7 @@ export function excalidrawSvgFiles() {
   const walk = (d) => {
     if (!existsSync(d)) return
     for (const n of readdirSync(d)) {
-      if (n === 'node_modules' || n === '.git') continue
+      if (NON_SOURCE_DIRS.has(n)) continue
       const p = join(d, n)
       let st
       try {
