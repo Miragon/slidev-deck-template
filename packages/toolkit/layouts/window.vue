@@ -1,48 +1,56 @@
 <script setup lang="ts">
 /**
- * code — Slide centered on one code window (framed on-brand).
+ * window — Slide centered on one framed window with tabs (code or diagrams).
  *
- * The window holds one or several code fences from the DEFAULT slot. Several
- * fences become file tabs in the window's header; the active tab is Slidev's
- * per-slide click counter, so a tab click and advancing the slide (arrow keys /
- * space) are the same action.
+ * The window holds one or several tabs from the DEFAULT slot: each code fence
+ * and each other component is one tab, in source order. Several tabs show a
+ * tab bar in the window's header; the active tab is Slidev's per-slide click
+ * counter, so a tab click and advancing the slide (arrow keys / space) are the
+ * same action.
  *
  * Frontmatter props:
  *   title    — slide title (h2-level)
  *   eyebrow  — uppercase kicker
  *   accent   — "blue" | "green" | "mixed" (default blue)
- *   files    — array of file names, one per fence in source order. They label
- *              the tabs (several fences) or the header (one fence).
- *   lang     — language badge on the right of the window header (e.g. "kotlin")
- *   tabIcon  — Lucide Iconify class shown before every file name, or false
- *              for no icon. Default: by tab kind, see TAB_ICONS.
- *   icons    — array of Lucide classes, one per tab in source order; an entry
- *              overrides tabIcon and the default for that tab.
+ *   tabs     — array of `{ label, icon?, caption?, lang? }`, one per tab in
+ *              source order:
+ *              `label`   — the tab's name in the header
+ *              `icon`    — Lucide Iconify class before the label, or false for
+ *                          none. Default: by tab kind, see TAB_ICONS.
+ *              `caption` — line below the window while this tab is active;
+ *                          inline Markdown (bold, italic, code, links)
+ *              `lang`    — language badge on the right of the header while
+ *                          this tab is active (e.g. "kotlin")
  * Slots:
- *   default     — the code fence(s), each one a tab of the window. Any other
- *                 component becomes a tab as well and is centred as a
- *                 visual: <Figure>, a mermaid fence, or a diagram from
- *                 slidev-addon-diagram-js (<Bpmn>, <DmnTable>, ...).
- *   ::lead::    — optional text above the window
- *   ::caption:: — optional caption below the window
+ *   default     — the tabs: code fences, <Figure>, a mermaid fence, or a
+ *                 diagram from slidev-addon-diagram-js (<Bpmn>, <DmnTable>, ...).
+ *                 Anything but a code fence is centred as a visual.
+ *   ::lead::    — optional text above the window, for the whole slide
+ *   ::caption:: — optional caption below the window for every tab without a
+ *                 `caption` of its own
  */
 import { Fragment, cloneVNode, computed, onUnmounted, useSlots, watch, type VNode } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
+import { inlineMarkdown } from '../utils/inlineMarkdown'
+
+interface Tab {
+  label?: string
+  icon?: string | false
+  caption?: string
+  lang?: string
+}
 
 const props = withDefaults(
   defineProps<{
     eyebrow?: string
     accent?: 'blue' | 'green' | 'mixed'
-    files?: string[]
-    tabIcon?: string | false
-    icons?: string[]
+    tabs?: Tab[]
     frontmatter?: Record<string, unknown>
   }>(),
-  { accent: 'blue', files: () => [], tabIcon: undefined, icons: () => [] },
+  { accent: 'blue', tabs: () => [] },
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
-const lang = computed(() => props.frontmatter?.lang as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
 // AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
@@ -57,8 +65,8 @@ function componentVNodes(nodes: VNode[]): VNode[] {
     node.type === Fragment ? componentVNodes(node.children as VNode[]) : typeof node.type === 'object' ? [node] : [],
   )
 }
-const fences = computed(() => componentVNodes(slots.default?.() ?? []))
-const hasTabs = computed(() => fences.value.length > 1)
+const panes = computed(() => componentVNodes(slots.default?.() ?? []))
+const hasTabBar = computed(() => panes.value.length > 1)
 
 const CODE_COMPONENTS = ['CodeBlockWrapper', 'ShikiMagicMove']
 // Matched by component-name prefix, so the viewer, simulation and modeler of
@@ -93,22 +101,35 @@ function fitted(node: VNode) {
   return isVisual(node) && growsUnbounded ? cloneVNode(node, { height: '100%' }) : node
 }
 
-function iconFor(node: VNode, i: number) {
-  if (props.tabIcon === false) return undefined
-  return props.icons[i] ?? props.tabIcon ?? defaultIcon(node)
+function iconFor(i: number) {
+  const icon = props.tabs[i]?.icon
+  if (icon === false) return undefined
+  return icon ?? defaultIcon(panes.value[i])
+}
+function labelFor(i: number) {
+  return props.tabs[i]?.label ?? (hasTabBar.value ? String(i + 1) : undefined)
 }
 
 const { $clicks, $clicksContext } = useSlideContext()
 const { currentPage, go } = useNav()
 
-// Register `fences.length - 1` click steps so the slide only advances past the
+// Register `panes.length - 1` click steps so the slide only advances past the
 // last tab, without the author declaring `clicks:` in frontmatter.
-const steps = computed(() => Math.max(0, fences.value.length - 1))
-const CLICK_KEY = Symbol('code')
+const steps = computed(() => Math.max(0, panes.value.length - 1))
+const CLICK_KEY = Symbol('window')
 watch(steps, (max) => $clicksContext.register(CLICK_KEY, { delta: 0, max }), { immediate: true })
 onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
 
 const selected = computed(() => Math.min(Math.max($clicks.value, 0), steps.value))
+const activeLang = computed(() => props.tabs[selected.value]?.lang)
+
+// Every caption sits in one grid cell, so the area keeps the height of the
+// tallest one and nothing jumps when the tab changes.
+const captions = computed(() =>
+  panes.value.map((_, i) => props.tabs[i]?.caption).map((caption) => (caption ? inlineMarkdown(caption) : undefined)),
+)
+const hasCaptionArea = computed(() => !!slots.caption || captions.value.some(Boolean))
+const showsSharedCaption = computed(() => !captions.value[selected.value])
 
 // Route the tab click through Slidev's own nav so mouse and keyboard share one
 // state. Blur afterwards: a focused tab swallows the arrow keys.
@@ -119,62 +140,78 @@ function select(i: number, e: MouseEvent) {
 </script>
 
 <template>
-  <div class="code-layout" :style="{ '--cd-grad': gradientVar, '--cd-accent': accentVar }">
-    <div class="code-inner">
-      <header v-if="title || eyebrow" class="code-head">
-        <span class="code-bar" aria-hidden="true"></span>
-        <div v-if="eyebrow" class="code-eyebrow">{{ eyebrow }}</div>
-        <h2 v-if="title" class="code-title">{{ title }}</h2>
+  <div class="window-layout" :style="{ '--wd-grad': gradientVar, '--wd-accent': accentVar }">
+    <div class="window-inner">
+      <header v-if="title || eyebrow" class="window-head">
+        <span class="window-bar" aria-hidden="true"></span>
+        <div v-if="eyebrow" class="window-eyebrow">{{ eyebrow }}</div>
+        <h2 v-if="title" class="window-title">{{ title }}</h2>
       </header>
 
-      <div v-if="$slots.lead" class="code-lead">
+      <div v-if="$slots.lead" class="window-lead">
         <slot name="lead" />
       </div>
 
-      <div class="code-window">
-        <div v-if="hasTabs || files.length || lang" class="code-window-bar">
-          <template v-if="hasTabs">
+      <div class="window-frame">
+        <div v-if="hasTabBar || labelFor(0) || activeLang" class="window-tab-bar">
+          <template v-if="hasTabBar">
             <button
-              v-for="(_, i) in fences"
+              v-for="(_, i) in panes"
               :key="i"
               type="button"
-              class="code-tab"
+              class="window-tab"
               :class="{ 'is-active': i === selected }"
               @click="select(i, $event)"
             >
-              <span v-if="iconFor(fences[i], i)" class="code-tab-icon" :class="iconFor(fences[i], i)" aria-hidden="true"></span>
-              {{ files[i] ?? i + 1 }}
+              <span v-if="iconFor(i)" class="window-tab-icon" :class="iconFor(i)" aria-hidden="true"></span>
+              {{ labelFor(i) }}
             </button>
           </template>
-          <span v-else-if="files.length" class="code-file">
-            <span v-if="iconFor(fences[0], 0)" class="code-tab-icon" :class="iconFor(fences[0], 0)" aria-hidden="true"></span>
-            {{ files[0] }}
+          <span v-else-if="labelFor(0)" class="window-file">
+            <span v-if="iconFor(0)" class="window-tab-icon" :class="iconFor(0)" aria-hidden="true"></span>
+            {{ labelFor(0) }}
           </span>
-          <span class="code-window-spacer" aria-hidden="true"></span>
-          <span v-if="lang" class="code-lang">{{ lang }}</span>
+          <span class="window-tab-spacer" aria-hidden="true"></span>
+          <span v-if="activeLang" class="window-lang">{{ activeLang }}</span>
         </div>
-        <div class="code-panes">
+        <div class="window-panes">
           <div
-            v-for="(fence, i) in fences"
+            v-for="(pane, i) in panes"
             :key="i"
-            class="code-pane"
-            :class="{ 'is-active': i === selected, 'is-visual': isVisual(fence) }"
+            class="window-pane"
+            :class="{ 'is-active': i === selected, 'is-visual': isVisual(pane) }"
             :aria-hidden="i !== selected"
           >
-            <component :is="fitted(fence)" />
+            <component :is="fitted(pane)" />
           </div>
         </div>
       </div>
 
-      <div v-if="$slots.caption" class="code-caption">
-        <slot name="caption" />
+      <div v-if="hasCaptionArea" class="window-caption">
+        <template v-for="(caption, i) in captions" :key="i">
+          <p
+            v-if="caption"
+            class="window-caption-cell"
+            :class="{ 'is-active': i === selected }"
+            :aria-hidden="i !== selected"
+            v-html="caption"
+          ></p>
+        </template>
+        <div
+          v-if="$slots.caption"
+          class="window-caption-cell"
+          :class="{ 'is-active': showsSharedCaption }"
+          :aria-hidden="!showsSharedCaption"
+        >
+          <slot name="caption" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.code-layout {
+.window-layout {
   position: relative;
   width: 100%;
   height: 100%;
@@ -185,7 +222,7 @@ function select(i: number, e: MouseEvent) {
   align-items: stretch;
 }
 
-.code-inner {
+.window-inner {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -196,27 +233,27 @@ function select(i: number, e: MouseEvent) {
   flex-direction: column;
 }
 
-.code-head {
+.window-head {
   flex: 0 0 auto;
   margin-bottom: 1.25rem;
 }
-.code-bar {
+.window-bar {
   display: block;
   width: 3.5rem;
   height: 0.35rem;
   border-radius: 999px;
-  background: var(--cd-grad);
+  background: var(--wd-grad);
   margin-bottom: 0.9rem;
 }
-.code-eyebrow {
+.window-eyebrow {
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--cd-accent);
+  color: var(--wd-accent);
   margin-bottom: 0.55rem;
 }
-.code-title {
+.window-title {
   font-size: clamp(1.7rem, 2.7vw, 2.2rem);
   line-height: 1.15;
   font-weight: 800;
@@ -224,22 +261,22 @@ function select(i: number, e: MouseEvent) {
   margin: 0;
 }
 
-.code-lead {
+.window-lead {
   flex: 0 0 auto;
   margin-bottom: 1rem;
   font-size: 1.1rem;
   line-height: 1.55;
   color: var(--miragon-text-secondary);
 }
-.code-lead :deep(p) {
+.window-lead :deep(p) {
   margin: 0;
 }
-.code-lead :deep(strong) {
+.window-lead :deep(strong) {
   font-weight: 700;
   color: var(--miragon-text-primary);
 }
 
-.code-window {
+.window-frame {
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
@@ -250,7 +287,7 @@ function select(i: number, e: MouseEvent) {
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   overflow: hidden;
 }
-.code-window-bar {
+.window-tab-bar {
   flex: 0 0 auto;
   display: flex;
   align-items: stretch;
@@ -259,28 +296,28 @@ function select(i: number, e: MouseEvent) {
   background: var(--miragon-gray-bg);
   border-bottom: 1px solid var(--miragon-border);
 }
-.code-window-spacer {
+.window-tab-spacer {
   flex: 1 1 auto;
 }
-.code-tab,
-.code-file {
+.window-tab,
+.window-file {
   font-family: var(--miragon-font-mono);
   font-size: 0.78rem;
   color: var(--miragon-text-muted);
   padding: 0.6rem 0.7rem;
 }
-.code-tab,
-.code-file {
+.window-tab,
+.window-file {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
-.code-tab-icon {
+.window-tab-icon {
   flex: 0 0 auto;
   width: 0.95rem;
   height: 0.95rem;
 }
-.code-tab {
+.window-tab {
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
@@ -288,17 +325,17 @@ function select(i: number, e: MouseEvent) {
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
-.code-tab.is-active {
+.window-tab.is-active {
   color: var(--miragon-text-primary);
   font-weight: 600;
   background: var(--miragon-white);
-  border-bottom-color: var(--cd-accent);
+  border-bottom-color: var(--wd-accent);
 }
-.code-tab:focus-visible {
-  outline: 2px solid var(--cd-accent);
+.window-tab:focus-visible {
+  outline: 2px solid var(--wd-accent);
   outline-offset: -2px;
 }
-.code-lang {
+.window-lang {
   align-self: center;
   font-family: var(--miragon-font-mono);
   font-size: 0.68rem;
@@ -311,26 +348,26 @@ function select(i: number, e: MouseEvent) {
   padding: 0.1rem 0.45rem;
 }
 
-/* Alle Fences liegen im selben Grid-Feld: das Fenster behält beim Tab-Wechsel
+/* Alle Tabs liegen im selben Grid-Feld: das Fenster behält beim Tab-Wechsel
    seine Größe, sichtbar ist nur der aktive. */
-.code-panes {
+.window-panes {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   padding: 0.4rem 0;
 }
-.code-pane {
+.window-pane {
   grid-area: 1 / 1;
   min-width: 0;
   visibility: hidden;
 }
-.code-pane.is-active {
+.window-pane.is-active {
   visibility: visible;
 }
 /* A visual taller than the window overflows downwards and is clipped there,
    never over the tab bar. */
-.code-pane.is-visual {
+.window-pane.is-visual {
   display: flex;
   align-items: safe center;
   justify-content: center;
@@ -339,7 +376,7 @@ function select(i: number, e: MouseEvent) {
   padding: 1rem 2rem;
 }
 /* Shiki-Fence: Rahmen aus code.css zurücksetzen, das Fenster besitzt ihn. */
-.code-pane :deep(.slidev-code) {
+.window-pane :deep(.slidev-code) {
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -348,25 +385,39 @@ function select(i: number, e: MouseEvent) {
   background: transparent;
 }
 
-.code-caption {
+.window-caption {
   flex: 0 0 auto;
+  display: grid;
   margin-top: 1rem;
   font-size: 0.95rem;
   color: var(--miragon-text-muted);
   text-align: center;
 }
-.code-caption :deep(p) {
+.window-caption-cell {
+  grid-area: 1 / 1;
+  margin: 0;
+  line-height: 1.5;
+  visibility: hidden;
+}
+.window-caption-cell.is-active {
+  visibility: visible;
+}
+.window-caption :deep(p) {
   margin: 0;
   line-height: 1.5;
 }
-.code-lead :deep(a),
-.code-caption :deep(a) {
-  color: var(--cd-accent);
+.window-caption :deep(strong) {
+  font-weight: 700;
+  color: var(--miragon-text-primary);
+}
+.window-lead :deep(a),
+.window-caption :deep(a) {
+  color: var(--wd-accent);
   text-decoration: none;
   border-bottom: 1px solid currentColor;
 }
-.code-lead :deep(:not(pre) > code),
-.code-caption :deep(:not(pre) > code) {
+.window-lead :deep(:not(pre) > code),
+.window-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
   background: var(--miragon-blue-light);
@@ -376,7 +427,7 @@ function select(i: number, e: MouseEvent) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .code-tab {
+  .window-tab {
     transition: none;
   }
 }
