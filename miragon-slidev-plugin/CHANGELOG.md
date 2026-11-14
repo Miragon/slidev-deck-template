@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.20.0...miragon-slidev-plugin-v2.0.0) (2026-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **slidev-toolkit:** `layout: code` is now `layout: window`. `files:`, `icons:`, `tabIcon:` and the slide-wide `lang:` are removed; use `tabs:` instead. See MIGRATION.md.
+
+### Features
+
+* **slidev-toolkit:** rename the code layout to window with per-tab captions ([#274](https://github.com/Miragon/slidev-deck-template/issues/274)) ([a3db70f](https://github.com/Miragon/slidev-deck-template/commit/a3db70fbb43d6e743070e9a66a5737d04d4aa81e))
+
+
+### Bug Fixes
+
+* **slidev-toolkit:** leave a gap between card text and a Figure below it ([#271](https://github.com/Miragon/slidev-deck-template/issues/271)) ([16761f9](https://github.com/Miragon/slidev-deck-template/commit/16761f995559c7221adb1f57832660f92eb4eaff)), closes [#269](https://github.com/Miragon/slidev-deck-template/issues/269)
+
 ## [1.20.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.19.0...miragon-slidev-plugin-v1.20.0) (2026-11-13)
 
 

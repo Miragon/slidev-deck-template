@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.0](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.7.1...slidev-validator-v0.8.0) (2026-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **slidev-toolkit:** `layout: code` is now `layout: window`. `files:`, `icons:`, `tabIcon:` and the slide-wide `lang:` are removed; use `tabs:` instead. See MIGRATION.md.
+
+### Features
+
+* **slidev-toolkit:** rename the code layout to window with per-tab captions ([#274](https://github.com/Miragon/slidev-deck-template/issues/274)) ([a3db70f](https://github.com/Miragon/slidev-deck-template/commit/a3db70fbb43d6e743070e9a66a5737d04d4aa81e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * @miragon/slidev-toolkit bumped from >=1.15.0 <3 to >=2.0.0
+
 ## [0.7.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.7.0...slidev-validator-v0.7.1) (2026-11-12)
 
 
