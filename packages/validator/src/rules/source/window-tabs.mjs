@@ -3,20 +3,12 @@ import { parseSync } from '@slidev/parser'
 import { toRel } from '../../helpers.mjs'
 
 /**
- * The `window` layout (toolkit 2.0, formerly `code`) takes every per-tab setting
- * from one `tabs:` list. A key the layout no longer reads is dropped silently by
- * Vue, so a slide written for the old `code` layout would render with numbered,
- * uncaptioned tabs and stay green. This rule names each leftover instead.
+ * The `window` layout takes every per-tab setting from one `tabs:` list. Vue drops
+ * a key it does not know silently, so a misspelled or malformed entry would render
+ * as a numbered, uncaptioned tab and stay green. This rule names each one instead.
  */
 
 const TAB_KEYS = new Set(['label', 'icon', 'caption', 'lang'])
-
-const REMOVED_KEYS = {
-  files: 'use `tabs: [{ label }]`',
-  icons: 'set `icon` on the matching `tabs` entry',
-  tabIcon: 'set `icon` on each `tabs` entry',
-  lang: 'set `lang` on the matching `tabs` entry',
-}
 
 function scanTab(tab, index) {
   const where = `tabs[${index}]`
@@ -39,25 +31,16 @@ function scanTab(tab, index) {
 
 /** Pure per-slide check (fixture-testable). Returns reasons; [] = ok. */
 export function scanWindowSlide(frontmatter = {}) {
-  const reasons = []
-  if (frontmatter.layout === 'code') {
-    reasons.push('the `code` layout was renamed to `window` in @miragon/slidev-toolkit 2.0; set `layout: window` (see MIGRATION.md)')
-  } else if (frontmatter.layout !== 'window') {
-    return reasons
-  }
-  for (const [key, hint] of Object.entries(REMOVED_KEYS)) {
-    if (key in frontmatter) reasons.push(`\`${key}:\` was removed from the window layout in toolkit 2.0; ${hint}`)
-  }
-  if (frontmatter.tabs === undefined) return reasons
-  if (!Array.isArray(frontmatter.tabs)) return [...reasons, '`tabs:` must be a list with one entry per tab']
-  return [...reasons, ...frontmatter.tabs.flatMap(scanTab)]
+  if (frontmatter.layout !== 'window' || frontmatter.tabs === undefined) return []
+  if (!Array.isArray(frontmatter.tabs)) return ['`tabs:` must be a list with one entry per tab']
+  return frontmatter.tabs.flatMap(scanTab)
 }
 
 export const windowTabs = {
   id: 'window-tabs',
   type: 'source',
   title: 'window slides configure their tabs in `tabs:`',
-  message: 'A window slide takes label, icon, caption and lang per tab from `tabs:`; the old code-layout keys are gone',
+  message: 'A window slide takes label, icon, caption and lang per tab from `tabs:`',
   meta: { category: 'required', default: 'error' },
   check({ sourceFiles = [] } = {}) {
     const offenders = []
