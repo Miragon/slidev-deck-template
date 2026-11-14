@@ -22,6 +22,7 @@ import { excalidrawBuiltTransparent } from './source/excalidraw-built-transparen
 import { brandPalette } from './source/brand-palette.mjs'
 import { brandLogoAsset } from './source/brand-logo-asset.mjs'
 import { brandTokenDefined } from './source/brand-token-defined.mjs'
+import { windowTabs } from './source/window-tabs.mjs'
 
 import { elementOverflow } from './rendered/element-overflow.mjs'
 import { headingBlack } from './rendered/heading-black.mjs'
@@ -44,6 +45,7 @@ export const allRules = [
   brandPalette,
   brandLogoAsset,
   brandTokenDefined,
+  windowTabs,
   elementOverflow,
   headingBlack,
   cardWhite,

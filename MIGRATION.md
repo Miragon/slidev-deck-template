@@ -1,3 +1,46 @@
+# Migration: `@miragon/slidev-toolkit` 2.0, the `code` layout became `window`
+
+Toolkit 2.0 renames the `code` layout to `window`, because its tabs hold diagrams as
+often as code, and gathers every per-tab setting into one `tabs:` list. Each tab can
+now carry its own caption. `files:`, `icons:`, `tabIcon:` and the slide-wide `lang:`
+are gone. Pair it with `@miragon/slidev-validator` from the same release: its
+`window-tabs` rule names every slide that still uses the old layout or keys.
+
+Before:
+
+```yaml
+layout: code
+files:
+  - recruitment.bpmn
+  - SendOfferWorker.kt
+icons:
+  - i-lucide-workflow
+lang: kotlin
+```
+
+After:
+
+```yaml
+layout: window
+tabs:
+  - label: recruitment.bpmn
+    icon: i-lucide-workflow
+    caption: "**The process:** an offer goes out once the rule says yes."
+  - label: SendOfferWorker.kt
+    lang: kotlin
+```
+
+1. Set `layout: window` on every former `code` slide.
+2. Turn each `files` entry into a `tabs` entry with that `label`.
+3. Move `icons[i]` to `tabs[i].icon`. A former `tabIcon` goes on every entry
+   (`icon: false` for no icon).
+4. Move `lang` to the entries whose tab it describes, usually only the code tabs.
+5. Optional: give a tab its own `caption`. `::caption::` stays and shows for every
+   tab without one.
+6. `npm run verify:source` until `window-tabs` is green.
+
+---
+
 # Migration: from the copied `verify/` suite to `@miragon/slidev-validator`
 
 Older decks (scaffolded before this change) carry a **static copy** of the

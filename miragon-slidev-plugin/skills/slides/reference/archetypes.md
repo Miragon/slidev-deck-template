@@ -287,34 +287,41 @@ The sibling of `bpmn` / `dmn` / `mermaid`, but for a hand-drawn `.excalidraw.svg
 
 Internally it frames the diagram with the `DiagramFrame` component (see `reference/components.md`). Use full mode when an Excalidraw diagram should be the framed focal point of a whole slide, and **split mode** (`side`) when it should sit beside its explanation without hand-building a `content` + `SplitView` layout. To frame one *part* of a slide manually reach for `DiagramFrame` directly. A transparent `.excalidraw.svg` via `<Figure src>` still sits directly on the grey `content` layout when it needs no frame.
 
-## code: one code window as the focal point (static, interactive)
+## window: one framed window with tabs (static, interactive)
 
-The slide for code that carries the message: header above, optional lead text, one white code window, optional caption below. The window holds the code fences from the **default slot**. One fence is a plain window with the file name in its header; several fences become **file tabs**, one active at a time. The active tab advances **either by clicking a tab OR by advancing the slide**, and both drive the same Slidev click counter. The layout registers the click steps itself, so you do **not** add a `clicks:` frontmatter; the last tab is the slide's final click.
+> Toolkit 2.0 renamed this layout from `code` and replaced `files:`, `icons:`, `tabIcon:` and `lang:` with one `tabs:` list. A deck still on toolkit 1.x keeps `layout: code` with the old keys; the `window-tabs` rule of the validator names every leftover.
+
+The slide for code or diagrams that carry the message: header above, optional lead text, one white window with a tab bar, optional caption below. Every code fence and every other component in the **default slot** is one tab, in source order. One tab is a plain window with its label in the header; several become **tabs**, one active at a time. The active tab advances **either by clicking a tab OR by advancing the slide**, and both drive the same Slidev click counter. The layout registers the click steps itself, so you do **not** add a `clicks:` frontmatter; the last tab is the slide's final click.
 
 | Frontmatter | Values |
 |---|---|
 | `title`, `eyebrow` (str) | free text |
 | `accent` | blue (default) / green / mixed |
-| `files` (array) | file names, one per fence in source order: the tab labels (several fences) or the header label (one fence). Without it the tabs are numbered |
-| `lang` (str) | language badge on the right of the window header, e.g. `kotlin`. Highlighting itself follows each fence's language tag |
-| `tabIcon` (str / `false`) | one Lucide class before every file name, overriding the defaults; `false` shows no icon. Defaults by tab: `file-code` for a fence, `workflow` for BPMN, `table` for DMN, `users` for Team Topologies, `map` for a Wardley Map, `sticky-note` for Event Storming, `file-image` for any other visual (`<Figure>`, mermaid) |
-| `icons` (array) | one Lucide class per tab in source order, overriding `tabIcon` and the default for that tab |
-| **default slot** | one or several code fences (or `<<<` imports); each fence is one tab. Any other component is a tab too, centred in the window: a `<Figure src="….excalidraw.svg">`, a ` ```mermaid ` fence, or a `slidev-addon-diagram-js` diagram (`<Bpmn>`, `<DmnTable>`, `<TeamTopologies>`, `<WardleyMap>`, `<EventStorming>`, and their interactive siblings). So a diagram can sit next to the code it explains, or a slide can tab through several diagrams (one idea over a few sibling pictures, each legible at full width). An addon diagram without a `height` fills the window; one with a fixed height of its own (`<DmnSimulate>`, 340px table under its form) keeps it, so set a smaller `height` there (e.g. `height="180px"`) when it overflows. A visual taller than the window is clipped at the bottom |
-| **`::lead::` slot** | optional text above the window |
-| **`::caption::` slot** | optional caption below the window, written in `*italics*` like the diagram layouts |
+| `tabs` (array) | one entry per tab in source order, each an object; everything that belongs to one tab sits in its entry |
+| `tabs[].label` (str, required) | the tab's name in the header, e.g. a file name (`SendOfferWorker.kt`) or a view (`Happy path`). Without an entry the tabs are numbered |
+| `tabs[].icon` (str / `false`) | Lucide class before the label, or `false` for none. Default by tab kind: `file-code` for a fence, `workflow` for BPMN, `table` for DMN, `users` for Team Topologies, `map` for a Wardley Map, `sticky-note` for Event Storming, `file-image` for any other visual (`<Figure>`, mermaid) |
+| `tabs[].caption` (str) | line below the window while this tab is active; inline `**bold**`, `*italic*`, `` `code` `` and links. Quote it in YAML when it starts with `*` or contains `: ` |
+| `tabs[].lang` (str) | language badge on the right of the header while this tab is active, e.g. `kotlin`. Highlighting itself follows each fence's language tag |
+| **default slot** | the tabs: code fences (or `<<<` imports), a `<Figure src="….excalidraw.svg">`, a ` ```mermaid ` fence, or a `slidev-addon-diagram-js` diagram (`<Bpmn>`, `<DmnTable>`, `<TeamTopologies>`, `<WardleyMap>`, `<EventStorming>`, and their interactive siblings). Anything but a code fence is centred in the window. So a diagram can sit next to the code it explains, or a slide can tab through several diagrams (one idea over a few sibling pictures, each legible at full width). An addon diagram without a `height` fills the window; one with a fixed height of its own (`<DmnSimulate>`, 340px table under its form) keeps it, so set a smaller `height` there (e.g. `height="180px"`) when it overflows. A visual taller than the window is clipped at the bottom |
+| **`::lead::` slot** | optional text above the window, for the whole slide |
+| **`::caption::` slot** | optional caption below the window for **every tab without a `caption` of its own**, written in `*italics*` like the diagram layouts |
 
-The window fills the height between lead and caption and keeps that size on every tab, so nothing jumps when the tab changes. Highlighting is native Shiki: mark lines on each fence (` ```kotlin {2,10-11} `), statically or per click. The text never sits inside the window: what the audience should take away goes into `::lead::`, a side remark into `::caption::`; both belong to the whole slide, not to a single tab.
+**Which caption shows:** the active tab's `caption` if it has one, otherwise `::caption::`, never both. All captions share one area that keeps the height of the tallest, so nothing jumps when the tab changes; the window itself also keeps its size on every tab. In the PDF export every tab is its own page with its own caption.
 
-Use `code` when the code is the focal point or the slide compares several files. For a snippet that only supports the text of a `content` slide, a `<CodeBlock>` or a bare fence is enough.
+Label and caption live in `tabs` only: no Slidev fence title (` ```kotlin [Main.kt] `) and no `<Figure caption>` inside a tab, so each tab has exactly one label and one caption. Highlighting is native Shiki: mark lines on each fence (` ```kotlin {2,10-11} `), statically or per click. The text never sits inside the window: what the audience should take away goes into `::lead::`, a remark on one tab into its `caption`, a remark on all of them into `::caption::`.
+
+Use `window` when code or a set of diagrams is the focal point. For a snippet that only supports the text of a `content` slide, a `<CodeBlock>` or a bare fence is enough.
 
 ````md
 ---
-layout: code
+layout: window
 title: One annotation covers both writes
-files:
-  - RegisterMembershipService.kt
-  - MembershipProcessAdapter.kt
-lang: kotlin
+tabs:
+  - label: RegisterMembershipService.kt
+    lang: kotlin
+  - label: MembershipProcessAdapter.kt
+    lang: kotlin
+    caption: "The adapter joins the transaction the service **opened**."
 ---
 
 ```kotlin {2}
@@ -336,10 +343,28 @@ The database write and the process start commit together.
 
 ::caption::
 
-*The adapter joins the transaction the service opened.*
+*One transaction, opened by the service.*
 ````
 
-**Limit:** two to four tabs (short file names, they share one header row), each fence within the 18-line code limit. One sentence in the lead, one line in the caption.
+Tabbing through addon diagrams, one caption each:
+
+````md
+---
+layout: window
+title: Which paths to test
+tabs:
+  - label: Happy path
+    caption: "**Happy path:** the main run, at least one test"
+  - label: Negative paths
+    caption: "**Negative paths:** rejections, aborts, errors"
+---
+
+<Bpmn bpmnFilePath="/resources/05-testing/happy-path.bpmn"></Bpmn>
+
+<Bpmn bpmnFilePath="/resources/05-testing/negative-paths.bpmn"></Bpmn>
+````
+
+**Limit:** two to four tabs (short labels, they share one header row), each fence within the 18-line code limit. One sentence in the lead, one line per caption.
 
 ## showcase: interactive feature explorer (static, interactive)
 
@@ -352,7 +377,7 @@ A row of cards; one active at a time, cross-fading a detail panel. Cards and pan
 | `items` (array) | YAML array of `{ label, body, icon?, image?, imageAlt? }` |
 | `gap` (str) | CSS length between the cards and the detail panel; default `1rem` (matches the card gap) |
 | `cards` | top (default) / left: where the cards sit relative to the detail panel |
-| **`::caption::` slot** | optional caption below the cards and the detail panel, written in `*italics*` like the `code` and diagram layouts; one line, it belongs to the whole slide, not to a single card |
+| **`::caption::` slot** | optional caption below the cards and the detail panel, written in `*italics*` like the `window` and diagram layouts; one line, it belongs to the whole slide, not to a single card |
 
 `body` is either a **string** (renders as one paragraph) or a **YAML list of strings** (renders as a plain bullet list with the standard accent-square markers, same as the `content` layout). Use the list form only for genuinely enumerable detail; keep it to three to four short items. Inline Markdown works in either form: `` `code` ``, `**bold**`, and `*italic*` are rendered (angle brackets are escaped, so `` `<v-clicks>` `` shows as a literal code chip). Wrap any HTML-like term in backticks rather than writing it raw.
 

@@ -141,6 +141,7 @@ config, so a report — and a CI log — is self-describing.
 | `brand-palette` | source | required | error |
 | `brand-logo-asset` | source | required | error |
 | `brand-token-defined` | source | required | error |
+| `window-tabs` | source | required | error |
 | `element-overflow` | rendered | recommended | error |
 | `heading-black` | rendered | required | error |
 | `card-white` | rendered | required | error |
@@ -165,6 +166,11 @@ build stays green and the breakage shows up on exactly the one slide that uses t
 token, usually as something plausible-looking. A computed name
 (`var(--miragon-gradient-${accent})`) cannot be resolved statically and is skipped
 rather than guessed at.
+
+`window-tabs` names every slide still written for the toolkit 1.x `code` layout
+(`layout: code`, `files:`, `icons:`, `tabIcon:`, a slide-wide `lang:`) and every
+malformed `tabs:` entry. Vue drops an unknown prop silently, so without it such a slide
+would render with numbered, uncaptioned tabs and stay green.
 
 `content-heading` has a per-slide opt-out (`allowMultilineHeading: true` in the
 slide frontmatter). `overlay-safe-area` reads the toolkit-owned safe-area model and

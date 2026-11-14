@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onUnmounted, ref, shallowRef, watch } from 'vue'
 import { useSlideContext } from '@slidev/client'
+import { inlineMarkdown } from '../utils/inlineMarkdown'
 
 /**
  * Figure — beschriftete Diagramm-Spalte: Titel oben, Grafik (Slot) mittig,
@@ -76,19 +77,7 @@ if (isStepped) {
   }, { immediate: true })
 }
 
-// HTML-sicher: erst escapen, dann nur die erlaubten Inline-Marker zu Tags machen.
-const captionHtml = computed(() => {
-  if (!props.caption) return ''
-  const escaped = props.caption
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-  return escaped
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
-})
+const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption) : ''))
 </script>
 
 <template>

@@ -44,6 +44,7 @@
     "assets",
     "global",
     "setup",
+    "utils",
     "global-top.vue",
     "global-bottom.vue"
   ],

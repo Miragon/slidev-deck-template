@@ -34,6 +34,7 @@
  */
 import { computed, onUnmounted, watch } from 'vue'
 import { useNav, useSlideContext } from '@slidev/client'
+import { inlineMarkdown } from '../utils/inlineMarkdown'
 
 interface Item {
   label: string
@@ -100,17 +101,8 @@ function toText(value: unknown): string {
   return String(value ?? '')
 }
 
-// Frontmatter values are plain strings, not compiled by Slidev, so render the
-// allowed inline Markdown ourselves (code, links, bold, italic, line breaks).
-// HTML-safe: escape first, then mark up (mirrors Figure.vue's caption).
 function inline(value: unknown): string {
-  const escaped = toText(value).trimEnd().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  return escaped
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
-    .replace(/\n/g, '<br>')
+  return inlineMarkdown(toText(value).trimEnd()).replace(/\n/g, '<br>')
 }
 
 // Route the card click through Slidev's own nav so mouse and keyboard share one

@@ -70,23 +70,25 @@ The body of a slide is plain Markdown, headings and bullets. Reach for a `<Card>
 
 ---
 id: s-51f101ac
-layout: code
+layout: window
 title: Code gets its own window
 eyebrow: 02 - Slidev
 accent: blue
-files:
-  - setup/mermaid.ts
-  - setup/transformers.ts
-lang: ts
+tabs:
+  - label: setup/mermaid.ts
+    lang: ts
+  - label: setup/transformers.ts
+    lang: ts
 ---
 
 <!--
-  code: one code window as the focal point of the slide. Each fence in the
-  slide body is one tab; a tab click and advancing the slide are the same
+  window: one framed window as the focal point of the slide. Each fence in
+  the slide body is one tab; a tab click and advancing the slide are the same
   action, so the slide walks through its files before it moves on.
   REQUIRED: at least one code fence in the default slot.
-  OPTIONAL: files (tab labels, one per fence in source order), lang (badge),
-  ::lead:: (text above the window), ::caption:: (line below it), accent.
+  OPTIONAL: tabs (one entry per tab in source order: label, icon, caption,
+  lang), ::lead:: (text above the window), ::caption:: (line below it for
+  every tab without a caption of its own), accent.
   Line highlighting is native Shiki, set on each fence (`ts {3-5}`).
   LIMIT: two to four tabs, each within the 18-line code limit; one sentence
   in the lead, one line in the caption.
@@ -118,23 +120,23 @@ The toolkit configures Slidev in two small setup files, so a deck never has to.
 
 ---
 id: s-d5a8f995
-layout: code
+layout: window
 title: Or tab through a set of diagrams
 eyebrow: 02 - Slidev
 accent: blue
-files:
-  - reference
-  - object storage
-  - history-level
+tabs:
+  - label: reference
+  - label: object storage
+  - label: history-level
 ---
 
 <!--
-  code layout with diagrams only: a <Figure> in the body is a tab like a code
+  window layout with diagrams only: a <Figure> in the body is a tab like a code
   fence, centred in the window and marked with a diagram icon. Use it when one
   idea unfolds over a few sibling diagrams (here: one row of a before/after
   each), so every diagram stays legible at full width.
-  REQUIRED: one <Figure src alt> per tab.  OPTIONAL: files (tab labels),
-  tabIcon (Lucide class, overrides the default icons), ::lead::, ::caption::.
+  REQUIRED: one <Figure src alt> per tab.  OPTIONAL: tabs (label, icon to
+  override the default, caption), ::lead::, ::caption::.
   LIMIT: two to four tabs; diagrams of a similar shape so nothing jumps.
   Transition: "And code and diagram fit in one window, too."
 -->
@@ -155,17 +157,18 @@ Three ways to keep a process instance lean, one diagram each.
 
 ---
 id: s-645e657e
-layout: code
+layout: window
 title: From the idea to the code
 eyebrow: 02 - Slidev
 accent: blue
-files:
-  - lean-reference.excalidraw.svg
-  - StartRecruitmentService.kt
+tabs:
+  - label: lean-reference.excalidraw.svg
+  - label: StartRecruitmentService.kt
+    lang: kotlin
 ---
 
 <!--
-  code layout, mixed: fences and <Figure>s share one window, in source order.
+  window layout, mixed: fences and <Figure>s share one window, in source order.
   Each tab gets its own icon (file-code for a fence, file-image for a figure).
   Here the principle comes first as a picture, the code that applies it second.
   LIMIT: two to four tabs, each fence within the 18-line code limit.

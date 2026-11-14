@@ -305,25 +305,30 @@ A DMN decision, live: feed the inputs in and watch which rule fires.
 
 ---
 id: s-915b5c32
-layout: code
+layout: window
 title: Process, rule and code in one window
 eyebrow: 04 - Diagrams
 accent: blue
-files:
-  - recruitment.bpmn
-  - hiring.dmn
-  - SendOfferWorker.kt
+tabs:
+  - label: recruitment.bpmn
+    caption: "**The process:** an offer goes out once the hiring rule says yes."
+  - label: hiring.dmn
+    caption: "**The rule:** the decision table behind the gateway."
+  - label: SendOfferWorker.kt
+    lang: kotlin
 ---
 
 <!--
-  code layout with diagrams from slidev-addon-diagram-js: every component in the
-  body is a tab, in source order. Diagrams are centred and get an icon by
+  window layout with diagrams from slidev-addon-diagram-js: every component in
+  the body is a tab, in source order. Diagrams are centred and get an icon by
   notation (workflow for BPMN, table for DMN, users / map / sticky-note for
   Team Topologies, Wardley Maps, Event Storming); a fence keeps file-code.
   Static viewers (<Bpmn>, <DmnTable>, <DmnDrd>, <TeamTopologies>, ...) suit a
   tab best; interactive ones (token simulation, modelers) work too.
-  OPTIONAL: files (tab labels), icons (one Lucide class per tab, overrides the
-  default), tabIcon (one icon for all tabs, or false), ::lead::, ::caption::.
+  OPTIONAL: tabs (one entry per tab: label, icon to override the default or
+  false for none, caption shown while the tab is active, lang badge),
+  ::lead::, ::caption:: (for every tab without a caption of its own; here the
+  code tab).
   LIMIT: two to four tabs.
   Transition: "The same addon draws three more notations."
 -->
@@ -345,7 +350,7 @@ class SendOfferWorker(private val offers: OfferService) {
 
 ::caption::
 
-*The process, the rule behind its gateway, and the code behind one of its tasks.*
+*The code behind the task that sends the offer.*
 
 ---
 id: s-86912c6f
