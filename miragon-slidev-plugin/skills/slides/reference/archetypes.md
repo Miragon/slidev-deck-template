@@ -289,7 +289,7 @@ Internally it frames the diagram with the `DiagramFrame` component (see `referen
 
 ## window: one framed window with tabs (static, interactive)
 
-> Toolkit 2.0 renamed this layout from `code` and replaced `files:`, `icons:`, `tabIcon:` and `lang:` with one `tabs:` list. A deck still on toolkit 1.x keeps `layout: code` with the old keys; the `window-tabs` rule of the validator names every leftover.
+> Toolkit 2.0 renamed this layout from `code` and replaced `files:`, `icons:`, `tabIcon:` and `lang:` with one `tabs:` list. A deck still on toolkit 1.x keeps `layout: code` with the old keys; MIGRATION.md lists the steps to move.
 
 The slide for code or diagrams that carry the message: header above, optional lead text, one white window with a tab bar, optional caption below. Every code fence and every other component in the **default slot** is one tab, in source order. One tab is a plain window with its label in the header; several become **tabs**, one active at a time. The active tab advances **either by clicking a tab OR by advancing the slide**, and both drive the same Slidev click counter. The layout registers the click steps itself, so you do **not** add a `clicks:` frontmatter; the last tab is the slide's final click.
 
