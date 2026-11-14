@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.8.1...slidev-validator-v0.8.2) (2026-11-14)
+
+
+### Bug Fixes
+
+* **validator:** ignore build output in deck/dist ([#279](https://github.com/Miragon/slidev-deck-template/issues/279)) ([8dcc508](https://github.com/Miragon/slidev-deck-template/commit/8dcc5081152968553a60ff3d13d9e7e79e64a48e)), closes [#278](https://github.com/Miragon/slidev-deck-template/issues/278)
+
 ## [0.8.1](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.8.0...slidev-validator-v0.8.1) (2026-11-14)
 
 
