@@ -167,10 +167,10 @@ token, usually as something plausible-looking. A computed name
 (`var(--miragon-gradient-${accent})`) cannot be resolved statically and is skipped
 rather than guessed at.
 
-`window-tabs` names every slide still written for the toolkit 1.x `code` layout
-(`layout: code`, `files:`, `icons:`, `tabIcon:`, a slide-wide `lang:`) and every
-malformed `tabs:` entry. Vue drops an unknown prop silently, so without it such a slide
-would render with numbered, uncaptioned tabs and stay green.
+`window-tabs` names every malformed `tabs:` entry on a `window` slide: a string
+instead of an object, a missing `label`, an unknown key or a wrong type. Vue drops an
+unknown key silently, so without it such a slide would render with numbered,
+uncaptioned tabs and stay green.
 
 `content-heading` has a per-slide opt-out (`allowMultilineHeading: true` in the
 slide frontmatter). `overlay-safe-area` reads the toolkit-owned safe-area model and
