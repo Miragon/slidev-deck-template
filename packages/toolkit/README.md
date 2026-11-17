@@ -25,7 +25,7 @@ theme: '@miragon/slidev-toolkit'
 That is all the wiring needed. You now get, automatically:
 
 - **Brand tokens and fonts** — the Miragon colours (primary blue `#335DE5`, sparing green) and the bundled Geist / Geist Mono variable fonts.
-- **The components**, auto-imported (use them by tag, no import): `Card`, `CardGrid`, `StepList` / `Step`, `Figure`, `SplitView`, `Chip`, `Agenda`, `BrandMeshBackground`.
+- **The components**, auto-imported (use them by tag, no import): `Card`, `CardGrid`, `StepList` / `Step`, `Figure`, `SplitView`, `Chip`, `QuizTime`, `Agenda`, `BrandMeshBackground`.
 - **The global chrome** — a thin progress bar on top and a chapter/position footer at the bottom, on every content slide.
 
 ## Layouts

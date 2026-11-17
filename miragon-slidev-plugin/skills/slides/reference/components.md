@@ -268,6 +268,28 @@ The pill is always white with the black label; only the icon takes the accent. E
 <Chip icon="i-lucide-container">docker</Chip>
 ```
 
+## QuizTime
+
+A live-quiz slide for any quiz tool (Kahoot, Mentimeter, Slido, a Google Form): one card per question dealt into a portrait stack with "1 / N ?" on the face card, a kicker, the quiz name, a meta line and a "Start the quiz" button. The component knows no tool: you pass the links. Put it alone on a `content` slide. The deal replays on every slide visit and is off under `prefers-reduced-motion`.
+
+| Prop | Values | Default | Notes |
+|---|---|---|---|
+| `name` (str) | free text | **required** | the quiz name, large and black |
+| `href` (str) | URL | **required** | where the speaker starts the quiz (the host or presenter link); the button opens it in a new tab |
+| `join` (str) | URL | none | the page the audience opens on their phones; adds "Join at `<host>` with your phone." after the meta line. Leave it off when the tool shows its own join code |
+| `kicker` (str) | free text | `Live quiz` | the blue uppercase line above the name, e.g. `Kahoot quiz` |
+| `questions` (num) | number | `10` | the number of cards in the stack and the "N questions" default line |
+| `sticker` (str) | free text | none | a green circle on the stack, e.g. a prize; the text gets smaller as it grows longer, so keep it under about 40 characters |
+| `sticker-label` (str) | free text | `Prize` | the small uppercase label on the sticker |
+| `sticker-icon` (str) | a **Lucide** Iconify class | `i-lucide-trophy` | the icon on the sticker |
+| **slot** | plain text | `N questions, nothing graded.` | replaces the meta line; the join hint always follows |
+
+The sticker is the slide's one green element, so leave other green accents off a quiz slide.
+
+```md
+<QuizTime name="Final Quiz" href="https://create.kahoot.it/details/<id>" join="https://kahoot.it" kicker="Kahoot quiz" questions="8" sticker="A BPMN book for the winner">One question from each topic.</QuizTime>
+```
+
 ## Agenda
 
 The clickable chapter stepper: the deck's own table of contents, rendered from the live deck. Unlike every other component it **owns the whole slide**, so its slide uses the built-in `layout: default` (the one sanctioned non-archetype) plus `class: agenda-slide`, because a theme archetype's header and padding would fight it. There is one per deck, right after the cover.
