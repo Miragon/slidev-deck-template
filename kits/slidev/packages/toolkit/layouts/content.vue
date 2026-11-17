@@ -34,10 +34,10 @@ const title = computed(() => props.frontmatter?.title as string | undefined)
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 </script>
 
 <template>
@@ -65,7 +65,7 @@ const accentVar = 'var(--miragon-blue)'
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -180,8 +180,8 @@ const accentVar = 'var(--miragon-blue)'
 .content-body :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-blue-darker);
+  background: var(--miragon-tint);
+  color: var(--miragon-code-text);
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }

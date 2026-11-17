@@ -9,7 +9,7 @@
    body :deep(...)) übernommen. */
 .mg-diagram-body {
   --mg-body-grad: var(--miragon-gradient-blue);
-  --mg-body-accent: var(--miragon-blue);
+  --mg-body-accent: var(--miragon-accent);
 }
 
 .mg-diagram-body p {
@@ -75,8 +75,8 @@
 .mg-diagram-body :not(pre) > code {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-blue-darker);
+  background: var(--miragon-tint);
+  color: var(--miragon-code-text);
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }

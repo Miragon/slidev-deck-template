@@ -114,8 +114,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
 .mg-code__window {
   position: relative;
   border-radius: 0.6rem;
-  border: 1px solid var(--miragon-border);
-  background: var(--miragon-white);
+  border: 1px solid var(--miragon-line);
+  background: var(--miragon-surface);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   overflow: hidden;
 }
@@ -124,8 +124,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 0.9rem;
-  background: var(--miragon-gray-bg);
-  border-bottom: 1px solid var(--miragon-border);
+  background: var(--miragon-ground);
+  border-bottom: 1px solid var(--miragon-line);
 }
 .mg-code__bar-spacer {
   flex: 1 1 auto;
@@ -154,8 +154,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--miragon-blue-dark);
-  background: var(--miragon-blue-light);
+  color: var(--miragon-accent-text);
+  background: var(--miragon-tint);
   border-radius: 0.35rem;
   padding: 0.1rem 0.45rem;
 }
@@ -171,18 +171,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKey, true))
   width: 1.6rem;
   height: 1.6rem;
   padding: 0;
-  border: 1px solid var(--miragon-border);
+  border: 1px solid var(--miragon-line);
   border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--miragon-white) 85%, transparent);
+  background: color-mix(in srgb, var(--miragon-surface) 85%, transparent);
   color: var(--miragon-text-muted);
   cursor: pointer;
   opacity: 1;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 .mg-code__toggle:hover {
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   border-color: var(--miragon-blue-warm);
-  background: var(--miragon-white);
+  background: var(--miragon-surface);
 }
 /* Fokus (CI-Regel C3): Der Toggle gab bisher nur beim Hover Rückmeldung. Ein
    eigener Ring macht ihn auch per Tastatur auffindbar und ist nicht mit dem

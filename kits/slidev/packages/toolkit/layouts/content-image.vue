@@ -44,10 +44,10 @@ const props = withDefaults(
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 
 // Base-Pfad respektieren (GitHub Pages baut unter /<repo>/). Runtime-Strings
 // werden von Vite NICHT umgeschrieben — daher manuell mit BASE_URL auflösen.
@@ -92,7 +92,7 @@ const columns = computed(() => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -127,7 +127,7 @@ const columns = computed(() => {
   object-fit: cover;
   border-radius: 1.1rem;
   box-shadow: 0 12px 30px color-mix(in srgb, var(--miragon-blue) 18%, transparent);
-  background: var(--miragon-white);
+  background: var(--miragon-surface);
 }
 .image-bare .ci-image img {
   object-fit: contain;

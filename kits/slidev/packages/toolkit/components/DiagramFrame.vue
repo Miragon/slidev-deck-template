@@ -10,7 +10,7 @@ withDefaults(
 
 <template>
   <div
-    class="mg-frame"
+    class="mg-frame mg-paper"
     :class="`mg-frame--${padding}`"
     :style="height ? { height } : undefined"
   >
@@ -21,8 +21,8 @@ withDefaults(
 <style scoped>
 .mg-frame {
   box-sizing: border-box;
-  background: var(--miragon-white);
-  border: 1px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 1px solid var(--miragon-line);
   border-radius: 1.1rem;
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   display: flex;

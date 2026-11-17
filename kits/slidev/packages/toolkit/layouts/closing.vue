@@ -33,7 +33,7 @@ function onLogoError(e: Event) {
 </script>
 
 <template>
-  <div class="closing-layout">
+  <div class="closing-layout mg-fixed-stage">
     <BrandMeshBackground />
 
     <div class="closing-content">
@@ -57,7 +57,7 @@ function onLogoError(e: Event) {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   /* Brand-Gradient als unterste Ebene: greift, falls BrandMeshBackground (WebGL) gar nicht
      mountet (PDF/headless ohne GPU) — so nie Weiß, immer der Miragon-Verlauf.
      BrandMeshBackground liegt mit position:absolute darüber und verdeckt ihn live. */
@@ -90,7 +90,7 @@ function onLogoError(e: Event) {
   font-size: 3.6rem;
   line-height: 1.05;
   font-weight: 900;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   margin: 0;
   text-shadow: 0 2px 24px color-mix(in srgb, var(--miragon-mesh-navy) 35%, transparent);
 }
@@ -98,7 +98,7 @@ function onLogoError(e: Event) {
 .closing-body :deep(p) {
   font-size: 1.4rem;
   font-weight: 400;
-  color: color-mix(in srgb, var(--miragon-white) 88%, transparent);
+  color: color-mix(in srgb, var(--miragon-on-colour) 88%, transparent);
   margin-top: 1.25rem;
   max-width: 42rem;
 }
@@ -107,7 +107,7 @@ function onLogoError(e: Event) {
   /* Weiß, nicht grün: auf dem Mesh liegen grüne Farbstopps, und die CI erlaubt
      pro Motiv nur ein, zwei grüne Akzente. Der eine Grün-Akzent ist der
      Eyebrow. Die Unterstreichung trägt hier die Link-Affordanz. */
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -137,10 +137,10 @@ function onLogoError(e: Event) {
   font-size: 0.95rem;
   font-weight: 600;
   /* Siehe Links oben: ein grüner Akzent pro Motiv, und der ist der Eyebrow. */
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
 }
 .closing-footer-text {
   font-size: 0.85rem;
-  color: color-mix(in srgb, var(--miragon-white) 70%, transparent);
+  color: color-mix(in srgb, var(--miragon-on-colour) 70%, transparent);
 }
 </style>

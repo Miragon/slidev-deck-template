@@ -49,7 +49,7 @@ withDefaults(
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: center;
@@ -80,7 +80,7 @@ withDefaults(
 
 .interactive-badge-icon {
   font-size: 1.6rem;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
 }
 
 .interactive-kicker {
@@ -88,7 +88,7 @@ withDefaults(
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   margin-bottom: 1rem;
 }
 

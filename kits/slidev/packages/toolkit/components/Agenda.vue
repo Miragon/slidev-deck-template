@@ -46,10 +46,10 @@ const props = withDefaults(
 const { slides, go, currentPage } = useNav()
 
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 
 // Markdown bold (** **) survives into the auto-extracted title; strip it.
 function clean(s?: string) {
@@ -288,14 +288,14 @@ function openSlide(no: number, ev: MouseEvent) {
 .agenda-layout {
   /* Fallback for the linter; the inline :style binding overrides at runtime. */
   --ag-grad: var(--miragon-gradient-mixed);
-  --ag-accent: var(--miragon-blue);
+  --ag-accent: var(--miragon-accent);
   --ag-head-gap: 1.4rem;
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -364,7 +364,7 @@ function openSlide(no: number, ev: MouseEvent) {
   height: 0.18rem;
   border-radius: 999px;
 }
-.track-line { background: var(--miragon-border); }
+.track-line { background: var(--miragon-line); }
 .track-fill { background: var(--ag-accent); transition: width 320ms cubic-bezier(0.2, 0.7, 0.2, 1); }
 
 .step {
@@ -419,8 +419,8 @@ function openSlide(no: number, ev: MouseEvent) {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: var(--miragon-white);
-  border: 2px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 2px solid var(--miragon-line);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
   transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 280ms ease, background 280ms ease;
 }
@@ -439,7 +439,7 @@ function openSlide(no: number, ev: MouseEvent) {
   box-shadow: 0 6px 16px color-mix(in srgb, var(--miragon-blue) 28%, transparent);
   transform: scale(1.1);
 }
-.step.is-active .step-num { color: var(--miragon-white); }
+.step.is-active .step-num { color: var(--miragon-on-colour); }
 
 /* ---- Alternating labels (above five chapters) --------------------------- */
 /* Dot stays in flow so columns stay equal; each label is absolute and centred on
@@ -558,7 +558,7 @@ function openSlide(no: number, ev: MouseEvent) {
 .mini-frame {
   border-radius: 0.7rem;
   overflow: hidden;
-  border: 1px solid var(--miragon-border);
+  border: 1px solid var(--miragon-line);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--miragon-blue) 12%, transparent);
   pointer-events: none;
   transition: border-color 280ms ease, box-shadow 280ms ease;
@@ -580,7 +580,7 @@ function openSlide(no: number, ev: MouseEvent) {
   padding: 0 0.28rem;
   border-radius: 0.35rem;
   background: color-mix(in srgb, var(--miragon-black) 72%, transparent);
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.02em;

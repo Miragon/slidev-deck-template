@@ -77,13 +77,15 @@ if (isStepped) {
   }, { immediate: true })
 }
 
+const showsLightAsset = !props.src || /\.svg$/i.test(props.src)
+
 const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption) : ''))
 </script>
 
 <template>
   <div class="mg-figure">
     <div v-if="title" class="mg-figure__title">{{ title }}</div>
-    <div class="mg-figure__media">
+    <div class="mg-figure__media" :class="{ 'mg-paper': showsLightAsset }">
       <div
         v-if="isStepped"
         ref="svgHost"
@@ -117,6 +119,13 @@ const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption
   display: flex;
   justify-content: center;
 }
+html.dark .mg-figure__media.mg-paper {
+  padding: 1rem;
+  border-radius: 0.6rem;
+}
+.mg-paper .mg-figure__media.mg-paper {
+  padding: 0;
+}
 .mg-figure__media img {
   max-width: 100%;
   height: auto;
@@ -146,7 +155,7 @@ const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption
   font-style: italic;
 }
 .mg-figure__caption :deep(a) {
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   text-decoration: underline;
   text-underline-offset: 0.15em;
   font-weight: 600;

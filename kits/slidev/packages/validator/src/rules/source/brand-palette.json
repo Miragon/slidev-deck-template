@@ -13,7 +13,9 @@
     { "name": "blau-hell", "hex": "#6B8AFF", "role": "interaction-dark", "note": "Derived from blau: links and accents on dark ground." },
     { "name": "success", "hex": "#0B7A55", "role": "status", "note": "STATE only, never a design colour." },
     { "name": "warning", "hex": "#92610A", "role": "status", "note": "STATE only, never a design colour." },
-    { "name": "danger", "hex": "#C92A2A", "role": "status", "note": "STATE only, never a design colour." }
+    { "name": "danger", "hex": "#C92A2A", "role": "status", "note": "STATE only, never a design colour." },
+    { "name": "warning-hell", "hex": "#FFB000", "role": "status-dark", "note": "tokens.json functional.warning-hell: the warning state on dark ground. STATE only." },
+    { "name": "danger-hell", "hex": "#FB6D73", "role": "status-dark", "note": "tokens.json functional.danger-hell: the danger state on dark ground. STATE only." }
   ],
 
   "restricted": [

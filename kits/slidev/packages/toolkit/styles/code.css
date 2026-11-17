@@ -18,8 +18,8 @@
    `goodbad` whose panels sit outside `.slidev-layout` — while staying low enough
    that the <CodeBlock> component's :deep rules (0,3,0) can still reset it. */
 .shiki.slidev-code {
-  background: var(--miragon-white);
-  border: 1px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 1px solid var(--miragon-line);
   border-radius: 0.6rem;
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
   overflow-x: auto;
@@ -47,7 +47,7 @@
 .shiki.slidev-code .line.highlighted {
   background:
     linear-gradient(var(--miragon-blue), var(--miragon-blue)) left / 3px 100% no-repeat,
-    var(--miragon-blue-light);
+    var(--miragon-tint);
 }
 
 /* A caption line under a fence (a following *italic* line) reads as a muted
@@ -67,9 +67,9 @@
 :not(pre) > code {
   font-family: var(--miragon-font-mono);
   font-size: 0.85em;
-  color: var(--miragon-blue-dark);
-  background: var(--miragon-blue-light);
-  border: 1px solid var(--miragon-border);
+  color: var(--miragon-accent-blue);
+  background: var(--miragon-tint);
+  border: 1px solid var(--miragon-line);
   border-radius: 0.35rem;
   padding: 0.1em 0.35em;
   overflow-wrap: anywhere;

@@ -34,8 +34,8 @@
   font-family: var(--miragon-font-mono);
   font-size: 0.95rem;
   line-height: 1.5;
-  background: var(--miragon-white);
-  border: 1px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 1px solid var(--miragon-line);
   border-radius: 0.6rem;
   overflow: hidden;
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
@@ -45,7 +45,7 @@
 :is(#slideshow, #print-container) thead th {
   color: var(--miragon-text-primary);
   font-weight: 700;
-  background: var(--miragon-blue-light);
+  background: var(--miragon-tint);
   border-bottom: 2px solid var(--miragon-blue);
 }
 
@@ -54,13 +54,13 @@
   padding: 0.55rem 1.1rem;
   text-align: left;
   color: var(--miragon-text-secondary);
-  border-bottom: 1px solid var(--miragon-border);
+  border-bottom: 1px solid var(--miragon-line);
   vertical-align: top;
 }
 
 /* Subtle zebra striping for scannability; last row carries no divider. */
 :is(#slideshow, #print-container) tbody tr:nth-child(even) td {
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
 }
 :is(#slideshow, #print-container) tbody tr:last-child td {
   border-bottom: none;

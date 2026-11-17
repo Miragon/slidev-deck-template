@@ -20,14 +20,16 @@ defineProps<{
 // schreibt für dunklen/farbigen Grund und Fotos ohnehin Weiß vor.
 // Die Datei ist der unveränderte offizielle Vektor (miragon-logo-weiss.svg).
 import logoSrc from '../assets/logo-white.svg'
+import ColorSchemeSwitch from '../global/ColorSchemeSwitch.vue'
 function onLogoError(e: Event) {
   (e.target as HTMLImageElement).style.display = 'none'
 }
 </script>
 
 <template>
-  <div class="cover-layout">
+  <div class="cover-layout mg-fixed-stage">
     <BrandMeshBackground />
+    <ColorSchemeSwitch class="cover-scheme-switch"></ColorSchemeSwitch>
 
     <div class="cover-content">
       <div v-if="eyebrow" class="cover-eyebrow">{{ eyebrow }}</div>
@@ -49,7 +51,7 @@ function onLogoError(e: Event) {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   /* Brand-Gradient als unterste Ebene: greift, falls BrandMeshBackground (WebGL) gar nicht
      mountet (PDF/headless ohne GPU) — so nie Weiß, immer der Miragon-Verlauf.
      BrandMeshBackground liegt mit position:absolute darüber und verdeckt ihn live. */
@@ -86,7 +88,7 @@ function onLogoError(e: Event) {
   font-size: 3.6rem;
   line-height: 1.05;
   font-weight: 900;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   margin: 0;
   text-shadow: 0 2px 24px color-mix(in srgb, var(--miragon-mesh-navy) 35%, transparent);
 }
@@ -94,7 +96,7 @@ function onLogoError(e: Event) {
 .cover-body :deep(p) {
   font-size: 1.4rem;
   font-weight: 400;
-  color: color-mix(in srgb, var(--miragon-white) 88%, transparent);
+  color: color-mix(in srgb, var(--miragon-on-colour) 88%, transparent);
   margin-top: 1.25rem;
   max-width: 42rem;
 }
@@ -103,7 +105,7 @@ function onLogoError(e: Event) {
   /* Weiß, nicht grün: auf dem Mesh liegen grüne Farbstopps, und die CI erlaubt
      pro Motiv nur ein, zwei grüne Akzente. Der eine Grün-Akzent ist der
      Eyebrow. Die Unterstreichung trägt hier die Link-Affordanz. */
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -121,8 +123,15 @@ function onLogoError(e: Event) {
 
 .cover-logo { height: 1.75rem; }
 
+.cover-scheme-switch {
+  position: absolute;
+  z-index: 3;
+  top: 2rem;
+  right: 2rem;
+}
+
 .cover-footer-text {
   font-size: 0.85rem;
-  color: color-mix(in srgb, var(--miragon-white) 70%, transparent);
+  color: color-mix(in srgb, var(--miragon-on-colour) 70%, transparent);
 }
 </style>

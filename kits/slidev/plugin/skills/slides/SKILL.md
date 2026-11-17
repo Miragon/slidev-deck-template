@@ -302,6 +302,21 @@ This downgrades that overlay's collision on that slide from an error to a **repo
 
 ---
 
+## Dark mode
+
+The deck renders light by default. Keep `colorSchema: light` in the headmatter: the toolkit owns the switch, so Slidev's own toggle stays out of the navigation bar.
+
+- **Switch on the cover.** The `cover` layout carries a small moon/sun button top right. It flips the whole deck and remembers the choice in the browser, so the presenter and audience windows follow along.
+- **Start dark with a flag.** `VITE_MIRAGON_COLOR_SCHEME=dark npm run dev` opens the deck dark. The flag beats a remembered choice on load.
+- **Export stays light.** PDF and print exports always render light, whatever the mode.
+- **Light assets sit on paper.** Excalidraw, BPMN, DMN, Mermaid and screenshots are light assets. In dark mode `DiagramFrame`, the diagram layouts, a `Figure` with an `.svg` and the visual tabs of `window` keep a light surface, like paper on a dark table. Nothing to do in the slide; never ship a dark variant of a diagram or invert one.
+- **Cover and closing do not change.** The mesh is a fixed stage and looks the same in both modes.
+- **Accents turn green in dark mode** (eyebrows, bold words, the first card accent) because blue on black fails AA; the second card accent turns white. The layouts handle it, the slide markdown stays the same.
+
+Colours in a layout or component come from the role tokens in `theme.css` (`--miragon-ground`, `--miragon-surface`, `--miragon-line`, `--miragon-text-*`, `--miragon-accent*`, `--miragon-on-colour`), never from a palette value that does not switch.
+
+---
+
 ## Speaker notes and transitions
 
 Every content slide gets `<!-- … -->` notes ending with a `Transition: "…"` line that hands off to the next slide.

@@ -37,8 +37,8 @@ const toneClass = computed(() => {
 <style scoped>
 .mg-card {
   border-radius: 0.75rem;
-  border: 1px solid var(--miragon-border);
-  background: var(--miragon-white);
+  border: 1px solid var(--miragon-line);
+  background: var(--miragon-surface);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
 }
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
@@ -151,12 +151,12 @@ const toneClass = computed(() => {
   height: auto;
   border-radius: 0;
   background: none;
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   font-weight: 700;
 }
 .mg-card .mg-card__body :deep(strong) { font-weight: 700; color: var(--miragon-text-primary); }
 .mg-card .mg-card__body :deep(a) {
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   text-decoration: none;
   border-bottom: 1px solid currentColor;
 }
