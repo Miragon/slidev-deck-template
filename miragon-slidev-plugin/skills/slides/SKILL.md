@@ -12,7 +12,7 @@ How to build the Miragon-branded Slidev deck in this repo: where things live, wh
 1. **Rendering truth (code), what actually ships:**
    - `packages/toolkit/styles/theme.css`: the brand colour tokens as CSS variables, mirrored from the brand's `tokens.json`.
    - `packages/toolkit/layouts/*.vue`: the layout archetypes (`layout:` in frontmatter).
-   - `packages/toolkit/components/*.vue`: the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<DiagramFrame>`, `<SplitView>`, `<CodeBlock>`, `<Chip>`, `<Agenda>`, `<BrandMeshBackground>`).
+   - `packages/toolkit/components/*.vue`: the reusable building blocks (`<Card>`, `<CardGrid>`, `<StepList>`, `<Figure>`, `<DiagramFrame>`, `<SplitView>`, `<CodeBlock>`, `<Chip>`, `<QuizTime>`, `<Agenda>`, `<BrandMeshBackground>`).
 2. **System truth (this skill)**: how to compose the deck from that code and the editorial rules code can't enforce.
 
 **Colours are not owned here.** The source of truth is `tokens.json` in the `miragon-brand` plugin's `corporate-design` skill (`skills/corporate-design/assets/tokens.json`); `theme.css` only mirrors it. That plugin is Miragon-internal; where it is not installed, `theme.css` and the palette below are the reference. So if a value disagrees, **`tokens.json` wins for colours** and a differing `theme.css` is the bug; the layout/component `.vue` wins for its prop signature; and this skill wins for editorial/composition rules.
@@ -32,7 +32,8 @@ packages/toolkit/          the design system (fixed, brand-controlled)
   styles/theme.css         colour tokens
   layouts/*.vue            the 17 archetypes
   components/*.vue         Card, CardGrid, StepList, Step, Figure, DiagramFrame,
-                           SplitView, CodeBlock, Chip, Agenda, BrandMeshBackground
+                           SplitView, CodeBlock, Chip, QuizTime, Agenda,
+                           BrandMeshBackground
   assets/                  official logo vectors + Geist fonts, bundled with the theme
 deck/
   slides.md                entry: headmatter + cover + src imports + closing
@@ -110,6 +111,7 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 | Several diagrams, one per tab (or next to code) | `window` with one `<Figure>`, mermaid fence or addon diagram (`<Bpmn>`, `<DmnTable>`, …) per tab |
 | Code as the focal point, one or several files | `window` (fences in the body, one window, tabs with a caption each) |
 | Click-through feature explorer / mini-quiz | `showcase` |
+| Run a live quiz (Kahoot, Mentimeter, any tool with a link) | `content` with `<QuizTime>` |
 | Close the deck | `closing` (animated) |
 | One memorable number / stat | `hero` with the number as the bold word |
 

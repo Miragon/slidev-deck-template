@@ -59,7 +59,7 @@ accent: blue
 ---
 id: s-474aa93d
 layout: content
-title: Eleven components keep markdown clean
+title: Twelve components keep markdown clean
 eyebrow: 03 - The Miragon theme
 accent: blue
 ---
@@ -75,6 +75,7 @@ accent: blue
 - **StepList / Step**: a labelled, ordered sequence
 - **Figure / DiagramFrame**: a captioned visual, and the white card around it
 - **SplitView / CodeBlock / Chip**: a visual beside its text, a labelled code window, an answer pill
+- **QuizTime**: a live-quiz slide with a card stack and a start link
 - **Agenda / BrandMeshBackground**: the chapter stepper, the brand shader
 
 </v-clicks>

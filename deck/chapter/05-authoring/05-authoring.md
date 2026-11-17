@@ -154,7 +154,7 @@ kicker: Exercise · 10 min
   materials, or another component such as a small CardGrid).
   LIMIT: one task, one-line subline, up to eight short chips, Lucide icons only.
   HOW TO USE: pick an icon that names the activity; the time goes in the kicker.
-  Transition: "Then take it home and start your own deck."
+  Transition: "Before you go, a quick check of what stuck."
 -->
 
 # Build a hero slide that asks one question
@@ -166,6 +166,28 @@ Work in pairs, then run verify until it is green.
 <Chip icon="i-lucide-users">Pairs</Chip>
 <Chip icon="i-lucide-terminal">npm run dev</Chip>
 <Chip icon="i-lucide-shield-check">npm run verify</Chip>
+
+---
+id: s-c6b23d9d
+layout: content
+title: Check what stuck
+eyebrow: 05 - Author with Claude
+accent: blue
+---
+
+<!--
+  QuizTime: a live quiz in any tool, one card per question dealt into a stack.
+  REQUIRED: name, href (the link the speaker starts the quiz from).
+  OPTIONAL: join (the audience URL, shown as "Join at <host>"), kicker (default
+  "Live quiz"), questions (default 10), sticker with sticker-label and sticker-icon,
+  a plain-text slot that replaces the "N questions, nothing graded." line.
+  LIMIT: one QuizTime per slide, alone on a content slide; a short sticker text.
+  HOW TO USE: paste the start link of your quiz tool into href and its join page
+  into join; the sticker is the slide's one green element.
+  Transition: "Then take it home and start your own deck."
+-->
+
+<QuizTime name="Deck Template Quiz" href="https://create.kahoot.it" join="https://kahoot.it" kicker="Kahoot quiz" questions="6" sticker="Bragging rights for the winner">Six questions on layouts, components and verify.</QuizTime>
 
 ---
 id: s-fb5da4d0
