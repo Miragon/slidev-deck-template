@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v2.0.0...miragon-slidev-plugin-v2.1.0) (2026-11-17)
+
+
+### Features
+
+* **slidev-toolkit:** add a tool-agnostic QuizTime component for live-quiz slides ([#283](https://github.com/Miragon/slidev-deck-template/issues/283)) ([#284](https://github.com/Miragon/slidev-deck-template/issues/284)) ([d437d6b](https://github.com/Miragon/slidev-deck-template/commit/d437d6bf0c436f6886a0efc54df7e6f9e410c898))
+
 ## [2.0.0](https://github.com/Miragon/slidev-deck-template/compare/miragon-slidev-plugin-v1.20.0...miragon-slidev-plugin-v2.0.0) (2026-11-14)
 
 
