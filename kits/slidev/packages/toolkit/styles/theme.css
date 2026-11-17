@@ -97,12 +97,13 @@
  * palette, wherever a value depends on the ground. Light values are the
  * pre-dark-mode values, so a deck with `colorSchema: light` renders unchanged.
  *
- * `.mg-paper` is a light sheet on the dark table: Excalidraw, BPMN, Mermaid
- * and screenshots are light assets and keep the light roles inside it.
+ * `.mg-paper` is a light sheet on the dark table for assets that cannot follow
+ * the mode (screenshots, the DMN table, the modelers); a sheet holding a
+ * `.mg-scheme-aware` diagram or a Mermaid fence follows the mode instead.
  * `.mg-fixed-stage` (cover, closing: the mesh) looks the same in both modes.
  */
 :root,
-html.dark .mg-paper,
+html.dark .mg-paper:not(:has(.mg-scheme-aware, .mermaid)),
 html.dark .mg-fixed-stage {
   --miragon-ground: var(--miragon-gray-bg);
   --miragon-surface: var(--miragon-white);
@@ -122,20 +123,30 @@ html.dark .mg-fixed-stage {
   --miragon-success: #0B7A55;
   --miragon-warning: #92610A;
   --miragon-danger: #C92A2A;
+  --miragon-diagram-text: initial;
+  --miragon-diagram-paper: initial;
+  --miragon-diagram-fill: initial;
+  --miragon-diagram-blue: initial;
   color-scheme: light;
 }
 
-html.dark .mg-paper {
+html.dark .mg-paper:not(:has(.mg-scheme-aware, .mermaid)) {
   background-color: var(--miragon-surface);
   color: var(--miragon-text-primary);
 }
 
-html.dark .mermaid:not(.mg-paper .mermaid) {
-  width: fit-content;
-  background-color: var(--miragon-white);
-  padding: 0.5rem;
-  border-radius: 0.6rem;
-}
+/* Diagram colours: a diagram drawn in the light palette reads its colours
+ * through these tokens. They stay unset in light mode, so every diagram keeps
+ * its own literal colour there; dark mode maps them onto the dark roles. */
+.mg-diagram-svg [fill="#1D1D1D" i] { fill: var(--miragon-diagram-text, #1D1D1D); }
+.mg-diagram-svg [stroke="#1D1D1D" i] { stroke: var(--miragon-diagram-text, #1D1D1D); }
+.mg-diagram-svg :not(text)[fill="#FFFFFF" i],
+.mg-diagram-svg :not(text)[fill="#FFF" i] { fill: var(--miragon-diagram-paper, #FFFFFF); }
+.mg-diagram-svg [fill="#F9F7F7" i] { fill: var(--miragon-diagram-fill, #F9F7F7); }
+.mg-diagram-svg [stroke="#335DE5" i] { stroke: var(--miragon-diagram-blue, #335DE5); }
+.mg-diagram-svg text[fill="#335DE5" i] { fill: var(--miragon-diagram-blue, #335DE5); }
+.mg-diagram-svg [stroke="#2B50D4" i] { stroke: var(--miragon-diagram-blue, #2B50D4); }
+.mg-diagram-svg text[fill="#2B50D4" i] { fill: var(--miragon-diagram-blue, #2B50D4); }
 
 /* Dark neutrals are white mixed into the CI black (corporate-design §8.2);
    accent text is green there, blue on black fails AA (3.08:1). */
@@ -158,6 +169,10 @@ html.dark {
   --miragon-success: var(--miragon-green);
   --miragon-warning: #FFB000;
   --miragon-danger: #FB6D73;
+  --miragon-diagram-text: var(--miragon-white);
+  --miragon-diagram-paper: color-mix(in srgb, var(--miragon-white) 5%, var(--miragon-black));
+  --miragon-diagram-fill: color-mix(in srgb, var(--miragon-white) 12%, var(--miragon-black));
+  --miragon-diagram-blue: var(--miragon-blue-bright);
   color-scheme: dark;
 }
 

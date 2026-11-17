@@ -59,6 +59,7 @@
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
 import SplitView from '../components/SplitView.vue'
+import { isDarkScheme } from '../utils/colorScheme'
 
 const props = withDefaults(
   defineProps<{
@@ -91,6 +92,7 @@ const props = withDefaults(
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
+const diagramTheme = computed(() => (isDarkScheme.value ? 'dark' : 'light'))
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
 // Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
@@ -150,7 +152,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
               :showAnnotations="showAnnotations"
               :showDrdButton="showDrdButton"
             />
-            <DmnDrd v-else-if="mode === 'drd'" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
+            <DmnDrd v-else-if="mode === 'drd'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
             <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
             <DmnTable
               v-else
@@ -185,7 +187,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
                 :showAnnotations="showAnnotations"
                 :showDrdButton="showDrdButton"
               />
-              <DmnDrd v-else-if="mode === 'drd'" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
+              <DmnDrd v-else-if="mode === 'drd'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
               <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
               <DmnTable
                 v-else

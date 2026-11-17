@@ -13,10 +13,9 @@
  *   diagram  — served URL path to the .excalidraw.svg, resolved base-aware
  *   alt      — alt text for the diagram image (default ""). Empty means
  *              "decorative, skip me" — the right default when the caption
- *              already carries the statement. Without a default the <img> would
- *              render with NO alt attribute at all and screen readers fall back
- *              to reading the file path (CI rule C4). Content-bearing diagrams
- *              set `alt` explicitly.
+ *              already carries the statement: the inline SVG is then hidden
+ *              from screen readers instead of read out shape by shape (CI rule
+ *              C4). Content-bearing diagrams set `alt` explicitly.
  *   side     — split layout: "left" | "right" places the diagram on that side
  *              and the slot becomes the content column on the other side.
  *   ratio    — diagram/content column ratio in split mode (default "1/1")
@@ -34,6 +33,7 @@
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
 import SplitView from '../components/SplitView.vue'
+import InlineSvg from '../global/InlineSvg.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -80,7 +80,7 @@ const imageSrc = computed(() => withBase(props.diagram))
 
       <template v-if="!side">
         <DiagramFrame class="excalidraw-canvas" padding="generous">
-          <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
+          <InlineSvg v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img"></InlineSvg>
         </DiagramFrame>
 
         <div v-if="$slots.default" class="excalidraw-caption">
@@ -91,7 +91,7 @@ const imageSrc = computed(() => withBase(props.diagram))
       <SplitView v-else class="excalidraw-split" :class="{ 'mg-diagram-split--stretch': stretched }" :ratio="ratio" :reverse="side === 'right'" :align="align">
         <template #visual>
           <DiagramFrame class="excalidraw-canvas excalidraw-canvas--split" padding="generous" :height="frameHeight" :style="frameMinHeight">
-            <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
+            <InlineSvg v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img"></InlineSvg>
           </DiagramFrame>
         </template>
         <div class="excalidraw-body mg-diagram-body" :style="{ '--mg-body-grad': gradientVar, '--mg-body-accent': accentVar }">
@@ -167,6 +167,12 @@ const imageSrc = computed(() => withBase(props.diagram))
   width: 100%;
 }
 .excalidraw-img {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+.excalidraw-img :deep(svg) {
   max-width: 100%;
   max-height: 100%;
   height: auto;

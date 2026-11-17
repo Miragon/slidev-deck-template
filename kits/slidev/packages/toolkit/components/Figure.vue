@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, onUnmounted, ref, shallowRef, watch } from 'vue'
+import { computed, nextTick, onUnmounted, shallowRef, watch } from 'vue'
 import { useSlideContext } from '@slidev/client'
+import InlineSvg from '../global/InlineSvg.vue'
 import { inlineMarkdown } from '../utils/inlineMarkdown'
 
 /**
@@ -29,8 +30,11 @@ import { inlineMarkdown } from '../utils/inlineMarkdown'
  * (Opacity wie `v-click`, kein Layout-Sprung); unmarkierte Elemente sind
  * immer sichtbar. `steps` registriert so viele Klicks auf der Folie, damit
  * `v-click="1"` … `v-click="n"` (z. B. in einer StepList) synchron läuft.
- * Dafür wird das SVG inline gerendert statt als <img>. Ohne `steps` ändert
- * sich nichts. Im PDF-Export erscheint die fertig aufgebaute Grafik.
+ * Im PDF-Export erscheint die fertig aufgebaute Grafik.
+ *
+ * Ein `.svg` wird immer inline gerendert, nicht als <img>: nur so kann der
+ * Dark Mode die Palettenfarben der Grafik umfärben (siehe theme.css,
+ * `.mg-diagram-svg`).
  *   <Figure src="resources/05-testing/scopes.svg" alt="…" steps="3"></Figure>
  */
 const props = withDefaults(
@@ -53,10 +57,10 @@ const resolvedSrc = computed(() => {
   return `${base}/${props.src.replace(/^\//, '')}`
 })
 
+const isSvg = !!props.src && /\.svg$/i.test(props.src)
 const stepCount = Number(props.steps ?? 0)
-const isStepped = stepCount > 0 && !!props.src
-const svgMarkup = ref('')
-const svgHost = shallowRef<HTMLElement>()
+const isStepped = stepCount > 0 && isSvg
+const inlineSvg = shallowRef<InstanceType<typeof InlineSvg>>()
 
 if (isStepped) {
   const { $clicks, $clicksContext } = useSlideContext()
@@ -64,20 +68,14 @@ if (isStepped) {
   $clicksContext.register(CLICK_KEY, { delta: 0, max: stepCount })
   onUnmounted(() => $clicksContext.unregister(CLICK_KEY))
 
-  watch(resolvedSrc, async (url) => {
-    svgMarkup.value = await (await fetch(url)).text()
-  }, { immediate: true })
-
-  watch([$clicks, svgMarkup], async () => {
+  watch([$clicks, () => inlineSvg.value?.markup], async () => {
     await nextTick()
-    svgHost.value?.querySelectorAll<SVGElement>('[data-step]').forEach((element) => {
+    inlineSvg.value?.$el.querySelectorAll<SVGElement>('[data-step]').forEach((element) => {
       element.classList.add('slidev-vclick-target')
       element.classList.toggle('slidev-vclick-hidden', Number(element.dataset.step) > $clicks.value)
     })
   }, { immediate: true })
 }
-
-const showsLightAsset = !props.src || /\.svg$/i.test(props.src)
 
 const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption) : ''))
 </script>
@@ -85,17 +83,8 @@ const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption
 <template>
   <div class="mg-figure">
     <div v-if="title" class="mg-figure__title">{{ title }}</div>
-    <div class="mg-figure__media" :class="{ 'mg-paper': showsLightAsset }">
-      <div
-        v-if="isStepped"
-        ref="svgHost"
-        class="mg-figure__svg"
-        :role="alt ? 'img' : undefined"
-        :aria-label="alt || undefined"
-        :aria-hidden="alt ? undefined : 'true'"
-        :style="{ maxHeight }"
-        v-html="svgMarkup"
-      ></div>
+    <div class="mg-figure__media">
+      <InlineSvg v-if="isSvg" ref="inlineSvg" class="mg-figure__svg" :src="resolvedSrc" :alt="alt" :style="{ maxHeight }"></InlineSvg>
       <img v-else-if="resolvedSrc" :src="resolvedSrc" :alt="alt" :style="{ maxHeight }" />
       <slot v-else />
     </div>
@@ -118,13 +107,6 @@ const captionHtml = computed(() => (props.caption ? inlineMarkdown(props.caption
 .mg-figure__media {
   display: flex;
   justify-content: center;
-}
-html.dark .mg-figure__media.mg-paper {
-  padding: 1rem;
-  border-radius: 0.6rem;
-}
-.mg-paper .mg-figure__media.mg-paper {
-  padding: 0;
 }
 .mg-figure__media img {
   max-width: 100%;

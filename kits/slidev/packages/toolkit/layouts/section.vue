@@ -14,6 +14,7 @@
  *   accent   — "blue" | "green" | "mixed" — Gradient-Akzent (default blue)
  */
 import { computed } from 'vue'
+import ColorSchemeSwitch from '../global/ColorSchemeSwitch.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -38,6 +39,7 @@ const accentVar = 'var(--miragon-accent)'
     :style="{ '--s-grad': gradientVar, '--s-accent': accentVar }"
   >
     <span v-if="index" class="section-ghost" aria-hidden="true">{{ index }}</span>
+    <ColorSchemeSwitch class="section-scheme-switch"></ColorSchemeSwitch>
 
     <div class="section-content">
       <span class="section-bar" aria-hidden="true"></span>
@@ -78,6 +80,13 @@ const accentVar = 'var(--miragon-accent)'
   opacity: 0.07;
   user-select: none;
   pointer-events: none;
+}
+
+.section-scheme-switch {
+  position: absolute;
+  z-index: 2;
+  top: 2rem;
+  right: 2rem;
 }
 
 .section-content {

@@ -15,9 +15,10 @@ defineProps<{
   bpmnFilePath?: string
   width?: string
   height?: string
+  theme?: 'light' | 'dark'
 }>()
 </script>
 
 <template>
-  <Bpmn :bpmnFilePath="bpmnFilePath" :width="width" :height="height" />
+  <Bpmn :bpmnFilePath="bpmnFilePath" :width="width" :height="height" :theme="theme" />
 </template>

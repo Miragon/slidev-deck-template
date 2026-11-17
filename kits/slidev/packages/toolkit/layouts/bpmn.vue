@@ -53,6 +53,7 @@ import DiagramFrame from '../components/DiagramFrame.vue'
 import SplitView from '../components/SplitView.vue'
 // Nicht <Bpmn> direkt: in bpmn.vue wäre das ein Selbstbezug (siehe BpmnStatic.vue).
 import BpmnStatic from '../components/BpmnStatic.vue'
+import { isDarkScheme } from '../utils/colorScheme'
 
 const props = withDefaults(
   defineProps<{
@@ -81,6 +82,7 @@ const props = withDefaults(
 )
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
+const diagramTheme = computed(() => (isDarkScheme.value ? 'dark' : 'light'))
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
 // Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
 // Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
@@ -132,7 +134,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
           <template v-if="diagram">
             <!-- All three addon components share the same
                  bpmnFilePath / width / height signature. -->
-            <BpmnStatic v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+            <BpmnStatic v-if="mode === 'static'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
             <BpmnModeler
               v-else-if="mode === 'modeler'"
               :bpmnFilePath="diagramSrc"
@@ -142,7 +144,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
               width="100%"
               :height="height"
             />
-            <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
+            <BpmnTokenSimulation v-else class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
           </template>
         </DiagramFrame>
 
@@ -155,7 +157,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
         <template #visual>
           <DiagramFrame class="bpmn-canvas bpmn-canvas--split" padding="compact" :height="height" v-bind="diagramA11y">
             <template v-if="diagram">
-              <BpmnStatic v-if="mode === 'static'" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
+              <BpmnStatic v-if="mode === 'static'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
               <BpmnModeler
                 v-else-if="mode === 'modeler'"
                 :bpmnFilePath="diagramSrc"
@@ -165,7 +167,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
                 width="100%"
                 :height="height"
               />
-              <BpmnTokenSimulation v-else :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
+              <BpmnTokenSimulation v-else class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" :engine="engine" :scenariosFilePath="scenariosSrc" width="100%" :height="height" />
             </template>
           </DiagramFrame>
         </template>

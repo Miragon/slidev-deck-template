@@ -26,6 +26,7 @@ function initialScheme(): ColorScheme {
 }
 
 export const colorScheme = ref<ColorScheme>('light')
+export const isDarkScheme = ref(false)
 let isApplied = false
 
 export function toggleColorScheme() {
@@ -42,6 +43,7 @@ export function applyColorScheme(isPrintMode: () => boolean) {
   })
   watch([colorScheme, isPrintMode], ([scheme, printing]) => {
     const isDark = scheme === 'dark' && !printing
+    isDarkScheme.value = isDark
     document.documentElement.classList.toggle('dark', isDark)
     document.documentElement.classList.toggle('light', !isDark)
   }, { immediate: true })

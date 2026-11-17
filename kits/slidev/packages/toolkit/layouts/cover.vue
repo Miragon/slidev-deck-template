@@ -128,6 +128,7 @@ function onLogoError(e: Event) {
   z-index: 3;
   top: 2rem;
   right: 2rem;
+  --mg-switch-colour: var(--miragon-on-colour);
 }
 
 .cover-footer-text {

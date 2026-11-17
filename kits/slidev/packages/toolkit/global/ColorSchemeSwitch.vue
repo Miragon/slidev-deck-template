@@ -28,9 +28,9 @@ const switchLabel = computed(() => (colorScheme.value === 'dark' ? 'Switch to li
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--miragon-on-colour) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mg-switch-colour, var(--miragon-text-primary)) 40%, transparent);
   background: transparent;
-  color: var(--miragon-on-colour);
+  color: var(--mg-switch-colour, var(--miragon-text-primary));
   font-size: 1.1rem;
   cursor: pointer;
   opacity: 0.7;
@@ -41,7 +41,7 @@ const switchLabel = computed(() => (colorScheme.value === 'dark' ? 'Switch to li
   opacity: 1;
 }
 .mg-scheme-switch:focus-visible {
-  outline: 2px solid var(--miragon-on-colour);
+  outline: 2px solid var(--mg-switch-colour, var(--miragon-text-primary));
   outline-offset: 2px;
 }
 </style>
