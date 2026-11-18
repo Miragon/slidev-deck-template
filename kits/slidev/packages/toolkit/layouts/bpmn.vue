@@ -137,6 +137,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
             <BpmnStatic v-if="mode === 'static'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
             <BpmnModeler
               v-else-if="mode === 'modeler'"
+              class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
               :bpmnFilePath="diagramSrc"
               :engine="engine"
               :tokenSimulation="tokenSimulation"
@@ -160,6 +161,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
               <BpmnStatic v-if="mode === 'static'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :bpmnFilePath="diagramSrc" width="100%" :height="height" />
               <BpmnModeler
                 v-else-if="mode === 'modeler'"
+                class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
                 :bpmnFilePath="diagramSrc"
                 :engine="engine"
                 :tokenSimulation="tokenSimulation"

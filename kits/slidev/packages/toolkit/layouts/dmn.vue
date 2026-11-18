@@ -143,6 +143,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
                  signature; the extra props differ per mode (see prop docs). -->
             <DmnSimulate
               v-if="mode === 'simulate'"
+              class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
               :dmnFilePath="diagramSrc"
               width="100%"
               :height="height"
@@ -153,9 +154,10 @@ const diagramA11y = computed<Record<string, string>>(() => {
               :showDrdButton="showDrdButton"
             />
             <DmnDrd v-else-if="mode === 'drd'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
-            <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
+            <DmnModeler v-else-if="mode === 'modeler'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
             <DmnTable
               v-else
+              class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
               :dmnFilePath="diagramSrc"
               width="100%"
               :height="height"
@@ -178,6 +180,7 @@ const diagramA11y = computed<Record<string, string>>(() => {
             <template v-if="diagram">
               <DmnSimulate
                 v-if="mode === 'simulate'"
+                class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
                 :dmnFilePath="diagramSrc"
                 width="100%"
                 :height="height"
@@ -188,9 +191,10 @@ const diagramA11y = computed<Record<string, string>>(() => {
                 :showDrdButton="showDrdButton"
               />
               <DmnDrd v-else-if="mode === 'drd'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" width="100%" :height="height" :fontSize="fontSize" />
-              <DmnModeler v-else-if="mode === 'modeler'" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
+              <DmnModeler v-else-if="mode === 'modeler'" class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme" :dmnFilePath="diagramSrc" :engine="engine" width="100%" :height="height" />
               <DmnTable
                 v-else
+                class="mg-scheme-aware" :theme="diagramTheme" :key="diagramTheme"
                 :dmnFilePath="diagramSrc"
                 width="100%"
                 :height="height"
