@@ -342,7 +342,7 @@ function select(i: number, e: MouseEvent) {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--miragon-accent-text);
+  color: var(--miragon-accent);
   background: var(--miragon-tint);
   border-radius: 0.35rem;
   padding: 0.1rem 0.45rem;
