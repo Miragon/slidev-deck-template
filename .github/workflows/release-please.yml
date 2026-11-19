@@ -58,6 +58,7 @@ on:
           - slidev/validator
           - slidev/create-deck
           - hub/hub-template
+          - docs/docs-starter
       beta_version:
         description: 'The beta version to publish, e.g. 0.4.0-beta.0'
         type: string

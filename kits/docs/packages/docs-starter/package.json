@@ -1,0 +1,55 @@
+{
+  "name": "@miragon/docs-starter",
+  "version": "0.0.0",
+  "description": "The Miragon docs kit for VitePress: config, theme, colours light and dark, GitHub anchors, Mermaid and the legal row, installed instead of copied.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miragon/brand-toolbox.git",
+    "directory": "kits/docs/packages/docs-starter"
+  },
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/kits/docs/packages/docs-starter#readme",
+  "bugs": "https://github.com/Miragon/brand-toolbox/issues",
+  "exports": {
+    ".": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
+    "./theme": "./theme/index.ts",
+    "./slug": {
+      "types": "./dist/slug.d.mts",
+      "default": "./dist/slug.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "theme",
+    "assets"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && cp src/slug.mjs src/slug.d.mts dist/",
+    "prepack": "npm run build",
+    "pretest": "npm run build",
+    "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "test:tarball": "node --test test/tarball.check.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "5.3.0",
+    "@fontsource-variable/geist-mono": "5.3.0"
+  },
+  "peerDependencies": {
+    "mermaid": "^12.0.0",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "mermaid": "12.3.0",
+    "typescript": "6.0.3",
+    "vitepress": "1.6.4",
+    "vitepress-plugin-mermaid": "2.0.17"
+  }
+}

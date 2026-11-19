@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "kits/*/packages/*",
-    "kits/slidev/deck"
+    "kits/slidev/deck",
+    "kits/docs/example"
   ],
   "scripts": {
     "dev": "npm run dev -w kits/slidev/deck",
@@ -23,6 +24,12 @@
     "check:release": "node shared/scripts/check-release-config.mjs"
   },
   "overrides": {
-    "magic-string@1.4.3": "1.4.2"
+    "magic-string@1.4.3": "1.4.2",
+    "vitepress": {
+      "vite": "6.4.5"
+    },
+    "vitepress-plugin-mermaid": {
+      "mermaid": "12.3.0"
+    }
   }
 }

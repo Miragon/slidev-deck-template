@@ -10,7 +10,7 @@
  */
 import { computed, onMounted, ref } from "vue"
 import { useData } from "vitepress"
-import type { MiragonThemeConfig } from "../config"
+import type { MiragonThemeConfig } from "../src/config"
 
 const live = ref<number>()
 

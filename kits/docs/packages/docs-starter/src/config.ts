@@ -1,13 +1,12 @@
 /**
  * Miragon-Doku-Kit: die ganze VitePress-Konfiguration einer Miragon-Doku.
  *
- * Quelle: Miragon/corporate-identity, Skill docs-site (plugins/miragon-brand/skills/docs-site/assets/).
- * Im Repo liegt die Datei unverändert unter docs/.vitepress/miragon/config.ts. Nicht dort ändern,
- * sondern in der CI und dann neu vendoren. `node docs/.vitepress/miragon/check.mjs` meldet Drift.
+ * Paket @miragon/docs-starter (Miragon/brand-toolbox, kits/docs/). Ein Repo installiert es und
+ * hält keine Kopie.
  *
  * Aufruf in docs/.vitepress/config.ts:
  *
- *   import { miragonDocs } from "./miragon/config"
+ *   import { miragonDocs } from "@miragon/docs-starter"
  *
  *   export default miragonDocs({
  *     repo: "Miragon/bpmn-cli",
@@ -22,13 +21,38 @@
  * Produktname im Titel, Gliederung H2 und H3, lokale Suche, Bearbeiten-Link, GitHub mit Sternen im Header, Bitte um einen Stern am Seitenende, 404-Texte und die Rechtsleiste
  * (Copyright, Impressum, Datenschutz) auf jeder Seite. Die Farben kommen aus theme/miragon.css.
  */
+import { copyFile, mkdir, readFile } from "node:fs/promises"
+import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { mergeConfig, type DefaultTheme, type HeadConfig, type UserConfig } from "vitepress"
 import { withMermaid } from "vitepress-plugin-mermaid"
 import type { MermaidConfig } from "mermaid"
 import { githubSlug } from "./slug.mjs"
-import { miragonLegal, type MiragonLegal } from "./legal"
+import { miragonLegal, type MiragonLegal } from "./legal.js"
 
-export { miragonLegal, type MiragonLegal } from "./legal"
+export { miragonLegal, type MiragonLegal } from "./legal.js"
+
+const PACKAGE_NAME = "@miragon/docs-starter"
+const FAVICON = "logo/miragon-komet-blau.svg"
+const FAVICON_FILE = fileURLToPath(new URL(`../assets/${FAVICON}`, import.meta.url))
+
+function faviconInDev(base: string) {
+  return {
+    name: "miragon-docs-favicon",
+    configureServer(server: { middlewares: { use: (path: string, handler: (req: unknown, res: { setHeader: (k: string, v: string) => void; end: (body: Buffer) => void }) => void) => void } }) {
+      server.middlewares.use(`${base}${FAVICON}`, async (_req, res) => {
+        res.setHeader("Content-Type", "image/svg+xml")
+        res.end(await readFile(FAVICON_FILE))
+      })
+    },
+  }
+}
+
+async function faviconInBuild(outDir: string) {
+  const target = join(outDir, FAVICON)
+  await mkdir(dirname(target), { recursive: true })
+  await copyFile(FAVICON_FILE, target)
+}
 
 /** Optionen von miragonDocs. Was hier nicht steht, legt das Kit fest. */
 export interface MiragonDocsOptions {
@@ -238,7 +262,12 @@ export async function miragonDocs(options: MiragonDocsOptions): Promise<UserConf
     // Mermaid für den Dev-Server vorbündeln: Es importiert CommonJS-Module, die
     // vitepress-plugin-mermaid nicht nennt, in 12 etwa elkjs und dayjs/plugin/duration. Ohne zeigt
     // `vitepress dev` etwa Gantt- und Use-Case-Diagramme nicht.
-    vite: { optimizeDeps: { include: ["mermaid"] } },
+    vite: {
+      optimizeDeps: { include: ["mermaid"], exclude: [PACKAGE_NAME] },
+      plugins: [faviconInDev(base)],
+    },
+
+    buildEnd: (siteConfig) => faviconInBuild(siteConfig.outDir),
 
     // Mermaid misst mit der Markenschrift. neutral ist das graue Theme von Mermaid, die Farben der
     // CI legt theme/miragon.css über die Rollen darüber, im Dunkeln wie im Hellen.

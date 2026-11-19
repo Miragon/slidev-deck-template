@@ -1,6 +1,4 @@
-// Beispiel-Doku für den Test des Kits (tests/docs-site). So sieht docs/.vitepress/config.ts in
-// einem Tool-Repo aus: das Kit aufrufen, Navigation und Seitenleiste übergeben, fertig.
-import { miragonDocs } from "./miragon/config"
+import { miragonDocs } from "@miragon/docs-starter"
 
 export default miragonDocs({
   repo: "Miragon/beispiel",

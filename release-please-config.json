@@ -45,6 +45,12 @@
       "component": "hub-template",
       "include-component-in-tag": true,
       "initial-version": "0.1.0"
+    },
+    "kits/docs/packages/docs-starter": {
+      "package-name": "@miragon/docs-starter",
+      "component": "docs-starter",
+      "include-component-in-tag": true,
+      "release-as": "1.0.0"
     }
   }
 }

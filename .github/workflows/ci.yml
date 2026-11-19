@@ -33,6 +33,9 @@ jobs:
       - name: Every package has the same release setup
         run: npm run check:release
 
+      - name: Brand tokens match their source in Miragon/corporate-identity
+        run: node shared/scripts/tokens.mjs
+
       # The speaker profiles address slides by the `id:` in their frontmatter.
       # `npm run dev` stamps a new slide automatically, so this only fails when
       # someone commits without ever having started the dev server - and then it

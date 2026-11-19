@@ -13,7 +13,7 @@
 import { computed } from "vue"
 import { useData } from "vitepress"
 import { useSidebar } from "vitepress/theme-without-fonts"
-import type { MiragonLegalThemeConfig } from "../legal"
+import type { MiragonLegalThemeConfig } from "../src/legal"
 
 const { theme } = useData<MiragonLegalThemeConfig>()
 const { hasSidebar } = useSidebar()
