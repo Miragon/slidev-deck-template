@@ -30,7 +30,7 @@ import type { MermaidConfig } from "mermaid"
 import { githubSlug } from "./slug.mjs"
 import { miragonLegal, type MiragonLegal } from "./legal.js"
 
-export { miragonLegal, type MiragonLegal } from "./legal.js"
+export { miragonLegal, type MiragonLegal, type MiragonLegalThemeConfig } from "./legal.js"
 
 const PACKAGE_NAME = "@miragon/docs-starter"
 const FAVICON = "logo/miragon-komet-blau.svg"

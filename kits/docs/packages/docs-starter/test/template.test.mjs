@@ -33,4 +33,5 @@ test('the package declares what the theme imports and peers what the consumer pi
   for (const peer of ['vitepress', 'vue', 'mermaid', 'vitepress-plugin-mermaid']) assert.ok(pkg.peerDependencies[peer], peer)
   assert.equal(pkg.exports['.'].default, './dist/config.js', 'Node loads compiled JS, it does not strip types under node_modules')
   assert.equal(pkg.exports['./theme'], './theme/index.ts', 'Vite compiles the theme')
+  assert.equal(pkg.exports['./theme/*'], './theme/*', 'a site with its own theme can take single parts: miragon.css, LegalRow.vue')
 })
