@@ -46,7 +46,7 @@ jobs:
         run: npm run check:ids
 
       - name: Build the reference deck
-        run: npx slidev build kits/slidev/deck/slides.md --base /${{ github.event.repository.name }}/ --out ../dist
+        run: npm run build
 
       - name: Verify guardrails (layout + source checks)
         run: npm run verify:source

@@ -60,13 +60,14 @@ my-talk/
 └── package.json                   # ← generated overlay (standalone, toolkit pinned, no workspace)
 ```
 
-Everything except the `← generated overlay` files is the shared **skeleton**, fetched from the
-template repo (a single source of design truth). It never emits the template-only infrastructure:
+Everything except the `← generated overlay` files is the shared **skeleton**, fetched from
+[`Miragon/brand-toolbox`](https://github.com/Miragon/brand-toolbox) (`kits/slidev/`, a single source of design
+truth). It never emits the repository's own infrastructure:
 the packages under `kits/*/packages/`, the `kits/slidev/plugin/` skill source and the `.claude-plugin/` marketplace
 manifest, `shared/`, the release-please / pr-title workflows and config, `LICENSE`, or `netlify.toml`.
 
 The authoring skills (`slides`, `excalidraw`) are delivered as the `miragon-slidev` Claude Code plugin,
-not emitted into the deck. The generated `.claude/settings.json` registers the template repo as a plugin
+not emitted into the deck. The generated `.claude/settings.json` registers `Miragon/brand-toolbox` as a plugin
 marketplace, so a deck pulls the skills from there and Claude Code keeps them up to date, rather than
 carrying a scaffold-time snapshot.
 

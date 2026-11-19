@@ -1,6 +1,6 @@
 # deck: the presentation content
 
-This is the part you edit. The deck consumes the [`@miragon/slidev-toolkit`](../packages/toolkit/) theme by name and fills it with content. The deck itself *is* its documentation: it teaches this repo while demoing every archetype.
+This is the part you edit. The deck consumes the [`@miragon/slidev-toolkit`](https://www.npmjs.com/package/@miragon/slidev-toolkit) theme by name and fills it with content. The deck itself *is* its documentation: it explains the deck setup while demoing every archetype.
 
 > Never author freehand. Load the **`slides` skill** (`miragon-slidev:slides`, from the `miragon-slidev` plugin) first. It is the authoring guide for layouts, components and editorial rules.
 
@@ -30,11 +30,11 @@ Current chapters: `01-intro`, `02-slidev`, `03-theme`, `04-diagrams`, `05-author
 | `public/` | ✅ deck-wide assets |
 | `vite.config.ts` | ⚠️ rarely (resource serving + shader pre-bundle) |
 
-Everything under `packages/toolkit/` is the brand and off-limits without sign-off.
+The theme itself (`@miragon/slidev-toolkit`) is the brand and off-limits without sign-off.
 
 ## Run
 
-From the repo root: `npm run dev` (preview), `npm run build` (static `dist/`), `npm run export` (local PDF). See the [root README](../README.md#present-build-export) for the full table.
+From the folder above `deck/`: `npm run dev` (preview), `npm run build` (static `dist/`), `npm run export` (local PDF), `npm run verify` (brand checks per slide).
 
 ## Notes
 
@@ -48,4 +48,4 @@ From the repo root: `npm run dev` (preview), `npm run build` (static `dist/`), `
 - **Dev URL won't load / 502 Bad Gateway.** The portless proxy isn't running or trusted. Run `npx portless doctor`, then `npx portless service install`. Bypass portless with `npm run dev:app` (raw `localhost` port).
 - **Cover/closing render white.** WebGL2 is unavailable and the `linear-gradient` fallback is blocked too. Update or switch browsers.
 - **`npm run export` gives an almost-empty PDF.** Vite re-optimized mid-export. Run `npm run build` once (warms the pre-bundle in `vite.config.ts`), then export.
-- **Brand colours look wrong.** The palette is owned by the `miragon-brand` plugin's `corporate-design` skill (`assets/tokens.json`, Miragon-internal); `../packages/toolkit/styles/theme.css` only mirrors it as CSS variables, loaded unscoped by `index.css`. Don't move or rename either file, and never "correct" a colour in `theme.css` without changing `tokens.json` first.
+- **Brand colours look wrong.** The palette is owned by the `miragon-brand` plugin's `corporate-design` skill (`assets/tokens.json`, Miragon-internal); the toolkit's `styles/theme.css` only mirrors it as CSS variables, loaded unscoped by `index.css`. Don't move or rename either file, and never "correct" a colour in `theme.css` without changing `tokens.json` first.
