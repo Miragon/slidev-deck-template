@@ -32,6 +32,12 @@ before(() => {
   run('npm', ['install', '--no-audit', '--no-fund'], site)
 })
 
+test('a site with its own theme can import single parts of the kit theme', () => {
+  const resolve = (specifier) => run(process.execPath, ['--input-type=module', '-e', `console.log(import.meta.resolve(${JSON.stringify(specifier)}))`], site).trim()
+  assert.match(resolve('@miragon/docs-starter/theme/miragon.css'), /docs-starter\/theme\/miragon\.css$/)
+  assert.match(resolve('@miragon/docs-starter/theme/LegalRow.vue'), /docs-starter\/theme\/LegalRow\.vue$/)
+})
+
 test('a consumer site outside the workspace builds from the packed tarball', () => {
   run('npx', ['vitepress', 'build'], site, { DOCS_BASE: '/beispiel/' })
   assertExampleSite(join(site, '.vitepress/dist'))

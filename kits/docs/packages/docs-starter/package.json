@@ -20,6 +20,7 @@
       "default": "./dist/config.js"
     },
     "./theme": "./theme/index.ts",
+    "./theme/*": "./theme/*",
     "./slug": {
       "types": "./dist/slug.d.mts",
       "default": "./dist/slug.mjs"
