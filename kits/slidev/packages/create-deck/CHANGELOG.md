@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.7.12](https://github.com/Miragon/brand-toolbox/compare/create-slidev-deck-v1.7.11...create-slidev-deck-v1.7.12) (2026-11-19)
+
+
+### Bug Fixes
+
+* **create-slidev-deck:** name npm in the next steps, whatever started the scaffold ([#306](https://github.com/Miragon/brand-toolbox/issues/306)) ([7a75ef4](https://github.com/Miragon/brand-toolbox/commit/7a75ef433bb364e07189afc7515d866d8104b693))
+* require the Node versions the decks and docs sites actually need ([#305](https://github.com/Miragon/brand-toolbox/issues/305)) ([fc0cca2](https://github.com/Miragon/brand-toolbox/commit/fc0cca2480c6d505280f4097b11b01f52b37f227))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.3.2 to 0.3.3
+  * devDependencies
+    * @miragon/slidev-speaker-profiles bumped from 0.3.2 to 0.3.3
+    * @miragon/slidev-validator bumped from 0.8.3 to 0.8.4
+
 ## [1.7.11](https://github.com/Miragon/brand-toolbox/compare/create-slidev-deck-v1.7.10...create-slidev-deck-v1.7.11) (2026-11-19)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@miragon/docs-starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Miragon docs kit for VitePress: config, theme, colours light and dark, GitHub anchors, Mermaid and the legal row, installed instead of copied.",
   "type": "module",
   "license": "MIT",

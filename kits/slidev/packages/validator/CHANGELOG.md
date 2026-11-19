@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.4](https://github.com/Miragon/brand-toolbox/compare/slidev-validator-v0.8.3...slidev-validator-v0.8.4) (2026-11-19)
+
+
+### Bug Fixes
+
+* require the Node versions the decks and docs sites actually need ([#305](https://github.com/Miragon/brand-toolbox/issues/305)) ([fc0cca2](https://github.com/Miragon/brand-toolbox/commit/fc0cca2480c6d505280f4097b11b01f52b37f227))
+
 ## [0.8.3](https://github.com/Miragon/brand-toolbox/compare/slidev-validator-v0.8.2...slidev-validator-v0.8.3) (2026-11-19)
 
 
