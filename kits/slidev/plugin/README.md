@@ -41,5 +41,5 @@ commits. Claude Code's background auto-update delivers each published version. S
 
 ## Targeted toolkit range
 
-The guidance targets `@miragon/slidev-toolkit >=1.15.0 <2`. Keep the toolkit current
+The guidance targets `@miragon/slidev-toolkit >=2.0.0 <3`. Keep the toolkit current
 (Dependabot) so the skills and the rendered theme stay in sync.
