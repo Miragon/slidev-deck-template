@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.3](https://github.com/Miragon/brand-toolbox/compare/slidev-validator-v0.8.2...slidev-validator-v0.8.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* point every package at the renamed repository Miragon/brand-packages ([#292](https://github.com/Miragon/brand-toolbox/issues/292)) ([ed1249c](https://github.com/Miragon/brand-toolbox/commit/ed1249c9a1e7e3e861eff5beb5b220cd5df284fa))
+* point every package at the renamed repository Miragon/brand-toolbox ([#294](https://github.com/Miragon/brand-toolbox/issues/294)) ([636b225](https://github.com/Miragon/brand-toolbox/commit/636b2258e52c925df113e4e1ba0a21a6d9b4488c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * @miragon/slidev-toolkit bumped from >=2.0.0 <3 to >=2.1.1
+
 ## [0.8.2](https://github.com/Miragon/slidev-deck-template/compare/slidev-validator-v0.8.1...slidev-validator-v0.8.2) (2026-11-14)
 
 
