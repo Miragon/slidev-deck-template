@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Miragon/brand-toolbox/compare/docs-starter-v1.0.1...docs-starter-v1.1.0) (2026-11-19)
+
+
+### Features
+
+* **docs-starter:** export single parts of the theme for sites with their own theme ([#309](https://github.com/Miragon/brand-toolbox/issues/309)) ([f856e35](https://github.com/Miragon/brand-toolbox/commit/f856e35989623d59ea7d1dac656312eaaf699c8d))
+
 ## [1.0.1](https://github.com/Miragon/brand-toolbox/compare/docs-starter-v1.0.0...docs-starter-v1.0.1) (2026-11-19)
 
 
