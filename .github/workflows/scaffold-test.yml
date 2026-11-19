@@ -27,9 +27,9 @@ jobs:
       - run: npm ci
 
       # Fast structural smoke tests: generated layout + the validator's own units.
-      - run: npm test -w packages/create-deck
-      - run: npm test -w packages/validator
-      - run: npm test -w packages/hub-template
+      - run: npm test -w kits/slidev/packages/create-deck
+      - run: npm test -w kits/slidev/packages/validator
+      - run: npm test -w kits/hub/packages/hub-template
 
       # Scaffold a deck and prove it installs, builds and passes the source guardrails.
       - name: Scaffold a deck and verify it builds
@@ -38,10 +38,10 @@ jobs:
           # release PR pins versions not yet published to the registry.
           pack() { npm pack -w "$1" --pack-destination "$RUNNER_TEMP" --json \
             | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename'; }
-          toolkit_tgz="$(pack packages/toolkit)"
-          validator_tgz="$(pack packages/validator)"
-          profiles_tgz="$(pack packages/speaker-profiles)"
-          CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
+          toolkit_tgz="$(pack kits/slidev/packages/toolkit)"
+          validator_tgz="$(pack kits/slidev/packages/validator)"
+          profiles_tgz="$(pack kits/slidev/packages/speaker-profiles)"
+          CREATE_DECK_SKELETON="$PWD" node kits/slidev/packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-deck"
           cd "$RUNNER_TEMP/smoke-deck"
           npm install --no-save "$RUNNER_TEMP/$toolkit_tgz" "$RUNNER_TEMP/$validator_tgz" "$RUNNER_TEMP/$profiles_tgz"
           npm run build
@@ -55,11 +55,11 @@ jobs:
         run: |
           pack() { npm pack -w "$1" --pack-destination "$RUNNER_TEMP" --json \
             | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8"))[0].filename'; }
-          toolkit_tgz="$(pack packages/toolkit)"
-          validator_tgz="$(pack packages/validator)"
-          profiles_tgz="$(pack packages/speaker-profiles)"
-          hub_tgz="$(pack packages/hub-template)"
-          CREATE_DECK_SKELETON="$PWD" node packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-hub" --hub --title "Smoke Hub"
+          toolkit_tgz="$(pack kits/slidev/packages/toolkit)"
+          validator_tgz="$(pack kits/slidev/packages/validator)"
+          profiles_tgz="$(pack kits/slidev/packages/speaker-profiles)"
+          hub_tgz="$(pack kits/hub/packages/hub-template)"
+          CREATE_DECK_SKELETON="$PWD" node kits/slidev/packages/create-deck/bin/index.mjs "$RUNNER_TEMP/smoke-hub" --hub --title "Smoke Hub"
           cd "$RUNNER_TEMP/smoke-hub"
           npm install --no-save "$RUNNER_TEMP/$toolkit_tgz" "$RUNNER_TEMP/$validator_tgz" "$RUNNER_TEMP/$profiles_tgz" "$RUNNER_TEMP/$hub_tgz"
           npm run hub:check

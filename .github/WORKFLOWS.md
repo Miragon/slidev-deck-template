@@ -6,8 +6,8 @@ The workflows that keep the template building, releasing and secure. All actions
 
 | File | Name | Trigger | Does |
 |---|---|---|---|
-| `ci.yml` | Build Deck | push to `main`, every PR, manual | `npm ci`, `slidev build`, then `npm run verify:source`. No browser involved: the PDF export is kept out of `build` and the guardrails are source-only. A required CI status; forks inherit it. |
-| `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR per target from conventional commits; on merge, cuts the tag/GitHub release and publishes the three npm packages (`@miragon/slidev-toolkit`, `@miragon/create-slidev-deck`, `@miragon/slidev-validator`). The `miragon-slidev` plugin also has a release line (tag + `miragon-slidev-plugin/.claude-plugin/plugin.json` + CHANGELOG bump) but is **not** published to npm — its marketplace serves it straight from git. |
+| `ci.yml` | CI | push to `main`, every PR, manual | `npm ci`, `npm run check:release` (every package has the same release setup), `check:ids`, `slidev build` of the reference deck, then `npm run verify:source`. No browser involved. A required CI status (`build`). The deck CI that scaffolded decks get is a separate file, `kits/slidev/.github/workflows/ci.yml`, which GitHub never runs here. |
+| `release-please.yml` | Release | push to `main`, manual | **Template-only.** Maintains a release PR per target from conventional commits; on merge, cuts the tag/GitHub release and publishes every released package under `kits/*/packages/*` to npm. The `miragon-slidev` plugin also has a release line (tag + `kits/slidev/plugin/.claude-plugin/plugin.json` + CHANGELOG bump) but is **not** published to npm — its marketplace serves it straight from git. |
 | `pin-check.yml` | Pin Check | push to `main`, every PR, manual | Fails if any `package.json` reintroduces a version range, wildcard, dist-tag or mutable git ref ([`Miragon/pin-npm-dependencies`](https://github.com/Miragon/pin-npm-dependencies)). |
 | `pr-title.yml` | PR Title | PR opened / edited | **Template-only.** Validates the PR title as a conventional-commit subject (`feat:`, `fix:`, `chore:`, …) so squash-merges give release-please a clean history. |
 | `scaffold-test.yml` | Scaffold Test | push to `main`, every PR, manual | **Template-only.** Runs the `create-slidev-deck` structural smoke test, then scaffolds a deck and checks it installs, builds and verifies with the toolkit pulled from npm. |
@@ -32,12 +32,12 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 `release-please.yml` publishes without an `NPM_TOKEN` secret. npm validates an OIDC token against the trusted-publisher config on npmjs.com, so the setup is deliberately constrained — read the header comment in the file before touching it:
 
-- Each package has its own publish job (`publish-toolkit`, `publish-create-deck`, `publish-validator`) gated on that package's own release, running **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename).
+- One `publish` job, a matrix over the packages to publish: release-please's `paths_released` filtered to `kits/*/packages/*` (`shared/scripts/npm-packages.mjs`), or every package on a `publish_current` dispatch. It runs **inline** in `release-please.yml` (the trusted-publisher config keys on the workflow filename, not on the job), and each entry runs `shared/scripts/publish-if-new.sh`.
 - **No GitHub environment** on the publish jobs (the environment-name claim must stay empty).
-- Publishing is **idempotent** — a job skips if that package's current version is already on npm.
-- `@miragon/slidev-validator` is newer: its **first** publish must be done once by a maintainer (Trusted Publishing cannot create a brand-new package name); afterwards `publish-validator` takes over.
+- Publishing is **idempotent**: an entry skips if that package's current version is already on npm.
+- A **new** package's first publish must be done once by a maintainer (Trusted Publishing cannot create a brand-new package name). Then create its binding (organization `Miragon`, repository `brand-toolbox`, workflow `release-please.yml`, no environment) and publish a beta from CI within 2 days, or the binding expires. That first CI publish ties the binding to the repository's numeric id.
 - `workflow_dispatch` inputs allow a dry-run (all packages) or a manual `publish_current` recovery republish.
-- A manual run with `beta_package` and `beta_version` publishes **one package from the selected branch** as a beta (`x.y.z-beta.N`, dist-tag `beta`) via the `publish-beta` job. The version is set in the runner only: nothing is committed, tagged or released, `latest` does not move, and release-please keeps counting from the last stable version. Add `dry_run` to rehearse it. npm refuses a prerelease version without `--tag`, which is why `publish_current` cannot do this.
+- A manual run with `beta_package` and `beta_version` publishes **one package (`<kit>/<package>`) from the selected branch** as a beta (`x.y.z-beta.N`, dist-tag `beta`) via the `publish-beta` job. The version is set in the runner only: nothing is committed, tagged or released, `latest` does not move, and release-please keeps counting from the last stable version. Add `dry_run` to rehearse it. npm refuses a prerelease version without `--tag`, which is why `publish_current` cannot do this.
 
 ## Dependency updates
 

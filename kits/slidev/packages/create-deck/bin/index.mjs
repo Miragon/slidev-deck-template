@@ -50,26 +50,29 @@ const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 const SPEAKER_PROFILES_VERSION = SELF.devDependencies['@miragon/slidev-speaker-profiles']
 const HUB_TEMPLATE_VERSION = SELF.dependencies['@miragon/hub-template']
 
-// Paths copied verbatim from the fetched skeleton into the new deck. Anything not
-// listed (packages/, miragon-slidev-plugin/ [the skills now ship as that plugin],
-// verify/ [now the @miragon/slidev-validator package], release-please*, pr-title.yml,
-// LICENSE, netlify.toml, docs/) is intentionally left out — that is the whole point of
-// the scaffold. `.claude/` is NOT copied: its only deck-facing content is the generated
-// settings.json (below) that wires the plugin marketplace.
-const SKELETON = [
-  'deck',
+// Paths copied verbatim from the fetched skeleton into the new deck, as
+// source in the brand-toolbox repo → target in the deck. Anything not listed
+// (kits/*/packages/, kits/slidev/plugin/ [the skills ship as that plugin],
+// shared/, release-please*, pr-title.yml, LICENSE, netlify.toml) is intentionally
+// left out — that is the whole point of the scaffold. `.claude/` is NOT copied: its
+// only deck-facing content is the generated settings.json (below) that wires the
+// plugin marketplace.
+const SLIDEV_KIT = 'kits/slidev'
+const SKELETON = {
+  [`${SLIDEV_KIT}/deck`]: 'deck',
   // Seeds the per-speaker slide selection: a README and the .gitignore that
   // keeps `.current` (which profile THIS machine uses) out of the repo.
-  '.slidev-profiles',
-  'CLAUDE.md',
-  '.npmrc',
-  '.gitignore',
-  '.github/workflows/ci.yml',
-  '.github/workflows/pin-check.yml',
-]
+  [`${SLIDEV_KIT}/.slidev-profiles`]: '.slidev-profiles',
+  [`${SLIDEV_KIT}/CLAUDE.md`]: 'CLAUDE.md',
+  [`${SLIDEV_KIT}/.github/workflows/ci.yml`]: '.github/workflows/ci.yml',
+  '.npmrc': '.npmrc',
+  '.gitignore': '.gitignore',
+  '.github/workflows/pin-check.yml': '.github/workflows/pin-check.yml',
+}
 
-// Skeleton files READ (not copied) to derive the generated package.json.
-const MANIFESTS = ['package.json', 'deck/package.json']
+// Skeleton file READ (not copied) to derive the generated package.json.
+const DECK_MANIFEST = `${SLIDEV_KIT}/deck/package.json`
+const MANIFESTS = [DECK_MANIFEST]
 
 // Skeleton files that must not survive into a standalone deck. The deck's own
 // workspace sub-manifest is replaced by the generated root package.json below.
@@ -183,7 +186,7 @@ async function fetchSkeleton(ref) {
   // Local mode brings the copy whitelist plus the manifests we read to build the
   // package.json (giget's full download already contains them).
   const src = resolve(local)
-  for (const rel of [...SKELETON, ...MANIFESTS]) {
+  for (const rel of [...Object.keys(SKELETON), ...MANIFESTS]) {
     const from = join(src, rel)
     if (existsSync(from)) {
       await mkdir(dirname(join(scratch, rel)), { recursive: true })
@@ -201,15 +204,16 @@ function deckNameFrom(dir) {
 /** Build the standalone deck package.json from the fetched skeleton's manifests. */
 function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, speakerProfilesVersion, hub = false) {
   const readManifest = (rel) => JSON.parse(readFileSync(join(scratch, rel), 'utf8'))
-  const deckPkg = readManifest('deck/package.json')
-  // npm `overrides` only take effect in the root manifest, so the template keeps
-  // them in its root package.json and every generated deck inherits them. They
+  const deckPkg = readManifest(DECK_MANIFEST)
+  // npm `overrides` only take effect in a root manifest. The deck's overrides are
+  // kept in the reference deck's manifest (inert there, mirrored in the monorepo
+  // root) so that overrides other kits need at the root never reach a deck. They
   // hold back a transitive release that breaks the deck build until upstream
   // fixes it (e.g. magic-string 1.4.3 misplaces UnoCSS @apply output, and
   // lightningcss then rejects the CSS). Empty object → no key in the output.
-  const { overrides } = readManifest('package.json')
+  const { overrides } = deckPkg
   const portlessVersion = deckPkg.devDependencies?.portless
-  if (!portlessVersion) throw new Error('Reference deck/package.json is missing devDependency portless')
+  if (!portlessVersion) throw new Error(`Reference ${DECK_MANIFEST} is missing devDependency portless`)
   const pkg = {
     name: deckName,
     // A hub is released with release-please, which bumps this version.
@@ -277,10 +281,10 @@ async function ensureEmptyTarget(target) {
 
 /** Copy each whitelisted skeleton path into the target. */
 async function copySkeleton(scratch, target, ref) {
-  for (const rel of SKELETON) {
-    const from = join(scratch, rel)
-    if (!existsSync(from)) throw new Error(`Skeleton is missing ${rel} (ref ${ref}).`)
-    const to = join(target, rel)
+  for (const [source, destination] of Object.entries(SKELETON)) {
+    const from = join(scratch, source)
+    if (!existsSync(from)) throw new Error(`Skeleton is missing ${source} (ref ${ref}).`)
+    const to = join(target, destination)
     await mkdir(dirname(to), { recursive: true })
     await cp(from, to, { recursive: true })
   }

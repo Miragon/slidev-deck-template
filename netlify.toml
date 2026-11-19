@@ -12,7 +12,7 @@
 # pure build time. Export the PDF locally with `npm run export` instead.
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = "kits/slidev/dist"
 
 # SPA fallback so deep links (e.g. /23) resolve on a hard refresh. Netlify
 # serves existing static assets first and only falls back to index.html.

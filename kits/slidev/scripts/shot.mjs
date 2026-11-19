@@ -11,6 +11,7 @@ function portlessUrl() {
   const bin = [
     join(repoRoot, 'node_modules', '.bin', 'portless'),
     join(repoRoot, 'deck', 'node_modules', '.bin', 'portless'),
+    join(repoRoot, '..', '..', 'node_modules', '.bin', 'portless'),
   ].find(existsSync)
   if (!bin) return null
   try {

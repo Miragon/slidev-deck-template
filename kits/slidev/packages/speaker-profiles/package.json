@@ -14,9 +14,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miragon/brand-toolbox.git",
-    "directory": "packages/speaker-profiles"
+    "directory": "kits/slidev/packages/speaker-profiles"
   },
-  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/speaker-profiles#readme",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/kits/slidev/packages/speaker-profiles#readme",
   "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "bin": {
     "slide-ids": "bin/slide-ids.mjs"
