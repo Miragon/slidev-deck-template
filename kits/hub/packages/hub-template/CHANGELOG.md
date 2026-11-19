@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/Miragon/brand-toolbox/compare/hub-template-v0.3.1...hub-template-v0.3.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* **hub-template:** link the start pages to the pages of their own language ([#299](https://github.com/Miragon/brand-toolbox/issues/299)) ([5c3ce1d](https://github.com/Miragon/brand-toolbox/commit/5c3ce1ddfe3350ab74ae3063a3193e2f966df35f))
+
 ## [0.3.1](https://github.com/Miragon/brand-toolbox/compare/hub-template-v0.3.0...hub-template-v0.3.1) (2026-11-19)
 
 

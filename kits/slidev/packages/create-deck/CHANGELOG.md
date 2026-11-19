@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.11](https://github.com/Miragon/brand-toolbox/compare/create-slidev-deck-v1.7.10...create-slidev-deck-v1.7.11) (2026-11-19)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.3.1 to 0.3.2
+
 ## [1.7.10](https://github.com/Miragon/brand-toolbox/compare/create-slidev-deck-v1.7.9...create-slidev-deck-v1.7.10) (2026-11-19)
 
 
