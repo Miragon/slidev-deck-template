@@ -40,3 +40,13 @@ test("the sign-in page carries the title, the language and the twin link", () =>
     assert.match(html, /name="lang" value="de"/);
     assert.throws(() => renderLoginPage({ slug: "x" }, "fr"), /texts/);
 });
+
+test("the sign-in page uses the brand palette and loads no font from a third party", () => {
+    const html = renderLoginPage({ slug: "x", title: "X", locale: "de" }, "de");
+    const palette = new Set(["#335DE5", "#2B50D4", "#6B8AFF", "#1D1D1D", "#FFFFFF", "#F9F7F7", "#C92A2A", "#FB6D73", "#282828", "#464646"]);
+    const used = [...html.matchAll(/#[0-9A-Fa-f]{6}\b/g)].map(([hex]) => hex.toUpperCase());
+    assert.ok(used.length > 0);
+    for (const hex of used) assert.ok(palette.has(hex), `${hex} is not a brand colour`);
+    assert.doesNotMatch(html, /fonts\.googleapis|Manrope/);
+    assert.match(html, /font-family: Geist, Inter, "Helvetica Neue", Arial, sans-serif/);
+});
