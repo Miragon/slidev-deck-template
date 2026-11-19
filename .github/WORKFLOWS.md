@@ -16,15 +16,15 @@ The workflows that keep the template building, releasing and secure. All actions
 
 ## Template-only workflows
 
-Forking this repo copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/brand-packages'`, and so is the App-token step of **Dependabot auto-merge**:
+Forking this repo copies every file here into the new repo, but only this repo owns the npm packages and the scaffolder. **Release**, **PR Title** and **Scaffold Test** are therefore guarded per job with `github.repository == 'Miragon/brand-toolbox'`, and so is the App-token step of **Dependabot auto-merge**:
 
 - Without the guard, a derived repo in the Miragon org would inherit the **org-level** release-please App credentials, open its own release PRs, and then fail the publish on an OIDC claim mismatch. Its PR titles would also be held to conventional-commit rules for no reason, and it would pointlessly test a scaffolder it does not own.
 - In a derived repo these workflows run as *skipped* — visible in the Actions tab, but with no effect (a skipped job counts as passing, so it never blocks a merge).
 - The repo slug is repeated literally in each `if:` on purpose: the `env` context is not available in `jobs.<id>.if`. **Renaming or moving this repo means updating all occurrences** (the jobs in `release-please.yml`, plus `pr-title.yml`, `scaffold-test.yml` and the App-token step in `dependabot-automerge.yml`), otherwise releases stop silently. After a rename, delete and recreate the npm trusted-publisher binding of every package and publish each one within 2 days (see below).
 
-## The old name `Miragon/slidev-deck-template`
+## The old names `Miragon/slidev-deck-template` and `Miragon/brand-packages`
 
-This repo was renamed from `Miragon/slidev-deck-template`. GitHub redirects the old name, and the redirect still carries load: decks scaffolded before the rename register the old slug as their Claude Code marketplace (`autoUpdate: true`), and older `create-slidev-deck` versions download their skeleton from it. **Never create a repository with the old name in the Miragon org.** It would break the redirect, and whoever owns that repository would serve skills to those decks.
+This repo was renamed from `Miragon/slidev-deck-template`, briefly to `Miragon/brand-packages`, and then to `Miragon/brand-toolbox`. GitHub redirects both old names, and the redirect still carries load: decks scaffolded before the rename register the old slug as their Claude Code marketplace (`autoUpdate: true`), and older `create-slidev-deck` versions download their skeleton from it. **Never create a repository with either old name in the Miragon org.** It would break the redirect, and whoever owns that repository would serve skills to those decks.
 
 Build Deck and Pin Check are deliberately *not* guarded — every deck repo wants them.
 

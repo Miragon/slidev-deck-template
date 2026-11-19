@@ -71,7 +71,7 @@ jobs:
     # Skip cleanly until the GitHub App is configured (Teil 3 of the setup), so a
     # push to main does not fail the workflow before the credentials exist.
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       (github.event_name != 'workflow_dispatch' || (!inputs.dry_run && inputs.beta_package == 'none')) &&
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
@@ -102,7 +102,7 @@ jobs:
   publish-toolkit:
     needs: release-please
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.toolkit_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -133,7 +133,7 @@ jobs:
   publish-validator:
     needs: release-please
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.validator_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -162,7 +162,7 @@ jobs:
   publish-speaker-profiles:
     needs: release-please
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.speaker_profiles_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -191,7 +191,7 @@ jobs:
   publish-create-deck:
     needs: release-please
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.create_deck_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -220,7 +220,7 @@ jobs:
   publish-hub-template:
     needs: release-please
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       !cancelled() && needs.release-please.result != 'failure' &&
       (needs.release-please.outputs.hub_template_released == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.publish_current))
@@ -251,7 +251,7 @@ jobs:
   # With dry_run = true it rehearses the publish instead.
   publish-beta:
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       github.event_name == 'workflow_dispatch' && inputs.beta_package != 'none'
     runs-on: ubuntu-latest
     permissions:
@@ -283,7 +283,7 @@ jobs:
   # `npm publish --dry-run` without releasing or publishing anything.
   dry-run:
     if: >-
-      github.repository == 'Miragon/brand-packages' &&
+      github.repository == 'Miragon/brand-toolbox' &&
       github.event_name == 'workflow_dispatch' && inputs.dry_run && inputs.beta_package == 'none'
     runs-on: ubuntu-latest
     steps:

@@ -13,11 +13,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Miragon/brand-packages.git",
+    "url": "git+https://github.com/Miragon/brand-toolbox.git",
     "directory": "packages/create-deck"
   },
-  "homepage": "https://github.com/Miragon/brand-packages/tree/main/packages/create-deck#readme",
-  "bugs": "https://github.com/Miragon/brand-packages/issues",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/create-deck#readme",
+  "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "bin": {
     "create-slidev-deck": "bin/index.mjs"
   },
