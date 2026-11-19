@@ -38,13 +38,20 @@ test('a consumer site outside the workspace builds from the packed tarball', () 
 })
 
 async function startDevServer() {
-  const server = spawn(process.execPath, [join(site, 'node_modules/vitepress/bin/vitepress.js'), 'dev', '--port', '5179'], { cwd: site, env: process.env })
+  const server = spawn(process.execPath, [join(site, 'node_modules/vitepress/bin/vitepress.js'), 'dev', '--port', '5179'], {
+    cwd: site,
+    env: { ...process.env, NO_COLOR: '1' },
+  })
   const exited = new Promise((resolve) => server.once('exit', resolve))
   let log = ''
   server.stdout.on('data', (chunk) => (log += chunk))
   server.stderr.on('data', (chunk) => (log += chunk))
+  const stop = () => (server.kill(), exited)
   const url = await new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error(`dev server did not start\n${log}`)), 60000)
+    const timeout = setTimeout(() => {
+      clearInterval(poll)
+      stop().then(() => reject(new Error(`dev server did not start\n${log}`)))
+    }, 60000)
     const poll = setInterval(() => {
       const match = log.match(/Local:\s+(http:\/\/\S+?)\/?\s/)
       if (!match) return
@@ -53,7 +60,7 @@ async function startDevServer() {
       resolve(match[1])
     }, 200)
   })
-  return { url, log: () => log, stop: () => (server.kill(), exited) }
+  return { url, log: () => log, stop }
 }
 
 test('the dev server serves the theme from the package source and the favicon', async () => {
