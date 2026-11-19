@@ -12,9 +12,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miragon/brand-toolbox.git",
-    "directory": "packages/toolkit"
+    "directory": "kits/slidev/packages/toolkit"
   },
-  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/toolkit#readme",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/kits/slidev/packages/toolkit#readme",
   "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "engines": {
     "slidev": ">=0.48.0"

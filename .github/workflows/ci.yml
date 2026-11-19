@@ -1,14 +1,15 @@
-name: Build Deck
+name: CI
 
-# Build on every push to main AND on every pull request — so Dependabot
-# (and human) PRs get a green/red CI status before merge.
+# The repository's own CI: builds the reference deck, runs its guardrails and
+# checks that every package has the same release setup. The deck CI that new
+# decks get lives in kits/slidev/.github/workflows/ci.yml (create-slidev-deck
+# copies it); GitHub never runs that copy here.
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 
-# Least privilege at workflow level.
 permissions:
   contents: read
 
@@ -29,15 +30,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Every package has the same release setup
+        run: npm run check:release
+
       # The speaker profiles address slides by the `id:` in their frontmatter.
       # `npm run dev` stamps a new slide automatically, so this only fails when
       # someone commits without ever having started the dev server - and then it
       # fails here rather than silently shifting somebody's selection.
-      - name: Verify every slide has a stable id
+      - name: Verify every slide of the reference deck has a stable id
         run: npm run check:ids
 
-      - name: Build HTML
-        run: npx slidev build deck/slides.md --base /${{ github.event.repository.name }}/ --out ../dist
-        
+      - name: Build the reference deck
+        run: npx slidev build kits/slidev/deck/slides.md --base /${{ github.event.repository.name }}/ --out ../dist
+
       - name: Verify guardrails (layout + source checks)
         run: npm run verify:source

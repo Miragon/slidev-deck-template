@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const CLI = join(HERE, '..', 'bin', 'index.mjs')
-const REPO_ROOT = join(HERE, '..', '..', '..')
+const REPO_ROOT = join(HERE, '..', '..', '..', '..', '..')
 const SELF = JSON.parse(readFileSync(join(HERE, '..', 'package.json'), 'utf8'))
 
 const run = (args) =>
@@ -82,6 +82,8 @@ test('enables the official Slidev plugin from its own marketplace', () => {
 test('omits the template-only files', () => {
   const forbidden = [
     'packages',
+    'kits',
+    'shared',
     'miragon-slidev-plugin', // the skills now ship as that plugin, not a copied folder
     '.claude-plugin', // the marketplace manifest stays in the template repo
     'verify', // the validator now ships as @miragon/slidev-validator, not a copied folder
@@ -128,11 +130,21 @@ test('derives runtime deps from the reference manifest; validator + portless as 
   assert.match(pkg.dependencies['@miragon/slidev-speaker-profiles'], /^\d/, 'speaker profiles must be an exact-pinned dependency')
 })
 
-test('carries the template root overrides into the deck', () => {
+test('carries the reference deck overrides into the deck', () => {
   // npm only honours `overrides` in the root manifest, so a pin that keeps the
-  // template building must reach every generated deck too.
+  // reference deck building must reach every generated deck too.
+  const deck = JSON.parse(readFileSync(join(REPO_ROOT, 'kits/slidev/deck/package.json'), 'utf8'))
+  assert.deepEqual(pkgOf(out).overrides, deck.overrides)
+})
+
+test('the monorepo root carries every override of the reference deck', () => {
+  // The deck manifest is where the scaffold reads them; npm ignores them there,
+  // so the root must hold the same entries for the reference deck to build.
   const root = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'))
-  assert.deepEqual(pkgOf(out).overrides, root.overrides)
+  const deck = JSON.parse(readFileSync(join(REPO_ROOT, 'kits/slidev/deck/package.json'), 'utf8'))
+  for (const [name, version] of Object.entries(deck.overrides ?? {})) {
+    assert.deepEqual(root.overrides?.[name], version, `root package.json is missing override ${name}`)
+  }
 })
 
 test('--validator-version overrides the pinned default', () => {

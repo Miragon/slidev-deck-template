@@ -14,9 +14,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miragon/brand-toolbox.git",
-    "directory": "packages/hub-template"
+    "directory": "kits/hub/packages/hub-template"
   },
-  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/hub-template#readme",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/kits/hub/packages/hub-template#readme",
   "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "bin": {
     "hub-template": "bin/hub-template.mjs"

@@ -14,9 +14,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miragon/brand-toolbox.git",
-    "directory": "packages/validator"
+    "directory": "kits/slidev/packages/validator"
   },
-  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/validator#readme",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/kits/slidev/packages/validator#readme",
   "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "bin": {
     "slidev-validator": "bin/index.mjs"

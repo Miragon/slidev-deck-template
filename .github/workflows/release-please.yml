@@ -1,8 +1,9 @@
 name: Release
 
-# On every push to main, release-please maintains a "Release PR" that bumps the
-# @miragon/slidev-toolkit version and updates CHANGELOG.md. Merging that Release
-# PR creates the GitHub release/tag and triggers the npm publish job.
+# On every push to main, release-please maintains a "Release PR" that bumps each
+# package under kits/*/packages/* (and the Claude plugins) and updates their
+# CHANGELOG.md. Merging that Release PR creates the GitHub releases/tags and
+# triggers the npm publish job, once per released package.
 #
 # The GitHub App token (not the default GITHUB_TOKEN) is required so the bot's
 # commits/tags trigger downstream workflows — a plain GITHUB_TOKEN would not.
@@ -47,16 +48,16 @@ on:
         type: boolean
         default: false
       beta_package:
-        description: 'Publish a beta of this package from the selected branch (dist-tag beta)'
+        description: 'Publish a beta of this package (<kit>/<package>) from the selected branch (dist-tag beta)'
         type: choice
         default: none
         options:
           - none
-          - toolkit
-          - speaker-profiles
-          - validator
-          - create-deck
-          - hub-template
+          - slidev/toolkit
+          - slidev/speaker-profiles
+          - slidev/validator
+          - slidev/create-deck
+          - hub/hub-template
       beta_version:
         description: 'The beta version to publish, e.g. 0.4.0-beta.0'
         type: string
@@ -68,19 +69,15 @@ permissions:
 
 jobs:
   release-please:
-    # Skip cleanly until the GitHub App is configured (Teil 3 of the setup), so a
-    # push to main does not fail the workflow before the credentials exist.
+    # Skip cleanly until the GitHub App is configured, so a push to main does not
+    # fail the workflow before the credentials exist.
     if: >-
       github.repository == 'Miragon/brand-toolbox' &&
       (github.event_name != 'workflow_dispatch' || (!inputs.dry_run && inputs.beta_package == 'none')) &&
       vars.RELEASE_PLEASE_APP_CLIENT_ID != ''
     runs-on: ubuntu-latest
     outputs:
-      toolkit_released: ${{ steps.release_please.outputs['packages/toolkit--release_created'] }}
-      create_deck_released: ${{ steps.release_please.outputs['packages/create-deck--release_created'] }}
-      validator_released: ${{ steps.release_please.outputs['packages/validator--release_created'] }}
-      speaker_profiles_released: ${{ steps.release_please.outputs['packages/speaker-profiles--release_created'] }}
-      hub_template_released: ${{ steps.release_please.outputs['packages/hub-template--release_created'] }}
+      packages: ${{ steps.packages.outputs.packages }}
     steps:
       - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
@@ -93,23 +90,35 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # The npm packages to publish: the released ones, or all of them on a
+      # `publish_current` dispatch. Paths outside kits/*/packages/* (the Claude
+      # plugins) are released by release-please but never published to npm.
+      - id: packages
+        env:
+          PATHS_RELEASED: ${{ steps.release_please.outputs.paths_released }}
+          PUBLISH_ALL: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_current }}
+        run: node shared/scripts/npm-packages.mjs >> "$GITHUB_OUTPUT"
 
   # Inline publish (see the note at the top of this file — must NOT be a reusable
   # workflow, so the OIDC token resolves to release-please.yml for npm Trusted
-  # Publishing). Runs when release-please cut a release, OR on a manual
-  # `publish_current` dispatch (recovery / republish). Idempotent: skips if the
-  # current version is already on the registry.
-  publish-toolkit:
+  # Publishing). One matrix entry per package to publish. Idempotent: skips a
+  # package whose current version is already on the registry.
+  publish:
     needs: release-please
     if: >-
       github.repository == 'Miragon/brand-toolbox' &&
-      !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.toolkit_released == 'true' ||
-       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
+      !cancelled() && needs.release-please.result == 'success' &&
+      needs.release-please.outputs.packages != '[]' && needs.release-please.outputs.packages != ''
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.release-please.outputs.packages) }}
+    name: publish ${{ matrix.package }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -120,134 +129,10 @@ jobs:
       # ships. Upgrade the CLI before publishing.
       - run: npm install -g npm@latest
       - run: npm ci
-      - name: Publish @miragon/slidev-toolkit
-        run: |
-          name="$(node -p "require('./packages/toolkit/package.json').name")"
-          version="$(node -p "require('./packages/toolkit/package.json').version")"
-          if npm view "$name@$version" version > /dev/null 2>&1; then
-            echo "$name@$version already published — skipping"
-          else
-            npm publish -w packages/toolkit --provenance --access public
-          fi
-
-  publish-validator:
-    needs: release-please
-    if: >-
-      github.repository == 'Miragon/brand-toolbox' &&
-      !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.validator_released == 'true' ||
-       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
-      - run: npm ci
-      - name: Publish @miragon/slidev-validator
-        run: |
-          name="$(node -p "require('./packages/validator/package.json').name")"
-          version="$(node -p "require('./packages/validator/package.json').version")"
-          if npm view "$name@$version" version > /dev/null 2>&1; then
-            echo "$name@$version already published — skipping"
-          else
-            npm publish -w packages/validator --provenance --access public
-          fi
-
-  publish-speaker-profiles:
-    needs: release-please
-    if: >-
-      github.repository == 'Miragon/brand-toolbox' &&
-      !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.speaker_profiles_released == 'true' ||
-       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
-      - run: npm ci
-      - name: Publish @miragon/slidev-speaker-profiles
-        run: |
-          name="$(node -p "require('./packages/speaker-profiles/package.json').name")"
-          version="$(node -p "require('./packages/speaker-profiles/package.json').version")"
-          if npm view "$name@$version" version > /dev/null 2>&1; then
-            echo "$name@$version already published — skipping"
-          else
-            npm publish -w packages/speaker-profiles --provenance --access public
-          fi
-
-  publish-create-deck:
-    needs: release-please
-    if: >-
-      github.repository == 'Miragon/brand-toolbox' &&
-      !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.create_deck_released == 'true' ||
-       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
-      - run: npm ci
-      - name: Publish @miragon/create-slidev-deck
-        run: |
-          name="$(node -p "require('./packages/create-deck/package.json').name")"
-          version="$(node -p "require('./packages/create-deck/package.json').version")"
-          if npm view "$name@$version" version > /dev/null 2>&1; then
-            echo "$name@$version already published — skipping"
-          else
-            npm publish -w packages/create-deck --provenance --access public
-          fi
-
-  publish-hub-template:
-    needs: release-please
-    if: >-
-      github.repository == 'Miragon/brand-toolbox' &&
-      !cancelled() && needs.release-please.result != 'failure' &&
-      (needs.release-please.outputs.hub_template_released == 'true' ||
-       (github.event_name == 'workflow_dispatch' && inputs.publish_current))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
-      - run: npm ci
-      - name: Publish @miragon/hub-template
-        run: |
-          name="$(node -p "require('./packages/hub-template/package.json').name")"
-          version="$(node -p "require('./packages/hub-template/package.json').version")"
-          if npm view "$name@$version" version > /dev/null 2>&1; then
-            echo "$name@$version already published — skipping"
-          else
-            npm publish -w packages/hub-template --provenance --access public
-          fi
+      - run: shared/scripts/publish-if-new.sh "${{ matrix.package }}"
 
   # Manual beta of ONE package from the selected branch (see the note at the top
-  # of this file). Inline for the same OIDC reason as the publish jobs above.
+  # of this file). Inline for the same OIDC reason as the publish job above.
   # With dry_run = true it rehearses the publish instead.
   publish-beta:
     if: >-
@@ -258,7 +143,7 @@ jobs:
       contents: read
       id-token: write
     env:
-      PACKAGE_DIR: packages/${{ inputs.beta_package }}
+      BETA_PACKAGE: ${{ inputs.beta_package }}
       BETA_VERSION: ${{ inputs.beta_version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -276,11 +161,12 @@ jobs:
           fi
       - name: Publish the beta
         run: |
-          npm pkg set version="$BETA_VERSION" -w "$PACKAGE_DIR"
-          npm publish -w "$PACKAGE_DIR" --provenance --access public --tag beta ${{ inputs.dry_run && '--dry-run' || '' }}
+          package_dir="kits/${BETA_PACKAGE%%/*}/packages/${BETA_PACKAGE#*/}"
+          npm pkg set version="$BETA_VERSION" -w "$package_dir"
+          npm publish -w "$package_dir" --provenance --access public --tag beta ${{ inputs.dry_run && '--dry-run' || '' }}
 
   # Manual sanity check: `Run workflow` with dry_run = true builds and runs
-  # `npm publish --dry-run` without releasing or publishing anything.
+  # `npm publish --dry-run` for every package without releasing anything.
   dry-run:
     if: >-
       github.repository == 'Miragon/brand-toolbox' &&
@@ -293,6 +179,8 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
       - run: npm ci
-      - run: npm publish -w packages/toolkit --access public --dry-run
-      - run: npm publish -w packages/create-deck --access public --dry-run
-      - run: npm publish -w packages/validator --access public --dry-run
+      - name: Dry-run every package
+        run: |
+          for package_dir in $(node -e 'import("./shared/scripts/npm-packages.mjs").then(m => console.log(m.allNpmPackageDirs().join(" ")))'); do
+            npm publish -w "$package_dir" --access public --dry-run
+          done

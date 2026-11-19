@@ -3,23 +3,24 @@
   "type": "module",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "deck"
+    "kits/*/packages/*",
+    "kits/slidev/deck"
   ],
   "scripts": {
-    "dev": "npm run dev -w deck",
-    "dev:plain": "npm run dev:app -w deck",
-    "build": "npm run build -w deck",
-    "export": "npm run export -w deck",
-    "check:ids": "slide-ids --check --entry deck/slides.md",
-    "stamp:ids": "slide-ids --stamp --entry deck/slides.md",
+    "dev": "npm run dev -w kits/slidev/deck",
+    "dev:plain": "npm run dev:app -w kits/slidev/deck",
+    "build": "npm run build -w kits/slidev/deck",
+    "export": "npm run export -w kits/slidev/deck",
+    "check:ids": "slide-ids --check --entry kits/slidev/deck/slides.md",
+    "stamp:ids": "slide-ids --stamp --entry kits/slidev/deck/slides.md",
     "preverify": "npm run check:ids",
-    "verify": "SLIDEV_PROFILE=none slidev-validator --rendered",
+    "verify": "cd kits/slidev && SLIDEV_PROFILE=none slidev-validator --rendered",
     "preverify:ci": "npm run check:ids",
-    "verify:ci": "SLIDEV_PROFILE=none slidev-validator --rendered",
+    "verify:ci": "cd kits/slidev && SLIDEV_PROFILE=none slidev-validator --rendered",
     "preverify:source": "npm run check:ids",
-    "verify:source": "SLIDEV_PROFILE=none slidev-validator",
-    "shot": "node scripts/shot.mjs"
+    "verify:source": "cd kits/slidev && SLIDEV_PROFILE=none slidev-validator",
+    "shot": "node kits/slidev/scripts/shot.mjs",
+    "check:release": "node shared/scripts/check-release-config.mjs"
   },
   "overrides": {
     "magic-string@1.4.3": "1.4.2"
