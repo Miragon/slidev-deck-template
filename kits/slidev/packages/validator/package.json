@@ -30,7 +30,7 @@
     "test": "node --test"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.22.0"
   },
   "dependencies": {
     "markdown-it": "15.0.3"

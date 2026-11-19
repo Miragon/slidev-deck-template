@@ -49,6 +49,7 @@ const TOOLKIT_VERSION = SELF.devDependencies['@miragon/slidev-toolkit']
 const VALIDATOR_VERSION = SELF.devDependencies['@miragon/slidev-validator']
 const SPEAKER_PROFILES_VERSION = SELF.devDependencies['@miragon/slidev-speaker-profiles']
 const HUB_TEMPLATE_VERSION = SELF.dependencies['@miragon/hub-template']
+const DECK_NODE_ENGINE = '>=22.22.0'
 
 // Paths copied verbatim from the fetched skeleton into the new deck, as
 // source in the brand-toolbox repo → target in the deck. Anything not listed
@@ -220,6 +221,7 @@ function buildPackageJson(scratch, deckName, toolkitVersion, validatorVersion, s
     ...(hub ? { version: HUB_INITIAL_VERSION } : {}),
     type: 'module',
     private: true,
+    engines: { node: DECK_NODE_ENGINE },
     scripts: {
       dev: 'portless',
       // Every slide needs a stable `id:` for the speaker profiles, and nobody
