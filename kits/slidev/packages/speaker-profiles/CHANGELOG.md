@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/Miragon/brand-toolbox/compare/slidev-speaker-profiles-v0.3.2...slidev-speaker-profiles-v0.3.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* require the Node versions the decks and docs sites actually need ([#305](https://github.com/Miragon/brand-toolbox/issues/305)) ([fc0cca2](https://github.com/Miragon/brand-toolbox/commit/fc0cca2480c6d505280f4097b11b01f52b37f227))
+
 ## [0.3.2](https://github.com/Miragon/brand-toolbox/compare/slidev-speaker-profiles-v0.3.1...slidev-speaker-profiles-v0.3.2) (2026-11-19)
 
 

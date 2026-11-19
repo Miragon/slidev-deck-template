@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/Miragon/brand-toolbox/compare/miragon-slidev-plugin-v2.1.1...miragon-slidev-plugin-v2.1.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* **miragon-slidev:** say the skills target toolkit 2.x ([#307](https://github.com/Miragon/brand-toolbox/issues/307)) ([4e2f979](https://github.com/Miragon/brand-toolbox/commit/4e2f9797fa1d727b20f44535910e96f0e56fc0ae))
+
 ## [2.1.1](https://github.com/Miragon/brand-toolbox/compare/miragon-slidev-plugin-v2.1.0...miragon-slidev-plugin-v2.1.1) (2026-11-19)
 
 

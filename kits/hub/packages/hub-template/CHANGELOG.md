@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.3](https://github.com/Miragon/brand-toolbox/compare/hub-template-v0.3.2...hub-template-v0.3.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* **hub-template:** draw the sign-in page in the Miragon brand ([#304](https://github.com/Miragon/brand-toolbox/issues/304)) ([f808562](https://github.com/Miragon/brand-toolbox/commit/f80856226cc6e30b0df4b5885c014be62f3ef59a))
+* require the Node versions the decks and docs sites actually need ([#305](https://github.com/Miragon/brand-toolbox/issues/305)) ([fc0cca2](https://github.com/Miragon/brand-toolbox/commit/fc0cca2480c6d505280f4097b11b01f52b37f227))
+
 ## [0.3.2](https://github.com/Miragon/brand-toolbox/compare/hub-template-v0.3.1...hub-template-v0.3.2) (2026-11-19)
 
 
