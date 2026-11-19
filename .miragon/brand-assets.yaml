@@ -2,7 +2,7 @@
 # Alle Dateien, die dieses Repo aus dem Plugin miragon-brand kopiert. "source" ist relativ zum Plugin,
 # "out" relativ zum Repo. Neue Einträge mit: brand-assets.mjs --add <source> <out>
 # Die Prüfsummen der Kopien schreibt brand-assets.mjs nach .miragon/brand-assets.sha256, die CI prüft sie mit sha256sum -c.
-skillVersion: 1.32.0
+skillVersion: 1.33.0
 files:
-  - source: skills/docs-site/assets/miragon/theme/cd-tokens.generated.css
+  - source: skills/docs-site/assets/cd-tokens.docs.generated.css
     out: kits/docs/packages/docs-starter/theme/cd-tokens.generated.css
