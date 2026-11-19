@@ -1,119 +1,62 @@
 # Miragon Slidev kit
 
-[![License: MIT](https://img.shields.io/github/license/Miragon/brand-toolbox)](../../LICENSE)
+[![npm](https://img.shields.io/npm/v/@miragon/create-slidev-deck?label=create-slidev-deck)](https://www.npmjs.com/package/@miragon/create-slidev-deck)
+[![npm](https://img.shields.io/npm/v/@miragon/slidev-toolkit?label=slidev-toolkit)](https://www.npmjs.com/package/@miragon/slidev-toolkit)
 [![CI](https://github.com/Miragon/brand-toolbox/actions/workflows/ci.yml/badge.svg)](https://github.com/Miragon/brand-toolbox/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@miragon/slidev-toolkit)](https://www.npmjs.com/package/@miragon/slidev-toolkit)
+[![License: MIT](https://img.shields.io/github/license/Miragon/brand-toolbox)](../../LICENSE)
 
-A reusable [Slidev](https://sli.dev) template in the Miragon corporate design. Fill in your content; the design, animations and colours are done.
+![Cover slide of the reference deck: "Build decks like code" on the animated Miragon background](../../.github/assets/cover.png)
 
-![Cover slide preview](../../.github/assets/cover.png)
+Write your talk, workshop or training deck in Markdown and present it in the Miragon brand.
 
-## Quick start
+## Why
 
-Scaffold a fresh deck with one command. Needs **Node 20+** and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
+A deck copied from last year's talk carries last year's colours, fonts and mistakes. Here the design is a package your deck depends on: you write slides, and brand fixes arrive as version updates.
+
+## What you get
+
+- **17 layouts for every kind of slide.** BPMN with token simulation, DMN tables, diagrams, quizzes and more; the [layout list](packages/toolkit/README.md#layouts) shows all of them.
+- **Brand checks before you present.** `npm run verify` checks every slide against the design rules, and your deck's CI runs the quick checks on every push.
+- **One deck, several speakers.** With speaker profiles, each speaker keeps their own selection of slides without copying the deck.
+- **Claude Code knows the deck.** The `miragon-slidev` plugin teaches Claude Code the layouts, components and brand rules.
+
+## Get started
+
+You need npm and Node.js 24 or newer on macOS or Linux (22.22 is enough for everything but `npm run dev`).
 
 ```bash
 npm create @miragon/slidev-deck@latest my-talk
-# equivalently:
-npx @miragon/create-slidev-deck@latest my-talk
-```
-
-```bash
 cd my-talk
 npm install
-npm run dev      # serves the deck at https://my-talk.localhost with live reload
+npm run dev
 ```
 
-`npm run dev` runs through [portless](https://portless.sh): a stable, worktree-aware `https://<deck>.localhost` URL instead of a `:3030` port, so several decks run side by side without colliding. The first run starts a local HTTPS proxy (a one-time `sudo` prompt); `npx portless service install` makes it permanent (needed for a headless Conductor Run button, which can't answer the prompt). For the raw server without portless, use `npm run dev:app`.
+Your deck opens at `https://my-talk.localhost`. The first run asks once for your computer's admin password to set up a local HTTPS proxy; without admin rights, use `npm run dev:app` instead.
 
-You get a lean repo with **only** the files a deck needs (`deck/`, `.claude/`, `CLAUDE.md`, `slidev-validator.config.mjs`, the Build Deck + Pin Check workflows) and both `@miragon/slidev-toolkit` (the theme) and `@miragon/slidev-validator` (the guardrail linter) pulled from npm: no toolkit source, no copied validator, no release tooling to prune. Then:
+Replace the demo slides under `deck/chapter/`: each one says what its layout is for, and the cover and closing are in `deck/slides.md`. Commit `package-lock.json` so CI can install. The `README.md` in your new deck lists every command. The reference deck is live at [slidev-template.netlify.app](https://slidev-template.netlify.app).
 
-1. Replace the demo content under `deck/`; keep the `REQUIRED / OPTIONAL / LIMIT / HOW TO USE` comment-block guardrails on each demo slide.
-2. Point the `seoMeta` block in `deck/slides.md` at your own domain, or delete it: it still carries this template's link preview.
-3. Commit the generated `package-lock.json` after the first `npm install` so CI (`npm ci`) is reproducible.
-4. Or open the repo with Claude Code and let it draft the first pass from your outline.
+To take a new version of the theme and the checks: `npm install --save-exact @miragon/slidev-toolkit@latest @miragon/slidev-validator@latest`.
 
-## The 17 archetypes
+Running a training? `npm create @miragon/slidev-deck@latest my-training -- --hub` adds a sign-in site around the deck; see the [training hub](../hub/).
 
-Set `layout:` per slide. When in doubt, copy the closest demo under `deck/chapter/`.
+## With your AI assistant
 
-| Layout | What it's for | Limit |
-|---|---|---|
-| `cover` | Animated title slide | 1 statement |
-| `hero` | One big statement, ideally a question the next slides answer | 1 idea, no bullets |
-| `interactive` | Hands the room to the audience: a plenum question or an exercise, with optional answer chips | 1 question, ≤ 8 chips |
-| `person` | Introduce one or two speakers (solo / duo) | bio ≤ 3 lines |
-| `section` | Chapter divider with ghost index; opens a chapter in the Agenda | terse subtitle |
-| `subsection` | Divides a chapter internally; skipped by the Agenda rail | terse subtitle |
-| `content` | Workhorse: bullets, prose, or a card grid | ≤ 5 bullets, 1 level |
-| `content-image` | Two columns: image on one side, prose/bullets on the other | ≤ 4 bullets, 1 visual |
-| `compare` | Side-by-side white panels; with `accent: mixed` the title colour and marker bar carry the distinction | ≤ 4 bullets per panel |
-| `goodbad` | "Which one is right, and why?": neutral panels + one-click reveal | keep panels short |
-| `bpmn` | A BPMN file with token simulation (needs `slidev-addon-diagram-js`) | 1 diagram, short caption |
-| `dmn` | A DMN decision table (needs `slidev-addon-diagram-js`) | 1 table |
-| `mermaid` | A Mermaid fence framed as the slide's focal point | 1 diagram, short caption |
-| `excalidraw` | An `.excalidraw.svg` framed as the slide's focal point | 1 diagram, short caption |
-| `window` | One framed window as the slide's focal point; code fences and diagrams become tabs, each with its own caption | 2–4 tabs, ≤ 18 lines each |
-| `showcase` | Interactive feature explorer: clickable cards + detail panel | 3–4 items |
-| `closing` | Animated closing slide | 1 CTA |
+Your new deck offers the `miragon-slidev` plugin once you trust its folder in Claude Code. It brings the `slides`, `excalidraw` (diagrams) and `create-training-hub` (training site) skills. To have it in every project:
 
-The built-in `default` layout is the one sanctioned non-archetype, for a full-bleed component slide such as the `Agenda`.
+```text
+/plugin marketplace add Miragon/brand-toolbox
+/plugin install miragon-slidev@miragon-slidev
+```
 
-## Components: keep the markdown clean
+## Help and feedback
 
-A slide is frontmatter + headings + bullets + component tags, never raw `<div>`/CSS/hex. Full props in the `slides` skill (the `miragon-slidev` plugin, `reference/components.md`).
-
-| Component | What it's for |
-|---|---|
-| `Card` | The canonical white card; accent on the title only |
-| `CardGrid` | Column wrapper for a row of `Card`s |
-| `StepList` / `Step` | A compact labelled sequence beside a diagram |
-| `Figure` | A titled, captioned wrapper around a visual (incl. `.excalidraw.svg`) |
-| `DiagramFrame` | The diagram layouts' white card, exposed to frame part of a slide |
-| `SplitView` | Two columns: a visual and an explanation |
-| `CodeBlock` | A code fence with a filename and a language badge |
-| `Agenda` | The chapter stepper with live slide previews (`layout: default`) |
-| `BrandMeshBackground` | The animated cover/closing shader (brand-locked) |
-
-Tables need no component: a plain Markdown table is styled on-brand automatically.
-
-## Present, build, export
-
-Run these in your deck:
-
-| Command | Result |
-|---|---|
-| `npm run dev` | Live preview at `https://<deck>.localhost` (portless); press `p` for presenter mode, `o` for overview |
-| `npm run build` | Static `dist/` you can host anywhere (Mesh animation included, no Node at runtime) |
-| `npm run export` | `slidev-exported.pdf` locally, one page per click step so every `showcase` card and `window` tab is in the hand-out (needs Chromium; kept out of `build` so CI stays green) |
-| `npm run verify` | Full screenshot + checklist per slide against the design rules (local; needs a browser) |
-| `npm run verify:source` | Fast source-only guardrail checks, no browser; the subset CI runs |
-
-Every push and PR to your deck runs **Build Deck** (the static build plus `npm run verify:source`) and **Pin Check** in CI; the full `npm run verify` screenshot suite stays a local step. Hosting is up to you (any static host, or wire up Netlify / GitHub Pages).
-
-## Working with Claude
-
-The scaffold ships `CLAUDE.md` and wires the `miragon-slidev` Claude Code plugin (the `slides` + `excalidraw` skills), so a Claude Code session knows the design system on the first prompt and the skills stay up to date instead of freezing at scaffold time. It also enables Slidev's official `slidev` plugin from its `slidev-plugins` marketplace for generic Slidev syntax, animations and export. It respects the white-card, no-em-dash, heading-colour and `leftIsGood` rules automatically. Starter prompts:
-
-> Outline a 30-minute talk on [topic] using `cover`, three `section` chapters with two `content` slides each, then `closing`. Split into chapter files under `deck/chapter/`.
-
-> Add a `content` slide "Three habits of a clean release" with a `CardGrid` of 3 white cards.
-
-> Build a `goodbad` slide asking "Which error message helps the user more?" Make Model A the avoid side.
-
-## Troubleshooting
-
-- **`npm install` fails (node-gyp / build tools).** Check `node --version` (needs 20+); on macOS run `xcode-select --install`.
-- **Dev URL won't load / 502 Bad Gateway.** The portless proxy isn't running or trusted. Run `npx portless doctor`, then `npx portless service install`. Bypass portless entirely with `npm run dev:app` (raw `localhost` port).
-- **Export produces an empty PDF.** Run `npm run build` once to warm the pre-bundle, then `npm run export`.
-- **Cover renders white.** WebGL2 is blocked and the gradient fallback too. Update or switch browsers.
+- **Something does not work:** see [Troubleshooting](deck/README.md#troubleshooting).
+- **Bugs and ideas:** [open an issue](https://github.com/Miragon/brand-toolbox/issues).
 
 ## Contributing
 
-Working on the template itself (the `@miragon/slidev-toolkit` design system, the `@miragon/create-slidev-deck` scaffolder, or the verification suite)? See [CONTRIBUTING.md](../../CONTRIBUTING.md) for the monorepo layout, local development and how releases are published.
+To build or change the kit, see [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## License
 
-MIT: see [LICENSE](../../LICENSE), covering this repository (the template scaffolding and the reference deck). `@miragon/slidev-toolkit` ships its own copy ([`packages/toolkit/LICENSE`](packages/toolkit/LICENSE)) in the npm package, and the bundled Geist fonts are OFL ([`LICENSE.txt`](packages/toolkit/assets/fonts/LICENSE.txt)).
-
-Your scaffolded deck carries no `LICENSE`, so your slides stay all-rights-reserved by default. Add your own only if you deliberately publish under specific terms.
+[MIT](../../LICENSE) © Miragon GmbH. Your own deck carries no licence, so your slides stay yours.

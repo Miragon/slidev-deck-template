@@ -1,31 +1,50 @@
 # Miragon brand toolbox
 
-[![License: MIT](https://img.shields.io/github/license/Miragon/brand-toolbox)](LICENSE)
 [![CI](https://github.com/Miragon/brand-toolbox/actions/workflows/ci.yml/badge.svg)](https://github.com/Miragon/brand-toolbox/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/Miragon/brand-toolbox)](LICENSE)
 
-Everything other Miragon repositories install from the Miragon brand: one kit per concern, each with its own npm packages, a reference project and, where it helps, a Claude Code plugin. A repository installs what it needs and keeps no copy.
+![Two of the kits at work: a Slidev deck cover and a docs page, both in the Miragon brand](.github/assets/brand-toolbox-banner.png)
 
-| Kit | What you get | Start here |
-|---|---|---|
-| [Slidev](kits/slidev/) | Miragon-branded presentations: the theme `@miragon/slidev-toolkit`, the scaffolder `@miragon/create-slidev-deck`, the guardrail linter `@miragon/slidev-validator`, per-speaker slide selections `@miragon/slidev-speaker-profiles`, and the `miragon-slidev` Claude Code plugin. | `npm create @miragon/slidev-deck@latest my-talk` |
-| [Docs](kits/docs/) | Miragon-branded VitePress docs sites: `@miragon/docs-starter` gives a tool's `docs/` the Miragon config and theme in one call. | `npm install --save-dev --save-exact @miragon/docs-starter` |
-| [Hub](kits/hub/packages/hub-template/) | A training hub: a VitePress site with a sign-in gate around the decks of a training (`@miragon/hub-template`). | `npm create @miragon/slidev-deck@latest my-training -- --hub` |
+Ready-made building blocks for what you deliver in the Miragon brand: talk, workshop and sales decks, training sites with a sign-in, and docs sites for Miragon tools.
 
-![Cover slide of the reference deck](.github/assets/cover.png)
+## Why
 
-## Repository layout
+Decks, trainings and docs sites used to start as a copy of an older repo, and every copy drifted: old colours, old fonts, fixes that never arrived. Here each building block is an npm package, so a fix is made once and reaches your repo as a version update.
 
+## What you get
+
+- **On brand from the first commit.** Colours, fonts, logos and layouts come from the Miragon corporate design; you write the content.
+- **Brand checks for decks.** Every deck comes with a linter that flags off-brand slides before you present them.
+- **Claude Code knows the deck rules.** The `miragon-slidev` plugin teaches Claude Code the deck layouts and the brand rules.
+
+## The building blocks
+
+Each kit's page walks you through the rest. The kits use npm, on macOS or Linux.
+
+| You deliver | Kit | Start with |
+| --- | --- | --- |
+| A talk, workshop or sales deck | [Slidev](kits/slidev/) (slides in Markdown) | `npm create @miragon/slidev-deck@latest my-talk` |
+| A training with one password-protected site for participants | [Training hub](kits/hub/) (a deck plus a sign-in site around it) | `npm create @miragon/slidev-deck@latest my-training -- --hub` |
+| The docs site of a Miragon tool | [Docs](kits/docs/) (a VitePress theme) | [Four steps](kits/docs/#get-started) in your repo's `docs/` folder |
+
+## With your AI assistant
+
+A new deck or hub offers the `miragon-slidev` Claude Code plugin once you trust its folder in Claude Code. To have it in every project, add the marketplace and install the plugin of the same name:
+
+```text
+/plugin marketplace add Miragon/brand-toolbox
+/plugin install miragon-slidev@miragon-slidev
 ```
-kits/<kit>/packages/   the npm packages of a kit, each released on its own
-kits/slidev/deck/      the reference deck, the demo and the deck every new one starts from
-kits/slidev/plugin/    the miragon-slidev Claude Code plugin
-kits/docs/example/     a consumer docs/ folder built with @miragon/docs-starter
-kits/docs/templates/   files a docs repo copies: config, landing page, Pages workflow
-shared/                brand tokens synced from corporate-identity, scripts every kit uses
-```
 
-Working on a kit, or adding one? See [CONTRIBUTING.md](CONTRIBUTING.md).
+## Help and feedback
+
+- **Bugs and ideas:** [open an issue](https://github.com/Miragon/brand-toolbox/issues).
+- **Brand questions** (colours, logo, wording): the [corporate identity guide](https://github.com/Miragon/corporate-identity), for Miragon staff.
+
+## Contributing
+
+How the kits are built, tested and released is in [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests from outside the Miragon team are not accepted; please open an issue instead.
 
 ## License
 
-MIT: see [LICENSE](LICENSE). Each npm package ships its own copy. The bundled Geist fonts are OFL ([`LICENSE.txt`](kits/slidev/packages/toolkit/assets/fonts/LICENSE.txt)).
+[MIT](LICENSE) © Miragon GmbH. The Miragon name and logo are trademarks of Miragon GmbH.
