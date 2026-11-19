@@ -2,7 +2,7 @@
 
 The Miragon-branded [Slidev](https://sli.dev) design system: a fixed brand theme, twelve layout archetypes, reusable components (`Card`, `CardGrid`, `StepList`, `Figure`, `SplitView`, `Agenda`), the animated `BrandMeshBackground`, and always-on progress chrome (a stepper bar and a chapter footer). One source of design truth, so a Miragon deck stays on-brand without hand-written HTML or CSS.
 
-> Building a **new** deck? The easiest path is `npm create @miragon/slidev-deck@latest my-talk` (from the [template repository](https://github.com/Miragon/brand-packages)) — it scaffolds this toolkit together with a demo deck, authoring guidance, and CI. Use the npm package below when you want the brand in an **existing** or standalone Slidev project.
+> Building a **new** deck? The easiest path is `npm create @miragon/slidev-deck@latest my-talk` (from the [template repository](https://github.com/Miragon/brand-toolbox)) — it scaffolds this toolkit together with a demo deck, authoring guidance, and CI. Use the npm package below when you want the brand in an **existing** or standalone Slidev project.
 
 ## Install
 
@@ -68,7 +68,7 @@ This package ships the design system only, not an asset pipeline. Serve your own
 
 ## Editorial conventions
 
-The brand is intentionally fixed: headings are black (blue is for kickers and accents), cards are always white with the accent on the title only, no em-dashes, no emoji. The full authoring guide, demo slides, and a design-system verify suite live in the [template repository](https://github.com/Miragon/brand-packages), not in this package.
+The brand is intentionally fixed: headings are black (blue is for kickers and accents), cards are always white with the accent on the title only, no em-dashes, no emoji. The full authoring guide, demo slides, and a design-system verify suite live in the [template repository](https://github.com/Miragon/brand-toolbox), not in this package.
 
 ## License
 

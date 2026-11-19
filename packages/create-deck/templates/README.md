@@ -1,7 +1,7 @@
 # __DECK_NAME__
 
 A [Slidev](https://sli.dev) presentation in the Miragon corporate design, scaffolded from
-[`Miragon/brand-packages`](https://github.com/Miragon/brand-packages). The design
+[`Miragon/brand-toolbox`](https://github.com/Miragon/brand-toolbox). The design
 system ships as the [`@miragon/slidev-toolkit`](https://www.npmjs.com/package/@miragon/slidev-toolkit)
 npm package — you fill in the content, the theme is fixed.
 
@@ -86,7 +86,7 @@ prompted to install the plugin, and later versions arrive in the background (run
 To manage it by hand — or if the prompt does not appear:
 
 ```
-/plugin marketplace add Miragon/brand-packages
+/plugin marketplace add Miragon/brand-toolbox
 /plugin install miragon-slidev@miragon-slidev
 /plugin marketplace update miragon-slidev   # pull the latest catalog on demand
 ```

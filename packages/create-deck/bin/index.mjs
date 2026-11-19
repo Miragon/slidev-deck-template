@@ -39,7 +39,7 @@ import { downloadTemplate } from 'giget'
 import { HUB_INITIAL_VERSION, HUB_SCRIPTS, nextStepsText, writeHub } from '@miragon/hub-template/scaffold'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const REPO = 'Miragon/brand-packages'
+const REPO = 'Miragon/brand-toolbox'
 const SELF = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 
 // The toolkit + validator versions written into the generated package.json: this
@@ -99,7 +99,7 @@ const CLAUDE_SETTINGS = JSON.stringify(
   {
     extraKnownMarketplaces: {
       'miragon-slidev': {
-        source: { source: 'github', repo: 'Miragon/brand-packages' },
+        source: { source: 'github', repo: 'Miragon/brand-toolbox' },
         autoUpdate: true,
       },
       'slidev-plugins': {

@@ -1,7 +1,7 @@
 # miragon-slidev (Claude Code plugin)
 
 The Miragon Slidev **authoring capabilities**, packaged as a Claude Code plugin so decks
-scaffolded from [`Miragon/brand-packages`](https://github.com/Miragon/brand-packages)
+scaffolded from [`Miragon/brand-toolbox`](https://github.com/Miragon/brand-toolbox)
 stay up to date automatically instead of carrying a frozen copy of the skills.
 
 ## What's inside
@@ -20,7 +20,7 @@ All skills are also **model-invoked**: Claude selects them automatically from th
 The plugin is served from the marketplace in the template repo (public — no auth):
 
 ```
-/plugin marketplace add Miragon/brand-packages
+/plugin marketplace add Miragon/brand-toolbox
 /plugin install miragon-slidev@miragon-slidev
 ```
 

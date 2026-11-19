@@ -11,11 +11,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Miragon/brand-packages.git",
+    "url": "git+https://github.com/Miragon/brand-toolbox.git",
     "directory": "packages/toolkit"
   },
-  "homepage": "https://github.com/Miragon/brand-packages/tree/main/packages/toolkit#readme",
-  "bugs": "https://github.com/Miragon/brand-packages/issues",
+  "homepage": "https://github.com/Miragon/brand-toolbox/tree/main/packages/toolkit#readme",
+  "bugs": "https://github.com/Miragon/brand-toolbox/issues",
   "engines": {
     "slidev": ">=0.48.0"
   },
