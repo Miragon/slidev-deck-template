@@ -46,4 +46,4 @@ Build Deck and Pin Check are deliberately *not* guarded — every deck repo want
 
 ## Deployment
 
-Hosting is Netlify (`netlify.toml` in the repo root), not a workflow here — it runs `npm run build` on its own builders (no Chromium: the PDF export is deliberately kept out of `build`). Deployment is opt-in even so: a `netlify.toml` creates no site by itself, Netlify builds only a repo that someone links to a site in its UI, so a repo created from this template gets no site and no URL. The `--base /<repo>/` in Build Deck keeps the build compatible with a GitHub Pages base path if you wire up a Pages deploy later.
+The repository has no site of its own and no GitHub Pages. Netlify hosts only the reference deck of the Slidev kit at [slidev-template.netlify.app](https://slidev-template.netlify.app): it builds `npm run build` from `netlify.toml` on its own builders (no Chromium: the PDF export is kept out of `build`), and the kit READMEs link to it.
