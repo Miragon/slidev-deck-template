@@ -170,12 +170,6 @@ Env:
   CREATE_DECK_SKELETON=<dir>   copy the skeleton from a local checkout instead of
                                fetching (development / offline).`
 
-/** Detect the package manager the initializer was launched with (npm create / pnpm create / …). */
-function packageManager() {
-  const name = (process.env.npm_config_user_agent ?? '').split('/')[0]
-  return ['pnpm', 'yarn', 'bun'].includes(name) ? name : 'npm'
-}
-
 /** Fetch (or locally copy) the template repo into a scratch dir; return its path. */
 async function fetchSkeleton(ref) {
   const local = process.env.CREATE_DECK_SKELETON
@@ -349,17 +343,16 @@ async function askHub() {
 }
 
 function printNextSteps(dir, hub) {
-  const pm = packageManager()
   console.log(`
 Done. Your deck is ready in ${dir}
 
 Next steps:
   cd ${dir}
-  ${pm} install
+  npm install
   npx portless service install   # one-time per machine: HTTPS proxy for the .localhost dev URL
-  ${pm} run dev                  # serves at https://${deckNameFrom(dir)}.localhost
+  npm run dev                  # serves at https://${deckNameFrom(dir)}.localhost
 
-Build with '${pm} run ${hub ? 'build:deck' : 'build'}', check brand guardrails with '${pm} run verify'.`)
+Build with 'npm run ${hub ? 'build:deck' : 'build'}', check brand guardrails with 'npm run verify'. The deck needs npm: its overrides and workspaces are npm features.`)
   if (hub) console.log(nextStepsText(hub))
 }
 

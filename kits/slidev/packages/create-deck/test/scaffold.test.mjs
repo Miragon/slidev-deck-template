@@ -292,3 +292,18 @@ test('declares the Node version the Slidev CLI of the deck needs', () => {
   const slidevCli = JSON.parse(readFileSync(join(REPO_ROOT, 'node_modules/@slidev/cli/package.json'), 'utf8'))
   assert.equal(pkgOf(out).engines?.node, slidevCli.engines.node)
 })
+
+test('the next steps name npm even when pnpm started the scaffold, since the deck relies on npm overrides', () => {
+  const { dir, cleanup: remove } = target('other-manager-deck')
+  try {
+    const output = execFileSync('node', [CLI, dir, '--no-hub'], {
+      env: { ...process.env, CREATE_DECK_SKELETON: REPO_ROOT, npm_config_user_agent: 'pnpm/9.0.0 npm/? node/v24.0.0' },
+      encoding: 'utf8',
+      stdio: 'pipe',
+    })
+    assert.match(output, /^\s+npm install$/m)
+    assert.doesNotMatch(output, /pnpm/)
+  } finally {
+    remove()
+  }
+})
