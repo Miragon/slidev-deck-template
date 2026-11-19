@@ -1,0 +1,95 @@
+/* Pictures the tool renders itself (docs/shots/): a light drawing on a card, in both modes. */
+.vp-doc .diagram {
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid var(--cd-ui-linie);
+  border-radius: 12px;
+  background: var(--cd-ui-flaeche);
+  text-align: center;
+}
+.vp-doc .diagram img {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 6px;
+  /* Drawings with black lines on a transparent ground stay on white in dark mode too
+     (corporate-design, dark mode 8.9). */
+  background: var(--cd-weiss);
+}
+.vp-doc .diagram figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--cd-ui-text-leise);
+}
+
+/* Two diagrams side by side (before and after), one above the other on narrow screens. */
+.vp-doc .diagram-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+.vp-doc .diagram-pair .diagram {
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .vp-doc .diagram-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CLI output wraps instead of hiding warnings and fix hints behind a scrollbar.
+   Commands (sh) and files (json, ts) keep their lines. */
+.vp-doc div[class*="language-txt"] pre,
+.vp-doc div[class*="language-text"] pre,
+.vp-doc div[class*="language-console"] pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.vp-doc div[class*="language-txt"] pre code,
+.vp-doc div[class*="language-text"] pre code,
+.vp-doc div[class*="language-console"] pre code {
+  white-space: pre-wrap;
+}
+
+/* Screenshots of a surface (modeler, IDE): a card that follows the mode, the shot keeps its own colours. */
+.vp-doc .shot {
+  margin: 24px 0;
+  padding: 12px;
+  border: 1px solid var(--cd-ui-linie);
+  border-radius: 12px;
+  background: var(--cd-ui-flaeche);
+  text-align: center;
+}
+.vp-doc .shot img {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 6px;
+}
+.vp-doc .shot figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--cd-ui-text-leise);
+}
+
+/* Facts under the first sentence of a page (a rule, a command): label in mono, value beside it. */
+.vp-doc .facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0 24px;
+  margin: 20px 0 0;
+  border-top: 1px solid var(--cd-ui-linie);
+}
+.vp-doc .facts dt,
+.vp-doc .facts dd {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cd-ui-linie);
+}
+.vp-doc .facts dt {
+  font: 500 12px/24px var(--vp-font-family-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cd-ui-text-leise);
+}

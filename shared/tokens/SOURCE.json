@@ -1,0 +1,10 @@
+{
+  "repository": "Miragon/corporate-identity",
+  "commit": "8b0ebc47900197d1bc44fba7d269c44797c6b62f",
+  "files": {
+    "cd-tokens.docs.generated.css": {
+      "source": "docs/.vitepress/theme/tokens.generated.css",
+      "sha256": "ce72d7b3b9a51e19336de9f871281dd93ef9793032ab56a411ad281eb35c43de"
+    }
+  }
+}
