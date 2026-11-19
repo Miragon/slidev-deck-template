@@ -57,10 +57,10 @@ const photo2Src = computed(() => withBase(props.photo2))
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const roleVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const roleVar = 'var(--miragon-accent)'
 
 function toInitials(name?: string) {
   const parts = (name ?? '').trim().split(/\s+/).filter(Boolean)
@@ -135,7 +135,7 @@ function onPhotoError(e: Event) {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: center;
@@ -163,7 +163,7 @@ function onPhotoError(e: Event) {
 .person-initials {
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--miragon-white);
+  color: var(--miragon-on-colour);
 }
 
 /* --- Akzent-Balken & Eyebrow (geteilt) ------------------------------------ */

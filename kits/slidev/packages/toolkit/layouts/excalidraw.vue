@@ -13,10 +13,9 @@
  *   diagram  — served URL path to the .excalidraw.svg, resolved base-aware
  *   alt      — alt text for the diagram image (default ""). Empty means
  *              "decorative, skip me" — the right default when the caption
- *              already carries the statement. Without a default the <img> would
- *              render with NO alt attribute at all and screen readers fall back
- *              to reading the file path (CI rule C4). Content-bearing diagrams
- *              set `alt` explicitly.
+ *              already carries the statement: the inline SVG is then hidden
+ *              from screen readers instead of read out shape by shape (CI rule
+ *              C4). Content-bearing diagrams set `alt` explicitly.
  *   side     — split layout: "left" | "right" places the diagram on that side
  *              and the slot becomes the content column on the other side.
  *   ratio    — diagram/content column ratio in split mode (default "1/1")
@@ -34,6 +33,7 @@
 import { computed } from 'vue'
 import DiagramFrame from '../components/DiagramFrame.vue'
 import SplitView from '../components/SplitView.vue'
+import InlineSvg from '../global/InlineSvg.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -52,10 +52,10 @@ const props = withDefaults(
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 
 const stretched = computed(() => props.align === 'stretch')
 const frameHeight = computed(() => (stretched.value ? undefined : props.height))
@@ -80,7 +80,7 @@ const imageSrc = computed(() => withBase(props.diagram))
 
       <template v-if="!side">
         <DiagramFrame class="excalidraw-canvas" padding="generous">
-          <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
+          <InlineSvg v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img"></InlineSvg>
         </DiagramFrame>
 
         <div v-if="$slots.default" class="excalidraw-caption">
@@ -91,7 +91,7 @@ const imageSrc = computed(() => withBase(props.diagram))
       <SplitView v-else class="excalidraw-split" :class="{ 'mg-diagram-split--stretch': stretched }" :ratio="ratio" :reverse="side === 'right'" :align="align">
         <template #visual>
           <DiagramFrame class="excalidraw-canvas excalidraw-canvas--split" padding="generous" :height="frameHeight" :style="frameMinHeight">
-            <img v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img" />
+            <InlineSvg v-if="imageSrc" :src="imageSrc" :alt="alt" class="excalidraw-img"></InlineSvg>
           </DiagramFrame>
         </template>
         <div class="excalidraw-body mg-diagram-body" :style="{ '--mg-body-grad': gradientVar, '--mg-body-accent': accentVar }">
@@ -108,7 +108,7 @@ const imageSrc = computed(() => withBase(props.diagram))
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -167,6 +167,12 @@ const imageSrc = computed(() => withBase(props.diagram))
   width: 100%;
 }
 .excalidraw-img {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+.excalidraw-img :deep(svg) {
   max-width: 100%;
   max-height: 100%;
   height: auto;
@@ -191,8 +197,8 @@ const imageSrc = computed(() => withBase(props.diagram))
 .excalidraw-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-blue-darker);
+  background: var(--miragon-tint);
+  color: var(--miragon-code-text);
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }

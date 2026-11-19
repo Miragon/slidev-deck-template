@@ -51,10 +51,10 @@ const title = computed(() => props.frontmatter?.title as string | undefined)
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 
 // Verdict-Logik: leftIsGood entscheidet, welche Seite das grüne Recommended
 // und welche das graue Avoid bekommt.
@@ -118,7 +118,7 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -182,11 +182,11 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   gap: 2rem;
 }
 .goodbad-panel {
-  background: var(--miragon-white);
-  border: 1px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 1px solid var(--miragon-line);
   border-radius: 1.1rem;
   padding: 1.25rem 1.5rem 1.5rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -279,8 +279,8 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
 .panel-body :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-blue-darker);
+  background: var(--miragon-tint);
+  color: var(--miragon-code-text);
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }
@@ -296,10 +296,10 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   flex: 0 0 auto;
   margin-top: 1.5rem;
   padding: 0.9rem 1.2rem;
-  background: var(--miragon-white);
-  border: 1px solid var(--miragon-border);
+  background: var(--miragon-surface);
+  border: 1px solid var(--miragon-line);
   border-radius: 0.8rem;
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 5%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-shadow) 5%, transparent);
 }
 .goodbad-legend :deep(p) {
   font-size: 1.02rem;

@@ -36,7 +36,7 @@
 .step-list.step-list :deep(.step__body > p) { display: inline; margin: 0; }
 .step-list.step-list :deep(strong) { font-weight: 700; color: var(--miragon-text-primary); }
 .step-list.step-list :deep(a) {
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
   text-decoration: none;
   border-bottom: 1px solid currentColor;
 }

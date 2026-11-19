@@ -118,8 +118,8 @@ const backCards = computed(() => {
   flex-direction: column;
   justify-content: space-between;
   padding: 1.2rem 1.35rem;
-  background: var(--miragon-white);
-  border-color: var(--miragon-border);
+  background: var(--miragon-surface);
+  border-color: var(--miragon-line);
 }
 .qt__count {
   font-family: var(--miragon-font-mono);
@@ -132,7 +132,7 @@ const backCards = computed(() => {
   font-weight: 800;
   line-height: 0.8;
   letter-spacing: -0.04em;
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
 }
 
 /* Sticker: green surface, black text. */
@@ -177,7 +177,7 @@ const backCards = computed(() => {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--miragon-blue-link);
+  color: var(--miragon-accent-text);
 }
 .qt__name {
   margin-top: 0.35rem;
@@ -185,7 +185,7 @@ const backCards = computed(() => {
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: var(--miragon-black);
+  color: var(--miragon-text-primary);
 }
 .qt .qt__meta {
   margin: 0.85rem 0 1.6rem;
@@ -200,7 +200,7 @@ const backCards = computed(() => {
   padding: 0.65rem 1.25rem;
   border-radius: 999px;
   background: var(--miragon-blue);
-  color: var(--miragon-white) !important;
+  color: var(--miragon-on-colour) !important;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none !important;

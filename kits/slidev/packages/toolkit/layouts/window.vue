@@ -52,10 +52,10 @@ const props = withDefaults(
 
 const title = computed(() => props.frontmatter?.title as string | undefined)
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 
 // Slidev compiles each fence to a component; the whitespace between fences
 // arrives as text nodes, which are not tabs.
@@ -179,7 +179,7 @@ function select(i: number, e: MouseEvent) {
             v-for="(pane, i) in panes"
             :key="i"
             class="window-pane"
-            :class="{ 'is-active': i === selected, 'is-visual': isVisual(pane) }"
+            :class="{ 'is-active': i === selected, 'is-visual': isVisual(pane), 'mg-paper': isVisual(pane) }"
             :aria-hidden="i !== selected"
           >
             <component :is="fitted(pane)" />
@@ -216,7 +216,7 @@ function select(i: number, e: MouseEvent) {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: stretch;
@@ -282,9 +282,9 @@ function select(i: number, e: MouseEvent) {
   display: flex;
   flex-direction: column;
   border-radius: 0.6rem;
-  border: 1px solid var(--miragon-border);
-  background: var(--miragon-white);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  border: 1px solid var(--miragon-line);
+  background: var(--miragon-surface);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   overflow: hidden;
 }
 .window-tab-bar {
@@ -293,8 +293,8 @@ function select(i: number, e: MouseEvent) {
   align-items: stretch;
   gap: 0.25rem;
   padding: 0 0.9rem 0 0;
-  background: var(--miragon-gray-bg);
-  border-bottom: 1px solid var(--miragon-border);
+  background: var(--miragon-ground);
+  border-bottom: 1px solid var(--miragon-line);
 }
 .window-tab-spacer {
   flex: 1 1 auto;
@@ -328,7 +328,7 @@ function select(i: number, e: MouseEvent) {
 .window-tab.is-active {
   color: var(--miragon-text-primary);
   font-weight: 600;
-  background: var(--miragon-white);
+  background: var(--miragon-surface);
   border-bottom-color: var(--wd-accent);
 }
 .window-tab:focus-visible {
@@ -342,8 +342,8 @@ function select(i: number, e: MouseEvent) {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--miragon-blue-dark);
-  background: var(--miragon-blue-light);
+  color: var(--miragon-accent);
+  background: var(--miragon-tint);
   border-radius: 0.35rem;
   padding: 0.1rem 0.45rem;
 }
@@ -420,8 +420,8 @@ function select(i: number, e: MouseEvent) {
 .window-caption :deep(:not(pre) > code) {
   font-family: var(--miragon-font-mono);
   font-size: 0.9em;
-  background: var(--miragon-blue-light);
-  color: var(--miragon-blue-darker);
+  background: var(--miragon-tint);
+  color: var(--miragon-code-text);
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
 }

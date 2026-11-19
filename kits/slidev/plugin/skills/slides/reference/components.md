@@ -30,7 +30,7 @@ A **plain-text** body (no inline Markdown) is unaffected, so keep it on the tag 
 
 ## Card
 
-The canonical white card (white background always, accent on the title only). For 2+ cards in a grid, step the accent left → right.
+The canonical card (surface background: white in light mode, the dark surface in dark mode; accent on the title only). For 2+ cards in a grid, step the accent left → right.
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
@@ -175,7 +175,7 @@ Because `steps` registers its clicks on the slide, `v-click="1"` … `v-click="n
 
 ## DiagramFrame
 
-The branded white card as a standalone container: white background, subtle border, rounded corners (1.1rem), soft blue shadow, contents centred. It is the **single source of that surface**: the `bpmn` / `dmn` / `mermaid` / `excalidraw` diagram layouts all frame their diagram by using this component internally (their `.*-canvas` class now only sets the flex-fill), so the card lives in one place. Exposed as a component so you can also frame **part** of a slide (e.g. one `SplitView` column) rather than a whole one. Reach for it when a visual needs that white card but a `Card` is wrong (a `Card` is for text, with a title and a title-accent; `DiagramFrame` has neither and just frames a nested visual). Nest anything inside: a `Figure`, an image, a ` ```mermaid ` fence.
+The branded card as a standalone container: surface background (white in light mode), subtle border, rounded corners (1.1rem), soft blue shadow, contents centred. It is the **single source of that surface**: the `bpmn` / `dmn` / `mermaid` / `excalidraw` diagram layouts all frame their diagram by using this component internally (their `.*-canvas` class now only sets the flex-fill), so the card lives in one place. Exposed as a component so you can also frame **part** of a slide (e.g. one `SplitView` column) rather than a whole one. Reach for it when a visual needs that white card but a `Card` is wrong (a `Card` is for text, with a title and a title-accent; `DiagramFrame` has neither and just frames a nested visual). Nest anything inside: a `Figure`, an image, a ` ```mermaid ` fence.
 
 | Prop | Values | Default | Notes |
 |---|---|---|---|
@@ -261,7 +261,7 @@ A white pill with an optional Lucide icon and a short label, for the possible an
 | `icon` (str) | a **Lucide** Iconify UnoCSS class, e.g. `i-lucide-git-branch` | none | shown left of the label in brand blue; write it literally so UnoCSS generates it. Lucide only: tool logos (`i-simple-icons-*`) are a second icon family and off-brand, so pick the closest Lucide glyph (`git` → `i-lucide-git-branch`, `docker` → `i-lucide-container`) |
 | **slot** | plain text | none | the label, one to three words |
 
-The pill is always white with the black label; only the icon takes the accent. Every chip carries its own small left and right margin (`0.2rem`), so chips keep their distance in any layout, not only in `interactive`. Keep to eight chips per slide.
+The pill takes the surface colour with the primary text colour (white with a black label in light mode); only the icon takes the accent. Every chip carries its own small left and right margin (`0.2rem`), so chips keep their distance in any layout, not only in `interactive`. Keep to eight chips per slide.
 
 ```md
 <Chip icon="i-lucide-git-branch">git</Chip>

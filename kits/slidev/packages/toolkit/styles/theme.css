@@ -54,21 +54,6 @@
      Zeigt jetzt auf das sanktionierte Link-Blau. */
   --miragon-blue-darker: var(--miragon-blue-link);
 
-  /* --- Neutrals (aus --miragon-black aufgehellt) --------------------- */
-  /* Kein Slate, kein Blaustich: reine Ableitungen des CI-Schwarz.
-     Kontraste nachgerechnet gegen #FFFFFF und gegen #F9F7F7. */
-  --miragon-border: color-mix(in srgb, var(--miragon-black) 12%, var(--miragon-white));
-
-  /* --- Text ---------------------------------------------------------- */
-  --miragon-text-primary: var(--miragon-black);                                     /* 16.86:1 / 15.79:1 */
-  --miragon-text-secondary: color-mix(in srgb, var(--miragon-black) 86%, var(--miragon-white)); /* ~10.9:1 / 10.2:1 */
-  --miragon-text-muted: color-mix(in srgb, var(--miragon-black) 72%, var(--miragon-white));     /* ~6.7:1 / 6.3:1 */
-
-  /* --- Statusfarben (nur Zustände, nie als Gestaltungsfarbe) --------- */
-  --miragon-success: #0B7A55;
-  --miragon-warning: #92610A;
-  --miragon-danger: #C92A2A;
-
   /* --- Static content gradients (chrome only, never cards) ----------- */
   /* Ausschließlich aus Palettenwerten aufgebaut. `mixed` ist der
      Marken-Verlauf aus tokens.json (gradient.brand). */
@@ -100,8 +85,99 @@
      Der grüne Akzent gehört auf Flächen und Grafik, nicht in Fließtext.
      Card.vue akzeptiert die alten Rampenwerte weiterhin, bildet sie aber auf
      diese zwei Stufen ab, damit bestehende Decks nicht brechen. */
+  /* Die zwei Stufen stehen als Rollen weiter unten (hell Blau, dunkel Grün und Weiß). */
+
+  /* Text on blue, on the mesh or on a photo: white in both modes. */
+  --miragon-on-colour: var(--miragon-white);
+}
+
+/*
+ * Role tokens: the only colours that switch with the mode (tokens.json
+ * `rolle`, corporate-design §8). Layouts and components read these, not the
+ * palette, wherever a value depends on the ground. Light values are the
+ * pre-dark-mode values, so a deck with `colorSchema: light` renders unchanged.
+ *
+ * `.mg-paper` turns into a light sheet on the dark table when it holds a
+ * raster image (a screenshot), which cannot follow the mode. Every other
+ * diagram follows the mode, so its frame turns dark with the slide.
+ * `.mg-fixed-stage` (cover, closing: the mesh) looks the same in both modes.
+ */
+:root,
+html.dark .mg-paper:has(img),
+html.dark .mg-fixed-stage {
+  --miragon-ground: var(--miragon-gray-bg);
+  --miragon-surface: var(--miragon-white);
+  --miragon-tint: var(--miragon-blue-light);
+  --miragon-line: color-mix(in srgb, var(--miragon-black) 12%, var(--miragon-white));
+  --miragon-text-primary: var(--miragon-black);                                     /* 16.86:1 / 15.79:1 */
+  --miragon-text-secondary: color-mix(in srgb, var(--miragon-black) 86%, var(--miragon-white)); /* ~10.9:1 / 10.2:1 */
+  --miragon-text-muted: color-mix(in srgb, var(--miragon-black) 72%, var(--miragon-white));     /* ~6.7:1 / 6.3:1 */
+  --miragon-accent: var(--miragon-blue);
+  --miragon-accent-text: var(--miragon-blue-link);
+  --miragon-accent-blue: var(--miragon-blue);
+  --miragon-code-text: var(--miragon-blue-link);
+  --miragon-border: var(--miragon-line);
   --miragon-card-accent-blue: var(--miragon-blue);
   --miragon-card-accent-blue-mid: var(--miragon-blue-link);
+  /* Statusfarben: nur Zustände, nie als Gestaltungsfarbe. */
+  --miragon-success: #0B7A55;
+  --miragon-warning: #92610A;
+  --miragon-danger: #C92A2A;
+  --miragon-diagram-text: initial;
+  --miragon-diagram-paper: initial;
+  --miragon-diagram-fill: initial;
+  --miragon-diagram-blue: initial;
+  --miragon-shadow: var(--miragon-blue);
+  color-scheme: light;
+}
+
+html.dark .mg-paper:has(img) {
+  background-color: var(--miragon-surface);
+  color: var(--miragon-text-primary);
+}
+
+/* Diagram colours: a diagram drawn in the light palette reads its colours
+ * through these tokens. They stay unset in light mode, so every diagram keeps
+ * its own literal colour there; dark mode maps them onto the dark roles. */
+.mg-diagram-svg [fill="#1D1D1D" i] { fill: var(--miragon-diagram-text, #1D1D1D); }
+.mg-diagram-svg [stroke="#1D1D1D" i] { stroke: var(--miragon-diagram-text, #1D1D1D); }
+.mg-diagram-svg :not(text)[fill="#FFFFFF" i],
+.mg-diagram-svg :not(text)[fill="#FFF" i] { fill: var(--miragon-diagram-paper, #FFFFFF); }
+.mg-diagram-svg [fill="#F9F7F7" i] { fill: var(--miragon-diagram-fill, #F9F7F7); }
+.mg-diagram-svg [stroke="#335DE5" i] { stroke: var(--miragon-diagram-blue, #335DE5); }
+.mg-diagram-svg text[fill="#335DE5" i] { fill: var(--miragon-diagram-blue, #335DE5); }
+.mg-diagram-svg [stroke="#2B50D4" i] { stroke: var(--miragon-diagram-blue, #2B50D4); }
+.mg-diagram-svg text[fill="#2B50D4" i] { fill: var(--miragon-diagram-blue, #2B50D4); }
+
+/* Dark neutrals are white mixed into the CI black (corporate-design §8.2);
+   accent text is green there, blue on black fails AA (3.08:1). */
+html.dark {
+  --miragon-ground: var(--miragon-black);
+  --miragon-surface: color-mix(in srgb, var(--miragon-white) 5%, var(--miragon-black));
+  --miragon-tint: color-mix(in srgb, var(--miragon-white) 12%, var(--miragon-black));
+  --miragon-line: color-mix(in srgb, var(--miragon-white) 18%, var(--miragon-black));
+  --miragon-text-primary: var(--miragon-white);
+  --miragon-text-secondary: color-mix(in srgb, var(--miragon-white) 86%, var(--miragon-black));
+  --miragon-text-muted: color-mix(in srgb, var(--miragon-white) 70%, var(--miragon-black));
+  --miragon-accent: var(--miragon-green);
+  --miragon-accent-text: var(--miragon-green);
+  --miragon-accent-blue: var(--miragon-white);
+  --miragon-code-text: var(--miragon-white);
+  /* On dark, accents alternate green and white (corporate-design §5). */
+  --miragon-card-accent-blue: var(--miragon-green);
+  --miragon-card-accent-blue-mid: var(--miragon-white);
+  /* The `-hell` status values from tokens.json, AA on the dark surfaces. */
+  --miragon-success: var(--miragon-green);
+  --miragon-warning: #FFB000;
+  --miragon-danger: #FB6D73;
+  --miragon-diagram-text: var(--miragon-white);
+  --miragon-diagram-paper: color-mix(in srgb, var(--miragon-white) 5%, var(--miragon-black));
+  --miragon-diagram-fill: color-mix(in srgb, var(--miragon-white) 12%, var(--miragon-black));
+  --miragon-diagram-blue: var(--miragon-blue-bright);
+  /* Shadows are barely visible on dark (tokens.json `shadow`); the lighter
+     surface and its line carry the height, so they tint with the CI black. */
+  --miragon-shadow: var(--miragon-black);
+  color-scheme: dark;
 }
 
 /*

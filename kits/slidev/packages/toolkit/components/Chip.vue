@@ -26,14 +26,14 @@ defineProps<{
   margin: 0 0.2rem;
   padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid var(--miragon-border);
-  background: var(--miragon-white);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  border: 1px solid var(--miragon-line);
+  background: var(--miragon-surface);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   white-space: nowrap;
 }
 .mg-chip__icon {
   font-size: 1.15rem;
-  color: var(--miragon-blue);
+  color: var(--miragon-accent);
 }
 .mg-chip__label {
   font-size: 1rem;

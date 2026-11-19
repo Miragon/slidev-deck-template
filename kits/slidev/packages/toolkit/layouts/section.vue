@@ -14,6 +14,7 @@
  *   accent   — "blue" | "green" | "mixed" — Gradient-Akzent (default blue)
  */
 import { computed } from 'vue'
+import ColorSchemeSwitch from '../global/ColorSchemeSwitch.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -26,10 +27,10 @@ const props = withDefaults(
 
 // Token reaktiv (siehe hero.vue) — alle Werte aus theme.css, keine Hex.
 const gradientVar = computed(() => `var(--miragon-gradient-${props.accent})`)
-// Textakzent ist immer das Marken-Blau. Grün erreicht auf hellem Grund keinen
-// AA-Kontrast (#00E676 = 1.67:1) und bleibt deshalb Flächen- und
-// Grafikakzent, getragen vom Gradient-Token.
-const accentVar = 'var(--miragon-blue)'
+// Textakzent ist die Rolle --miragon-accent: hell das Marken-Blau, dunkel Grün.
+// Auf hellem Grund erreicht Grün keinen AA-Kontrast (#00E676 = 1.67:1) und
+// bleibt dort Flächen- und Grafikakzent, getragen vom Gradient-Token.
+const accentVar = 'var(--miragon-accent)'
 </script>
 
 <template>
@@ -38,6 +39,7 @@ const accentVar = 'var(--miragon-blue)'
     :style="{ '--s-grad': gradientVar, '--s-accent': accentVar }"
   >
     <span v-if="index" class="section-ghost" aria-hidden="true">{{ index }}</span>
+    <ColorSchemeSwitch class="section-scheme-switch"></ColorSchemeSwitch>
 
     <div class="section-content">
       <span class="section-bar" aria-hidden="true"></span>
@@ -55,7 +57,7 @@ const accentVar = 'var(--miragon-blue)'
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--miragon-gray-bg);
+  background: var(--miragon-ground);
   color: var(--miragon-text-primary);
   display: flex;
   align-items: center;
@@ -74,10 +76,17 @@ const accentVar = 'var(--miragon-blue)'
   line-height: 1;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: var(--s-accent);
+  color: var(--miragon-accent-blue);
   opacity: 0.07;
   user-select: none;
   pointer-events: none;
+}
+
+.section-scheme-switch {
+  position: absolute;
+  z-index: 2;
+  top: 2rem;
+  right: 2rem;
 }
 
 .section-content {
