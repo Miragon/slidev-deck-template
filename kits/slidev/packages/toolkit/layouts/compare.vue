@@ -172,7 +172,7 @@ const rightMark = computed(() => (twoTone.value || props.accent === 'green' ? 'v
   border: 1px solid var(--miragon-line);
   border-radius: 1.1rem;
   padding: 2rem 2rem 1.5rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
 }
 .panel-title {
   font-size: 1.35rem;

@@ -284,7 +284,7 @@ function select(i: number, e: MouseEvent) {
   border-radius: 0.6rem;
   border: 1px solid var(--miragon-line);
   background: var(--miragon-surface);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   overflow: hidden;
 }
 .window-tab-bar {

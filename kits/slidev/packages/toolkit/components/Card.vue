@@ -39,7 +39,7 @@ const toneClass = computed(() => {
   border-radius: 0.75rem;
   border: 1px solid var(--miragon-line);
   background: var(--miragon-surface);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
 }
 .mg-card--compact { padding: 1rem; display: flex; flex-direction: column; }
 .mg-card--standard { padding: 1.25rem; }

@@ -236,7 +236,7 @@ function select(i: number, e: MouseEvent) {
   border: 1px solid var(--miragon-line);
   border-radius: 1rem;
   padding: 1.1rem 1.2rem 1.2rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   font: inherit;
   color: inherit;
   display: flex;
@@ -280,7 +280,7 @@ function select(i: number, e: MouseEvent) {
 .showcase-card.is-active {
   transform: translateY(-4px) scale(1.02);
   border-color: var(--sc-accent);
-  box-shadow: 0 16px 36px color-mix(in srgb, var(--miragon-blue) 18%, transparent);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--miragon-shadow) 18%, transparent);
 }
 .showcase-card.is-active .card-index,
 .showcase-card.is-active .card-icon {
@@ -297,7 +297,7 @@ function select(i: number, e: MouseEvent) {
   border: 1px solid var(--miragon-line);
   border-radius: 1rem;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   display: flex;
   align-items: center;
   position: relative;

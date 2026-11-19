@@ -126,7 +126,7 @@ const columns = computed(() => {
   max-height: 26rem;
   object-fit: cover;
   border-radius: 1.1rem;
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--miragon-blue) 18%, transparent);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--miragon-shadow) 18%, transparent);
   background: var(--miragon-surface);
 }
 .image-bare .ci-image img {

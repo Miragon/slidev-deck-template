@@ -186,7 +186,7 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   border: 1px solid var(--miragon-line);
   border-radius: 1.1rem;
   padding: 1.25rem 1.5rem 1.5rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -299,7 +299,7 @@ const rightVerdictClass = computed(() => (props.leftIsGood ? 'verdict-bad' : 've
   background: var(--miragon-surface);
   border: 1px solid var(--miragon-line);
   border-radius: 0.8rem;
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 5%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-shadow) 5%, transparent);
 }
 .goodbad-legend :deep(p) {
   font-size: 1.02rem;

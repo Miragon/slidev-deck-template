@@ -21,7 +21,7 @@
   background: var(--miragon-surface);
   border: 1px solid var(--miragon-line);
   border-radius: 0.6rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 6%, transparent);
   overflow-x: auto;
   line-height: 1.2 !important;
 }

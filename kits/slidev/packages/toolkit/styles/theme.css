@@ -127,6 +127,7 @@ html.dark .mg-fixed-stage {
   --miragon-diagram-paper: initial;
   --miragon-diagram-fill: initial;
   --miragon-diagram-blue: initial;
+  --miragon-shadow: var(--miragon-blue);
   color-scheme: light;
 }
 
@@ -173,6 +174,9 @@ html.dark {
   --miragon-diagram-paper: color-mix(in srgb, var(--miragon-white) 5%, var(--miragon-black));
   --miragon-diagram-fill: color-mix(in srgb, var(--miragon-white) 12%, var(--miragon-black));
   --miragon-diagram-blue: var(--miragon-blue-bright);
+  /* Shadows are barely visible on dark (tokens.json `shadow`); the lighter
+     surface and its line carry the height, so they tint with the CI black. */
+  --miragon-shadow: var(--miragon-black);
   color-scheme: dark;
 }
 

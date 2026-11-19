@@ -74,7 +74,7 @@ withDefaults(
   height: 3.5rem;
   border-radius: 999px;
   background: var(--miragon-blue);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 24%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 24%, transparent);
   margin-bottom: 1.5rem;
 }
 

@@ -38,7 +38,7 @@
   border: 1px solid var(--miragon-line);
   border-radius: 0.6rem;
   overflow: hidden;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-blue) 6%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--miragon-shadow) 6%, transparent);
 }
 
 /* Header row: black label, restrained blue accent rule underneath. */

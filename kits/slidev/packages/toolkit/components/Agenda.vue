@@ -421,7 +421,7 @@ function openSlide(no: number, ev: MouseEvent) {
   place-items: center;
   background: var(--miragon-surface);
   border: 2px solid var(--miragon-line);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-blue) 8%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--miragon-shadow) 8%, transparent);
   transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 280ms ease, background 280ms ease;
 }
 .step-num {
@@ -436,7 +436,7 @@ function openSlide(no: number, ev: MouseEvent) {
 .step.is-active .step-dot {
   background: var(--ag-accent);
   border-color: var(--ag-accent);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--miragon-blue) 28%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--miragon-shadow) 28%, transparent);
   transform: scale(1.1);
 }
 .step.is-active .step-num { color: var(--miragon-on-colour); }
@@ -559,14 +559,14 @@ function openSlide(no: number, ev: MouseEvent) {
   border-radius: 0.7rem;
   overflow: hidden;
   border: 1px solid var(--miragon-line);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--miragon-blue) 12%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--miragon-shadow) 12%, transparent);
   pointer-events: none;
   transition: border-color 280ms ease, box-shadow 280ms ease;
 }
 .mini:hover .mini-frame,
 .mini:focus-visible .mini-frame {
   border-color: var(--ag-accent);
-  box-shadow: 0 16px 34px color-mix(in srgb, var(--miragon-blue) 20%, transparent);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--miragon-shadow) 20%, transparent);
 }
 .mini-frame :deep(*) { user-select: none; }
 .mini-no {
