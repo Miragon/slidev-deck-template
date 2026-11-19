@@ -77,8 +77,9 @@ Each chapter file **begins with a `section` archetype slide** (the chapter divid
 
 - **Every slide declares a layout archetype.** Set `layout:` in the slide's frontmatter to one of the 17 theme archetypes; no freehand slides. (Only the built-in `default` is also allowed, for full-bleed component slides like the Agenda; `src:` import stubs carry no layout.) The verify suite enforces this.
 - **One language per deck, applied consistently** across all slide content (titles, bullets, labels, diagram text). The deck's language is a choice: English by default, but German or another language is equally valid; pick one and keep the whole deck in it, with no mixing per slide. Code, brand names, and standard technical terms stay as-is regardless of language. Speaker notes (`<!-- … -->`) may be in another language if requested.
-- **Cards are always white.** Use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**, and only `accent="blue"` or `accent="blue-mid"`: a card title is text on white, where green fails AA. The one exception is the opt-in `status` prop (`success` / `warning` / `danger`) for a card that delivers a verdict, never for variety.
-- **Headings are BLACK (`#1D1D1D`, the CI black), never blue and never `#000000`.** Blue is for kickers/eyebrows, accents, small labels. The layouts set heading colour, so don't override it.
+- **Colours follow the theme, never the slide.** The toolkit has a light and a dark mode, and every colour is a role token in `theme.css` that switches with it (see [Dark mode](#dark-mode)). The rules below name the light values; dark mode reverses the roles. A slide never picks a colour for one mode.
+- **Cards sit on the surface colour**: white in light mode, the dark surface in dark mode. Use `<Card>` (in a `<CardGrid>` for multiple); never a coloured/gradient tile, never a coloured left-border. Accent goes on the **title only**, and only `accent="blue"` or `accent="blue-mid"`: in light mode a card title is text on white, where green fails AA; the component maps both stops to the dark-mode accents itself. The one exception is the opt-in `status` prop (`success` / `warning` / `danger`) for a card that delivers a verdict, never for variety.
+- **Headings take the primary text colour**: the CI black `#1D1D1D` in light mode (never `#000000`), white in dark mode; never blue. Blue (green in dark mode) is for kickers/eyebrows, accents, small labels. The layouts set heading colour, so don't override it.
 - **Content headings stay on one line.** The `title:` of a content layout (`content`, `content-image`, `compare`, `showcase`, `goodbad`, `window`, and the diagram layouts) renders as a single-line heading; a second line eats the content area. Keep it short (a few words), and never force a break with `<br>`, a literal newline, or a trailing `\`. `verify` enforces this (`content-heading` rule); the rare deliberate exception is `allowMultilineHeading: true` on that slide. Only `hero`/`interactive`/`section`/`subsection` headings (markdown `#`) are meant to be expressive and may wrap.
 - **No em-dashes** (`—`). Use commas, colons, parentheses. Compound hyphens (Open-Source, BPMN-Training) are fine. **No emoji**: use inline SVG or a **Lucide** Iconify class (`i-lucide-*`), outline, on the 24px grid, never mixed with another icon set.
 - **Bullets are plain `<ul><li>`.** The layout provides the marker. Never override list styling per slide.
@@ -129,7 +130,7 @@ The single sanctioned exception to "no utility classes": a `class` or `style` on
 
 ### `Card` + `CardGrid`: the canonical white-card grid
 
-`Card` replaces hand-written card `<div>`s: background is always white, the accent lands on the title only. `CardGrid` replaces the raw `<div class="grid grid-cols-N …">` wrapper, so the markdown carries no CSS classes. For 2+ cards, alternate the two sanctioned stops left → right.
+`Card` replaces hand-written card `<div>`s: the background is the surface colour (white in light mode), the accent lands on the title only. `CardGrid` replaces the raw `<div class="grid grid-cols-N …">` wrapper, so the markdown carries no CSS classes. For 2+ cards, alternate the two sanctioned stops left → right.
 
 ```md
 <CardGrid cols="3">
@@ -242,7 +243,7 @@ Slidev renders a ` ```mermaid ` fence natively, no addon, brand-styled globally 
 
 **Language:** one language per deck, applied consistently (see non-negotiables): pick the deck's language (English by default, or German or another language) and keep every slide in it, never mixing within a slide. Code, brand names, and standard technical terms stay as-is. Speaker notes may be in another language if requested.
 
-**Typography in markdown:** headings black (`#1D1D1D`, the CI black, never `#000000`); blue only for kickers/accents/labels; never set `font-family`. The accent bar is the one brand moment per slide, so don't add extra bars.
+**Typography in markdown:** headings in the primary text colour (CI black `#1D1D1D` in light mode, never `#000000`); blue only for kickers/accents/labels; never set `font-family`. The accent bar is the one brand moment per slide, so don't add extra bars.
 
 **Punctuation / emoji / bullets:** no em-dashes; no emoji (inline SVG or a Lucide Iconify class, `i-lucide-*`, never a second icon set); plain `<ul><li>` with the layout's marker, never per-slide list styling.
 
