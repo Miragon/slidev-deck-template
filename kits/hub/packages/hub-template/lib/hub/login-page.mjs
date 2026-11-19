@@ -32,27 +32,28 @@ const TEXTS = {
 };
 
 const STYLE = `<style>
-  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
   :root {
-    --blue: #335DE4;
-    --blue-hover: #4A70E8;
-    --navy: #1B1E3A;
-    --fg-muted: #5A6178;
-    --border: #E4E7F0;
-    --bg-soft: #F7F8FB;
+    --blue: #335DE5;
+    --blue-hover: #2B50D4;
+    --link: #2B50D4;
+    --text: #1D1D1D;
+    --fg-muted: color-mix(in srgb, #1D1D1D 72%, #FFFFFF);
+    --border: color-mix(in srgb, #1D1D1D 14%, #FFFFFF);
+    --bg-soft: #F9F7F7;
     --card: #FFFFFF;
-    --error-bg: #FDECEC;
-    --error-fg: #B3261E;
+    --error-bg: color-mix(in srgb, #C92A2A 10%, #FFFFFF);
+    --error-fg: #C92A2A;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --navy: #F4F6FE;
-      --fg-muted: #A7AFCD;
-      --border: #252555;
-      --bg-soft: #0F0F28;
-      --card: #16163A;
-      --error-bg: #3A1B22;
-      --error-fg: #FFB4AB;
+      --link: #6B8AFF;
+      --text: #FFFFFF;
+      --fg-muted: color-mix(in srgb, #FFFFFF 72%, #1D1D1D);
+      --border: #464646;
+      --bg-soft: #1D1D1D;
+      --card: #282828;
+      --error-bg: color-mix(in srgb, #C92A2A 24%, #1D1D1D);
+      --error-fg: #FB6D73;
     }
   }
   * { box-sizing: border-box; }
@@ -62,9 +63,9 @@ const STYLE = `<style>
     display: grid;
     place-items: center;
     padding: 24px;
-    font-family: 'Manrope', -apple-system, 'Segoe UI', sans-serif;
+    font-family: Geist, Inter, "Helvetica Neue", Arial, sans-serif;
     background: var(--bg-soft);
-    color: var(--navy);
+    color: var(--text);
   }
   main {
     width: 100%;
@@ -73,7 +74,7 @@ const STYLE = `<style>
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 40px 36px 36px;
-    box-shadow: 0 12px 40px rgba(27, 30, 58, 0.08);
+    box-shadow: 0 12px 40px rgba(29, 29, 29, 0.08);
   }
   .brand {
     display: flex;
@@ -106,14 +107,14 @@ const STYLE = `<style>
   input:focus {
     outline: none;
     border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(51, 93, 228, 0.18);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 20%, transparent);
   }
   button {
     width: 100%;
     font: inherit;
     font-size: 15px;
     font-weight: 700;
-    color: #fff;
+    color: #FFFFFF;
     background: var(--blue);
     border: none;
     border-radius: 10px;
@@ -133,7 +134,7 @@ const STYLE = `<style>
   }
   .error.show { display: block; }
   .lang { margin-top: 24px; text-align: center; font-size: 13px; }
-  .lang a { color: var(--blue); text-decoration: none; }
+  .lang a { color: var(--link); text-decoration: none; }
   .lang a:hover { text-decoration: underline; }
 </style>`;
 
