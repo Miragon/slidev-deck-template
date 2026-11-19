@@ -33,8 +33,10 @@ jobs:
       - name: Every package has the same release setup
         run: npm run check:release
 
-      - name: Brand tokens match their source in Miragon/corporate-identity
-        run: node shared/scripts/tokens.mjs
+      # Files copied from the miragon-brand plugin (Miragon/corporate-identity), listed in
+      # .miragon/brand-assets.yaml. Fails when a copy was edited by hand.
+      - name: Brand assets are unchanged copies
+        run: sha256sum -c .miragon/brand-assets.sha256
 
       # The speaker profiles address slides by the `id:` in their frontmatter.
       # `npm run dev` stamps a new slide automatically, so this only fails when
