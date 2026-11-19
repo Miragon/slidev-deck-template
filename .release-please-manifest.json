@@ -4,5 +4,6 @@
   "kits/slidev/packages/validator": "0.8.3",
   "kits/slidev/packages/speaker-profiles": "0.3.2",
   "kits/slidev/plugin": "2.1.1",
-  "kits/hub/packages/hub-template": "0.3.1"
+  "kits/hub/packages/hub-template": "0.3.1",
+  "kits/docs/packages/docs-starter": "0.0.0"
 }

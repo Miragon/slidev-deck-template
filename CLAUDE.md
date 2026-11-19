@@ -5,6 +5,7 @@ This repo holds everything other Miragon repositories install from the brand: on
 ## Per kit
 
 - **Slidev** (`kits/slidev/`): the guide is **`kits/slidev/CLAUDE.md`**. Read it before touching the deck, the toolkit, the validator or the plugin. Its paths (`deck/`, `packages/toolkit/`, `scripts/shot.mjs`) are relative to `kits/slidev/`, which is laid out like a deck repository. Always invoke the `slides` skill before editing a slide.
+- **Docs** (`kits/docs/`): `@miragon/docs-starter` and its example site. Never edit `theme/cd-tokens.generated.css` or `shared/tokens/` by hand; they come from Miragon/corporate-identity (`node shared/scripts/tokens.mjs`).
 - **Hub** (`kits/hub/packages/hub-template/`): see its README.
 
 ## Rules for the whole repo

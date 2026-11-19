@@ -1,0 +1,31 @@
+name: Docs Test
+
+# TEMPLATE-ONLY. Proves @miragon/docs-starter works for a docs repo: the unit
+# tests and the example site build in the workspace, then the consumer path,
+# a site outside the workspace that installs the packed tarball, builds and
+# serves the theme in the dev server.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs-starter:
+    if: github.repository == 'Miragon/brand-toolbox'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test -w kits/docs/packages/docs-starter
+      - run: npm run test:tarball -w kits/docs/packages/docs-starter

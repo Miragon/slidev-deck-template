@@ -1,0 +1,28 @@
+{
+  "name": "@miragon/docs-example",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The example docs site of the Miragon docs kit: a consumer docs/ folder built with @miragon/docs-starter.",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "@braintree/sanitize-url": "7.1.2",
+    "cytoscape": "3.34.3",
+    "cytoscape-cose-bilkent": "4.1.0",
+    "dayjs": "1.11.23",
+    "debug": "4.4.3",
+    "mermaid": "12.3.0",
+    "vitepress": "1.6.4",
+    "vitepress-plugin-mermaid": "2.0.17"
+  },
+  "overrides": {
+    "vite": "6.4.5",
+    "vitepress-plugin-mermaid": {
+      "mermaid": "$mermaid"
+    }
+  }
+}

@@ -8,6 +8,7 @@ Everything other Miragon repositories install from the Miragon brand: one kit pe
 | Kit | What you get | Start here |
 |---|---|---|
 | [Slidev](kits/slidev/) | Miragon-branded presentations: the theme `@miragon/slidev-toolkit`, the scaffolder `@miragon/create-slidev-deck`, the guardrail linter `@miragon/slidev-validator`, per-speaker slide selections `@miragon/slidev-speaker-profiles`, and the `miragon-slidev` Claude Code plugin. | `npm create @miragon/slidev-deck@latest my-talk` |
+| [Docs](kits/docs/) | Miragon-branded VitePress docs sites: `@miragon/docs-starter` gives a tool's `docs/` the Miragon config and theme in one call. | `npm install --save-dev --save-exact @miragon/docs-starter` |
 | [Hub](kits/hub/packages/hub-template/) | A training hub: a VitePress site with a sign-in gate around the decks of a training (`@miragon/hub-template`). | `npm create @miragon/slidev-deck@latest my-training -- --hub` |
 
 ![Cover slide of the reference deck](.github/assets/cover.png)
@@ -18,7 +19,9 @@ Everything other Miragon repositories install from the Miragon brand: one kit pe
 kits/<kit>/packages/   the npm packages of a kit, each released on its own
 kits/slidev/deck/      the reference deck, the demo and the deck every new one starts from
 kits/slidev/plugin/    the miragon-slidev Claude Code plugin
-shared/                scripts every kit uses (release checks, publishing)
+kits/docs/example/     a consumer docs/ folder built with @miragon/docs-starter
+kits/docs/templates/   files a docs repo copies: config, landing page, Pages workflow
+shared/                brand tokens synced from corporate-identity, scripts every kit uses
 ```
 
 Working on a kit, or adding one? See [CONTRIBUTING.md](CONTRIBUTING.md).
