@@ -1,6 +1,6 @@
 # @miragon/create-slidev-deck
 
-Scaffold a lean [Miragon Slidev deck](https://github.com/Miragon/slidev-deck-template): a fresh
+Scaffold a lean [Miragon Slidev deck](https://github.com/Miragon/brand-packages): a fresh
 repo with **only** the files a deck needs, and `@miragon/slidev-toolkit` pulled from npm instead of
 vendored.
 

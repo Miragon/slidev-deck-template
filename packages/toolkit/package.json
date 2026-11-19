@@ -11,11 +11,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Miragon/slidev-deck-template.git",
+    "url": "git+https://github.com/Miragon/brand-packages.git",
     "directory": "packages/toolkit"
   },
-  "homepage": "https://github.com/Miragon/slidev-deck-template/tree/main/packages/toolkit#readme",
-  "bugs": "https://github.com/Miragon/slidev-deck-template/issues",
+  "homepage": "https://github.com/Miragon/brand-packages/tree/main/packages/toolkit#readme",
+  "bugs": "https://github.com/Miragon/brand-packages/issues",
   "engines": {
     "slidev": ">=0.48.0"
   },
