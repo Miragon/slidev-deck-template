@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.10](https://github.com/Miragon/brand-toolbox/compare/create-slidev-deck-v1.7.9...create-slidev-deck-v1.7.10) (2026-11-19)
+
+
+### Bug Fixes
+
+* point every package at the renamed repository Miragon/brand-packages ([#292](https://github.com/Miragon/brand-toolbox/issues/292)) ([ed1249c](https://github.com/Miragon/brand-toolbox/commit/ed1249c9a1e7e3e861eff5beb5b220cd5df284fa))
+* point every package at the renamed repository Miragon/brand-toolbox ([#294](https://github.com/Miragon/brand-toolbox/issues/294)) ([636b225](https://github.com/Miragon/brand-toolbox/commit/636b2258e52c925df113e4e1ba0a21a6d9b4488c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @miragon/hub-template bumped from 0.3.0 to 0.3.1
+  * devDependencies
+    * @miragon/slidev-toolkit bumped from 2.1.0 to 2.1.1
+    * @miragon/slidev-speaker-profiles bumped from 0.3.1 to 0.3.2
+    * @miragon/slidev-validator bumped from 0.8.2 to 0.8.3
+
 ## [1.7.9](https://github.com/Miragon/slidev-deck-template/compare/create-slidev-deck-v1.7.8...create-slidev-deck-v1.7.9) (2026-11-17)
 
 
