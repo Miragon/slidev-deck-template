@@ -13,7 +13,7 @@ defineExpose({ markup })
 
 <template>
   <div
-    class="mg-diagram-svg mg-scheme-aware"
+    class="mg-diagram-svg"
     :role="alt ? 'img' : undefined"
     :aria-label="alt || undefined"
     :aria-hidden="alt ? undefined : 'true'"

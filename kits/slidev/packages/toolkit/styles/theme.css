@@ -97,13 +97,13 @@
  * palette, wherever a value depends on the ground. Light values are the
  * pre-dark-mode values, so a deck with `colorSchema: light` renders unchanged.
  *
- * `.mg-paper` is a light sheet on the dark table for assets that cannot follow
- * the mode (screenshots, the DMN table, the modelers); a sheet holding a
- * `.mg-scheme-aware` diagram or a Mermaid fence follows the mode instead.
+ * `.mg-paper` turns into a light sheet on the dark table when it holds a
+ * raster image (a screenshot), which cannot follow the mode. Every other
+ * diagram follows the mode, so its frame turns dark with the slide.
  * `.mg-fixed-stage` (cover, closing: the mesh) looks the same in both modes.
  */
 :root,
-html.dark .mg-paper:not(:has(.mg-scheme-aware, .mermaid)),
+html.dark .mg-paper:has(img),
 html.dark .mg-fixed-stage {
   --miragon-ground: var(--miragon-gray-bg);
   --miragon-surface: var(--miragon-white);
@@ -130,7 +130,7 @@ html.dark .mg-fixed-stage {
   color-scheme: light;
 }
 
-html.dark .mg-paper:not(:has(.mg-scheme-aware, .mermaid)) {
+html.dark .mg-paper:has(img) {
   background-color: var(--miragon-surface);
   color: var(--miragon-text-primary);
 }
