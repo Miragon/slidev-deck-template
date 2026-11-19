@@ -117,3 +117,18 @@ test("an English root puts German under /de/", async () => {
     assert.ok(!existsSync(join(dir, "site/docs/en")));
     assert.match(await readFile(join(dir, "site/docs/.vitepress/config.mts"), "utf8"), /\/de\//);
 });
+
+for (const locale of ["de", "en"]) {
+    test(`with a ${locale} root, every link on both start pages leads to a page`, async () => {
+        const dir = await mkdtemp(join(tmpdir(), `hub-scaffold-links-${locale}-`));
+        const { config } = await writeHub(dir, { slug: "x", title: "X", locale });
+        for (const folder of ["site/docs", `site/docs/${config.other}`]) {
+            const index = await readFile(join(dir, folder, "index.md"), "utf8");
+            const links = [...index.matchAll(/\]\((\/[^)]*)\)/g)].map((match) => match[1]);
+            assert.equal(links.length, 5, folder);
+            for (const link of links) {
+                assert.ok(existsSync(join(dir, "site/docs", `${link}.md`)), `${folder}/index.md links to ${link}`);
+            }
+        }
+    });
+}
