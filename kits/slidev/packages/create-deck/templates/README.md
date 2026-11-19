@@ -7,7 +7,7 @@ npm package — you fill in the content, the theme is fixed.
 
 ## Quick start
 
-Needs **Node 20+** (**Node 24+** for `npm run dev`) and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
+Needs **Node 22.22+** (**Node 24+** for `npm run dev`) and a modern browser (WebGL2 for the animated background, with a CSS-gradient fallback).
 
 ```bash
 npm install

@@ -35,7 +35,7 @@ A new package goes to `kits/<kit>/packages/<name>/` and gets, in the same PR: an
 
 ## Local development
 
-Needs **Node 20+** (**Node 24+** for `npm run dev`, which uses portless) and a modern browser (WebGL2 for the animated background).
+Needs **Node 22.22+** (**Node 24+** for `npm run dev`, which uses portless) and a modern browser (WebGL2 for the animated background).
 
 ```bash
 npm install      # once — installs every workspace

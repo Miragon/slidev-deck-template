@@ -287,3 +287,8 @@ test('--hub refuses a bad locale', () => {
     t.cleanup()
   }
 })
+
+test('declares the Node version the Slidev CLI of the deck needs', () => {
+  const slidevCli = JSON.parse(readFileSync(join(REPO_ROOT, 'node_modules/@slidev/cli/package.json'), 'utf8'))
+  assert.equal(pkgOf(out).engines?.node, slidevCli.engines.node)
+})

@@ -4,6 +4,9 @@
   "description": "The Miragon docs kit for VitePress: config, theme, colours light and dark, GitHub anchors, Mermaid and the legal row, installed instead of copied.",
   "type": "module",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miragon/brand-toolbox.git",
