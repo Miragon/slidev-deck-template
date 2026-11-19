@@ -17,7 +17,7 @@ All skills are also **model-invoked**: Claude selects them automatically from th
 
 ## Install
 
-The plugin is served from the marketplace in the template repo (public — no auth):
+The plugin is served from the marketplace in this repository, `Miragon/brand-toolbox` (public, no sign-in):
 
 ```
 /plugin marketplace add Miragon/brand-toolbox
