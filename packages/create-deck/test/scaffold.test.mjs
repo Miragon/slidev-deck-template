@@ -64,7 +64,7 @@ test('wires the miragon-slidev plugin marketplace instead of copying skills', ()
   const settings = JSON.parse(readFileSync(join(out, '.claude/settings.json'), 'utf8'))
   assert.deepEqual(settings.extraKnownMarketplaces['miragon-slidev'].source, {
     source: 'github',
-    repo: 'Miragon/slidev-deck-template',
+    repo: 'Miragon/brand-packages',
   })
   assert.equal(settings.extraKnownMarketplaces['miragon-slidev'].autoUpdate, true)
   assert.equal(settings.enabledPlugins['miragon-slidev@miragon-slidev'], true)
