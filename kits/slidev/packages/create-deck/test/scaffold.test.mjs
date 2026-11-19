@@ -291,6 +291,8 @@ test('--hub refuses a bad locale', () => {
 test('declares the Node version the Slidev CLI of the deck needs', () => {
   const slidevCli = JSON.parse(readFileSync(join(REPO_ROOT, 'node_modules/@slidev/cli/package.json'), 'utf8'))
   assert.equal(pkgOf(out).engines?.node, slidevCli.engines.node)
+})
+
 test('the next steps name npm even when pnpm started the scaffold, since the deck relies on npm overrides', () => {
   const { dir, cleanup: remove } = target('other-manager-deck')
   try {
