@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 type ColorScheme = 'light' | 'dark'
 
@@ -48,3 +48,5 @@ export function applyColorScheme(isPrintMode: () => boolean) {
     document.documentElement.classList.toggle('light', !isDark)
   }, { immediate: true })
 }
+
+export const diagramTheme = computed<ColorScheme>(() => (isDarkScheme.value ? 'dark' : 'light'))
