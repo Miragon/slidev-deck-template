@@ -39,7 +39,7 @@ const PAGES = {
         nav: ["Start", "Setup", "Agenda", "Übungen", "Folien", "Ressourcen"],
         lang: "de-DE",
         label: "Deutsch",
-        index: (t) => `# ${t}\n\nWillkommen. Hier liegen Setup, Agenda, Übungen, Folien und Ressourcen für das Training.\n\n- [Setup](/setup)\n- [Agenda](/agenda)\n- [Übungen](/exercises)\n- [Folien](/slides)\n- [Ressourcen](/resources)\n`,
+        index: (t, prefix) => `# ${t}\n\nWillkommen. Hier liegen Setup, Agenda, Übungen, Folien und Ressourcen für das Training.\n\n- [Setup](${prefix}/setup)\n- [Agenda](${prefix}/agenda)\n- [Übungen](${prefix}/exercises)\n- [Folien](${prefix}/slides)\n- [Ressourcen](${prefix}/resources)\n`,
         pages: {
             setup: ["Setup", "Was Teilnehmende vor dem Training installieren und einrichten müssen."],
             agenda: ["Agenda", "Der Ablauf des Trainings."],
@@ -52,7 +52,7 @@ const PAGES = {
         nav: ["Start", "Setup", "Agenda", "Exercises", "Slides", "Resources"],
         lang: "en-US",
         label: "English",
-        index: (t) => `# ${t}\n\nWelcome. Setup, agenda, exercises, slides and resources for the training live here.\n\n- [Setup](/en/setup)\n- [Agenda](/en/agenda)\n- [Exercises](/en/exercises)\n- [Slides](/en/slides)\n- [Resources](/en/resources)\n`,
+        index: (t, prefix) => `# ${t}\n\nWelcome. Setup, agenda, exercises, slides and resources for the training live here.\n\n- [Setup](${prefix}/setup)\n- [Agenda](${prefix}/agenda)\n- [Exercises](${prefix}/exercises)\n- [Slides](${prefix}/slides)\n- [Resources](${prefix}/resources)\n`,
         pages: {
             setup: ["Setup", "What participants have to install and set up before the training."],
             agenda: ["Agenda", "The schedule of the training."],
@@ -510,8 +510,9 @@ export default ${JSON.stringify({ slug: config.slug, title: config.title, locale
 
     for (const code of [config.locale, config.other]) {
         const p = PAGES[code];
-        const dir = code === config.locale ? "site/docs" : `site/docs/${code}`;
-        await put(`${dir}/index.md`, p.index(config.title));
+        const isRoot = code === config.locale;
+        const dir = isRoot ? "site/docs" : `site/docs/${code}`;
+        await put(`${dir}/index.md`, p.index(config.title, isRoot ? "" : `/${code}`));
         for (const page of PAGE_ORDER) {
             if (page === "slides") {
                 await put(
