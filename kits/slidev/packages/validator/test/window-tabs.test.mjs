@@ -23,16 +23,9 @@ test('other layouts are ignored, even with the same keys', () => {
   assert.deepEqual(scanWindowSlide({}), [])
 })
 
-test('the removed code layout points at window', () => {
-  const [reason] = scanWindowSlide({ layout: 'code' })
-  assert.ok(reason.includes('renamed to `window`'))
-})
-
-test('every removed key of the code layout is named', () => {
-  const reasons = scanWindowSlide({ layout: 'window', files: ['a'], icons: ['x'], tabIcon: false, lang: 'ts' })
-  for (const key of ['files', 'icons', 'tabIcon', 'lang']) {
-    assert.ok(reasons.some((r) => r.startsWith(`\`${key}:\``)), `${key} must be reported`)
-  }
+test('keys of the former code layout are no longer reported', () => {
+  assert.deepEqual(scanWindowSlide({ layout: 'code', files: ['a'] }), [])
+  assert.deepEqual(scanWindowSlide({ layout: 'window', files: ['a'], icons: ['x'], tabIcon: false, lang: 'ts' }), [])
 })
 
 test('a string shorthand entry is rejected', () => {
